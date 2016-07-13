@@ -42,38 +42,65 @@
   <div id="attachment-filters">
     <div class="panel panel-default">
       <div class="panel-heading">
-        Filtrer les résultats
+        <h4 v-show="$parent.search || $parent.tag || sort.term">
+          <span v-show="$parent.tag">
+            <span class="label label-primary"><a href="#" @click.prevent="clearTags(), find()"><i class="fa fa-times" style="color:white;" aria-hidden="true"></i></a> Filtre: #{{$parent.tag}}</span>
+            &nbsp;
+          </span>
+          <span v-show="$parent.search">
+            <span class="label label-primary"><a href="#" @click.prevent="clearSearch(null,true), find()"><i class="fa fa-times" style="color:white;" aria-hidden="true"></i></a> Filtre: {{$parent.search}} ?</span>
+            &nbsp;
+          </span>
+          <span  v-show="sort.term" class="label label-info"><a href="#"><i class="fa fa-times" style="color:white;" aria-hidden="true"></i></a> Ordre: {{sort.term}}</span>
+        </h4>
       </div>
       <div class="panel-body">
         <div class="form-inline">
           <div class="form-group">
             <div class="input-group">
               <span class="input-group-addon" id="basic-addon1">#</span>
-              <input type="text" class="form-control" id="exampleInputName2" placeholder="tag">
+              <!-- ici -->
+              <select class="form-control" id="tagsInputSearch" placeholder="tag" ></select>
             </div>
           </div>
           <div class="form-group">
             <div class="input-group">
               <span class="input-group-addon" id="basic-addon1">?</span>
-              <input type="text" class="form-control" id="exampleInputName2" placeholder="nom du fichier ou titre">
+              <input type="text" class="form-control" id="searchInputSearch" placeholder="nom du fichier ou titre">
             </div>
           </div>
-          <button type="button" class="btn btn-default">Chercher</button>
+
+          <!-- TYPES -->
           <div class="form-group">
             <div class="dropdown">
-              <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                Ordonner par
+              <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" >
+                Afficher les
                 <span class="caret"></span>
               </button>
-              <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                <li><a href="#">Action</a></li>
-                <li><a href="#">Another action</a></li>
-                <li><a href="#">Something else here</a></li>
-                <li role="separator" class="divider"></li>
-                <li><a href="#">Separated link</a></li>
+              <ul class="dropdown-menu" >
+                <li v-for="(index, type) in types"><a href="#">{{type.type}}</a></li>
               </ul>
             </div>
           </div>
+
+          <!-- SORT -->
+          <div class="form-group">
+            <div class="dropdown">
+              <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" >
+                Ordonner par
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" >
+                <li><a href="#">nom</a></li>
+                <li><a href="#">date de création</a></li>
+                <li><a href="#">type</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- SEARCH -->
+          <button type="button" class="btn btn-success" @click.prevent="find()"><i class="fa fa-search" aria-hidden="true"></i> Chercher</button>
+
         </div>
       </div>
     </div>
@@ -82,7 +109,7 @@
 
 <!-- browse -->
 <script type="text/x-template" id="attachment-browse">
-  <div id="attachment-browse" class="modal-mask" v-show="show" transition="modal">
+  <div id="attachment-browse" class="modal-mask" v-if="show" transition="modal">
     <div class="modal-wrapper">
       <div class="modal-container container">
         <div class="custom-modal-header">
@@ -91,7 +118,7 @@
         <div class="custom-modal-body">
 
         <!-- pagination -->
-        <attachment-filters :pagination.sync="pagination" :callback="getFiles" ></attachment-filters>
+        <attachment-filters :types="types" :tags="tags" :callback="getFiles" ></attachment-filters>
 
         <!-- file list -->
         <div class="row" >
@@ -129,7 +156,7 @@
 
 <div id="attachment-app">
   <attachment-upload :show.sync="showUpload" :settings="settings" ></attachment-upload>
-  <attachment-browse :selectedfiles.sync="selectedfiles" :show.sync="showBrowse" :settings="settings" ></attachment-browse>
+  <attachment-browse :types="types" :tags="tags" :selectedfiles.sync="selectedfiles" :show.sync="showBrowse" :settings="settings" ></attachment-browse>
   <attachment-files :files.sync="selectedfiles" ></attachment-files>
   <p>
     <div class="btn-group">

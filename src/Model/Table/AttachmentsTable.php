@@ -77,20 +77,26 @@ class AttachmentsTable extends Table
           'wildcardOne' => '?',
           'field' => [$this->aliasField('type')]
         ])
-        ->add('atag', 'Search.Callback', [
-            'callback' => function ($query, $args, $filter) {
+        ->add('types', 'Search.Callback', [
+          'callback' => function ($query, $args, $filter) {
+            return $query
+            ->distinct($this->aliasField('type'));
+          }
+        ])
+        ->add('tag', 'Search.Callback', [
+          'callback' => function ($query, $args, $filter) {
+            return $query
+            ->distinct($this->aliasField('id'))
+            ->matching('Atags', function (Query $query) use ($args) {
               return $query
-              ->distinct($this->aliasField('id'))
-              ->matching('Atags', function (Query $query) use ($args) {
-                  return $query
-                      ->where([
-                          'OR' => [
-                            $this->Atags->target()->aliasField('name') => $args['atag'],
-                            $this->Atags->target()->aliasField('slug') => $args['atag']
-                          ]
-                      ]);
-              });
-            }
+              ->where([
+                  'OR' => [
+                    $this->Atags->target()->aliasField('name') => $args['tag'],
+                    $this->Atags->target()->aliasField('slug') => $args['tag']
+                  ]
+              ]);
+            });
+          }
         ]);
     }
 

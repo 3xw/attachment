@@ -4,23 +4,12 @@ namespace Attachment\Controller;
 use Attachment\Controller\AppController;
 
 /**
-* Attachments Controller
-*
-* @property \Attachment\Model\Table\AttachmentsTable $Attachments
-*/
-class AttachmentsController extends AppController
+ * Atags Controller
+ *
+ * @property \Attachment\Model\Table\AtagsTable $Atags
+ */
+class AtagsController extends AppController
 {
-
-
-  public $paginate = [
-    'page' => 1,
-    'limit' => 18,
-    'maxLimit' => 200,
-    'sortWhitelist' => [
-      'name', 'created', 'type', 'subtype', 'date'
-    ]
-  ];
-
   use \Crud\Controller\ControllerTrait;
 
   public function initialize(){
@@ -29,26 +18,22 @@ class AttachmentsController extends AppController
     $this->loadComponent('Crud.Crud', [
       'actions' => [
         'Crud.Index',
+        /*
         'Crud.View',
         'add' =>[
           'className' => 'Crud.Add',
           'api.success.data.entity' => ['id','path','type','subtype','name','size']
         ],
         'Crud.Edit',
-        'Crud.Delete',
-        /*'find' => [
-          'className' => 'Crud.Index',
-          'api.success.data.entity' => ['type','subtype']
-        ]*/
+        'Crud.Delete'*/
       ],
       'listeners' => [
         //'CrudCache',
         'Crud.Api',
-        'Crud.ApiPagination',
+        //'Crud.ApiPagination',
         'Crud.ApiQueryLog',
-        'Crud.Search'
+        //'Crud.Search'
       ]
     ]);
   }
-
 }

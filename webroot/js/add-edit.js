@@ -49,79 +49,6 @@
     scope.Sortable.create(this.el, options);
   });
 
-  Vue.component('attachment-pagination',{
-    template: '#attachment-pagination',
-    props: {
-      pagination: {
-        type: Object,
-        required: true
-      },
-      callback: {
-        type: Function,
-        required: true
-      },
-      offset: {
-        type: Number,
-        default: 4
-      }
-    },
-    computed: {
-      array: function () {
-        if(this.pagination.page_count == 1) {
-          return [];
-        }
-
-        var from = this.pagination.current_page - this.offset;
-        if(from < 1) {
-          from = 1;
-        }
-
-        var to = from + (this.offset );
-        if(to >= this.pagination.page_count) {
-          to = this.pagination.page_count;
-        }
-
-        var arr = [];
-        while (from <=to) {
-          arr.push(from);
-          from++;
-        }
-
-        return arr;
-      }
-    },
-    methods: {
-      changePage: function (page) {
-        this.pagination.current_page = page;
-        this.callback();
-      }
-    }
-  });
-
-  Vue.component('attachment-filters',{
-    template: '#attachment-filters',
-    props: {
-      pagination: {
-        type: Object,
-        required: true
-      },
-      callback: {
-        type: Function,
-        required: true
-      },
-      offset: {
-        type: Number,
-        default: 4
-      }
-    },
-    methods: {
-      changePage: function (page) {
-        this.pagination.current_page = page;
-        this.callback();
-      }
-    }
-  });
-
   Vue.component('attachment-upload', {
     template: '#attachment-upload',
     data: function(){
@@ -213,8 +140,11 @@
         setTimeout(this.setupUI, 500);
       },
       setupUI: function(){
-        $('#atagsinput').tagsinput();
+
         this.addEventListeners();
+
+        $('#atagsinput').tagsinput();
+
       },
       startUpload: function(){
         this.errors = [];
@@ -311,10 +241,124 @@
     }
   });
 
+  Vue.component('attachment-pagination',{
+    template: '#attachment-pagination',
+    props: {
+      pagination: {
+        type: Object,
+        required: true
+      },
+      callback: {
+        type: Function,
+        required: true
+      },
+      offset: {
+        type: Number,
+        default: 4
+      }
+    },
+    computed: {
+      array: function () {
+        if(this.pagination.page_count == 1) {
+          return [];
+        }
+
+        var from = this.pagination.current_page - this.offset;
+        if(from < 1) {
+          from = 1;
+        }
+
+        var to = from + (this.offset );
+        if(to >= this.pagination.page_count) {
+          to = this.pagination.page_count;
+        }
+
+        var arr = [];
+        while (from <=to) {
+          arr.push(from);
+          from++;
+        }
+
+        return arr;
+      }
+    },
+    methods: {
+      changePage: function (page) {
+        this.pagination.current_page = page;
+        this.callback();
+      }
+    }
+  });
+
+  Vue.component('attachment-filters',{
+    template: '#attachment-filters',
+    props: {
+      tags: Array,
+      types: Array,
+      callback: {
+        type: Function,
+        required: true
+      }
+    },
+    data: function(){
+      return {
+        sort: { query: '', term: ''}
+      }
+    },
+    methods: {
+      find: function(){
+        this.$parent.pagination.current_page = 1;
+        this.$parent.search = $('#searchInputSearch').val() || null;
+        this.$parent.tag = $('#tagsInputSearch').val() || null;
+        this.callback();
+      },
+      setupUI: function(){
+
+        var tagsList = new Bloodhound({
+          datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+          queryTokenizer: Bloodhound.tokenizers.whitespace,
+          local: this.tags
+        });
+        tagsList.initialize();
+
+        $('#tagsInputSearch').tagsinput({
+          freeInput: true,
+          itemValue: 'name',
+          itemText: 'name',
+          typeaheadjs: {
+              name: 'tagsList',
+              displayKey: 'name',
+              source: tagsList.ttAdapter()
+          }
+        });
+
+        $('#tagsInputSearch').change(this.clearSearch);
+        $('#searchInputSearch').keyup(this.clearTags);
+
+      },
+      clearTags: function(){
+        console.log('clearTags');
+        if($('#tagsInputSearch').val()){
+          $('#tagsInputSearch').tagsinput('removeAll');
+        }
+      },
+      clearSearch: function(e, force){
+        console.log('clearSearch');
+        console.log($('#tagsInputSearch').val());
+        console.log(force);
+        if( $('#tagsInputSearch').val() != null || force){
+          $('#searchInputSearch').val('');
+        }
+      }
+    }
+  });
+
   Vue.component('attachment-browse', {
     template: '#attachment-browse',
     data: function(){
       return {
+        search: '',
+        tag: '',
         files: [],
         ids: [],
         pagination: {
@@ -329,6 +373,8 @@
     },
     props: {
       selectedfiles: Array,
+      tags: Array,
+      types: Array,
       settings: Object,
       show: {
         type: Boolean,
@@ -355,22 +401,13 @@
         return this.ids.indexOf(id) != -1;
       },
       addEventListeners : function(){
-        /*
-        $('#attachment-dropzone').bind('dragenter', this.dragOver);
-        $('#attachment-dropzone').bind('dragleave', this.dragOut);
-        $('#attachment-dropzone').bind('dragover', this.dragOver);
-        $('#attachment-dropzone').bind('drop', this.getDroppedFiles);
-        $('#attachment-files-input').bind('change', this.getselectedfiles);
-        */
+        $('form').bind('submit', this.preventSubmit);
       },
       removeEventListeners : function(){
-        /*
-        $('#attachment-dropzone').unbind('dragenter', this.dragOver);
-        $('#attachment-dropzone').unbind('dragleave', this.dragOut);
-        $('#attachment-dropzone').unbind('dragover', this.dragOver);
-        $('#attachment-dropzone').unbind('drop', this.getDroppedFiles);
-        $('#attachment-files-input').unbind('change', this.getselectedfiles);
-        */
+        $('form').unbind('submit', this.preventSubmit);
+      },
+      preventSubmit: function(e){
+        e.preventDefault();
       },
       close: function(){
         this.removeEventListeners();
@@ -378,17 +415,24 @@
         this.show = false;
       },
       open: function(){
+        this.addEventListeners();
         this.show = true;
         this.getFiles();
+        setTimeout(this.setupUI, 500);
       },
       setupUI: function(){
-        console.log('setupUI');
+        this.$children[0].setupUI();
       },
       getFiles: function(){
+        var params = {page: this.pagination.current_page};
+        if(this.search){
+          params.search = this.search;
+        }
+        if(this.tag){
+          params.tag = this.tag;
+        }
         var options = {
-          params: {
-            page: this.pagination.current_page,
-          },
+          params: params,
           headers:{
             "Accept":"application/json",
             "Content-Type":"application/json"
@@ -445,12 +489,50 @@
       showUpload: false,
       showBrowse: false,
       settings: $('#attachment-settings').data('settings'),
-      selectedfiles: []
+      selectedfiles: [],
+      tags: [],
+      types: []
     },
     ready:function(){
       this.selectedfiles = this.settings.attachments;
+      this.getTags().getTypes();
     },
-    methods: {}
+    methods: {
+      getTags: function(){
+        var options = {
+          headers:{
+            "Accept":"application/json",
+            "Content-Type":"application/json"
+          }
+        };
+        this.$http.get(this.settings.tagsURL, options)
+        .then(this.tagsSuccessCallback, this.errorCallback);
+        return this;
+      },
+      getTypes: function(){
+        var options = {
+          params: {
+            types: '*',
+          },
+          headers:{
+            "Accept":"application/json",
+            "Content-Type":"application/json"
+          }
+        };
+        this.$http.get(this.settings.browseURL, options)
+        .then(this.typesSuccessCallback, this.errorCallback);
+        return this;
+      },
+      tagsSuccessCallback: function(response){
+        this.tags = response.data.data;
+      },
+      typesSuccessCallback: function(response){
+        this.types = response.data.data;
+      },
+      errorCallback: function(response){
+        console.log(response);
+      },
+    }
   });
 
 })(window, jQuery);

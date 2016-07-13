@@ -33,6 +33,10 @@ if( Configure::read('Storage.settings') ){
     $attachemntSettings = Configure::read('Storage.default_settings');
   }
 }
+$session = $this->request->session();
+$session->write('Storage', $attachemntSettings);
+
+//only for vuejs
 $attachemntSettings['addURL'] = $this->Url->build([
   'controller' => 'Attachments',
   'action' => 'add',
@@ -47,16 +51,24 @@ $attachemntSettings['browseURL'] = $this->Url->build([
   'prefix' => false,
   //'ext' => 'json'
 ]);
-$session = $this->request->session();
-$session->write('Storage', $attachemntSettings);
-
+$attachemntSettings['tagsURL'] = $this->Url->build([
+  'controller' => 'Atags',
+  'action' => 'index',
+  'plugin' => 'Attachment',
+  'prefix' => false,
+  //'ext' => 'json'
+]);
 $attachemntSettings['attachments'] = $attachments;
+
+// add css
+$this->Html->css([
+  'https://rawgit.com/timschlechter/bootstrap-tagsinput/master/src/bootstrap-tagsinput.css',
+],['block' => 'css']);
 
 // add js scripts
 $this->Html->script([
-  'vendor/awallef/attachment/boostrap-tagsinput.js',
-  'vendor/awallef/attachment/Sortable.min.js',
-  //'vendor/jquery/jquery-ui.min.js',
-  //'vendor/awallef/attachment/vue.drag-and-drop.js',
+  'https://rawgit.com/TimSchlechter/bootstrap-tagsinput/master/src/bootstrap-tagsinput.js',
+  'https://rawgit.com/twitter/typeahead.js/master/dist/typeahead.bundle.min.js',
+  'http://rubaxa.github.io/Sortable/Sortable.js',
   'vendor/awallef/attachment/add-edit.js'
 ],['block' => 'script']);
