@@ -1,13 +1,17 @@
-<?
+<?php
 // load
 use Cake\Core\Configure;
 use Cake\Filesystem\Folder;
+echo '<h1>HELLO</h1>';
+
 
 // check for js file
+/*
 $frontFolderPath = WWW_ROOT . 'js/vendor/awallef/attachment';
 $pluginFolderPath = ROOT . DS . 'plugins' . DS . 'Attachment/webroot/js';
 $folder = new Folder($pluginFolderPath);
 $folder->copy($frontFolderPath);
+*/
 
 $attachments = [];
 
@@ -70,5 +74,5 @@ $this->Html->script([
   'https://rawgit.com/TimSchlechter/bootstrap-tagsinput/master/src/bootstrap-tagsinput.js',
   'https://rawgit.com/twitter/typeahead.js/master/dist/typeahead.bundle.min.js',
   'http://rubaxa.github.io/Sortable/Sortable.js',
-  'vendor/awallef/attachment/add-edit.js'
+  'Attachment.add-edit.js'
 ],['block' => 'script']);
