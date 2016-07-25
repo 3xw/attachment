@@ -65,13 +65,13 @@ $attachemntSettings['attachments'] = $attachments;
 
 // add css
 $this->Html->css([
-  'https://rawgit.com/timschlechter/bootstrap-tagsinput/master/src/bootstrap-tagsinput.css',
+  'Attachment.vendor/TimSchlechter/bootstrap-tagsinput/bootstrap-tagsinput.css',
 ],['block' => 'css']);
 
 // add js scripts
 $this->Html->script([
-  'https://rawgit.com/TimSchlechter/bootstrap-tagsinput/master/src/bootstrap-tagsinput.js',
-  'https://rawgit.com/twitter/typeahead.js/master/dist/typeahead.bundle.min.js',
-  'http://rubaxa.github.io/Sortable/Sortable.js',
+  'Attachment.vendor/TimSchlechter/bootstrap-tagsinput/bootstrap-tagsinput.js',
+  'Attachment.vendor/twitter/typeahead.js/typeahead.bundle.min.js',
+  'Attachment.vendor/rubaxa/Sortable/Sortable.js',
   'Attachment.add-edit.js'
 ],['block' => 'script']);
