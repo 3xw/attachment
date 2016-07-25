@@ -2,7 +2,6 @@
 // load
 use Cake\Core\Configure;
 use Cake\Filesystem\Folder;
-echo '<h1>HELLO</h1>';
 
 
 // check for js file
