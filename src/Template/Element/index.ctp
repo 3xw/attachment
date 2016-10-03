@@ -10,21 +10,14 @@ $this->Html->script([
   'Attachment.vendor/TimSchlechter/bootstrap-tagsinput/bootstrap-tagsinput.js',
   'Attachment.vendor/twitter/typeahead.js/typeahead.bundle.min.js',
   'Attachment.vendor/rubaxa/Sortable/Sortable.js',
-  'Attachment.add-edit.js'
+  'Attachment.index.js'
 ],['block' => 'script']);
 ?>
-
 <!-- includes settings -->
 <?php include_once('includes/add-edit__settings.php'); ?>
 
 <!-- pass settings -->
 <div id="attachment-settings" data-settings='<?= json_encode($attachemntSettings) ?>' ></div>
-
-<!-- dropzone -->
-<?php include_once('includes/add-edit__dropzone.html'); ?>
-
-<!-- files -->
-<?php include_once('includes/add-edit__files.html'); ?>
 
 <!-- pagination -->
 <script type="text/x-template" id="attachment-pagination">
@@ -122,65 +115,36 @@ $this->Html->script([
 
 <!-- browse -->
 <script type="text/x-template" id="attachment-browse">
-  <div id="attachment-browse" class="modal-mask" v-if="show" transition="modal">
-    <div class="modal-wrapper">
-      <div class="modal-container container">
-        <div class="custom-modal-header">
-          <?= __('Parcourir les fichiers') ?>
-        </div>
-        <div class="custom-modal-body">
+  <div id="attachment-browse" v-if="show">
+    <!-- title -->
+    <h4><?= __('Parcourir les fichiers') ?></h4>
 
-        <!-- pagination -->
-        <attachment-filters :types="types" :tags="tags" :callback="getFiles" ></attachment-filters>
+    <!-- pagination -->
+    <attachment-filters :types="types" :tags="tags" :callback="getFiles" ></attachment-filters>
 
-        <!-- file list -->
-        <div class="row" >
-          <div v-for="(index, file) in files" id="{{index}}"  class="attachment-files__item col-xs-4 col-md-2">
-            <div class="thumbnail" >
-              <img v-bind:src="'<?= $this->Url->build('/image.php') ?>?image='+file.path+'&width=678&cropratio=16:9'" />
-              <div class="caption">
-                {{file.name}}<br/>
-                {{file.size | bytesToMegaBytes | decimal 2 }} MB<br/>
+    <!-- file list -->
+    <div class="row" >
+      <div v-for="(index, file) in files" id="{{index}}"  class="attachment-files__item col-xs-4 col-md-2">
+        <div class="thumbnail" >
+          <img v-bind:src="'<?= $this->Url->build('/image.php') ?>?image='+file.path+'&width=678&cropratio=16:9'" />
+          <div class="caption">
+            {{file.name}}<br/>
+            {{file.size | bytesToMegaBytes | decimal 2 }} MB<br/>
 
-                  <!-- data -->
-                  <a v-show="!isSelected(file.id)" href="#" class="btn btn-xs btn-info" role="button" @click="add(index)" >Ajouter</a>
-                  <a v-show="isSelected(file.id)" href="#" class="btn btn-xs btn-warning" role="button" @click="remove(file.id)" >Enlever</a>
+              <!-- data -->
+              <a v-show="!isSelected(file.id)" href="#" class="btn btn-xs btn-info" role="button" @click="add(index)" >Ajouter</a>
+              <a v-show="isSelected(file.id)" href="#" class="btn btn-xs btn-warning" role="button" @click="remove(file.id)" >Enlever</a>
 
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- pagination -->
-        <attachment-pagination :pagination.sync="pagination" :callback="getFiles" :offset="4"></attachment-pagination>
-
-        <p></p>
-        <div class="custom-modal-footer">
-          <div class="btn-group">
-            <button type="button" class="modal-default-button btn btn-warning" @click="close()">
-              Fermer
-            </button>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- pagination -->
+    <attachment-pagination :pagination.sync="pagination" :callback="getFiles" :offset="4"></attachment-pagination>
   </div>
 </script>
 
-<div id="attachment-app">
-  <attachment-upload :show.sync="showUpload" :settings="settings" ></attachment-upload>
+<div id="attachment-index-app">
   <attachment-browse :types="types" :tags="tags" :selectedfiles.sync="selectedfiles" :show.sync="showBrowse" :settings="settings" ></attachment-browse>
-  <attachment-files :files.sync="selectedfiles" ></attachment-files>
-  <p>
-    <div class="btn-group">
-      <button type="button" class="btn btn-xs btn-info" @click="$children[0].open()">
-        <i class="fa fa-cloud-upload" aria-hidden="true"></i>
-        <?= __('Téléverser'); ?>
-      </button>
-      <button type="button" class="btn btn-xs btn-info" @click="$children[1].open()">
-        <i class="fa fa-cloud" aria-hidden="true"></i>
-        <?= __('Parcourir'); ?>
-      </button>
-    </div>
-  </p>
 </div>

@@ -14,8 +14,6 @@ use Cake\Network\Session;
 use Cake\ORM\Behavior;
 use Cake\ORM\Table;
 
-use Attachment\Model\FilesystemRegistry;
-
 /**
 * Storage behavior
 */
@@ -45,11 +43,6 @@ class StorageBehavior extends Behavior
     if (!isset($config['file_field']) || '' === $config['file_field']) {
       throw new Exception('Must specify a field for FileBehavior');
     }
-  }
-
-  public function filesystem($alias)
-  {
-      return FilesystemRegistry::retrieve($alias);
   }
 
   public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options)

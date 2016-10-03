@@ -23,21 +23,9 @@ if( isset($settings) ){
 
 
 // get config and store it in session!
-if( Configure::read('Storage.settings') ){
-  if( isset($settings) ){
-    $attachemntSettings = array_merge( Configure::read('Storage.default_settings'),Configure::read('Storage.settings'),$settings);
-  }else{
-    $attachemntSettings = array_merge( Configure::read('Storage.default_settings'),Configure::read('Storage.settings'));
-  }
-}else{
-  if( isset($settings) ){
-    $attachemntSettings = array_merge( Configure::read('Storage.default_settings'),$settings);
-  }else{
-    $attachemntSettings = Configure::read('Storage.default_settings');
-  }
-}
+$attachemntSettings = isset($settings) ? array_merge( Configure::read('Attachment'),$settings) : Configure::read('Attachment');
 $session = $this->request->session();
-$session->write('Storage', $attachemntSettings);
+$session->write('Attachment', $attachemntSettings);
 
 //only for vuejs
 $attachemntSettings['addURL'] = $this->Url->build([
@@ -62,16 +50,3 @@ $attachemntSettings['tagsURL'] = $this->Url->build([
   //'ext' => 'json'
 ]);
 $attachemntSettings['attachments'] = $attachments;
-
-// add css
-$this->Html->css([
-  'Attachment.vendor/TimSchlechter/bootstrap-tagsinput/bootstrap-tagsinput.css',
-],['block' => 'css']);
-
-// add js scripts
-$this->Html->script([
-  'Attachment.vendor/TimSchlechter/bootstrap-tagsinput/bootstrap-tagsinput.js',
-  'Attachment.vendor/twitter/typeahead.js/typeahead.bundle.min.js',
-  'Attachment.vendor/rubaxa/Sortable/Sortable.js',
-  'Attachment.add-edit.js'
-],['block' => 'script']);

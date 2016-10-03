@@ -4,9 +4,11 @@
     "type": "cakephp-plugin",
     "require": {
         "php": ">=5.4.16",
-        "cakephp/cakephp": "~3.0",
+        "cakephp/cakephp": "~3.3",
         "friendsofcake/crud": "^4.3",
-        "friendsofcake/search": "^2.0"
+        "friendsofcake/search": "^2.0",
+        "wyrihaximus/fly-pie": "^1.1",
+        "league/flysystem-aws-s3-v3": "^1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "*"
