@@ -21,7 +21,7 @@ use Attachment\Model\FilesystemRegistry;
 */
 class StorageBehavior extends Behavior
 {
-
+  
   /**
   * Default configuration.
   *
@@ -47,9 +47,9 @@ class StorageBehavior extends Behavior
     }
   }
 
-  public function filesystem($alias)
+  public function filesystem($profile)
   {
-      return FilesystemRegistry::retrieve($alias);
+    return FilesystemRegistry::retrieve($profile);
   }
 
   public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options)
@@ -89,46 +89,6 @@ class StorageBehavior extends Behavior
     }
   }
 
-  public function getPath($modelName, $path, $type, $subtype, ArrayObject $options)
-  {
-    //'{$modelName}{DS}{$group}{DS}{$user}{DS}{$year}{DS}{$month}{DS}{$type}{DS}{$subtype}{DS}{$fileName}';
-
-    $modelName = substr($modelName, strrpos($modelName, '\\') + 1 );
-
-    if(!property_exists ( $options, 'user'))
-    {
-      $group = 'public';
-      $user = 'default';
-    }else
-    {
-      $user = $options->user;
-      $group = $user['role_id'];
-      $user = $user['id'];
-    }
-
-    $path = str_replace(array(
-      '{$modelName}',
-      '{DS}',
-      '{$role}',
-      '{$user}',
-      '{$year}',
-      '{$month}',
-      '{$type}',
-      '{$subtype}'
-    ), array(
-      Inflector::pluralize($modelName),
-      DS,
-      $group,
-      $user,
-      date("Y"),
-      date("m"),
-      $type,
-      $subtype
-    ), $path);
-
-    return strtolower($path);
-  }
-
   public function beforeSave(Event $event, EntityInterface $entity, ArrayObject $options)
   {
     $settings = $this->config();
@@ -155,7 +115,7 @@ class StorageBehavior extends Behavior
         $sessionStorage = $session->read('Storage');
         if(!$sessionStorage){
           $event->stopPropagation();
-          $entity->errors($field,['Storage kes not found in session! Please pass Storgae Settings thrught session!']);
+          $entity->errors($field,['Attachment keys not found in session! Please pass Attachment settings throught session!']);
         }
         $conf = array_merge($sessionStorage, $settings);
 
@@ -175,21 +135,21 @@ class StorageBehavior extends Behavior
           return false;
         }
 
-        switch ($conf['fileEngine']) {
-          case 'local':
-            $path = WWW_ROOT . $conf['base'] . DS . $this->getPath(get_class($entity), $conf['path'], $type, $subtype, $options);
-            $folder = new Folder();
-            $folder->create($path, 0777);
+        // store file
+        $profile = $conf['profile'];
+        $entity->set('profile', $profile);
 
-            $entity->{$field} = $conf['base'] . DS . $this->getPath(get_class($entity), $conf['path'], $type, $subtype, $options) . DS . $name;
-            if( !move_uploaded_file($temp_name, $path . DS . $name) )
-            {
-              $event->stopPropagation();
-              $entity->errors($field,['Unable to move file on Server HD']);
-              return false;
-            }
-            break;
+        // delete if exists
+        if($this->filesystem($profile)->has($name))
+        {
+          $this->filesystem($profile)->delete($name);
         }
+
+        // store file
+        $stream = fopen($temp_name, 'r+');
+        $this->filesystem($profile)->writeStream($name, $stream);
+        fclose($stream);
+        $entity->{$field} = $name;
 
       }
     }
@@ -199,11 +159,14 @@ class StorageBehavior extends Behavior
   {
     $settings = $this->config();
     $field = $settings['file_field'];
-    $conf = array_merge( Configure::read('Storage.settings'), $settings);
+    $delete = $settings['delete'];
 
-    if (!empty($entity[$field]) && $conf['delete'])
+    if (!empty($entity[$field]) && $delete)
     {
-      $this->_fileToRemove = $entity[$field];
+      $this->_fileToRemove = [
+        'file' => $entity[$field],
+        'profile' => $entity['profile']
+      ];
     }
   }
 
@@ -211,14 +174,12 @@ class StorageBehavior extends Behavior
   {
     if ($this->_fileToRemove)
     {
-        $conf = array_merge( Configure::read('Storage.settings'), $this->config() );
-        switch ($conf['fileEngine'])
-        {
-            case 'local':
-                $file = new File(WWW_ROOT . $this->_fileToRemove);
-                return $file->delete();
-                break;
-        }
+      $file = $this->_fileToRemove['file'];
+      $profile = $this->_fileToRemove['profile'];
+      if($this->filesystem($profile)->has($file))
+      {
+        $this->filesystem($profile)->delete($file);
+      }
     }
   }
 

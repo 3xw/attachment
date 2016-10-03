@@ -10,3 +10,5 @@ Router::plugin(
       $routes->fallbacks('DashedRoute');
     }
 );
+
+Router::connect('/images/*', ['plugin' => 'Attachment', 'controller' => 'Resize', 'action' => 'proceed']);

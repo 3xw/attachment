@@ -12,18 +12,18 @@ $folder = new Folder($pluginFolderPath);
 $folder->copy($frontFolderPath);
 */
 
-$attachments = [];
-
-if( isset($settings) ){
-  if(!empty($settings['attachments'])){
-    $attachments = $settings['attachments'];
-    unset($settings['attachments']);
-  }
+if( !isset($settings) )
+{
+  $attachments = []; $attachemntSettings = Configure::read('Attachment.upload');
+}else
+{
+  $attachments = empty($settings['attachments'])? [] : $settings['attachments'];
+  $attachemntSettings = empty($settings['upload']) ?
+    Configure::read('Attachment.upload') :
+    array_merge( Configure::read('Attachment.upload'),$settings['upload']);
 }
 
-
-// get config and store it in session!
-$attachemntSettings = isset($settings) ? array_merge( Configure::read('Attachment'),$settings) : Configure::read('Attachment');
+// store...
 $session = $this->request->session();
 $session->write('Attachment', $attachemntSettings);
 

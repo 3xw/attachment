@@ -1,21 +1,9 @@
 <?php
 use Cake\Core\Configure;
 
-/* default:
-****************************/
-Configure::write('Attachment', [
-	'default' => [
-		'adapter' => 'League\Flysystem\Adapter\Local',
-		'client' => new League\Flysystem\Adapter\Local('files{DS}{$modelName}{DS}{$year}')
-	],
-]);
-debug(Configure::check('attachment'));
+Configure::load('Attachment.attachment');
+collection((array)Configure::read('Attachment.config'))->each(function ($file) {
+    Configure::load($file);
+});
 
-
-try {
-	Configure::load('attachment');
-} catch (Exception $e) {
-
-}
-
-debug(Configure::read('Attachment'));
+//debug(Configure::read('Attachment'));

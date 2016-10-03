@@ -1,10 +1,10 @@
 <?php
 
-namespace Attachment\Model\;
+namespace Attachment\Model;
 
-use WyriHaximus\FlyPie\FilesystemRegistry as WyriHaximusFilesystemRegistry
+use WyriHaximus\FlyPie\FilesystemRegistry as WyriHaximusFilesystemRegistry;
 
 class FilesystemRegistry extends WyriHaximusFilesystemRegistry
 {
-  const CONFIGURE_KEY_PREFIX = 'Attachment.';
+  const CONFIGURE_KEY_PREFIX = 'Attachment.profiles.';
 }
