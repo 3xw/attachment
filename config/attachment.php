@@ -9,6 +9,10 @@ return [
     		'adapter' => 'League\Flysystem\Adapter\Local',
     		'client' => new League\Flysystem\Adapter\Local('files')
     	],
+      'cache' => [
+    		'adapter' => 'League\Flysystem\Adapter\Local',
+    		'client' => new League\Flysystem\Adapter\Local('images')
+    	],
     ],
 
     // upload settings
