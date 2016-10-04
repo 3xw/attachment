@@ -67,6 +67,7 @@ class ResizeController extends AppController
 
     // retrieve image
     $contents = $this->_filesystem($profile)->read($image);
+    Image::configure(['driver' => Configure::check('Attachment.thumbnails.driver')]);
     $img = Image::make($contents);
 
     // get original sizes
