@@ -11,7 +11,7 @@ return [
     	],
       'cache' => [
     		'adapter' => 'League\Flysystem\Adapter\Local',
-    		'client' => new League\Flysystem\Adapter\Local('images')
+    		'client' => new League\Flysystem\Adapter\Local('thumbnails')
     	],
     ],
 
