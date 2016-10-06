@@ -2,7 +2,7 @@
 // add css
 $this->Html->css([
   'Attachment.vendor/TimSchlechter/bootstrap-tagsinput/bootstrap-tagsinput.css',
-  'Attachment.attachment.css',
+  'Attachment.attachment.css?v='.time()
 ],['block' => 'css']);
 
 // add js scripts
@@ -10,7 +10,7 @@ $this->Html->script([
   'Attachment.vendor/TimSchlechter/bootstrap-tagsinput/bootstrap-tagsinput.js',
   'Attachment.vendor/twitter/typeahead.js/typeahead.bundle.min.js',
   'Attachment.vendor/rubaxa/Sortable/Sortable.js',
-  'Attachment.index.js'
+  'Attachment.index.js?v='.time()
 ],['block' => 'script']);
 ?>
 <!-- includes settings -->

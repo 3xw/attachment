@@ -10,10 +10,9 @@ $this->Html->script([
   'Attachment.vendor/TimSchlechter/bootstrap-tagsinput/bootstrap-tagsinput.js',
   'Attachment.vendor/twitter/typeahead.js/typeahead.bundle.min.js',
   'Attachment.vendor/rubaxa/Sortable/Sortable.js',
-  'Attachment.add-edit.js'
+  'Attachment.add-edit.js?v='.time()
 ],['block' => 'script']);
 ?>
-
 <!-- includes settings -->
 <?php include_once('includes/add-edit__settings.php'); ?>
 
@@ -167,7 +166,25 @@ $this->Html->script([
   </div>
 </script>
 
-<div id="attachment-app">
+<div class="attachment-app-1">
+  <attachment-upload :show.sync="showUpload" :settings="settings" ></attachment-upload>
+  <attachment-browse :types="types" :tags="tags" :selectedfiles.sync="selectedfiles1" :show.sync="showBrowse" :settings="settings" ></attachment-browse>
+  <attachment-files :files.sync="selectedfiles1" ></attachment-files>
+  <p>
+    <div class="btn-group">
+      <button type="button" class="btn btn-xs btn-info" @click="$children[0].open()">
+        <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+        <?= __('Téléverser'); ?>
+      </button>
+      <button type="button" class="btn btn-xs btn-info" @click="$children[1].open()">
+        <i class="fa fa-cloud" aria-hidden="true"></i>
+        <?= __('Parcourir'); ?>
+      </button>
+    </div>
+  </p>
+</div>
+<h1>divider</h1>
+<div class="attachment-app-2">
   <attachment-upload :show.sync="showUpload" :settings="settings" ></attachment-upload>
   <attachment-browse :types="types" :tags="tags" :selectedfiles.sync="selectedfiles" :show.sync="showBrowse" :settings="settings" ></attachment-browse>
   <attachment-files :files.sync="selectedfiles" ></attachment-files>

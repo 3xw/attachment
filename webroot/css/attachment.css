@@ -14,10 +14,12 @@
 .attachment-dropzone__instructions{ margin-bottom: 20px;}
 #attachment-upload .alert{ margin-bottom: 5px;}
 .attachment-upload__item { padding: 5px; margin-bottom: 5px; border: 2px solid #808080; background: #eee; border-radius: 4px; }
-.attachment-upload__item__icon { display: inline-block; font-size: 51px; margin-right: 12px; }
+.attachment-upload__item__icon { display: inline-block; font-size: 51px; width: 40px; margin-right: 12px; }
 .attachment-upload__item__description{ display: inline-block; }
 
 #attachment-atags{ margin-bottom: 10px;}
+
+#attachment-filters .panel-heading a { padding: 0; display: inline; }
 
 /* type head */
 .twitter-typeahead .tt-query,

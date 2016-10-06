@@ -135,6 +135,9 @@ class AttachmentsTable extends Table
             ->add('md5', 'unique', ['rule' => 'validateUnique', 'provider' => 'table','message' => 'Attachment already exists']);
 
         $validator
+            ->allowEmpty('profile');
+
+        $validator
             ->dateTime('date')
             ->allowEmpty('date');
 

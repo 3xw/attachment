@@ -1,4 +1,5 @@
 <?php
+use Cake\Routing\Router;
 
 return [
   'Attachment' => [
@@ -7,11 +8,13 @@ return [
     'profiles' => [
       'default' => [
     		'adapter' => 'League\Flysystem\Adapter\Local',
-    		'client' => new League\Flysystem\Adapter\Local('files')
+    		'client' => new League\Flysystem\Adapter\Local('files'),
+        'baseUrl' =>  '/files/'
     	],
       'cache' => [
     		'adapter' => 'League\Flysystem\Adapter\Local',
-    		'client' => new League\Flysystem\Adapter\Local('thumbnails')
+    		'client' => new League\Flysystem\Adapter\Local('thumbnails'),
+        'baseUrl' =>  '/thumbnails/'
     	],
     ],
 
@@ -22,6 +25,7 @@ return [
       'atags' => [],
       'relation' => 'belongsToMany',
       'profile' => 'default',
+      'visibility' => 'public'
     ],
 
     // thumbnails settings

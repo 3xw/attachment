@@ -15,11 +15,15 @@
               {{file.name}}<br/>
               {{file.size | bytesToMegaBytes | decimal 2 }} MB<br/>
 
-              <!-- data -->
+            <!-- data -->
+            <?php if ($settings['relations']== 'belongsToMany') { ?>
               <input type="hidden" name="attachments[{{index}}][id]" value="{{file.id}}">
               <input type="hidden" name="attachments[{{index}}][_joinData][order]" value="{{index}}">
+            <?php }else{ ?>
+              <input type="hidden" name="<?= $settings['field'] ?>" value="{{file.id}}">
+            <?php } ?>
 
-              <a href="#" class="btn btn-xs btn-warning" role="button" @click="remove(index)" >Enlever</a>
+            <a href="#" class="btn btn-xs btn-warning" role="button" @click="remove(index)" >Enlever</a>
           </div>
         </div>
       </div>

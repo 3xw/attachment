@@ -21,7 +21,7 @@ use Attachment\Model\FilesystemRegistry;
 */
 class StorageBehavior extends Behavior
 {
-  
+
   /**
   * Default configuration.
   *
@@ -112,12 +112,12 @@ class StorageBehavior extends Behavior
 
         // GET CONFIG
         $session = new Session();
-        $sessionStorage = $session->read('Storage');
-        if(!$sessionStorage){
+        $sessionAttachment = $session->read('Attachment');
+        if(!$sessionAttachment){
           $event->stopPropagation();
           $entity->errors($field,['Attachment keys not found in session! Please pass Attachment settings throught session!']);
         }
-        $conf = array_merge($sessionStorage, $settings);
+        $conf = array_merge($sessionAttachment, $settings);
 
         // CHECK type
         if (( in_array($fullType, $conf['types']) === false))
@@ -149,6 +149,7 @@ class StorageBehavior extends Behavior
         $stream = fopen($temp_name, 'r+');
         $this->filesystem($profile)->writeStream($name, $stream);
         fclose($stream);
+        $this->filesystem($profile)->setVisibility($name, $conf['visibility']);
         $entity->{$field} = $name;
 
       }

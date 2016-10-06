@@ -483,8 +483,60 @@
     }
   });
 
-  var app = new Vue({
-    el: "#attachment-app",
+  var app1 = new Vue({
+    el: ".attachment-app-1",
+    data: {
+      showUpload: false,
+      showBrowse: false,
+      settings: $('#attachment-settings').data('settings'),
+      selectedfiles1: [],
+      tags: [],
+      types: []
+    },
+    ready:function(){
+      this.selectedfiles1 = this.settings.attachments;
+      this.getTags().getTypes();
+    },
+    methods: {
+      getTags: function(){
+        var options = {
+          headers:{
+            "Accept":"application/json",
+            "Content-Type":"application/json"
+          }
+        };
+        this.$http.get(this.settings.tagsURL, options)
+        .then(this.tagsSuccessCallback, this.errorCallback);
+        return this;
+      },
+      getTypes: function(){
+        var options = {
+          params: {
+            types: '*',
+          },
+          headers:{
+            "Accept":"application/json",
+            "Content-Type":"application/json"
+          }
+        };
+        this.$http.get(this.settings.browseURL, options)
+        .then(this.typesSuccessCallback, this.errorCallback);
+        return this;
+      },
+      tagsSuccessCallback: function(response){
+        this.tags = response.data.data;
+      },
+      typesSuccessCallback: function(response){
+        this.types = response.data.data;
+      },
+      errorCallback: function(response){
+        console.log(response);
+      },
+    }
+  });
+
+  var app2 = new Vue({
+    el: ".attachment-app-2",
     data: {
       showUpload: false,
       showBrowse: false,
