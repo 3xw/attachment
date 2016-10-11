@@ -21,6 +21,17 @@
 
 #attachment-filters .panel-heading a { padding: 0; display: inline; }
 
+/* THUMB
+*****************************/
+.attachment-thumb__icon-container { position: relative; }
+.attachment-thumb__icon-container::before { content:''; display:block; padding-bottom: 56.25%; }
+.attachment-thumb__icon-container div { position: absolute; top: 0; left: 0; bottom: 0; right: 0; background: #FB404B; display: flex; align-items: center; justify-content: center; }
+.attachment-thumb__icon-container i { color: white; font-size: 24px; }
+@media (min-width: 992px){
+  .card form [class*="col-"] { padding: 0 15px; }
+}
+
+
 /* type head */
 .twitter-typeahead .tt-query,
 .twitter-typeahead .tt-hint {

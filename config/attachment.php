@@ -25,7 +25,8 @@ return [
       'atags' => [],
       'relation' => 'belongsToMany',
       'profile' => 'default',
-      'visibility' => 'public'
+      'visibility' => 'public',
+      'speech' => false
     ],
 
     // thumbnails settings

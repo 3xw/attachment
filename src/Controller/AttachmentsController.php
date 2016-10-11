@@ -32,7 +32,7 @@ class AttachmentsController extends AppController
         'Crud.View',
         'add' =>[
           'className' => 'Crud.Add',
-          'api.success.data.entity' => ['id','path','type','subtype','name','size']
+          'api.success.data.entity' => ['id','profile','path','type','subtype','name','size']
         ],
         'Crud.Edit',
         'Crud.Delete',
