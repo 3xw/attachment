@@ -60,6 +60,10 @@ Vue.filter('isThumbable', function (file) {
     case 'image/gif':
     return true;
     break;
+    case 'embed/youtube':
+    case 'embed/vimeo':
+    return (file.path)? true : false;
+    break;
     default:
     return false;
   }
@@ -71,6 +75,10 @@ Vue.filter('isNotThumbable', function (file) {
     case 'image/png':
     case 'image/gif':
     return false;
+    break;
+    case 'embed/youtube':
+    case 'embed/vimeo':
+    return (file.path)? false : true;
     break;
     default:
     return true;

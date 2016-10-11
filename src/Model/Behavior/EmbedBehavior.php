@@ -105,6 +105,8 @@ class EmbedBehavior extends Behavior
 
       // md5
       $data['md5'] = md5($data[$embed_field]);
+
+      $data['profile'] = 'external';
     }
   }
 }

@@ -11,6 +11,11 @@ return [
     		'client' => new League\Flysystem\Adapter\Local('files'),
         'baseUrl' =>  '/files/'
     	],
+      'external' => [
+    		'adapter' => 'Attachment\Network\ExternalAdapter',
+    		'client' => new Attachment\Network\ExternalAdapter(),
+        'baseUrl' =>  ''
+    	],
       'cache' => [
     		'adapter' => 'League\Flysystem\Adapter\Local',
     		'client' => new League\Flysystem\Adapter\Local('thumbnails'),

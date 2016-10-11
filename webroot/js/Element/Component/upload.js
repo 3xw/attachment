@@ -145,7 +145,6 @@ Vue.component('attachment-upload', {
         dataType: 'json',
         url: this.settings.url+'attachment/attachments/add.json',
         data: formData,
-        //context: document.body,
         cache: false,
         contentType: false,
         processData: false,
@@ -166,6 +165,11 @@ Vue.component('attachment-upload', {
         success: function(response){
           self.progress = false;
           self.$els.progressbar.style.width = 0+ "%";
+          if(self.settings.relation != 'belongsToMany'){
+            if(self.settings.attachments.length > 0){
+              self.settings.attachments.pop();
+            }
+          }
           self.settings.attachments.push(response.data);
           self.handleUploads();
         },

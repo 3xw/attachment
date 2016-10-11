@@ -10,6 +10,9 @@
       <!-- browse -->
       <attachment-browse :types="types" :tags="tags" :settings="settings" ></attachment-browse>
 
+      <!-- embed -->
+      <attachment-embed :settings.sync="settings" ></attachment-embed>
+
       <!-- files -->
       <attachment-files :settings.sync="settings" ></attachment-files>
 
@@ -23,7 +26,7 @@
             <i class="fa fa-cloud" aria-hidden="true"></i>
             <?= __('Parcourir'); ?>
           </button>
-          <button type="button" class="btn btn-fill btn-xs btn-info" @click="$children[1].open()">
+          <button type="button" class="btn btn-fill btn-xs btn-info" @click="$children[2].open()">
             <i class="fa fa-code" aria-hidden="true"></i>
             <?= __('Ajouter un embed code'); ?>
           </button>

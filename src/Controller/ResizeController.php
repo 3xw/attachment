@@ -23,7 +23,7 @@ class ResizeController extends AppController
   {
     //debug(Configure::read('Attachment'));
     //die();
-
+    
     // test profile
     if(!Configure::check('Attachment.profiles.'.$profile) || $profile == 'cache' ){ throw new NotFoundException(); }
 
