@@ -26,7 +26,7 @@
             <i class="fa fa-cloud" aria-hidden="true"></i>
             <?= __('Parcourir'); ?>
           </button>
-          <button type="button" class="btn btn-fill btn-xs btn-info" @click="$children[2].open()">
+          <button v-if="dispalyEmbed()" type="button" class="btn btn-fill btn-xs btn-info" @click="$children[2].open()">
             <i class="fa fa-code" aria-hidden="true"></i>
             <?= __('Ajouter un embed code'); ?>
           </button>

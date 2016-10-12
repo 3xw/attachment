@@ -60,7 +60,7 @@ class AttachmentsTable extends Table
 
         // Setup search filter using search manager
         $this->searchManager()
-        ->add('search', 'Search.Like', [
+        ->add('search', 'Attachment.SessionLike', [
           'before' => true,
           'after' => true,
           'mode' => 'or',
@@ -69,7 +69,7 @@ class AttachmentsTable extends Table
           'wildcardOne' => '?',
           'field' => [$this->aliasField('title'), $this->aliasField('description'), $this->aliasField('name')]
         ])
-        ->add('type', 'Search.Like', [
+        ->add('type', 'Attachment.SessionLike', [
           'before' => true,
           'after' => true,
           'mode' => 'or',
@@ -78,13 +78,13 @@ class AttachmentsTable extends Table
           'wildcardOne' => '?',
           'field' => [$this->aliasField('type')]
         ])
-        ->add('types', 'Search.Callback', [
+        ->add('types', 'Attachment.SessionCallback',[
           'callback' => function ($query, $args, $filter) {
             return $query
             ->distinct($this->aliasField('type'));
           }
         ])
-        ->add('tag', 'Search.Callback', [
+        ->add('tag', /*'Search.Callback',*/'Attachment.SessionCallback',[
           'callback' => function ($query, $args, $filter) {
             return $query
             ->distinct($this->aliasField('id'))
@@ -92,8 +92,8 @@ class AttachmentsTable extends Table
               return $query
               ->where([
                   'OR' => [
-                    $this->Atags->target()->aliasField('name') => $args['tag'],
-                    $this->Atags->target()->aliasField('slug') => $args['tag']
+                    'Atags.name' => $args['tag'],
+                    'Atags.slug' => $args['tag']
                   ]
               ]);
             });

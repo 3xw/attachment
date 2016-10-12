@@ -69,6 +69,10 @@ Vue.component('attachment-browse', {
     },
     getFiles: function(){
       var params = {page: this.pagination.current_page};
+
+      // add uuid for restriction at search
+      params.uuid = this.settings.uuid;
+
       if(this.search){
         params.search = this.search;
       }

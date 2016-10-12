@@ -89,7 +89,9 @@ Vue.component('attachment-upload', {
     },
     setupUI: function(){
       this.addEventListeners();
-      $('#atagsinput').tagsinput();
+      if(this.settings.restriction != 'tag_restricted'){
+        $('#atagsinput').tagsinput();
+      }
     },
     startUpload: function(){
       this.errors = [];
@@ -126,7 +128,7 @@ Vue.component('attachment-upload', {
       var fileName = file.name;
 
       // retrieve tags
-      var tags = $('#atagsinput').val();
+      var tags = (this.settings.restriction != 'tag_restricted')? $('#atagsinput').val(): this.atags;
       for( var t in tags )
       {
         formData.append('atags['+t+'][name]', tags[t].trim());

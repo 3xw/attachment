@@ -1,5 +1,4 @@
 <?php
-use Cake\Routing\Router;
 
 return [
   'Attachment' => [
@@ -31,7 +30,8 @@ return [
       'relation' => 'belongsToMany',
       'profile' => 'default',
       'visibility' => 'public',
-      'speech' => false
+      'speech' => false,
+      'restriction' => Attachment\View\Helper\AttachmentHelper::OPEN // or Attachment\View\Helper\AttachmentHelper::TAG_RESTRICTED
     ],
 
     // thumbnails settings

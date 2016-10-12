@@ -10,6 +10,11 @@ use Cake\Utility\Inflector;
 
 class AttachmentHelper extends Helper
 {
+
+  const OPEN = 'open';
+
+  const TAG_RESTRICTED = 'tag_restricted';
+
   public $helpers = ['Url','Html'];
 
   private $_filesystems = [];
