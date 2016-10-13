@@ -1,6 +1,6 @@
 <?php
 
-namespace Attachment\Model;
+namespace Attachment\Fly;
 
 use WyriHaximus\FlyPie\FilesystemRegistry as WyriHaximusFilesystemRegistry;
 

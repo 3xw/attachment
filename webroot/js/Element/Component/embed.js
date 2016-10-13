@@ -25,7 +25,7 @@ Vue.component('attachment-embed', {
       setTimeout(this.setupUI, 500);
     },
     setupUI: function(){
-      if(this.settings.restriction != 'tag_restricted'){
+      if(this.settings.restrictions.indexOf('tag_restricted') == -1){
         $('#atagsinput').tagsinput();
       }
     },
@@ -50,7 +50,7 @@ Vue.component('attachment-embed', {
       formData.append('uuid', this.settings.uuid);
 
       // retrieve tags
-      var tags = (this.settings.restriction != 'tag_restricted')? $('#atagsinput').val(): this.atags;
+      var tags = (this.settings.restrictions.indexOf('tag_restricted') == -1)? $('#atagsinput').val(): this.atags;
       for( var t in tags )
       {
         formData.append('atags['+t+'][name]', tags[t].trim());

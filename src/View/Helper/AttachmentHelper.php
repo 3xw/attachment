@@ -2,7 +2,7 @@
 namespace Attachment\View\Helper;
 
 use Cake\View\Helper;
-use Attachment\Model\FilesystemRegistry;
+use Attachment\Fly\FilesystemRegistry;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
 use Cake\Utility\Text;
@@ -14,6 +14,8 @@ class AttachmentHelper extends Helper
   const OPEN = 'open';
 
   const TAG_RESTRICTED = 'tag_restricted';
+
+  const TYPES_RESTRICTED = 'types_restricted';
 
   public $helpers = ['Url','Html'];
 
@@ -42,7 +44,7 @@ class AttachmentHelper extends Helper
       // add css
       $this->Html->css([
         'Attachment.vendor/TimSchlechter/bootstrap-tagsinput/bootstrap-tagsinput.css',
-        'Attachment.attachment.css?v='.time(),
+        'Attachment.attachment.css',
       ],['block' => 'css']);
 
       // add script
@@ -50,15 +52,15 @@ class AttachmentHelper extends Helper
         'Attachment.vendor/TimSchlechter/bootstrap-tagsinput/bootstrap-tagsinput.js',
         'Attachment.vendor/twitter/typeahead.js/typeahead.bundle.min.js',
         'Attachment.vendor/rubaxa/Sortable/Sortable.js',
-        'Attachment.Element/Component/utils.js?v='.time(),
-        'Attachment.Element/Component/thumb.js?v='.time(),
-        'Attachment.Element/Component/files.js?v='.time(),
-        'Attachment.Element/Component/pagination.js?v='.time(),
-        'Attachment.Element/Component/filters.js?v='.time(),
-        'Attachment.Element/Component/upload.js?v='.time(),
-        'Attachment.Element/Component/embed.js?v='.time(),
-        'Attachment.Element/Component/browse.js?v='.time(),
-        'Attachment.Element/Component/input.js?v='.time()
+        'Attachment.Element/Component/utils.js',
+        'Attachment.Element/Component/thumb.js',
+        'Attachment.Element/Component/files.js',
+        'Attachment.Element/Component/pagination.js',
+        'Attachment.Element/Component/filters.js',
+        'Attachment.Element/Component/upload.js',
+        'Attachment.Element/Component/embed.js',
+        'Attachment.Element/Component/browse.js',
+        'Attachment.Element/Component/input.js'
       ],['block' => true]);
     }
   }
@@ -89,10 +91,10 @@ class AttachmentHelper extends Helper
 
   public function fullPath($attachment)
   {
-    $baseUrl = Configure::read('Attachment.profiles.'.$attachment['profile'].'.baseUrl');
+    $baseUrl = Configure::read('Attachment.profiles.'.$attachment->profile.'.baseUrl');
     $start = substr($baseUrl,0 , 4);
     $baseUrl = ( $start == 'http' )? $baseUrl : Router::url($baseUrl, true);
-    return $baseUrl.$attachment['path'];
+    return $baseUrl.$attachment->path;
   }
 
   public function image($params, $attributes = null ) {
@@ -108,7 +110,23 @@ class AttachmentHelper extends Helper
 
   public function thumbSrc($params) {
     $start = substr($params['image'],0 , 4);
-    $params['image'] = ( $start == 'http' )? $params['image'] : $params['image'];
-    return $this->Url->build('/image.php').'?'. http_build_query($params);
+
+    if(( $start == 'http' )){
+      $profile = 'external';
+    }else{
+      $profile = empty($params['profile'])? 'external' : $params['profile'];
+    }
+    $url = $this->Url->build('/thumbnails/'.$profile.'/',true);
+    $dims = ['height' => 'h','width' => 'w','align' => 'a'];
+    foreach($dims as $key => $value){
+      if(!empty($params[$key])){
+        $url .= $value.$params[$key];
+      }
+    }
+    if(!empty($params['cropratio'])){
+      $url .= 'c'.str_replace(':','-',$params['cropratio']);
+    }
+
+    return $url.'/'.$params['image'];
   }
 }

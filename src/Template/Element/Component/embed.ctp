@@ -15,7 +15,7 @@
           </div>
 
           <!-- TAGS -->
-          <div v-if="this.settings.restriction != 'tag_restricted'" id="attachment-atags">
+          <div v-if="this.settings.restrictions.indexOf('tag_restricted') == -1" id="attachment-atags">
             <label >Tags</label>
             <select id="atagsinput" multiple class="form-control">
               <option v-for="(index, atag) in atags" value="{{atag}}">{{atag}}</option>

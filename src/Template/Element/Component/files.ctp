@@ -6,7 +6,7 @@
     <input v-if="settings.relation == 'belongsToMany'" type="hidden" name="attachments[]" value="" id="AttachmentAttachment_">
 
     <div class="row" v-sortable="{draggable:'.attachment-files__item', onEnd:onEnd}" >
-      <div v-for="(index, file) in settings.attachments" id="{{index}}"  class="attachment-files__item col-xs-4 col-md-3">
+      <div v-for="(index, file) in settings.attachments" id="{{index}}"  class="attachment-files__item col-xs-4 col-md-3 col-lg-2">
         <div class="thumbnail" >
 
           <!-- thumb -->

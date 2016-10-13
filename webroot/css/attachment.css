@@ -32,6 +32,10 @@
   .card form [class*="col-"] { padding: 0 15px; }
 }
 
+/* loading
+*****************************/
+.attachment-loading-container { text-align: center;}
+.attachment-loading-container img { max-width: 200px; display: inline-block; }
 
 /* type head */
 .twitter-typeahead .tt-query,

@@ -4,6 +4,7 @@ namespace Attachment\Model\Filter\Restriction;
 use Cake\Network\Session;
 use Cake\Routing\Router;
 use Cake\Utility\Inflector;
+use Cake\Network\Exception\UnauthorizedException;
 
 Trait SessionRestrictionTrait {
 
@@ -13,15 +14,19 @@ Trait SessionRestrictionTrait {
     {
       $session = new Session();
       $settings = $session->read('Attachment.'.Router::getRequest()->query['uuid']);
-      if(!empty($settings['restriction']))
+      if(!empty($settings['restrictions']))
       {
-        $restriction = '\\Attachment\\Model\\Filter\\Restriction\\' . Inflector::camelize($settings['restriction']);
-        if (class_exists($restriction))
+        foreach($settings['restrictions'] as $restriction)
         {
-          $restriction = new $restriction;
-          $restriction->process($this->query(), $settings);
+          $restriction = '\\Attachment\\Model\\Filter\\Restriction\\' . Inflector::camelize($restriction);
+          if (class_exists($restriction))
+          {
+            $restriction = new $restriction;
+            $restriction->process($this->query(), $settings);
+          }
         }
-        //debug($this->query());
+      }else{
+        throw new UnauthorizedException(__("Error Processing Request, reload the page or try login again!"));
       }
     }
   }

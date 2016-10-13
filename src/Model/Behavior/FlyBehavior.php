@@ -6,20 +6,18 @@ use Cake\Event\Event;
 use Exception;
 use Cake\Utility\Inflector;
 use Cake\Core\Configure;
-use Cake\Filesystem\Folder;
-use Cake\Filesystem\File;
 use Cake\Datasource\EntityInterface;
 use Cake\Network\Session;
 
 use Cake\ORM\Behavior;
 use Cake\ORM\Table;
 
-use Attachment\Model\FilesystemRegistry;
+use Attachment\Fly\FilesystemRegistry;
 
 /**
 * Storage behavior
 */
-class StorageBehavior extends Behavior
+class FlyBehavior extends Behavior
 {
 
   /**

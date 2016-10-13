@@ -4,8 +4,11 @@ Vue.component('attachment-browse', {
     return {
       search: '',
       tag: '',
+      sort: { query: '', term: ''},
+      errors: [],
       files: [],
       ids: [],
+      loading: true,
       pagination: {
         "page_count": 1,
         "current_page": 1,
@@ -38,7 +41,8 @@ Vue.component('attachment-browse', {
     for(var i in this.settings.attachments ){
       this.ids.push(this.settings.attachments[i].id);
     }
-    this.getTags().getTypes();
+    this.getTags();
+    this.types = this.settings.types;
   },
   methods: {
     isSelected: function(id){
@@ -57,9 +61,11 @@ Vue.component('attachment-browse', {
       this.removeEventListeners();
       this.files = [];
       this.show = false;
+      this.loading = false;
     },
     open: function(){
       this.addEventListeners();
+      this.loading = true;
       this.show = true;
       this.getFiles();
       setTimeout(this.setupUI, 500);
@@ -68,9 +74,10 @@ Vue.component('attachment-browse', {
       this.$children[0].setupUI();
     },
     getFiles: function(){
+      this.loading = true;
       var params = {page: this.pagination.current_page};
 
-      // add uuid for restriction at search
+      // add uuid for restrictions
       params.uuid = this.settings.uuid;
 
       if(this.search){
@@ -79,6 +86,15 @@ Vue.component('attachment-browse', {
       if(this.tag){
         params.tag = this.tag;
       }
+      if(this.sort.term){
+        params.sort = this.sort.query.sort;
+        params.direction = this.sort.query.direction;
+      }
+
+      if(!this.tag && !this.search){
+        params.index = 'filter';
+      }
+
       var options = {
         params: params,
         headers:{
@@ -90,12 +106,14 @@ Vue.component('attachment-browse', {
       .then(this.successCallback, this.errorCallback);
     },
     successCallback: function(response){
+      this.loading = false;
       this.files = response.data.data;
       this.pagination = response.data.pagination;
       //console.log(this.pagination);
     },
     getTags: function(){
       var options = {
+        params: {index:'filter'},
         headers:{
           "Accept":"application/json",
           "Content-Type":"application/json"
@@ -105,27 +123,13 @@ Vue.component('attachment-browse', {
       .then(this.tagsSuccessCallback, this.errorCallback);
       return this;
     },
-    getTypes: function(){
-      var options = {
-        params: {
-          types: '*',
-        },
-        headers:{
-          "Accept":"application/json",
-          "Content-Type":"application/json"
-        }
-      };
-      this.$http.get(this.settings.url+'attachment/attachments.json', options)
-      .then(this.typesSuccessCallback, this.errorCallback);
-      return this;
-    },
     tagsSuccessCallback: function(response){
       this.tags = response.data.data;
     },
-    typesSuccessCallback: function(response){
-      this.types = response.data.data;
-    },
     errorCallback: function(response){
+      this.loading = false;
+      var message = ( response.data )? response.data.data.message : 'Your session is lost, please login again!';
+      this.errors.push(message);
       console.log(response);
     },
     add: function(index){

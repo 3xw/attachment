@@ -11,8 +11,8 @@ return [
         'baseUrl' =>  '/files/'
     	],
       'external' => [
-    		'adapter' => 'Attachment\Network\ExternalAdapter',
-    		'client' => new Attachment\Network\ExternalAdapter(),
+    		'adapter' => 'Attachment\Fly\ExternalAdapter',
+    		'client' => new Attachment\Fly\ExternalAdapter(),
         'baseUrl' =>  ''
     	],
       'cache' => [
@@ -31,7 +31,7 @@ return [
       'profile' => 'default',
       'visibility' => 'public',
       'speech' => false,
-      'restriction' => Attachment\View\Helper\AttachmentHelper::OPEN // or Attachment\View\Helper\AttachmentHelper::TAG_RESTRICTED
+      'restrictions' => [] // or Attachment\View\Helper\AttachmentHelper::TAG_RESTRICTED
     ],
 
     // thumbnails settings

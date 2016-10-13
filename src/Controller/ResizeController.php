@@ -4,7 +4,7 @@ namespace Attachment\Controller;
 use Attachment\Controller\AppController;
 use Cake\Core\Configure;
 use Cake\Network\Exception\NotFoundException;
-use Attachment\Model\FilesystemRegistry;
+use Attachment\Fly\FilesystemRegistry;
 use Intervention\Image\ImageManagerStatic as Image;
 
 /**
@@ -23,7 +23,7 @@ class ResizeController extends AppController
   {
     //debug(Configure::read('Attachment'));
     //die();
-    
+
     // test profile
     if(!Configure::check('Attachment.profiles.'.$profile) || $profile == 'cache' ){ throw new NotFoundException(); }
 
