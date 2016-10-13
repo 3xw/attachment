@@ -4,7 +4,7 @@ namespace Attachment\Controller;
 use Attachment\Controller\AppController;
 use Cake\Core\Configure;
 use Cake\Network\Exception\NotFoundException;
-use Attachment\Model\FilesystemRegistry;
+use Attachment\Fly\FilesystemRegistry;
 use Intervention\Image\ImageManagerStatic as Image;
 
 /**
@@ -21,8 +21,8 @@ class ResizeController extends AppController
 
   public function proceed($profile, $dim, ...$image )
   {
-    debug(Configure::read('Attachment'));
-    die();
+    //debug(Configure::read('Attachment'));
+    //die();
 
     // test profile
     if(!Configure::check('Attachment.profiles.'.$profile) || $profile == 'cache' ){ throw new NotFoundException(); }
@@ -70,7 +70,7 @@ class ResizeController extends AppController
 
     // retrieve image
     $contents = $this->_filesystem($profile)->read($image);
-    Image::configure(['driver' => Configure::check('Attachment.thumbnails.driver')]);
+    Image::configure(['driver' => Configure::read('Attachment.thumbnails.driver')]);
     $img = Image::make($contents);
 
     // get original sizes

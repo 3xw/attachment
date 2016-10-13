@@ -6,20 +6,18 @@ use Cake\Event\Event;
 use Exception;
 use Cake\Utility\Inflector;
 use Cake\Core\Configure;
-use Cake\Filesystem\Folder;
-use Cake\Filesystem\File;
 use Cake\Datasource\EntityInterface;
 use Cake\Network\Session;
 
 use Cake\ORM\Behavior;
 use Cake\ORM\Table;
 
-use Attachment\Model\FilesystemRegistry;
+use Attachment\Fly\FilesystemRegistry;
 
 /**
 * Storage behavior
 */
-class StorageBehavior extends Behavior
+class FlyBehavior extends Behavior
 {
 
   /**
@@ -32,6 +30,8 @@ class StorageBehavior extends Behavior
   protected $_file = [];
 
   protected $_fileToRemove = false;
+
+  protected $_uuid = '';
 
   /**
   * Build the behaviour
@@ -66,6 +66,9 @@ class StorageBehavior extends Behavior
 
       // store file!
       $this->_file = $data[$field];
+
+      // set uuid if exists
+      $this->_uuid = empty($data['uuid'])? '' : $data['uuid'];
 
       // md5
       $data['md5'] = md5_file($data[$field]['tmp_name']);
@@ -112,7 +115,7 @@ class StorageBehavior extends Behavior
 
         // GET CONFIG
         $session = new Session();
-        $sessionAttachment = $session->read('Attachment');
+        $sessionAttachment = $session->read('Attachment.'.$this->_uuid);
         if(!$sessionAttachment){
           $event->stopPropagation();
           $entity->errors($field,['Attachment keys not found in session! Please pass Attachment settings throught session!']);
@@ -147,11 +150,12 @@ class StorageBehavior extends Behavior
 
         // store file
         $stream = fopen($temp_name, 'r+');
-        $this->filesystem($profile)->writeStream($name, $stream);
+        $this->filesystem($profile)->writeStream($name, $stream,[
+          'visibility' => $conf['visibility'],
+          'mimetype' => $fullType
+        ]);
         fclose($stream);
-        $this->filesystem($profile)->setVisibility($name, $conf['visibility']);
         $entity->{$field} = $name;
-
       }
     }
   }

@@ -1,5 +1,4 @@
 <?php
-use Cake\Routing\Router;
 
 return [
   'Attachment' => [
@@ -10,6 +9,11 @@ return [
     		'adapter' => 'League\Flysystem\Adapter\Local',
     		'client' => new League\Flysystem\Adapter\Local('files'),
         'baseUrl' =>  '/files/'
+    	],
+      'external' => [
+    		'adapter' => 'Attachment\Fly\ExternalAdapter',
+    		'client' => new Attachment\Fly\ExternalAdapter(),
+        'baseUrl' =>  ''
     	],
       'cache' => [
     		'adapter' => 'League\Flysystem\Adapter\Local',
@@ -25,7 +29,9 @@ return [
       'atags' => [],
       'relation' => 'belongsToMany',
       'profile' => 'default',
-      'visibility' => 'public'
+      'visibility' => 'public',
+      'speech' => false,
+      'restrictions' => [] // or Attachment\View\Helper\AttachmentHelper::TAG_RESTRICTED
     ],
 
     // thumbnails settings
