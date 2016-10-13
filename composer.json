@@ -1,5 +1,5 @@
 {
-    "name": "3xw-team/attachment",
+    "name": "3xw/attachment",
     "description": "Attachment plugin for CakePHP",
     "type": "cakephp-plugin",
     "require": {
