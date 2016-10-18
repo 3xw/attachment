@@ -67,8 +67,8 @@ class AttachmentHelper extends Helper
 
   public function input($field, $settings = [])
   {
-    $settings['relation'] = ($field == 'Attachment')? 'belongsToMany' : 'belongsTo';
-    $settings['field'] = ($field == 'Attachment')? '' : $field;
+    $settings['relation'] = ($field == 'Attachments')? 'belongsToMany' : 'belongsTo';
+    $settings['field'] = ($field == 'Attachments')? '' : $field;
     $this->_setupInputComponent();
     $settings = array_merge(Configure::read('Attachment.upload'),$settings);
     $uuid = Text::uuid();
