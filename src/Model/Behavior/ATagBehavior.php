@@ -6,6 +6,7 @@ use Cake\Event\Event;
 use Exception;
 use Cake\Utility\Inflector;
 use Cake\Datasource\EntityInterface;
+use Cake\Network\Session;
 
 use Cake\ORM\Behavior;
 use Cake\ORM\Table;
@@ -39,6 +40,38 @@ class ATagBehavior extends Behavior
 
   public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options)
   {
+    // GET CONFIG
+    $session = new Session();
+    $uuid = empty($data['uuid'])? '' : $data['uuid'];
+    $sessionAttachment = $session->read('Attachment.'.$uuid);
+    if(!$sessionAttachment){
+      $event->stopPropagation();
+      throw new Exception('Attachment keys not found in session! Please pass Attachment settings throught session!');
+    }
+
+    // see if tag restricted
+    $isTagRestricted = false;
+    if(!empty($sessionAttachment['restrictions']))
+    {
+      foreach($sessionAttachment['restrictions'] as $restriction )
+      {
+        if($restriction == 'tag_restricted')
+        {
+          $isTagRestricted = true;
+        }
+      }
+    }
+
+    if($isTagRestricted)
+    {
+      $data['atags'] = [];
+      $tags = empty($sessionAttachment['atags'])? []: $sessionAttachment['atags'];
+      foreach($tags as $tag)
+      {
+        array_push($data['atags'],['name' => $tag]);
+      }
+    }
+
     if(!empty($data['atags']))
     {
       $atags = $this->_table->Atags;
