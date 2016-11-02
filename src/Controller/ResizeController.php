@@ -43,7 +43,13 @@ class ResizeController extends AppController
 
     // test if image
     $mimetypes = ['image/jpeg','image/png','image/gif'];
-    $mimetype = $this->_filesystem($profile)->getMimetype($image);
+    if($profile == 'external')
+    {
+      $url = str_replace(':/','://',$image);
+      $mimetype = get_headers($url, 1)["Content-Type"];
+    }else{
+      $mimetype = $this->_filesystem($profile)->getMimetype($image);
+    }
     if(!in_array($mimetype, $mimetypes))
     {
       throw new NotFoundException('Invalide file type! Image only!');
