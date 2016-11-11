@@ -77,7 +77,7 @@ class AttachmentHelper extends Helper
     $settings['url'] = $this->Url->build('/', true);
     $settings['label'] = empty($settings['label'])? Inflector::humanize($field) : $settings['label'];
 
-    return "<attachment-input :settings='".json_encode($settings)."' ></attachment-input>";
+    return "<attachment-input :settings='".htmlspecialchars(json_encode($settings), ENT_QUOTES, 'UTF-8')."' ></attachment-input>";
   }
 
   public function filesystem($profile)
