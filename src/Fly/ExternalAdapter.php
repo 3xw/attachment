@@ -15,7 +15,7 @@ class ExternalAdapter extends AbstractAdapter
 
   private function _makeNicePathUrl($path)
   {
-    return str_replace('http:/', 'http://', $path);
+    return str_replace(['http:/','https:/'], ['http://','https://'], $path);
   }
 
   /**
