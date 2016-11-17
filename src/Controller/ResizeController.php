@@ -131,7 +131,7 @@ class ResizeController extends AppController
     }
 
     // create folders
-    $folder = $profile.DS.$dim.DS.substr($image, 0, strrpos($image, '/') - 1 );
+    $folder = $profile.DS.$dim.DS.substr($image, 0, strrpos($image, '/') );
     $folder = new Folder($this->_filesystem('cache')->getAdapter()->applyPathPrefix($folder), true, 0777);
 
     // write image
