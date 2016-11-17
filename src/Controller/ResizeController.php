@@ -5,6 +5,8 @@ use Attachment\Controller\AppController;
 use Cake\Core\Configure;
 use Cake\Network\Exception\NotFoundException;
 use Attachment\Fly\FilesystemRegistry;
+use Cake\Filesystem\Folder;
+use Cake\Core\App;
 use Intervention\Image\ImageManagerStatic as Image;
 
 /**
@@ -127,6 +129,10 @@ class ResizeController extends AppController
       case 7: $img->crop($fw,$fh, 0, $nh-$fh ); break;
       case 8: $img->crop($fw,$fh, 0, 0 ); break;
     }
+
+    // create folders
+    $folder = $profile.DS.$dim.DS.substr($image, 0, strrpos($image, '/') - 1 );
+    $folder = new Folder($this->_filesystem('cache')->getAdapter()->applyPathPrefix($folder), true, 0777);
 
     // write image
     $img->encode($mimetype);
