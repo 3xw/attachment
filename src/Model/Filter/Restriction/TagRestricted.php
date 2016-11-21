@@ -15,9 +15,9 @@ class TagRestricted extends BaseRestriction
 
       foreach($settings['atags'] as $tag )
       {
-        $alias1 = 'At'.Inflector::camelize($tag);
+        $alias1 = 'At'.Inflector::slug($tag,'_');
         $query->innerJoin([$alias1 => 'attachments_atags'],[$alias1.'.attachment_id = Attachments.id']);
-        $alias2 = 'Atags'.Inflector::camelize($tag);
+        $alias2 = 'Atags'.Inflector::slug($tag,'_');
         $query->innerJoin([$alias2 => 'atags'],[
           $alias2.'.id = '.$alias1.'.atag_id AND ('.$alias2.'.name = "'.$tag.'" OR '.$alias2.'.slug = "'.$tag.'" )'
         ]);
