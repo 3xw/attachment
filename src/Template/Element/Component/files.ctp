@@ -1,6 +1,6 @@
 <!-- files -->
 <script type="text/x-template" id="attachment-files">
-  <div id="attachment-files">
+  <div id="attachment-files" data-intro="Liste des médias séléctionnés, vous pouvez les ordonner en les déplaçant à la souris." data-position="left">
 
     <!-- add Array input -->
     <input v-if="settings.relation == 'belongsToMany'" type="hidden" name="attachments[]" value="" id="AttachmentAttachment_">

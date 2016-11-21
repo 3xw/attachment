@@ -17,7 +17,7 @@
       <attachment-files :settings.sync="settings" ></attachment-files>
 
       <p>
-        <div class="btn-group">
+        <div class="btn-group" data-intro="Ajouter des médias à l'aide de ces boutons" data-position="right">
           <button type="button" class="btn btn-fill btn-xs btn-info" @click="$children[0].open()">
             <i class="fa fa-cloud-upload" aria-hidden="true"></i>
             <?= __('Téléverser'); ?>
