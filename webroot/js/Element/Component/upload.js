@@ -105,8 +105,7 @@ Vue.component('attachment-upload', {
           this.close();
           this.tellUser('Tous les fichiers ont bien été téléversé!');
         }else{
-          this.removeEventListeners();
-          this.addEventListeners();
+          this.close();
           this.tellUser(this.errors.length+' fichiers n\'ont pu être téléverssé!');
         }
       }
@@ -180,6 +179,7 @@ Vue.component('attachment-upload', {
           self.$els.progressbar.style.width = 0 + "%";
 
           var message = response.statusText;
+          console.log(response);
           //self.success = '';
           if(response.responseJSON){
             var errors = response.responseJSON.data.errors;
