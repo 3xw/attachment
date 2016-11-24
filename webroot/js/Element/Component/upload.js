@@ -183,8 +183,8 @@ Vue.component('attachment-upload', {
           
           //self.success = '';
           if(response.responseJSON){
-            var errors = ( response.responseJSON['data'] )? response.responseJSON.data.errors: esponse.responseJSON.errors;
-            var message = ( response.responseJSON['data'] )? response.responseJSON.data.message: esponse.responseJSON.message;
+            var errors = ( response.responseJSON['data'] )? response.responseJSON.data.errors: response.responseJSON.errors;
+            var message = ( response.responseJSON['data'] )? response.responseJSON.data.message: response.responseJSON.message;
 
             if(errors['md5']){
               if(errors['md5']['unique']){
