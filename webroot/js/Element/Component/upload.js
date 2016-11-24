@@ -180,15 +180,17 @@ Vue.component('attachment-upload', {
           self.$els.progressbar.style.width = 0 + "%";
 
           var message = response.statusText;
-          
+
           //self.success = '';
           if(response.responseJSON){
             var errors = ( response.responseJSON['data'] )? response.responseJSON.data.errors: response.responseJSON.errors;
             var message = ( response.responseJSON['data'] )? response.responseJSON.data.message: response.responseJSON.message;
 
-            if(errors['md5']){
-              if(errors['md5']['unique']){
-                message = errors['md5'].unique;
+            if(errors){
+              if(errors['md5']){
+                if(errors['md5']['unique']){
+                  message = errors['md5'].unique;
+                }
               }
             }
           }
