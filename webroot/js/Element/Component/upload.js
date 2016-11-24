@@ -105,7 +105,8 @@ Vue.component('attachment-upload', {
           this.close();
           this.tellUser('Tous les fichiers ont bien été téléversé!');
         }else{
-          this.close();
+          this.removeEventListeners();
+          this.addEventListeners();
           this.tellUser(this.errors.length+' fichiers n\'ont pu être téléverssé!');
         }
       }
@@ -179,11 +180,12 @@ Vue.component('attachment-upload', {
           self.$els.progressbar.style.width = 0 + "%";
 
           var message = response.statusText;
-          console.log(response);
+          
           //self.success = '';
           if(response.responseJSON){
-            var errors = response.responseJSON.data.errors;
-            var message = response.responseJSON.data.message;
+            var errors = ( response.responseJSON['data'] )? response.responseJSON.data.errors: esponse.responseJSON.errors;
+            var message = ( response.responseJSON['data'] )? response.responseJSON.data.message: esponse.responseJSON.message;
+
             if(errors['md5']){
               if(errors['md5']['unique']){
                 message = errors['md5'].unique;
