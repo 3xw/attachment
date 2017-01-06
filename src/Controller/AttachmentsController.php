@@ -2,6 +2,7 @@
 namespace Attachment\Controller;
 
 use Attachment\Controller\AppController;
+use Cake\Event\Event;
 
 /**
 * Attachments Controller
@@ -35,10 +36,10 @@ class AttachmentsController extends AppController
           'api.success.data.entity' => ['id','profile','path','type','subtype','name','size']
         ],
         'Crud.Edit',
-        'Crud.Delete',
+        //'Crud.Delete',
         /*'find' => [
-          'className' => 'Crud.Index',
-          'api.success.data.entity' => ['type','subtype']
+        'className' => 'Crud.Index',
+        'api.success.data.entity' => ['type','subtype']
         ]*/
       ],
       'listeners' => [
@@ -49,6 +50,19 @@ class AttachmentsController extends AppController
         'Crud.Search'
       ]
     ]);
+  }
+
+  public function delete($id)
+  {
+    $this->Crud->on('afterDelete', function(Event $event) {
+      if (!$event->subject()->success) {
+        $event->stopPropagation();
+        //$this->log("Delete failed for entity " . $event->subject()->id);
+        return 'an error occured';
+      }
+    });
+
+    return $this->Crud->execute();
   }
 
 }

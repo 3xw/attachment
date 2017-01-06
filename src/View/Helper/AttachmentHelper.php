@@ -23,6 +23,57 @@ class AttachmentHelper extends Helper
 
   private $_inputComponentCount = 0;
 
+  private function _setupIndexComponent()
+  {
+    $this->_inputComponentCount++;
+    if($this->_inputComponentCount == 1)
+    {
+      // session clear
+      $this->request->session()->write('Attachment', '');
+
+      // add template
+      $this->_View->append('template', $this->_View->element('Attachment.Component/thumb'));
+      $this->_View->append('template', $this->_View->element('Attachment.Component/files-index'));
+      $this->_View->append('template', $this->_View->element('Attachment.Component/edit'));
+      $this->_View->append('template', $this->_View->element('Attachment.Component/pagination'));
+      $this->_View->append('template', $this->_View->element('Attachment.Component/filters'));
+      $this->_View->append('template', $this->_View->element('Attachment.Component/index'));
+
+      // add css
+      $this->Html->css([
+        'Attachment.vendor/TimSchlechter/bootstrap-tagsinput/bootstrap-tagsinput.css',
+        'Attachment.attachment.css',
+      ],['block' => 'css']);
+
+      // add script
+      $this->Html->script([
+        'Attachment.vendor/TimSchlechter/bootstrap-tagsinput/bootstrap-tagsinput.js',
+        'Attachment.vendor/twitter/typeahead.js/typeahead.bundle.min.js',
+        'Attachment.vendor/rubaxa/Sortable/Sortable.js',
+        'Attachment.Element/Component/utils.js',
+        'Attachment.Element/Component/thumb.js',
+        'Attachment.Element/Component/files-index.js?v='.time(),
+        'Attachment.Element/Component/edit.js?v='.time(),
+        'Attachment.Element/Component/pagination.js',
+        'Attachment.Element/Component/filters.js',
+        'Attachment.Element/Component/index.js?v='.time()
+      ],['block' => true]);
+    }
+  }
+
+  public function buildIndex($settings = [])
+  {
+    $this->_setupIndexComponent();
+    $settings['actions'] = (empty($settings['actions']))? ['add','edit','delete'] : $settings['actions'];
+    $settings = array_merge(Configure::read('Attachment.upload'),$settings);
+    $uuid = Text::uuid();
+    $this->request->session()->write('Attachment.'.$uuid, $settings);
+    $settings['uuid'] = $uuid;
+    $settings['url'] = $this->Url->build('/', true);
+
+    return "<attachment-index :settings='".htmlspecialchars(json_encode($settings), ENT_QUOTES, 'UTF-8')."' ></attachment-index>";
+  }
+
   private function _setupInputComponent()
   {
     $this->_inputComponentCount++;
