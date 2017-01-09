@@ -14,6 +14,7 @@ Vue.component('attachment-index',{
       successes: [],
       errors: [],
       files: [],
+      fileToDeleteName: '',
       ids: [],
       loading: true,
       pagination: {
@@ -51,6 +52,23 @@ Vue.component('attachment-index',{
       }
       this.errors.push(message);
       console.log(response);
+    },
+    'delete-file': function(index){
+      var file = this.files[index];
+      this.fileToDeleteName = file.name;
+      if(!confirm('Delete file: '+this.fileToDeleteName+'?')){
+        return false;
+      }
+      var options = {
+        headers:{
+          "Accept":"application/json",
+          "Content-Type":"application/json"
+        }
+      };
+      file.uuid = this.settings.uuid;
+      this.loading = true;
+      this.$http.delete(this.settings.url+'attachment/attachments/delete/'+file.id+'.json', file,options)
+      .then(this.deleteSuccessCallback, this.errorCallback);
     }
   },
   methods: {
@@ -107,6 +125,11 @@ Vue.component('attachment-index',{
     tagsSuccessCallback: function(response){
       this.tags = response.data.data;
       this.settings.atags = response.data.data;
+    },
+    deleteSuccessCallback: function(response){
+      this.loading = false;
+      this.successes.push('file: '+this.fileToDeleteName+' was successfully deleted!');
+      this.getFiles();
     },
     errorCallback: function(response){
       this.loading = false;
