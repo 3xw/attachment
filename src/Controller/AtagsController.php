@@ -12,6 +12,13 @@ class AtagsController extends AppController
 {
   use \Crud\Controller\ControllerTrait;
 
+  public $paginate = [
+        'limit' => 100000,
+        'order' => [
+            'Atags.name' => 'ASC'
+        ]
+    ];
+
   public function initialize(){
     parent::initialize();
 

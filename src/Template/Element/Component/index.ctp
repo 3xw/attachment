@@ -11,6 +11,12 @@
       <strong>Attention!</strong> {{error}}
     </div>
 
+    <!-- SUCCESS -->
+    <div v-for="(index, success) in successes" track-by="$index" class="alert alert-success alert-dismissible" role="alert">
+      <button type="button" class="close"  aria-label="Close" @click="successes = []" ><span aria-hidden="true">&times;</span></button>
+      <strong>OK!</strong> {{success}}
+    </div>
+
     <!-- loading -->
     <div v-if="loading" class="attachment-loading-container">
       <img v-bind:src="this.settings.url+'attachment/img/loading.gif'" class="img-responsive" />

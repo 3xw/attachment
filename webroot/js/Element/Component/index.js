@@ -11,6 +11,7 @@ Vue.component('attachment-index',{
       search: '',
       tag: '',
       sort: { query: '', term: ''},
+      successes: [],
       errors: [],
       files: [],
       ids: [],
@@ -31,17 +32,28 @@ Vue.component('attachment-index',{
     this.getFiles();
   },
   events: {
-    'edit-file': function(index) {
-      console.log('hoooo');
-      console.log(index);
-      //this.$broadcast('edit-file',this.files[index]);
+    'show-edit-file': function(index) {
+      this.$broadcast('edit-file',this.files[index]);
+    },
+    'edit-progress': function(){
+      this.loading = true;
+    },
+    'edit-success': function(response, file){
+      this.loading = false;
+      this.successes.push('file: '+file.name+' successfully edited!');
+      this.getTags();
+    },
+    'edit-error': function(response, file){
+      this.loading = false;
+      var message = ( response.data && response.data.data && response.data.data.message )? 'file: '+file.name+' '+response.data.data.message : 'Your session is lost, please login again!';
+      if( response.data && response.data.message ){
+        message = 'file: '+file.name+' '+response.data.message;
+      }
+      this.errors.push(message);
+      console.log(response);
     }
   },
   methods: {
-    /*showEdit:function(index){
-      console.log(index);
-      this.$broadcast('yo-file');
-    },*/
     getFiles: function(){
       this.loading = true;
       var params = {page: this.pagination.current_page};
@@ -94,6 +106,7 @@ Vue.component('attachment-index',{
     },
     tagsSuccessCallback: function(response){
       this.tags = response.data.data;
+      this.settings.atags = response.data.data;
     },
     errorCallback: function(response){
       this.loading = false;

@@ -29,13 +29,19 @@ class AttachmentsController extends AppController
 
     $this->loadComponent('Crud.Crud', [
       'actions' => [
-        'Crud.Index',
+        //'Crud.Index',
+        'index' => [
+          'className' => 'Crud.Index',
+        ],
         'Crud.View',
         'add' =>[
           'className' => 'Crud.Add',
           'api.success.data.entity' => ['id','profile','path','type','subtype','name','size']
         ],
         'Crud.Edit',
+        'delete' => [
+          'className' => 'Crud.Delete',
+        ],
         //'Crud.Delete',
         /*'find' => [
         'className' => 'Crud.Index',
@@ -50,6 +56,16 @@ class AttachmentsController extends AppController
         'Crud.Search'
       ]
     ]);
+
+  }
+
+  public function index()
+  {
+    $this->Crud->on('beforePaginate', function(\Cake\Event\Event $event) {
+      $this->paginate['contain'] = ['Atags'];
+    });
+
+    return $this->Crud->execute();
   }
 
   public function delete($id)

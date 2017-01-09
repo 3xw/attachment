@@ -1,7 +1,6 @@
 <!-- files -->
 <script type="text/x-template" id="attachment-files-index">
   <div id="attachment-files-index" data-intro="Liste des vos médias." data-position="top">
-    <button class="btn btn-fill btn-xs btn-info" role="button" v-on:click="$dispatch('edit-file',0)" >
       <?= __('Edit') ?>
     </button>
     <div class="row" >
@@ -19,10 +18,10 @@
 
             <!-- buttons -->
             <div class="btn-group">
-              <button class="btn btn-fill btn-xs btn-info" role="button" v-on:click="$dispatch('edit-file',index)" v-if="settings.actions.indexOf('edit') != -1">
+              <button class="btn btn-fill btn-xs btn-info" role="button" v-on:click="$dispatch('show-edit-file',index)" v-if="settings.actions.indexOf('edit') != -1">
                 <?= __('Edit') ?>
               </button>
-              <button class="btn btn-fill btn-xs btn-danger" role="button" @click="$dispatch('delete-file',index)" v-if="settings.actions.indexOf('delete') != -1">
+              <button class="btn btn-fill btn-xs btn-danger" role="button" v-on:click="$dispatch('delete-file',index)" v-if="settings.actions.indexOf('delete') != -1">
                 <?= __('Delete') ?>
               </button>
             </div>

@@ -12,18 +12,23 @@
             <span class="label label-primary"><a href="#" @click.prevent="clearSearch(null,true), find()"><i class="fa fa-times" style="color:white;" aria-hidden="true"></i></a> Filtre: {{$parent.search}} ?</span>
             &nbsp;
           </span>
-          <span  v-show="$parent.sort.term" class="label label-info"><a href="#"><i class="fa fa-times" style="color:white;" aria-hidden="true"></i></a> Ordre: {{$parent.sort.term}}</span>
+          <span v-show="$parent.sort.term" class="label label-info"><a href="#"><i class="fa fa-times" style="color:white;" aria-hidden="true"></i></a> Ordre: {{$parent.sort.term}}</span>
         </h4>
       </div>
       <div class="panel-body">
         <div class="form-inline">
+
+          <!-- tags -->
+          <!--
           <div class="form-group">
             <div class="input-group">
               <span class="input-group-addon" id="basic-addon1">#</span>
-              <!-- ici -->
               <select class="form-control" id="tagsInputSearch" placeholder="tag" ></select>
             </div>
           </div>
+          -->
+
+          <!-- serach -->
           <div class="form-group">
             <div class="input-group">
               <span class="input-group-addon" id="basic-addon1">?</span>
@@ -47,6 +52,7 @@
           -->
 
           <!-- SORT -->
+          <!--
           <div class="form-group">
             <div class="dropdown">
               <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" >
@@ -60,6 +66,7 @@
               </ul>
             </div>
           </div>
+          -->
 
           <!-- SEARCH -->
           <button type="button" class="btn btn-fill btn-success" @click.prevent="find()"><i class="fa fa-search" aria-hidden="true"></i> Chercher</button>

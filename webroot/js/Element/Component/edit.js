@@ -4,7 +4,7 @@ Vue.component('attachment-edit', {
     return {
       loading: false,
       atags: [],
-      files: [],
+      file: {},
       errors: [],
       success: [] ,
     };
@@ -17,9 +17,9 @@ Vue.component('attachment-edit', {
     },
   },
   events: {
-    'yoyo-file': function(file) {
-      console.log(file);
-      //this.open();
+    'edit-file': function(file) {
+      this.file = file;
+      this.open();
     }
   },
   methods: {
@@ -37,23 +37,33 @@ Vue.component('attachment-edit', {
         $('#atagsinput').tagsinput();
       }
     },
-    startUpload: function(){
-      this.errors = [];
-      this.handleUploads();
-    },
-    handleUploads: function(){
-      if(this.files.length != 0){
-        this.upload(this.files.shift());
-      }else{
-        if(this.errors.length == 0 ){
-          this.close();
-          this.tellUser('Tous les fichiers ont bien été téléversé!');
-        }else{
-          this.removeEventListeners();
-          this.addEventListeners();
-          this.tellUser(this.errors.length+' fichiers n\'ont pu être téléverssé!');
+    edit: function(){
+      this.close();
+      this.$dispatch('edit-progress');
+
+      var options = {
+        headers:{
+          "Accept":"application/json",
+          "Content-Type":"application/json"
         }
+      };
+      this.file.uuid = this.settings.uuid;
+      delete(this.file.date);
+      delete(this.file.created);
+      delete(this.file.modified);
+      if(this.settings.restrictions.indexOf('tag_restricted') != -1)
+      {
+        delete(this.file.atags);
       }
+      this.$http.post(this.settings.url+'attachment/attachments/edit/'+this.file.id+'.json', this.file,options)
+      .then(this.editSuccessCallback, this.errorCallback);
+      return this;
+    },
+    editSuccessCallback: function(response){
+      this.$dispatch('edit-success', response, this.file);
+    },
+    errorCallback: function(response){
+      this.$dispatch('edit-error', response, this.file);
     }
   }
 });
