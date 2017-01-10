@@ -54,13 +54,13 @@ class AttachmentHelper extends Helper
         'Attachment.vendor/rubaxa/Sortable/Sortable.js',
         'Attachment.Element/Component/utils.js',
         'Attachment.Element/Component/thumb.js',
-        'Attachment.Element/Component/files-index.js?v='.time(),
-        'Attachment.Element/Component/edit.js?v='.time(),
-        'Attachment.Element/Component/upload.js?v='.time(),
-        'Attachment.Element/Component/embed.js?v='.time(),
+        'Attachment.Element/Component/files-index.js',
+        'Attachment.Element/Component/edit.js',
+        'Attachment.Element/Component/upload.js',
+        'Attachment.Element/Component/embed.js',
         'Attachment.Element/Component/pagination.js',
         'Attachment.Element/Component/filters.js',
-        'Attachment.Element/Component/index.js?v='.time()
+        'Attachment.Element/Component/index.js'
       ],['block' => true]);
     }
   }
