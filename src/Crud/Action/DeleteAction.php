@@ -33,16 +33,16 @@ class DeleteAction extends \Crud\Action\DeleteAction
     }
     catch (\PDOException $e)
     {
-      /*$subject->set(['data',[
+      $viewVars = ['success', 'data'];
+      $this->_controller->set('success', false);
+      $this->_controller->set('data',[
+        'id' => $id, //Extract the `id` value from the entity and place it into the `id` key in the return data.
+        'status' => false, //Extract the `status_value` value from the entity and place it into the `status` key in the return data.
         'code' => 400,
         'exception' => $e,
         'message' => __('unable to delete this Attachment. This attachment looks beeing in use by an other record. Please detatch the attachment to related record an then try to delete it again.')
-      ]]);*/
-      $subject->set(['error',[
-        'code' => 400,
-        'exception' => $e,
-        'message' => __('unable to delete this Attachment. This attachment looks beeing in use by an other record. Please detatch the attachment to related record an then try to delete it again.')
-      ]]);
+      ]);
+      $this->_controller->set('_serialize', $viewVars);
       $this->_error($subject);
     }
 
