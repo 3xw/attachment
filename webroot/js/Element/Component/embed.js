@@ -14,6 +14,11 @@ Vue.component('attachment-embed', {
       default: false
     },
   },
+  events: {
+    'show-embed': function(){
+      this.open();
+    }
+  },
   methods: {
     close: function(){
       this.show = false;
@@ -80,6 +85,7 @@ Vue.component('attachment-embed', {
           }
           self.settings.attachments.push(response.data);
           self.close();
+          self.$dispatch('embed-finished');
         },
         error: function(response){
           var message = response.statusText;

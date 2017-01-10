@@ -35,6 +35,8 @@ class AttachmentHelper extends Helper
       $this->_View->append('template', $this->_View->element('Attachment.Component/thumb'));
       $this->_View->append('template', $this->_View->element('Attachment.Component/files-index'));
       $this->_View->append('template', $this->_View->element('Attachment.Component/edit'));
+      $this->_View->append('template', $this->_View->element('Attachment.Component/upload'));
+      $this->_View->append('template', $this->_View->element('Attachment.Component/embed'));
       $this->_View->append('template', $this->_View->element('Attachment.Component/pagination'));
       $this->_View->append('template', $this->_View->element('Attachment.Component/filters'));
       $this->_View->append('template', $this->_View->element('Attachment.Component/index'));
@@ -54,6 +56,8 @@ class AttachmentHelper extends Helper
         'Attachment.Element/Component/thumb.js',
         'Attachment.Element/Component/files-index.js?v='.time(),
         'Attachment.Element/Component/edit.js?v='.time(),
+        'Attachment.Element/Component/upload.js?v='.time(),
+        'Attachment.Element/Component/embed.js?v='.time(),
         'Attachment.Element/Component/pagination.js',
         'Attachment.Element/Component/filters.js',
         'Attachment.Element/Component/index.js?v='.time()

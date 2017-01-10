@@ -72,33 +72,6 @@ class AttachmentsController extends AppController
 
   public function delete($id)
   {
-    /*
-    $this->Crud->on('afterDelete', function(Event $event) {
-      if (!$event->subject()->success) {
-        $event->stopPropagation();
-        debug($event->subject()->youpi);
-        return false;
-        //$this->log("Delete failed for entity " . $event->subject()->id);
-        //return 'unable to delete this Attachment. This attachment looks beeing in use by an other record. Please detatch the attachment to related record an then try to delete it again.';
-      }
-    });
-
-
-    try
-    {
-      return $this->Crud->execute();
-    }
-    catch (\PDOException $e)
-    {
-      $subject = new Subject([
-        'success' => false,
-        'id' => $id,
-        'message' => 'unable to delete this Attachment. This attachment looks beeing in use by an other record. Please detatch the attachment to related record an then try to delete it again.'
-      ]);
-      $this->Crud->trigger('afterDelete',$subject);
-      $this->redirect(['action' => 'index']);
-    }*/
-
     return $this->Crud->execute();
   }
 

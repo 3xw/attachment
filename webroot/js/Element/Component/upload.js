@@ -20,6 +20,11 @@ Vue.component('attachment-upload', {
       default: false
     },
   },
+  events: {
+    'show-upload': function(){
+      this.open();
+    }
+  },
   methods: {
     dragOver: function(e){
       e.preventDefault();
@@ -109,6 +114,7 @@ Vue.component('attachment-upload', {
           this.addEventListeners();
           this.tellUser(this.errors.length+' fichiers n\'ont pu être téléverssé!');
         }
+        this.$dispatch('upload-finished');
       }
     },
     tellUser: function(message){

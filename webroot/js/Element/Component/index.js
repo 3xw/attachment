@@ -69,9 +69,24 @@ Vue.component('attachment-index',{
       this.loading = true;
       this.$http.delete(this.settings.url+'attachment/attachments/delete/'+file.id+'.json', file,options)
       .then(this.deleteSuccessCallback, this.errorCallback);
-    }
+    },
+    'upload-finished': function(){
+      this.getFiles();
+    },
+    'embed-finished': function(){
+      this.getFiles();
+    },
   },
   methods: {
+    dispalyEmbed : function(){
+      for( var type in this.settings.types ){
+        if(this.settings.types[type].indexOf('embed') != -1)
+        {
+          return true;
+        }
+      }
+      return false;
+    },
     getFiles: function(){
       this.loading = true;
       var params = {page: this.pagination.current_page};
