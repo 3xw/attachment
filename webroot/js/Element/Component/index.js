@@ -32,6 +32,13 @@ Vue.component('attachment-index',{
     this.getTags();
     this.getFiles();
   },
+  watch: {
+    'loading' : function(val, oldVal){
+      if(val === true){
+        this.files = [];
+      }
+    }
+  },
   events: {
     'show-edit-file': function(index) {
       this.$broadcast('edit-file',this.files[index]);
@@ -139,7 +146,7 @@ Vue.component('attachment-index',{
     },
     tagsSuccessCallback: function(response){
       this.tags = response.data.data;
-      this.settings.atags = response.data.data;
+      //this.settings.atags = response.data.data;
     },
     deleteSuccessCallback: function(response){
       this.loading = false;

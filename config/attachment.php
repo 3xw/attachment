@@ -22,6 +22,9 @@ return [
     	],
     ],
 
+    // unique
+    'md5Unique' => true,
+
     // upload settings
     'upload' => [
       'maxsize' => 30, // 30MB

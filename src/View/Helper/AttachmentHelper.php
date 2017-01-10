@@ -69,6 +69,7 @@ class AttachmentHelper extends Helper
   {
     $this->_setupIndexComponent();
     $settings['actions'] = (empty($settings['actions']))? ['add','edit','delete'] : $settings['actions'];
+    $settings['attachments'] = [];
     $settings = array_merge(Configure::read('Attachment.upload'),$settings);
     $uuid = Text::uuid();
     $this->request->session()->write('Attachment.'.$uuid, $settings);
