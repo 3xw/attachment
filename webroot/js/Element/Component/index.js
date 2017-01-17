@@ -49,7 +49,8 @@ Vue.component('attachment-index',{
     'edit-success': function(response, file){
       this.loading = false;
       this.successes.push('file: '+file.name+' successfully edited!');
-      this.getTags();
+      //this.getTags();
+      this.getFiles();
     },
     'edit-error': function(response, file){
       this.loading = false;
