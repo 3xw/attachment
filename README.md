@@ -217,8 +217,9 @@ The upload is made before saving a realted records. global settings are setup un
 
 Restrictions are behaviors used in backend to sort files.
 
-	 AttachmentHelper::TAG_RESTRICTED // enforce attachments to associted with given tags in save and retieve
-	 AttachmentHelper::types_restricted // enforce attachments to saved and retrieve to according mime types
+	 AttachmentHelper::TAG_RESTRICTED // enforce attachments to associted with given tags in save and retieve with a AND strategy
+	 AttachmentHelper::TAG_OR_RESTRICTED // enforce attachments to associted with given tags in save and retieve with a OR strategy
+	 AttachmentHelper::types_restricted // enforce attachments to saved and retrieve with a OR strategy according given mime types
 
 ###Settings.thumbnails
 Attachment.thumbnails is the settings for thumbs generation.

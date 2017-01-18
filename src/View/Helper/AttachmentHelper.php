@@ -15,6 +15,8 @@ class AttachmentHelper extends Helper
 
   const TAG_RESTRICTED = 'tag_restricted';
 
+  const TAG_OR_RESTRICTED = 'tag_or_restricted';
+
   const TYPES_RESTRICTED = 'types_restricted';
 
   public $helpers = ['Url','Html'];

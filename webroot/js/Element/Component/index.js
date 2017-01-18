@@ -60,6 +60,7 @@ Vue.component('attachment-index',{
       }
       this.errors.push(message);
       console.log(response);
+      this.getFiles();
     },
     'delete-file': function(index){
       var file = this.files[index];
@@ -76,7 +77,7 @@ Vue.component('attachment-index',{
       file.uuid = this.settings.uuid;
       this.loading = true;
       this.$http.delete(this.settings.url+'attachment/attachments/delete/'+file.id+'.json', file,options)
-      .then(this.deleteSuccessCallback, this.errorCallback);
+      .then(this.deleteSuccessCallback, this.errorDeleteCallback);
     },
     'upload-finished': function(){
       this.getFiles();
@@ -159,6 +160,13 @@ Vue.component('attachment-index',{
       var message = ( response.data )? response.data.data.message : 'Your session is lost, please login again!';
       this.errors.push(message);
       console.log(response);
+    },
+    errorDeleteCallback: function(response){
+      this.loading = false;
+      var message = ( response.data )? response.data.data.message : 'Your session is lost, please login again!';
+      this.errors.push(message);
+      console.log(response);
+      this.getFiles();
     },
   }
 });
