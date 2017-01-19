@@ -135,7 +135,7 @@ class ResizeController extends AppController
     $folder = new Folder($this->_filesystem('cache')->getAdapter()->applyPathPrefix($folder), true, 0777);
 
     // write image
-    $img->encode($mimetype);
+    $img->encode($mimetype, Configure::read('Attachment.thumbnails.quality'));
     $path = $profile.DS.$dim.DS.$image;
     $this->_filesystem('cache')->put($profile.DS.$dim.DS.$image, $img);
     $path = $this->_filesystem('cache')->getAdapter()->applyPathPrefix($path);
