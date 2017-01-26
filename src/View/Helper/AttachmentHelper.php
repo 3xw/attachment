@@ -184,6 +184,8 @@ class AttachmentHelper extends Helper
     if(!empty($params['cropratio'])){
       $url .= 'c'.str_replace(':','-',$params['cropratio']);
     }
+    //mad resize
+    if(Configure::read('Attachment.thumbnails.madResize')){ $params['image'] = $params['image'].'.jpg'; }
 
     return $url.'/'.$params['image'];
   }

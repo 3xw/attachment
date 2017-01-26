@@ -33,9 +33,16 @@ class ResizeController extends AppController
     preg_match_all('/([a-z])([0-9]*-[0-9]*|[0-9]*)/', $dim, $dims, PREG_SET_ORDER);
     if(empty($dims)){ throw new NotFoundException(); }
 
-    // if empty $images
+    // if empty $image
     if(empty($image)){ throw new NotFoundException(); }
     $image = implode("/", $image);
+
+    // mad resize
+    if(Configure::read('Attachment.thumbnails.madResize'))
+    {
+      // remove extra '.jpg'
+      $image = substr($image, 0, -4);
+    }
 
     // look for image
     if(!$this->_filesystem($profile)->has($image))
@@ -134,11 +141,32 @@ class ResizeController extends AppController
     $folder = $profile.DS.$dim.DS.substr($image, 0, strrpos($image, '/') );
     $folder = new Folder($this->_filesystem('cache')->getAdapter()->applyPathPrefix($folder), true, 0777);
 
+    // mad resize
+    if(Configure::read('Attachment.thumbnails.madResize'))
+    {
+      // remove extra '.jpg'
+      $image = $image.'.jpg';
+      $mimetype = 'jpg';
+    }
+
     // write image
     $img->encode($mimetype, Configure::read('Attachment.thumbnails.quality'));
     $path = $profile.DS.$dim.DS.$image;
     $this->_filesystem('cache')->put($profile.DS.$dim.DS.$image, $img);
     $path = $this->_filesystem('cache')->getAdapter()->applyPathPrefix($path);
+
+    // mad resize
+    if(Configure::read('Attachment.thumbnails.madResize'))
+    {
+      $out = $path.'_'.time();
+      $jpegRecompress = Configure::read('Attachment.thumbnails.jpegRecompressPath');
+      exec("$jpegRecompress --method smallfry $path $out",$feedback, $return);
+      if(file_exists($out))
+      {
+        exec("rm $path");
+        exec("mv $out $path");
+      }
+    }
 
     // send file
     $this->response->file($path);

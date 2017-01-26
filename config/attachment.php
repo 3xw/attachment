@@ -40,6 +40,8 @@ return [
     // thumbnails settings
     'thumbnails' => [
       'driver' => 'Imagick', // or Imagick if installed,
+      'madResize' => false,
+      'jpegRecompressPath' => '/usr/bin/jpeg-recompress',
       'quality' => 45,
       'widths' => [],
       'heights' => [],
