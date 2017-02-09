@@ -168,6 +168,26 @@ class ResizeController extends AppController
       }
     }
 
+    // jpegoptim
+    if(Configure::read('AwsServer.jpegoptim') && ($mimetype == 'jpeg' || $mimetype == 'jpeg') )
+    {
+      $jpegoptim = Configure::read('AwsServer.jpegoptim');
+      exec("$jpegoptim -m 65 --all-progressive $path");
+    }
+    // pngquant
+    if(Configure::read('AwsServer.pngquant') && $mimetype == 'png' )
+    {
+      $pngquant = Configure::read('AwsServer.pngquant');
+      exec("$pngquant $path --ext .png --force");
+    }
+
+    /*
+    'AwsServer' => [
+      'jpegoptim' => '/usr/bin/jpegoptim',
+      'pngquant' => '/usr/bin/pngquant'
+    ],
+    */
+
     // send file
     $this->response->file($path);
     return $this->response;
