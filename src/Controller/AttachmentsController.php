@@ -5,6 +5,7 @@ use Attachment\Controller\AppController;
 use Cake\Event\Event;
 use Crud\Event\Subject;
 use App\Crud\ADelete;
+use Cake\Core\Configure;
 
 /**
 * Attachments Controller
@@ -35,12 +36,16 @@ class AttachmentsController extends AppController
         'index' => [
           'className' => 'Crud.Index',
         ],
-        'Crud.View',
+        'view' => [
+          'className' => 'Crud.View',
+        ],
         'add' =>[
           'className' => 'Crud.Add',
           'api.success.data.entity' => ['id','profile','path','type','subtype','name','size']
         ],
-        'Crud.Edit',
+        'edit' => [
+          'className' => 'Crud.Edit',
+        ],
         'delete' => [
           'className' => 'Attachment\Crud\Action\DeleteAction',
         ],
@@ -64,9 +69,37 @@ class AttachmentsController extends AppController
   public function index()
   {
     $this->Crud->on('beforePaginate', function(Event $event) {
-      $this->paginate['contain'] = ['Atags'];
+      $event->subject->query->contain(['Atags']);
+      if(Configure::read('Attachment.translate'))
+      {
+        $event->subject->query->find('translations');
+      }
     });
 
+    return $this->Crud->execute();
+  }
+
+  public function view($id = null)
+  {
+    $this->Crud->on('beforeFind', function(Event $event) {
+      $event->subject->query->contain(['Atags']);
+      if(Configure::read('Attachment.translate'))
+      {
+        $event->subject->query->find('translations');
+      }
+    });
+    return $this->Crud->execute();
+  }
+
+  public function edit($id = null)
+  {
+    $this->Crud->on('beforeFind', function(Event $event) {
+      $event->subject->query->contain(['Atags']);
+      if(Configure::read('Attachment.translate'))
+      {
+        $event->subject->query->find('translations');
+      }
+    });
     return $this->Crud->execute();
   }
 
