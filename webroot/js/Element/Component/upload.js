@@ -97,6 +97,10 @@ Vue.component('attachment-upload', {
       if(this.settings.restrictions.indexOf('tag_restricted') == -1){
         $('#atagsinput').tagsinput();
       }
+      if(this.settings.i18n.enable){
+        $('.attachment-locale-area ul a:last').tab('show');
+        $('.attachment-locale-area ul a:first').tab('show');
+      }
     },
     startUpload: function(){
       this.errors = [];

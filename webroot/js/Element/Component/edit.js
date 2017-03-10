@@ -33,8 +33,12 @@ Vue.component('attachment-edit', {
       setTimeout(this.setupUI, 500);
     },
     setupUI: function(){
-      if(this.settings.restrictions.indexOf('tag_restricted') == -1){
+      if(this.settings.restrictions.indexOf('tag_restricted') == -1 || this.settings.restrictions.indexOf('tag_or_restricted') != -1){
         $('#atagsinput').tagsinput();
+      }
+      if(this.settings.i18n.enable){
+        $('.attachment-locale-area ul a:last').tab('show');
+        $('.attachment-locale-area ul a:first').tab('show');
       }
     },
     edit: function(){
@@ -51,7 +55,7 @@ Vue.component('attachment-edit', {
       delete(this.file.date);
       delete(this.file.created);
       delete(this.file.modified);
-      if(this.settings.restrictions.indexOf('tag_restricted') != -1)
+      if(this.settings.restrictions.indexOf('tag_restricted') != -1 || this.settings.restrictions.indexOf('tag_or_restricted') != -1)
       {
         delete(this.file.atags);
       }

@@ -20,6 +20,8 @@ use Cake\Core\Configure;
 class AttachmentsTable extends Table
 {
 
+  //use \Attachment\Model\Behavior\CustomTranslateTrait;
+
   /**
   * Initialize method
   *
@@ -55,6 +57,11 @@ class AttachmentsTable extends Table
       'joinTable' => 'attachments_atags',
       'className' => 'Attachment.Atags'
     ]);
+
+    if(Configure::read('Attachment.translate'))
+    {
+      $this->addBehavior('Translate', ['fields' => ['title','description']]);
+    }
 
     // Add the behaviour to your table
     $this->addBehavior('Search.Search');

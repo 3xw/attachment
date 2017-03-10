@@ -77,6 +77,12 @@ class AttachmentHelper extends Helper
     $this->request->session()->write('Attachment.'.$uuid, $settings);
     $settings['uuid'] = $uuid;
     $settings['url'] = $this->Url->build('/', true);
+    $settings['translate'] = Configure::read('Attachment.translate');
+    $settings['i18n'] = [
+      'enable' => Configure::read('Attachment.translate'),
+      'languages' => Configure::read('I18n.languages'),
+      'defaultLocale' => Configure::read('App.defaultLocale')
+    ];
 
     return "<attachment-index :settings='".htmlspecialchars(json_encode($settings), ENT_QUOTES, 'UTF-8')."' ></attachment-index>";
   }
@@ -134,7 +140,12 @@ class AttachmentHelper extends Helper
     $settings['uuid'] = $uuid;
     $settings['url'] = $this->Url->build('/', true);
     $settings['label'] = empty($settings['label'])? Inflector::humanize($field) : $settings['label'];
-
+    $settings['i18n'] = [
+      'enable' => Configure::read('Attachment.translate'),
+      'languages' => Configure::read('I18n.languages'),
+      'defaultLocale' => Configure::read('App.defaultLocale')
+    ];
+    
     return "<attachment-input :settings='".htmlspecialchars(json_encode($settings), ENT_QUOTES, 'UTF-8')."' ></attachment-input>";
   }
 

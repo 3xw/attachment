@@ -46,7 +46,8 @@ class ATagBehavior extends Behavior
     $sessionAttachment = $session->read('Attachment.'.$uuid);
     if(!$sessionAttachment){
       $event->stopPropagation();
-      throw new Exception('Attachment keys not found in session! Please pass Attachment settings throught session!');
+      //throw new Exception('Attachment keys not found in session! Please pass Attachment settings throught session!');
+      return;
     }
 
     // see if tag restricted
