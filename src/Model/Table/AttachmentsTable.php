@@ -20,7 +20,7 @@ use Cake\Core\Configure;
 class AttachmentsTable extends Table
 {
 
-  use \Attachment\Model\Behavior\CustomTranslateTrait;
+  //use \Attachment\Model\Behavior\CustomTranslateTrait;
 
   /**
   * Initialize method

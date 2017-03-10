@@ -28,7 +28,47 @@
             <!-- OPTIONS -->
             <div  id="attachment-options">
               <div class="row optional-fields">
-                <div class="col-md-6">
+
+                <!-- _translations[en_GB][name] -->
+                <div v-if="settings.i18n.enable" class="col-md-6 attachment-locale-area">
+                  <ul class="nav nav-tabs" role="tablist">
+                    <li v-for="(index, language) in settings.i18n.languages" v-bind:class="{ 'active': language ==  settings.i18n.defaultLocale}" role="presentation">
+                      <a href="#a-{{language}}" aria-controls="a-{{language}}" role="tab" data-toggle="tab" >
+                        {{language}}
+                      </a>
+                    </li>
+                  </ul>
+                  <div class="tab-content">
+
+                    <!-- defaultLocale -->
+                    <div role="tabpanel" class="tab-pane active" id="a-{{settings.i18n.defaultLocale}}">
+                      <div class="input text">
+                        <label for="title">Title</label>
+                        <input type="text" name="title" class="form-control" id="title">
+                      </div>
+                      <div class="input text">
+                        <label for="title">Description</label>
+                        <textarea name="description" class="form-control" id="description" rows="5"></textarea>
+                      </div>
+                    </div>
+
+                    <!-- other locales -->
+                    <div v-for="(index, language) in settings.i18n.languages"  v-if="language != settings.i18n.defaultLocale" role="tabpanel" class="tab-pane active" id="a-{{language}}">
+                      <div class="input text">
+                        <label for="title">Title {{language}}</label>
+                        <input type="text" name="_translations[{{language}}][title]" class="form-control" id="a-{{language}}-title">
+                      </div>
+                      <div class="input text">
+                        <label for="title">Description {{language}}</label>
+                        <textarea name="_translations[{{language}}][description]" class="form-control" id="a-{{language}}-description" rows="5"></textarea>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+                <!-- no translate -->
+                <div v-if="!settings.i18n.enable" class="col-md-6">
                   <div class="input text">
                     <label for="title">Title</label>
                     <input type="text" name="title" class="form-control" id="title">
@@ -38,6 +78,8 @@
                     <textarea name="description" class="form-control" id="description" rows="5"></textarea>
                   </div>
                 </div>
+
+
                 <div class="col-md-6">
                   <div class="input text">
                     <label for="author">Author</label>
