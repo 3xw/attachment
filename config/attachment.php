@@ -3,6 +3,12 @@
 return [
   'Attachment' => [
 
+    'compression' => [
+      'jpegoptim' => '/usr/local/bin/jpegoptim',
+      'pngquant' => '/usr/local/bin/pngquant',
+      'quality' => 25
+    ],
+
     // set profiles
     'profiles' => [
       'default' => [

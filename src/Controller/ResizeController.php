@@ -169,24 +169,20 @@ class ResizeController extends AppController
     }
 
     // jpegoptim
-    if(Configure::read('AwsServer.jpegoptim') && ($mimetype == 'jpeg' || $mimetype == 'jpeg') )
+    if(Configure::read('Attachment.compression.jpegoptim') && ($mimetype == 'image/jpeg' || $mimetype == 'image/jpeg') )
     {
-      $jpegoptim = Configure::read('AwsServer.jpegoptim');
-      exec("$jpegoptim -m 65 --all-progressive $path");
+
+      $jpegoptim = Configure::read('Attachment.compression.jpegoptim');
+      $q = Configure::read('Attachment.compression.quality')? Configure::read('Attachment.compression.quality'): 25;
+      exec("$jpegoptim -m $q --all-progressive --strip-all --strip-iptc --strip-icc $path");
     }
     // pngquant
-    if(Configure::read('AwsServer.pngquant') && $mimetype == 'png' )
+    if(Configure::read('Attachment.compression.pngquant') && $mimetype == 'image/png' )
     {
-      $pngquant = Configure::read('AwsServer.pngquant');
-      exec("$pngquant $path --ext .png --force");
+      $pngquant = Configure::read('Attachment.compression.pngquant');
+      $q = Configure::read('Attachment.compression.quality')? Configure::read('Attachment.compression.quality'): 25;
+      exec("$pngquant $path --ext .png --quality $q --force");
     }
-
-    /*
-    'AwsServer' => [
-      'jpegoptim' => '/usr/bin/jpegoptim',
-      'pngquant' => '/usr/bin/pngquant'
-    ],
-    */
 
     // send file
     $this->response->file($path);
