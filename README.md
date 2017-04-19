@@ -338,9 +338,10 @@ in file
 	<?= $this->Attachment->image([
 		'image' => $post->attachments[0]->path,
 		'profile' => $post->attachments[0]->profile,
-		'width' => '1200',
+		'width' => '600',
 		'cropratio' => '16:9,
-		'quality' => 50, // from 0 to 100 ( default 25 in plugin's config attachment.php )
+		'quality' => 50, // from 0 to 100 ( default 25 in plugin's config file attachment.php )
+		'srcset' => [300, 600, 900, 1200]
 	],['class' => 'img-responsive']) ?>
 	
 	<!-- Display an embed video  -->
