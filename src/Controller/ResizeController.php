@@ -37,13 +37,6 @@ class ResizeController extends AppController
     if(empty($image)){ throw new NotFoundException(); }
     $image = implode("/", $image);
 
-    // mad resize
-    if(Configure::read('Attachment.thumbnails.madResize'))
-    {
-      // remove extra '.jpg'
-      $image = substr($image, 0, -4);
-    }
-
     // look for image
     if(!$this->_filesystem($profile)->has($image))
     {
@@ -67,13 +60,14 @@ class ResizeController extends AppController
     /* all checks god let's resize...
     ********************************************/
     // set dimentions
-    $align = $crop = $height = $width = 0;
+    $align = $crop = $height = $width = $quality = 0;
     for( $i = 0; $i < count($dims); $i++ ){
       switch($dims[$i][1]){
         case 'a': $align = (int) $dims[$i][2]; break; // 0 to 8
         case 'c': $crop = explode('-',$dims[$i][2]); break; // 16-9 for 16/9
         case 'h': $height = (int) $dims[$i][2]; break; // height in px
         case 'w': $width = (int) $dims[$i][2]; break; // width in px
+        case 'q': $quality = (int) $dims[$i][2]; break; // width in px
       }
     }
 
@@ -149,39 +143,28 @@ class ResizeController extends AppController
       $mimetype = 'jpg';
     }
 
+    // quality
+    $quality = $quality? $quality: Configure::read('Attachment.thumbnails.compression.quality');
+    $encodingQuality = ((Configure::read('Attachment.thumbnails.compression.jpegoptim') && ($mimetype == 'image/jpeg' || $mimetype == 'image/jpeg') )
+      || (Configure::read('Attachment.thumbnails.compression.pngquant') && $mimetype == 'image/png' ))? 100: $quality;
+
     // write image
-    $img->encode($mimetype, Configure::read('Attachment.thumbnails.quality'));
+    $img->encode($mimetype, $encodingQuality);
     $path = $profile.DS.$dim.DS.$image;
     $this->_filesystem('cache')->put($profile.DS.$dim.DS.$image, $img);
     $path = $this->_filesystem('cache')->getAdapter()->applyPathPrefix($path);
 
-    // mad resize
-    if(Configure::read('Attachment.thumbnails.madResize'))
-    {
-      $out = $path.'_'.time();
-      $jpegRecompress = Configure::read('Attachment.thumbnails.jpegRecompressPath');
-      exec("$jpegRecompress --method smallfry $path $out",$feedback, $return);
-      if(file_exists($out))
-      {
-        exec("rm $path");
-        exec("mv $out $path");
-      }
-    }
-
     // jpegoptim
-    if(Configure::read('Attachment.compression.jpegoptim') && ($mimetype == 'image/jpeg' || $mimetype == 'image/jpeg') )
+    if(Configure::read('Attachment.thumbnails.compression.jpegoptim') && ($mimetype == 'image/jpeg' || $mimetype == 'image/jpeg') )
     {
-
-      $jpegoptim = Configure::read('Attachment.compression.jpegoptim');
-      $q = Configure::read('Attachment.compression.quality')? Configure::read('Attachment.compression.quality'): 25;
-      exec("$jpegoptim -m $q --all-progressive --strip-all --strip-iptc --strip-icc $path");
+      $jpegoptim = Configure::read('Attachment.thumbnails.compression.jpegoptim');
+      exec("$jpegoptim -m $quality --all-progressive --strip-all --strip-iptc --strip-icc $path");
     }
     // pngquant
-    if(Configure::read('Attachment.compression.pngquant') && $mimetype == 'image/png' )
+    if(Configure::read('Attachment.thumbnails.compression.pngquant') && $mimetype == 'image/png' )
     {
-      $pngquant = Configure::read('Attachment.compression.pngquant');
-      $q = Configure::read('Attachment.compression.quality')? Configure::read('Attachment.compression.quality'): 25;
-      exec("$pngquant $path --ext .png --quality $q --force");
+      $pngquant = Configure::read('Attachment.thumbnails.compression.pngquant');
+      exec("$pngquant $path --ext .png --quality $quality --force");
     }
 
     // send file

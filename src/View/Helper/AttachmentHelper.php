@@ -145,7 +145,7 @@ class AttachmentHelper extends Helper
       'languages' => Configure::read('I18n.languages'),
       'defaultLocale' => Configure::read('App.defaultLocale')
     ];
-    
+
     return "<attachment-input :settings='".htmlspecialchars(json_encode($settings), ENT_QUOTES, 'UTF-8')."' ></attachment-input>";
   }
 
@@ -186,7 +186,7 @@ class AttachmentHelper extends Helper
       $profile = empty($params['profile'])? 'external' : $params['profile'];
     }
     $url = $this->Url->build('/thumbnails/'.$profile.'/',true);
-    $dims = ['height' => 'h','width' => 'w','align' => 'a'];
+    $dims = ['height' => 'h','width' => 'w','align' => 'a', 'quality' => 'q'];
     foreach($dims as $key => $value){
       if(!empty($params[$key])){
         $url .= $value.$params[$key];
