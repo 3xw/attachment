@@ -166,10 +166,29 @@ class AttachmentHelper extends Helper
     return $baseUrl.$attachment->path;
   }
 
-  public function image($params, $attributes = null ) {
+  public function image($params, $attributes = null )
+  {
+    // srcset!!
+    if(!empty($params['srcset']) && is_array($params['srcset']) && (!empty($params['width']) || !empty($params['height'])))
+    {
+      $srcset = '';
+      $srcsets = $params['srcset'];
+      unset($params['srcset']);
+      $dim = !empty($params['width'])? 'width': 'height';
+      foreach($srcsets as $size)
+      {
+        $newParams = $params;
+        $newParams[$dim] = $size;
+        $srcset .= $this->thumbSrc( $newParams ).' '.$size.substr($dim,0,1).', ';
+      }
+      $srcset = substr($srcset,0, -2);
+      $attributes['srcset'] = $srcset;
+    }
+
+    // normal stuff
     $src = $this->thumbSrc( $params );
     $html = '<img src="'. $src .'" ';
-    $attributes = ( $attributes )? $attributes : array();
+    $attributes = ( $attributes )? $attributes : [];
     foreach(  $attributes as $attribute => $value ){
       $html.='  '.$attribute.'="'.$value.'"';
     }
@@ -195,8 +214,6 @@ class AttachmentHelper extends Helper
     if(!empty($params['cropratio'])){
       $url .= 'c'.str_replace(':','-',$params['cropratio']);
     }
-    //mad resize
-    if(Configure::read('Attachment.thumbnails.madResize')){ $params['image'] = $params['image'].'.jpg'; }
 
     return $url.'/'.$params['image'];
   }
