@@ -168,24 +168,7 @@ class AttachmentHelper extends Helper
 
   public function image($params, $attributes = null )
   {
-    // srcset!!
-    if(!empty($params['srcset']) && is_array($params['srcset']) && (!empty($params['width']) || !empty($params['height'])))
-    {
-      $srcset = '';
-      $srcsets = $params['srcset'];
-      unset($params['srcset']);
-      $dim = !empty($params['width'])? 'width': 'height';
-      foreach($srcsets as $size)
-      {
-        $newParams = $params;
-        $newParams[$dim] = $size;
-        $srcset .= $this->thumbSrc( $newParams ).' '.$size.substr($dim,0,1).', ';
-      }
-      $srcset = substr($srcset,0, -2);
-      $attributes['srcset'] = $srcset;
-    }
-
-    // normal stuff
+    // src
     $src = $this->thumbSrc( $params );
     $html = '<img src="'. $src .'" ';
     $attributes = ( $attributes )? $attributes : [];
@@ -193,6 +176,34 @@ class AttachmentHelper extends Helper
       $html.='  '.$attribute.'="'.$value.'"';
     }
     $html .= ' />';
+
+    // srcset!!
+    if(!empty($params['srcset']) && is_array($params['srcset']) && (!empty($params['width']) || !empty($params['height'])))
+    {
+      // collect data
+      $srcsets = $params['srcset'];
+      unset($params['srcset']);
+      $dim = !empty($params['width'])? 'width': 'height';
+      $breakpoints = Configure::read('Attachment.thumbnails.breakpoints');
+
+      foreach($srcsets as $breakpoint => $values)
+      {
+        $newParams = $params;
+        $srcset = '';
+        foreach($values as $ratio => $value)
+        {
+          $r = $ratio + 1;
+          $newParams[$dim] = $value;
+          $srcset .= $this->thumbSrc( $newParams ).' '.$r.'x, ';
+        }
+        $srcset = substr($srcset,0, -2);
+        $html = $this->Html->tag('source','',['srcset' => $srcset, 'media' => $breakpoints[$breakpoint]]).$html;
+      }
+      $html = $this->Html->tag('picture',$html);
+    }
+
+    // normal stuff
+
     return $html;
   }
 

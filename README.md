@@ -180,6 +180,12 @@ Exemple of settings:
         		'pngquant' => '/usr/local/bin/pngquant', // path or false ( default /usr/local/bin/pngquant )
         		'quality' => 25 // encoding quality level from 0 to 100 ( default 25 )
       		],
+      		'breakpoints' => [
+		        'lg' => '(min-width: 1200px)',
+		        'md' => '(max-width: 1199px)',
+		        'sm' => '(max-width: 991px)',
+		        'xs' => '(max-width: 767px)',
+	      ],
 	      'widths' => ['678','1200'],
 	      'heights' => false,
 	      'aligns' => false, // or some of following [0,1,2,3,4,5,6,7,8] with 0 center, 1 top, 4 left, 5 right top corner, 8 left top corner ....
@@ -341,7 +347,12 @@ in file
 		'width' => '600',
 		'cropratio' => '16:9,
 		'quality' => 50, // from 0 to 100 ( default 25 in plugin's config file attachment.php )
-		'srcset' => [300, 600, 900, 1200]
+		'srcset' => [
+	      'lg' => [360,720],
+	      'md' => [293, 586],
+	      'sm' => [283, 566],
+	      'xs' => [767,1534],
+	    ]
 	],['class' => 'img-responsive']) ?>
 	
 	<!-- Display an embed video  -->
