@@ -23,7 +23,7 @@ You can install this plugin into your CakePHP application using [composer](http:
 
 The recommended way to install composer packages is:
 
-		composer require 3xw/attachment:3.3.x
+		composer require 3xw/attachment:3.4.x
 
 ###Installation.boostrap
 Load it in config/boostrap.php like so:
