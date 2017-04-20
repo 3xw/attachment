@@ -46,6 +46,7 @@ return [
       'compression' => [
         'jpegoptim' => '/usr/local/bin/jpegoptim',
         'pngquant' => '/usr/local/bin/pngquant',
+        'cwebp' => '/usr/local/bin/cwebp',
         'quality' => 25
       ],
       'breakpoints' => [

@@ -23,9 +23,6 @@ class ResizeController extends AppController
 
   public function proceed($profile, $dim, ...$image )
   {
-    //debug(Configure::read('Attachment'));
-    //die();
-
     // test profile
     if(!Configure::check('Attachment.profiles.'.$profile) || $profile == 'cache' ){ throw new NotFoundException(); }
 
@@ -37,10 +34,36 @@ class ResizeController extends AppController
     if(empty($image)){ throw new NotFoundException(); }
     $image = implode("/", $image);
 
-    // look for image
-    if(!$this->_filesystem($profile)->has($image))
+    //test if webp
+    preg_match_all('/([a-zA-Z0-9_:\/.èüéöàä\$£ç\&%#*+?=,;~-]*)\.webp$/', $image, $webp, PREG_SET_ORDER);
+    if(!empty($webp))
     {
-      throw new NotFoundException();
+      if(!Configure::read('Attachment.thumbnails.compression.cwebp'))
+      {
+        throw new NotFoundException('wepb not installed!!');
+      }
+      $extsToTest = ['.jpg','.jpeg','.png','.JPG','.JPEG','.PNG'];
+      $fileFound = false;
+      foreach($extsToTest as $ext)
+      {
+        $image = $webp[0][1].$ext;
+        if($this->_filesystem($profile)->has($image))
+        {
+          $fileFound = true;
+          break;
+        }
+      }
+      if(!$fileFound)
+      {
+        throw new NotFoundException();
+      }
+    }else
+    {
+      // look for image
+      if(!$this->_filesystem($profile)->has($image))
+      {
+        throw new NotFoundException();
+      }
     }
 
     // test if image
@@ -135,14 +158,6 @@ class ResizeController extends AppController
     $folder = $profile.DS.$dim.DS.substr($image, 0, strrpos($image, '/') );
     $folder = new Folder($this->_filesystem('cache')->getAdapter()->applyPathPrefix($folder), true, 0777);
 
-    // mad resize
-    if(Configure::read('Attachment.thumbnails.madResize'))
-    {
-      // remove extra '.jpg'
-      $image = $image.'.jpg';
-      $mimetype = 'jpg';
-    }
-
     // quality
     $quality = $quality? $quality: Configure::read('Attachment.thumbnails.compression.quality');
     $encodingQuality = ((Configure::read('Attachment.thumbnails.compression.jpegoptim') && ($mimetype == 'image/jpeg' || $mimetype == 'image/jpeg') )
@@ -150,21 +165,32 @@ class ResizeController extends AppController
 
     // write image
     $img->encode($mimetype, $encodingQuality);
+    $image = empty($webp)? $image: uniqid('tmp_').$image;
     $path = $profile.DS.$dim.DS.$image;
     $this->_filesystem('cache')->put($profile.DS.$dim.DS.$image, $img);
     $path = $this->_filesystem('cache')->getAdapter()->applyPathPrefix($path);
 
     // jpegoptim
-    if(Configure::read('Attachment.thumbnails.compression.jpegoptim') && ($mimetype == 'image/jpeg' || $mimetype == 'image/jpeg') )
+    if(empty($webp) && Configure::read('Attachment.thumbnails.compression.jpegoptim') && ($mimetype == 'image/jpeg' || $mimetype == 'image/jpeg') )
     {
       $jpegoptim = Configure::read('Attachment.thumbnails.compression.jpegoptim');
       exec("$jpegoptim -m $quality --all-progressive --strip-all --strip-iptc --strip-icc $path");
     }
     // pngquant
-    if(Configure::read('Attachment.thumbnails.compression.pngquant') && $mimetype == 'image/png' )
+    if(empty($webp) && Configure::read('Attachment.thumbnails.compression.pngquant') && $mimetype == 'image/png' )
     {
       $pngquant = Configure::read('Attachment.thumbnails.compression.pngquant');
       exec("$pngquant $path --ext .png --quality $quality --force");
+    }
+
+    // cwebp jpeg && png
+    if(!empty($webp) && Configure::read('Attachment.thumbnails.compression.cwebp') && ($mimetype == 'image/jpeg' || $mimetype == 'image/jpeg' || $mimetype == 'image/png') )
+    {
+      $cwebp = Configure::read('Attachment.thumbnails.compression.cwebp');
+      $output = $profile.DS.$dim.DS.$webp[0][0];
+      $output = $this->_filesystem('cache')->getAdapter()->applyPathPrefix($output);
+      exec("$cwebp -q $quality $path -o $output && rm $path");
+      $path = $output;
     }
 
     // send file

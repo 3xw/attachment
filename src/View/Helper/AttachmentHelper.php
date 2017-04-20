@@ -186,10 +186,31 @@ class AttachmentHelper extends Helper
       $dim = !empty($params['width'])? 'width': 'height';
       $breakpoints = Configure::read('Attachment.thumbnails.breakpoints');
 
+      //webp
+      preg_match_all('/([a-zA-Z0-9_:\/.èüéöàä\$£ç\&%#*+?=,;~-]*\.png$|[a-zA-Z0-9_:\/.èüéöàä\$£ç\&%#*+?=,;~-]*\.PNG$)/', $params['image'], $noWebp, PREG_SET_ORDER);
+
       foreach($srcsets as $breakpoint => $values)
       {
-        $newParams = $params;
+        // webp
         $srcset = '';
+        $newParams = $params;
+        if(empty($noWebp))
+        {
+          foreach($values as $ratio => $value)
+          {
+            $r = $ratio + 1;
+            $newParams[$dim] = $value;
+            preg_match_all('/([a-zA-Z0-9_:\/.èüéöàä\$£ç\&%#*+?=,;~-]*)\.([a-zA-Z]{3,4})$/', $params['image'], $img, PREG_SET_ORDER);
+            $newParams['image'] = $img[0][1].'.webp';
+            $srcset .= $this->thumbSrc( $newParams ).' '.$r.'x, ';
+          }
+          $srcset = substr($srcset,0, -2);
+          $html = $this->Html->tag('source','',['srcset' => $srcset, 'media' => $breakpoints[$breakpoint], 'type' => 'image/webp']).$html;
+        }
+
+        // normal
+        $srcset = '';
+        $newParams = $params;
         foreach($values as $ratio => $value)
         {
           $r = $ratio + 1;
@@ -197,7 +218,8 @@ class AttachmentHelper extends Helper
           $srcset .= $this->thumbSrc( $newParams ).' '.$r.'x, ';
         }
         $srcset = substr($srcset,0, -2);
-        $html = $this->Html->tag('source','',['srcset' => $srcset, 'media' => $breakpoints[$breakpoint]]).$html;
+        $type = empty($noWebp)? 'image/jpeg': 'image/png';
+        $html = $this->Html->tag('source','',['srcset' => $srcset, 'media' => $breakpoints[$breakpoint], 'type' => $type]).$html;
       }
       $html = $this->Html->tag('picture',$html);
     }
