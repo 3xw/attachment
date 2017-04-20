@@ -191,6 +191,19 @@ class AttachmentHelper extends Helper
 
       foreach($srcsets as $breakpoint => $values)
       {
+        // normal
+        $srcset = '';
+        $newParams = $params;
+        foreach($values as $ratio => $value)
+        {
+          $r = $ratio + 1;
+          $newParams[$dim] = $value;
+          $srcset .= $this->thumbSrc( $newParams ).' '.$r.'x, ';
+        }
+        $srcset = substr($srcset,0, -2);
+        $type = empty($noWebp)? 'image/jpeg': 'image/png';
+        $html = $this->Html->tag('source','',['srcset' => $srcset, 'media' => $breakpoints[$breakpoint], 'type' => $type]).$html;
+
         // webp
         $srcset = '';
         $newParams = $params;
@@ -207,21 +220,10 @@ class AttachmentHelper extends Helper
           $srcset = substr($srcset,0, -2);
           $html = $this->Html->tag('source','',['srcset' => $srcset, 'media' => $breakpoints[$breakpoint], 'type' => 'image/webp']).$html;
         }
-
-        // normal
-        $srcset = '';
-        $newParams = $params;
-        foreach($values as $ratio => $value)
-        {
-          $r = $ratio + 1;
-          $newParams[$dim] = $value;
-          $srcset .= $this->thumbSrc( $newParams ).' '.$r.'x, ';
-        }
-        $srcset = substr($srcset,0, -2);
-        $type = empty($noWebp)? 'image/jpeg': 'image/png';
-        $html = $this->Html->tag('source','',['srcset' => $srcset, 'media' => $breakpoints[$breakpoint], 'type' => $type]).$html;
+        
       }
       $html = $this->Html->tag('picture',$html);
+
     }
 
     // normal stuff
