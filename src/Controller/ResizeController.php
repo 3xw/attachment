@@ -38,9 +38,9 @@ class ResizeController extends AppController
     preg_match_all('/([a-zA-Z0-9_:\/.èüéöàä\$£ç\&%#*+?=,;~-]*)\.webp$/', $image, $webp, PREG_SET_ORDER);
     if(!empty($webp))
     {
-      if(!Configure::read('Attachment.thumbnails.compression.cwebp'))
+      if(!Configure::read('Attachment.thumbnails.compression.cwebp') || !Configure::read('Attachment.thumbnails.compression.convert'))
       {
-        throw new NotFoundException('wepb not installed!!');
+        throw new NotFoundException('wepb and/or convert (ImageMagick) not installed!!');
       }
       $extsToTest = ['.jpg','.jpeg','.png','.JPG','.JPEG','.PNG'];
       $fileFound = false;
@@ -184,12 +184,27 @@ class ResizeController extends AppController
     }
 
     // cwebp jpeg && png
-    if(!empty($webp) && Configure::read('Attachment.thumbnails.compression.cwebp') && ($mimetype == 'image/jpeg' || $mimetype == 'image/jpeg' || $mimetype == 'image/png') )
+    if(!empty($webp) && Configure::read('Attachment.thumbnails.compression.cwebp') && Configure::read('Attachment.thumbnails.compression.convert') && ($mimetype == 'image/jpeg' || $mimetype == 'image/jpeg' || $mimetype == 'image/png') )
     {
-      $cwebp = Configure::read('Attachment.thumbnails.compression.cwebp');
+
       $output = $profile.DS.$dim.DS.$webp[0][0];
       $output = $this->_filesystem('cache')->getAdapter()->applyPathPrefix($output);
-      exec("$cwebp -q $quality $path -o $output && rm $path");
+
+      // CMYK to RGB
+      if(($mimetype == 'image/jpeg' || $mimetype == 'image/jpeg'))
+      {
+        $convert = Configure::read('Attachment.thumbnails.compression.convert');
+        exec("$convert -colorspace RGB $path $path 2>&1", $out);
+      }
+
+      // FORMAT TO webp
+      $cwebp = Configure::read('Attachment.thumbnails.compression.cwebp');
+      exec("$cwebp -q $quality $path -o $output 2>&1", $out);
+
+      // clean
+      exec("rm $path");
+
+      // set new path
       $path = $output;
     }
 
