@@ -10,6 +10,11 @@ return [
     		'client' => new League\Flysystem\Adapter\Local('files'),
         'baseUrl' =>  '/files/'
     	],
+      'img' => [
+    		'adapter' => 'League\Flysystem\Adapter\Local',
+    		'client' => new League\Flysystem\Adapter\Local('img'),
+        'baseUrl' =>  '/img/'
+    	],
       'external' => [
     		'adapter' => 'Attachment\Fly\ExternalAdapter',
     		'client' => new Attachment\Fly\ExternalAdapter(),
