@@ -156,7 +156,8 @@ class ResizeController extends AppController
 
     // create folders
     $folder = $profile.DS.$dim.DS.substr($image, 0, strrpos($image, '/') );
-    $folder = new Folder(WWW_ROOT.$this->_filesystem('cache')->getAdapter()->applyPathPrefix($folder), true, 0777);
+    $folder = $this->_filesystem('cache')->getAdapter()->applyPathPrefix($folder);
+    $folder = new Folder($folder, true, 0777);
 
     // quality
     $quality = $quality? $quality: Configure::read('Attachment.thumbnails.compression.quality');
@@ -179,6 +180,7 @@ class ResizeController extends AppController
     $path = $profile.DS.$dim.DS.$image;
     $this->_filesystem('cache')->put($profile.DS.$dim.DS.$image, $img);
     $path = $this->_filesystem('cache')->getAdapter()->applyPathPrefix($path);
+
 
     // jpegoptim
     if(empty($webp) && Configure::read('Attachment.thumbnails.compression.jpegoptim') && ($mimetype == 'image/jpeg' || $mimetype == 'image/jpeg') )
