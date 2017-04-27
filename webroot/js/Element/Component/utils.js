@@ -53,6 +53,37 @@ Vue.filter('icon', function (input) {
   }
 });
 
+Vue.filter('isNiceImage', function (file) {
+  switch(file.type+'/'+file.subtype){
+    case 'image/jpeg':
+    case 'image/png':
+    case 'image/gif':
+    return true;
+    default:
+    return false;
+  }
+});
+
+Vue.filter('isEmbed', function (file) {
+  switch(file.type){
+    case 'embed':
+    return true;
+    break;
+    default:
+    return false;
+  }
+});
+
+Vue.filter('isNotEmbed', function (file) {
+  switch(file.type){
+    case 'embed':
+    return false;
+    break;
+    default:
+    return true;
+  }
+});
+
 Vue.filter('isThumbable', function (file) {
   switch(file.type+'/'+file.subtype){
     case 'image/jpeg':
