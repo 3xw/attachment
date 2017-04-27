@@ -43,6 +43,9 @@ Vue.component('attachment-index',{
     'show-edit-file': function(index) {
       this.$broadcast('edit-file',this.files[index]);
     },
+    'show-view-file': function(index) {
+      this.$broadcast('view-file',this.files[index]);
+    },
     'edit-progress': function(){
       this.loading = true;
     },

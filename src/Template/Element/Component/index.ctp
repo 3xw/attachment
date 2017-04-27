@@ -28,6 +28,9 @@
     <!-- pagination -->
     <attachment-pagination :pagination="pagination" :callback="getFiles" :offset="4"></attachment-pagination>
 
+    <!-- view -->
+    <attachment-view :settings.sync="settings" ></attachment-view>
+
     <!-- edit -->
     <attachment-edit :settings.sync="settings" ></attachment-edit>
 
@@ -36,7 +39,7 @@
 
     <!-- embed -->
     <attachment-embed :settings.sync="settings" ></attachment-embed>
-    
+
     <!-- add btn -->
     <p>
       <div v-if="settings.actions.indexOf('add') != -1" class="btn-group" data-intro="Ajouter des médias à l'aide de ces boutons" data-position="right">

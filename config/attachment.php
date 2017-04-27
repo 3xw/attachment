@@ -10,6 +10,11 @@ return [
     		'client' => new League\Flysystem\Adapter\Local('files'),
         'baseUrl' =>  '/files/'
     	],
+      'img' => [
+    		'adapter' => 'League\Flysystem\Adapter\Local',
+    		'client' => new League\Flysystem\Adapter\Local('img'),
+        'baseUrl' =>  '/img/'
+    	],
       'external' => [
     		'adapter' => 'Attachment\Fly\ExternalAdapter',
     		'client' => new Attachment\Fly\ExternalAdapter(),
@@ -17,7 +22,7 @@ return [
     	],
       'cache' => [
     		'adapter' => 'League\Flysystem\Adapter\Local',
-    		'client' => new League\Flysystem\Adapter\Local('thumbnails'),
+    		'client' => new League\Flysystem\Adapter\Local(WWW_ROOT.'thumbnails'),
         'baseUrl' =>  '/thumbnails/'
     	],
     ],
@@ -33,6 +38,7 @@ return [
       'maxsize' => 30, // 30MB
       'types' =>[],
       'atags' => [],
+      'cols' => 'col-xs-4 col-md-3 col-lg-2',
       'relation' => 'belongsToMany',
       'profile' => 'default',
       'visibility' => 'public',

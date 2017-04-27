@@ -37,6 +37,7 @@ class AttachmentHelper extends Helper
       $this->_View->append('template', $this->_View->element('Attachment.Component/thumb'));
       $this->_View->append('template', $this->_View->element('Attachment.Component/files-index'));
       $this->_View->append('template', $this->_View->element('Attachment.Component/edit'));
+      $this->_View->append('template', $this->_View->element('Attachment.Component/view'));
       $this->_View->append('template', $this->_View->element('Attachment.Component/upload'));
       $this->_View->append('template', $this->_View->element('Attachment.Component/embed'));
       $this->_View->append('template', $this->_View->element('Attachment.Component/pagination'));
@@ -58,6 +59,7 @@ class AttachmentHelper extends Helper
         'Attachment.Element/Component/thumb.js',
         'Attachment.Element/Component/files-index.js',
         'Attachment.Element/Component/edit.js',
+        'Attachment.Element/Component/view.js',
         'Attachment.Element/Component/upload.js',
         'Attachment.Element/Component/embed.js',
         'Attachment.Element/Component/pagination.js',
@@ -70,7 +72,7 @@ class AttachmentHelper extends Helper
   public function buildIndex($settings = [])
   {
     $this->_setupIndexComponent();
-    $settings['actions'] = (empty($settings['actions']))? ['add','edit','delete'] : $settings['actions'];
+    $settings['actions'] = (empty($settings['actions']))? ['add','edit','delete','view'] : $settings['actions'];
     $settings['attachments'] = [];
     $settings = array_merge(Configure::read('Attachment.upload'),$settings);
     $uuid = Text::uuid();
@@ -83,7 +85,11 @@ class AttachmentHelper extends Helper
       'languages' => Configure::read('I18n.languages'),
       'defaultLocale' => Configure::read('App.defaultLocale')
     ];
-
+    $profiles = Configure::read('Attachment.profiles');
+    $settings['baseUrls'] = [];
+    foreach($profiles as $key => $value){
+      $settings['baseUrls'][$key] = $value['baseUrl'];
+    }
     return "<attachment-index :settings='".htmlspecialchars(json_encode($settings), ENT_QUOTES, 'UTF-8')."' ></attachment-index>";
   }
 
@@ -220,7 +226,7 @@ class AttachmentHelper extends Helper
           $srcset = substr($srcset,0, -2);
           $html = $this->Html->tag('source','',['srcset' => $srcset, 'media' => $breakpoints[$breakpoint], 'type' => 'image/webp']).$html;
         }
-        
+
       }
       $html = $this->Html->tag('picture',$html);
 
