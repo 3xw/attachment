@@ -18,6 +18,9 @@
 
             <!-- buttons -->
             <div class="btn-group">
+              <button class="btn btn-fill btn-xs btn-success" role="button" v-on:click="$dispatch('show-view-file',index)" v-if="settings.actions.indexOf('view') != -1">
+                <?= __('View') ?>
+              </button>
               <button class="btn btn-fill btn-xs btn-info" role="button" v-on:click="$dispatch('show-edit-file',index)" v-if="settings.actions.indexOf('edit') != -1">
                 <?= __('Edit') ?>
               </button>
