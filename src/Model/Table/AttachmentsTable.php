@@ -69,14 +69,24 @@ class AttachmentsTable extends Table
     // Setup search filter using search manager
     $this->searchManager()
     ->add('index', 'Attachment.SessionIndex', [])
-    ->add('search', 'Attachment.SessionLike', [
-      'before' => true,
-      'after' => true,
-      'mode' => 'or',
-      'comparison' => 'LIKE',
-      'wildcardAny' => '*',
-      'wildcardOne' => '?',
-      'field' => [$this->aliasField('title'), $this->aliasField('description'), $this->aliasField('name')]
+    ->add('search', 'Attachment.SessionCallback',[
+      'callback' => function ($query, $args, $filter) {
+        $needle = '%'.$args['search'].'%';
+        return $query
+        ->distinct($this->aliasField('id'))
+        ->leftJoin(['AA' => 'attachments_atags'],['AA.attachment_id = Attachments.id'])
+        ->leftJoin(['Atags' => 'atags'],['Atags.id = AA.atag_id'])
+        ->where([
+          'OR' => [
+            'Atags.name LIKE' => $needle,
+            'Atags.slug LIKE' => $needle,
+            'Attachments.title LIKE' => $needle,
+            'Attachments.description LIKE' => $needle,
+            'Attachments.name LIKE' => $needle,
+          ]
+        ])
+        ;
+      }
     ])
     ->add('type', 'Attachment.SessionLike', [
       'before' => true,
