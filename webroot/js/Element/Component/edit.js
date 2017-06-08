@@ -55,9 +55,17 @@ Vue.component('attachment-edit', {
       delete(this.file.date);
       delete(this.file.created);
       delete(this.file.modified);
-      if(this.settings.restrictions.indexOf('tag_restricted') != -1 || this.settings.restrictions.indexOf('tag_or_restricted') != -1)
+      if(this.settings.restrictions.indexOf('tag_restricted') != -1 || this.settings.restrictions.indexOf('tag_or_restricted') == -1)
       {
         delete(this.file.atags);
+      }else
+      {
+        var atags = $('#atagsinput').val();
+        this.file.atags = [];
+        for( var i in atags )
+        {
+          this.file.atags[i] = {name: atags[i].trim()}
+        }
       }
       this.$http.post(this.settings.url+'attachment/attachments/edit/'+this.file.id+'.json', this.file,options)
       .then(this.editSuccessCallback, this.errorCallback);
