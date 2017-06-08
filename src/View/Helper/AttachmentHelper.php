@@ -135,11 +135,24 @@ class AttachmentHelper extends Helper
     }
   }
 
-  public function input($field, $settings = [])
+  private function _setTrumbowygComponent()
   {
-    $settings['relation'] = ($field == 'Attachments')? 'belongsToMany' : 'belongsTo';
-    $settings['field'] = ($field == 'Attachments')? '' : $field;
-    $this->_setupInputComponent();
+    $this->_View->append('template', $this->_View->element('Attachment.Component/trumbowyg'));
+
+    // add css
+    $this->Html->css([
+      'https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.6.0/ui/trumbowyg.min.css',
+    ],['block' => 'css']);
+
+    // add script
+    $this->Html->script([
+      'https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.6.0/trumbowyg.min.js',
+      'Attachment.Element/Component/trumbowyg.js'
+    ],['block' => true]);
+  }
+
+  private function _getSettings($settings)
+  {
     $settings = array_merge(Configure::read('Attachment.upload'),$settings);
     $uuid = Text::uuid();
     $this->request->session()->write('Attachment.'.$uuid, $settings);
@@ -151,8 +164,26 @@ class AttachmentHelper extends Helper
       'languages' => Configure::read('I18n.languages'),
       'defaultLocale' => Configure::read('App.defaultLocale')
     ];
+    return $settings;
+  }
 
-    return "<attachment-input :settings='".htmlspecialchars(json_encode($settings), ENT_QUOTES, 'UTF-8')."' ></attachment-input>";
+  public function trumbowyg($field, $settings = [])
+  {
+    $settings['relation'] = 'belongsToMany';
+    $settings['field'] = (isset($settings['field']))? $settings['field'] : 'Attachments';
+    $this->_setupInputComponent();
+    $this->_setTrumbowygComponent();
+
+    return "<attachment-trumbowyg :settings='".htmlspecialchars(json_encode($this->_getSettings($settings)), ENT_QUOTES, 'UTF-8')."' ></attachment-trumbowyg>";
+  }
+
+  public function input($field, $settings = [])
+  {
+    $settings['relation'] = ($field == 'Attachments')? 'belongsToMany' : 'belongsTo';
+    $settings['field'] = ($field == 'Attachments')? '' : $field;
+    $this->_setupInputComponent();
+
+    return "<attachment-input :settings='".htmlspecialchars(json_encode($this->_getSettings($settings)), ENT_QUOTES, 'UTF-8')."' ></attachment-input>";
   }
 
   public function filesystem($profile)
