@@ -22,9 +22,9 @@
           <!-- TAGS -->
           <div id="attachment-atags" v-if="this.settings.restrictions.indexOf('tag_restricted') == -1">
             <label >Tags</label>
-            <select v-model="file.atags" name="atags" id="atagsinput" multiple class="form-control">
+            <select name="atags" id="atagsinput" multiple class="form-control">
               <option
-                v-for="(index, atag) in file.atags"
+                v-for="atag in file.atags"
                 value="{{atag.name}}"
                 selected="selected">
                   {{atag.name}}

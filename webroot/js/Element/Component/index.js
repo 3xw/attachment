@@ -52,7 +52,7 @@ Vue.component('attachment-index',{
     'edit-success': function(response, file){
       this.loading = false;
       this.successes.push('file: '+file.name+' successfully edited!');
-      //this.getTags();
+      this.getTags();
       this.getFiles();
     },
     'edit-error': function(response, file){
@@ -90,6 +90,9 @@ Vue.component('attachment-index',{
     },
   },
   methods: {
+    getFileByIndex: function(index){
+      return this.files[index];
+    },
     dispalyEmbed : function(){
       for( var type in this.settings.types ){
         if(this.settings.types[type].indexOf('embed') != -1)
@@ -135,7 +138,6 @@ Vue.component('attachment-index',{
       this.loading = false;
       this.files = response.data.data;
       this.pagination = response.data.pagination;
-      //console.log(this.pagination);
     },
     getTags: function(){
       var options = {
