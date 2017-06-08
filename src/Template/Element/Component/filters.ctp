@@ -19,14 +19,14 @@
         <div class="form-inline">
 
           <!-- tags -->
-          <!--
+
           <div class="form-group">
             <div class="input-group">
               <span class="input-group-addon" id="basic-addon1">#</span>
               <select class="form-control" id="tagsInputSearch" placeholder="tag" ></select>
             </div>
           </div>
-          -->
+          
 
           <!-- serach -->
           <div class="form-group">
