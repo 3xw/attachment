@@ -28,6 +28,11 @@ Vue.component('attachment-browse', {
       default: false
     },
   },
+  events: {
+    'show-browse': function(){
+      this.open();
+    }
+  },
   watch: {
     'settings.attachments' : function(val, oldVal){
       var newIds = [];
@@ -62,6 +67,7 @@ Vue.component('attachment-browse', {
       this.files = [];
       this.show = false;
       this.loading = false;
+      this.$dispatch('browse-closed');
     },
     open: function(){
       this.addEventListeners();
