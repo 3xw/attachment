@@ -43,7 +43,21 @@ return [
       'profile' => 'default',
       'visibility' => 'public',
       'speech' => false,
-      'restrictions' => [] // or Attachment\View\Helper\AttachmentHelper::TAG_RESTRICTED
+      'restrictions' => [], // or Attachment\View\Helper\AttachmentHelper::TAG_RESTRICTED
+
+      // trumbowyg settings
+      'trumbowyg' => [
+        'svgPath' => '/attachment/icons/icons.svg',
+        'lang'=>'fr',
+        'btnsDef'=> [
+          'media'=> [ 'dropdown'=> ['attachment-browse','attachment-upload','noembed'], 'ico'=> 'noembed']
+        ],
+        'btns'=> [
+          ['viewHTML'],['media'],['formatting'],'btnGrp-semantic',['superscript', 'subscript'],
+          ['link'],'btnGrp-justify','btnGrp-lists',['horizontalRule'],['removeformat'],['foreColor', 'backColor'],['fullscreen']
+        ],
+        'resetCss' => true, 'removeformatPasted'=> true, 'autogrow'=> true
+      ]
     ],
 
     // thumbnails settings
