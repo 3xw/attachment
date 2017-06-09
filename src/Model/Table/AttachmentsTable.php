@@ -142,6 +142,14 @@ class AttachmentsTable extends Table
     ->requirePresence('size', 'create')
     ->notEmpty('size');
 
+    $validator
+    ->integer('width')
+    ->allowEmpty('width');
+
+    $validator
+    ->integer('height')
+    ->allowEmpty('height');
+
     // MD% Uique
     if(Configure::check('Attachment.md5Unique') )
     {
