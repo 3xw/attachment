@@ -135,29 +135,57 @@ class AttachmentHelper extends Helper
     }
   }
 
-  private function _setTrumbowygComponent()
+  private function _createTrumbowygUrl($value, $plugins, &$js, &$css)
   {
-    $this->_View->append('template', $this->_View->element('Attachment.Component/trumbowyg'));
+    if(is_string($value)){
+      if($value == 'foreColor' || $value == 'backColor'){ $value = 'colors'; }
+      if($value == 'colors'){$css[] = 'https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.6.0/plugins/colors/ui/trumbowyg.colors.min.css';}
+      if(array_search($value, $plugins) !== false ){
+        $js[] = "https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.6.0/plugins/$value/trumbowyg.$value.min.js";
+      }
+    }
 
-    // add css
-    $this->Html->css([
-      'https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.6.0/ui/trumbowyg.min.css',
-    ],['block' => 'css']);
-
-    // add script
-    $this->Html->script([
-      'https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.6.0/trumbowyg.min.js',
-      'Attachment.Element/Component/trumbowyg.js'
-    ],['block' => true]);
+    if(is_array($value)){
+      foreach($value as $v ){
+        $this->_createTrumbowygUrl($v, $plugins, $js, $css);
+      }
+    }
   }
 
-  private function _getSettings($settings)
+  private function _setTrumbowygComponent($settings)
+  {
+    $this->_View->append('template', $this->_View->element('Attachment.Component/trumbowyg'));
+    $css = ['https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.6.0/ui/trumbowyg.min.css'];
+    $js = [
+      'https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.6.0/trumbowyg.min.js',
+      'Attachment.Element/Component/trumbowyg-plugin-upload.js',
+      'Attachment.Element/Component/trumbowyg-plugin-browse.js',
+      'Attachment.Element/Component/trumbowyg.js'
+    ];
+
+    $plugins = ['base64','cleanpaste','colors','emoji','insertaudio','noembed','pasteimage','preformatted','table','template'];
+
+    foreach($settings['trumbowyg']['btns'] as $btn){ $this->_createTrumbowygUrl($btn, $plugins, $js, $css); }
+    if(!empty($settings['trumbowyg']['btnsDef'])){
+      foreach($settings['trumbowyg']['btnsDef'] as $btn){
+        if(array_key_exists('dropdown', $btn)){$this->_createTrumbowygUrl($btn['dropdown'], $plugins, $js, $css);}
+      }
+    }
+
+    // add css
+    $this->Html->css($css,['block' => 'css']);
+
+    // add script
+    $this->Html->script($js,['block' => true]);
+  }
+
+  private function _getSettings($field,$settings)
   {
     $settings = array_merge(Configure::read('Attachment.upload'),$settings);
     $uuid = Text::uuid();
     $this->request->session()->write('Attachment.'.$uuid, $settings);
     $settings['uuid'] = $uuid;
-    $settings['url'] = $this->Url->build('/', true);
+    $settings['url'] = $this->Url->build('/');
     $settings['label'] = empty($settings['label'])? Inflector::humanize($field) : $settings['label'];
     $settings['i18n'] = [
       'enable' => Configure::read('Attachment.translate'),
@@ -169,12 +197,15 @@ class AttachmentHelper extends Helper
 
   public function trumbowyg($field, $settings = [])
   {
-    $settings['relation'] = 'belongsToMany';
-    $settings['field'] = (isset($settings['field']))? $settings['field'] : 'Attachments';
     $this->_setupInputComponent();
-    $this->_setTrumbowygComponent();
+    $settings = $this->_getSettings($field,$settings);
+    $settings['field'] = $field;
+    $settings['relation'] = 'belongsTo';
+    $settings['trumbowyg']['svgPath'] = $this->Url->build($settings['trumbowyg']['svgPath'], true);
+    $settings['attachments'] = [];
+    $this->_setTrumbowygComponent($settings);
 
-    return "<attachment-trumbowyg :settings='".htmlspecialchars(json_encode($this->_getSettings($settings)), ENT_QUOTES, 'UTF-8')."' ></attachment-trumbowyg>";
+    return "<attachment-trumbowyg :settings='".htmlspecialchars(json_encode($settings), ENT_QUOTES, 'UTF-8')."' ></attachment-trumbowyg>";
   }
 
   public function input($field, $settings = [])
@@ -183,7 +214,7 @@ class AttachmentHelper extends Helper
     $settings['field'] = ($field == 'Attachments')? '' : $field;
     $this->_setupInputComponent();
 
-    return "<attachment-input :settings='".htmlspecialchars(json_encode($this->_getSettings($settings)), ENT_QUOTES, 'UTF-8')."' ></attachment-input>";
+    return "<attachment-input :settings='".htmlspecialchars(json_encode($this->_getSettings($field,$settings)), ENT_QUOTES, 'UTF-8')."' ></attachment-input>";
   }
 
   public function filesystem($profile)

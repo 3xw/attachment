@@ -86,6 +86,7 @@ Vue.component('attachment-upload', {
       this.files = [];
       this.show = false;
       this.errors = [];
+      this.$dispatch('upload-closed');
     },
     open: function(){
       this.atags = this.settings.atags;

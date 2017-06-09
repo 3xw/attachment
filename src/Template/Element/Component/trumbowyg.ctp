@@ -14,7 +14,7 @@
       <attachment-embed :settings.sync="settings" ></attachment-embed>
 
       <!-- trumbowyg -->
-      <div v-bind:class="settings.uuid">{{settings.content}}</div>
+      <textarea name="{{settings.field}}" v-bind:class="settings.uuid">{{settings.content}}</textarea>
 
     </div>
   </div>
