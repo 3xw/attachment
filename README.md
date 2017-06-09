@@ -170,6 +170,20 @@ Exemple of settings:
 	      'types' =>['image/jpeg','image/png','image/gif'],
 	      'atags' => [],
 	      'profile' => 's3',
+	      
+	      // trumbowyg settings
+	      'trumbowyg' => [
+	        'svgPath' => '/attachment/icons/icons.svg',
+	        'lang'=>'fr',
+	        'btnsDef'=> [
+	          'media'=> [ 'dropdown'=> ['attachment-browse','attachment-upload','noembed'], 'ico'=> 'noembed']
+	        ],
+	        'btns'=> [
+	          ['viewHTML'],['media'],['formatting'],'btnGrp-semantic',['superscript', 'subscript'],
+	          ['link'],'btnGrp-justify','btnGrp-lists',['horizontalRule'],['removeformat'],['foreColor', 'backColor'],['fullscreen']
+	        ],
+	        'resetCss' => true, 'removeformatPasted'=> true, 'autogrow'=> true
+	      ]
 	    ],
 
 	    // thumbnails settings
@@ -338,6 +352,19 @@ Global Attachments index :
         Attachment\View\Helper\AttachmentHelper::TYPES_RESTRICTED
       ]
     ]) ?>
+    
+NEW! you can use trumbowyg now!!
+
+	$this->Attachment->trumbowyg('content',[
+       'types' =>['image/jpeg','image/png','image/gif'],
+       'atags' => [],
+       'restrictions' => [
+          Attachment\View\Helper\AttachmentHelper::TAG_RESTRICTED,
+          Attachment\View\Helper\AttachmentHelper::TYPES_RESTRICTED
+       ],
+       'content' => '',
+    ]);
+This will let you insert mages right into trumbowyg textarea !!! heepee!
 
 ####Usage.view.frontend
 in file
