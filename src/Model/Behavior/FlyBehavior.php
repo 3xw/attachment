@@ -8,6 +8,7 @@ use Cake\Utility\Inflector;
 use Cake\Core\Configure;
 use Cake\Datasource\EntityInterface;
 use Cake\Network\Session;
+use Intervention\Image\ImageManagerStatic as Image;
 
 use Cake\ORM\Behavior;
 use Cake\ORM\Table;
@@ -136,6 +137,15 @@ class FlyBehavior extends Behavior
           $event->stopPropagation();
           $entity->errors($field,['This file is too large max size is : '  . ( $conf['maxsize']  ) .' MB']);
           return false;
+        }
+
+        // get sizes if file is image...
+        if($fullType == 'image/jpeg' || $fullType == 'image/png' || $fullType == 'image/gif')
+        {
+          $img = Image::make($temp_name);
+          $entity->set('width', $img->width());
+          $entity->set('height', $img->height());
+          unset($img);
         }
 
         // store file
