@@ -386,3 +386,8 @@ in file
 
 	<!-- Display an embed video  -->
 	<?= $post->attachments[0]->embed ?>
+
+####Usage.shell
+Attachment plugin provides a usefull shell script to retrieve width and height of images
+
+	bin/cake Attachment.GetImageSizes

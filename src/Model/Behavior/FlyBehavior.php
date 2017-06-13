@@ -8,7 +8,6 @@ use Cake\Utility\Inflector;
 use Cake\Core\Configure;
 use Cake\Datasource\EntityInterface;
 use Cake\Network\Session;
-use Intervention\Image\ImageManagerStatic as Image;
 
 use Cake\ORM\Behavior;
 use Cake\ORM\Table;
@@ -142,9 +141,11 @@ class FlyBehavior extends Behavior
         // get sizes if file is image...
         if($fullType == 'image/jpeg' || $fullType == 'image/png' || $fullType == 'image/gif')
         {
-          $img = Image::make($temp_name);
-          $entity->set('width', $img->width());
-          $entity->set('height', $img->height());
+          $image_info = getimagesize($temp_name);
+          $image_width = $image_info[0];
+          $image_height = $image_info[1];
+          $entity->set('width', $image_width);
+          $entity->set('height', $image_height);
           unset($img);
         }
 
