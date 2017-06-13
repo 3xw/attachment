@@ -154,13 +154,15 @@ class AttachmentHelper extends Helper
 
   private function _setTrumbowygComponent($settings)
   {
+    $this->_View->append('template', $this->_View->element('Attachment.Component/trumbowyg-options'));
     $this->_View->append('template', $this->_View->element('Attachment.Component/trumbowyg'));
     $css = ['https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.6.0/ui/trumbowyg.min.css'];
     $js = [
       'https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.6.0/trumbowyg.min.js',
       'Attachment.Element/Component/trumbowyg-plugin-upload.js',
       'Attachment.Element/Component/trumbowyg-plugin-browse.js',
-      'Attachment.Element/Component/trumbowyg.js'
+      'Attachment.Element/Component/trumbowyg.js',
+      'Attachment.Element/Component/trumbowyg-options.js'
     ];
 
     $plugins = ['base64','cleanpaste','colors','emoji','insertaudio','noembed','pasteimage','preformatted','table','template'];

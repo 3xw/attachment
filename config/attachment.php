@@ -56,7 +56,16 @@ return [
           ['viewHTML'],['media'],['formatting'],'btnGrp-semantic',['superscript', 'subscript'],
           ['link'],'btnGrp-justify','btnGrp-lists',['horizontalRule'],['removeformat'],['foreColor', 'backColor'],['fullscreen']
         ],
-        'resetCss' => true, 'removeformatPasted'=> true, 'autogrow'=> true
+        'resetCss' => true, 'removeformatPasted'=> true, 'autogrow'=> true,
+        'imageOptions' => [
+          'align' => [
+            '' => 'ne pas toucher',
+            'img-float-left' => 'collé à gauche',
+            'img-float-right' => 'collé à droite',
+            'img-center' => 'centré'
+          ],
+          'classes' => true, 'altTitle' => true, 'width' => true, 'crop' => true
+        ]
       ]
     ],
 

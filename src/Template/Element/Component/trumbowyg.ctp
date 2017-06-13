@@ -10,8 +10,8 @@
       <!-- browse -->
       <attachment-browse :types="types" :tags="tags" :settings="settings" ></attachment-browse>
 
-      <!-- embed -->
-      <attachment-embed :settings.sync="settings" ></attachment-embed>
+      <!-- trumbowyg-options -->
+      <attachment-trumbowyg-options :settings.sync="settings" :file.sync="file" ></attachment-trumbowyg-options>
 
       <!-- trumbowyg -->
       <textarea name="{{settings.field}}" v-bind:class="settings.uuid">{{settings.content}}</textarea>
