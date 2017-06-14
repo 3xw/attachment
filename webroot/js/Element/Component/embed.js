@@ -93,18 +93,17 @@ Vue.component('attachment-embed', {
         },
         error: function(response){
           var message = response.statusText;
+
           //self.success = '';
           if(response.responseJSON){
-            var errors = response.responseJSON.data.errors;
-            var message = response.responseJSON.data.message;
-            if(errors['md5']){
-              if(errors['md5']['unique']){
-                message = errors['md5'].unique;
-              }
-            }
-            if(errors['name']){
-              if(errors['name']['_required']){
-                message = 'Name: '+errors['name']['_required'];
+            var errors = ( response.responseJSON['data'] )? response.responseJSON.data.errors: response.responseJSON.errors;
+            var message = ( response.responseJSON['data'] )? response.responseJSON.data.message: response.responseJSON.message;
+
+            if(errors){
+              if(errors['md5']){
+                if(errors['md5']['unique']){
+                  message = errors['md5'].unique;
+                }
               }
             }
           }
