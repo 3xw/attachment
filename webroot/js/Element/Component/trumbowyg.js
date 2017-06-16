@@ -29,11 +29,14 @@ Vue.component('attachment-trumbowyg',{
     }
   },
   ready: function(){
+    if(this.settings.trumbowyg.langs && this.settings.trumbowyg.langs[this.settings.trumbowyg.lang]){
+        $.trumbowyg.langs[this.settings.trumbowyg.lang] = this.settings.trumbowyg.langs[this.settings.trumbowyg.lang];
+    }
     this.$trumbowyg = $('.'+this.settings.uuid);
     this.$trumbowyg
     .trumbowyg(this.settings.trumbowyg)
     .on('attachment-upload',this.upload)
-    .on('attachment-browse',this.browse)
+    .on('attachment-browse',this.browse);
   },
   methods: {
     setup: function(trumbowyg){

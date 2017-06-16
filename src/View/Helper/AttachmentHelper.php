@@ -178,6 +178,7 @@ class AttachmentHelper extends Helper
     $css = ['https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.6.0/ui/trumbowyg.min.css'];
     $js = [
       'https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.6.0/trumbowyg.min.js',
+      'https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.6.0/langs/'.$settings['trumbowyg']['lang'].'.min.js',
       'Attachment.Element/Component/trumbowyg-plugin-upload.js'.$this->getVersion(),
       'Attachment.Element/Component/trumbowyg-plugin-browse.js'.$this->getVersion(),
       'Attachment.Element/Component/trumbowyg.js'.$this->getVersion(),
