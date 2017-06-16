@@ -9,13 +9,7 @@ Vue.component('attachment-trumbowyg',{
     return {
       $trumbowyg: null,
       trumbowyg: null,
-      //file: null,
-      options: {
-        classes: {
-          label: 'Styles',
-          required: true
-        },
-      }
+      options: null,
     };
   },
   events: {
@@ -26,7 +20,12 @@ Vue.component('attachment-trumbowyg',{
       this.openOptions();
     },
     'options-success': function(args){
-      this.createHtmlElement(args[0]);
+      this.options = args[0];
+      this.$trumbowyg.trumbowyg("openModalInsert", {
+        title: "Confirmez l'ajout du média?",
+        callback: this.createHtmlElement
+      })
+      //this.createHtmlElement();
     }
   },
   ready: function(){
@@ -63,7 +62,8 @@ Vue.component('attachment-trumbowyg',{
       path += '/'+this.file.path;
       return path;
     },
-    createHtmlElement: function(options){
+    createHtmlElement: function(values){
+      var options = this.options;
       var html = '<img';
       var classes = 'img-responsive ';
       classes += (options.classes)? options.classes+' ': '';
@@ -77,10 +77,12 @@ Vue.component('attachment-trumbowyg',{
 
       var node = $(html)[0];
 
+      /*
       if(!this.trumbowyg.range){
         this.trumbowyg.range = this.trumbowyg.doc.getSelection().getRangeAt(0);
         console.log(this.trumbowyg.range);
       }
+      */
       this.trumbowyg.range.deleteContents();
       this.trumbowyg.range.insertNode(node);
       return true;
