@@ -171,6 +171,13 @@ Exemple of settings:
 	      'atags' => [],
 	      'profile' => 's3',
 	      
+	      // pagination setting in browse views
+	      'pagination' => [
+	        'offset' => 9, // = 10 pages
+	        'start' => true,
+	        'end' => true,
+	      ],
+	      
 	      // trumbowyg settings
 	      'trumbowyg' => [
 	        'svgPath' => '/attachment/icons/icons.svg',
