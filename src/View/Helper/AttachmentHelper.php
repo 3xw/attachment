@@ -2,6 +2,7 @@
 namespace Attachment\View\Helper;
 
 use Cake\View\Helper;
+use Cake\View\View;
 use Attachment\Fly\FilesystemRegistry;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
@@ -25,6 +26,24 @@ class AttachmentHelper extends Helper
 
   private $_inputComponentCount = 0;
 
+  private $_version = false;
+
+  public function getVersion()
+  {
+    if(!$this->_version){
+      $string = file_get_contents(APP."../composer.lock");
+      $composer = json_decode($string, true);
+      foreach($composer['packages'] as $package)
+      {
+        if($package['name'] == '3xw/attachment'){
+          $this->_version = '?version='.$package['version'];
+          break;
+        }
+      }
+    }
+    return $this->_version;
+  }
+
   private function _setupIndexComponent()
   {
     $this->_inputComponentCount++;
@@ -47,7 +66,7 @@ class AttachmentHelper extends Helper
       // add css
       $this->Html->css([
         'Attachment.vendor/TimSchlechter/bootstrap-tagsinput/bootstrap-tagsinput.css',
-        'Attachment.attachment.css',
+        'Attachment.attachment.css'.$this->getVersion(),
       ],['block' => 'css']);
 
       // add script
@@ -55,16 +74,16 @@ class AttachmentHelper extends Helper
         'Attachment.vendor/TimSchlechter/bootstrap-tagsinput/bootstrap-tagsinput.js',
         'Attachment.vendor/twitter/typeahead.js/typeahead.bundle.min.js',
         'Attachment.vendor/rubaxa/Sortable/Sortable.js',
-        'Attachment.Element/Component/utils.js',
-        'Attachment.Element/Component/thumb.js',
-        'Attachment.Element/Component/files-index.js',
-        'Attachment.Element/Component/edit.js',
-        'Attachment.Element/Component/view.js',
-        'Attachment.Element/Component/upload.js',
-        'Attachment.Element/Component/embed.js',
-        'Attachment.Element/Component/pagination.js',
-        'Attachment.Element/Component/filters.js',
-        'Attachment.Element/Component/index.js'
+        'Attachment.Element/Component/utils.js'.$this->getVersion(),
+        'Attachment.Element/Component/thumb.js'.$this->getVersion(),
+        'Attachment.Element/Component/files-index.js'.$this->getVersion(),
+        'Attachment.Element/Component/edit.js'.$this->getVersion(),
+        'Attachment.Element/Component/view.js'.$this->getVersion(),
+        'Attachment.Element/Component/upload.js'.$this->getVersion(),
+        'Attachment.Element/Component/embed.js'.$this->getVersion(),
+        'Attachment.Element/Component/pagination.js'.$this->getVersion(),
+        'Attachment.Element/Component/filters.js'.$this->getVersion(),
+        'Attachment.Element/Component/index.js'.$this->getVersion()
       ],['block' => true]);
     }
   }
@@ -114,7 +133,7 @@ class AttachmentHelper extends Helper
       // add css
       $this->Html->css([
         'Attachment.vendor/TimSchlechter/bootstrap-tagsinput/bootstrap-tagsinput.css',
-        'Attachment.attachment.css',
+        'Attachment.attachment.css'.$this->getVersion(),
       ],['block' => 'css']);
 
       // add script
@@ -122,15 +141,15 @@ class AttachmentHelper extends Helper
         'Attachment.vendor/TimSchlechter/bootstrap-tagsinput/bootstrap-tagsinput.js',
         'Attachment.vendor/twitter/typeahead.js/typeahead.bundle.min.js',
         'Attachment.vendor/rubaxa/Sortable/Sortable.js',
-        'Attachment.Element/Component/utils.js',
-        'Attachment.Element/Component/thumb.js',
-        'Attachment.Element/Component/files.js',
-        'Attachment.Element/Component/pagination.js',
-        'Attachment.Element/Component/filters.js',
-        'Attachment.Element/Component/upload.js',
-        'Attachment.Element/Component/embed.js',
-        'Attachment.Element/Component/browse.js',
-        'Attachment.Element/Component/input.js'
+        'Attachment.Element/Component/utils.js'.$this->getVersion(),
+        'Attachment.Element/Component/thumb.js'.$this->getVersion(),
+        'Attachment.Element/Component/files.js'.$this->getVersion(),
+        'Attachment.Element/Component/pagination.js'.$this->getVersion(),
+        'Attachment.Element/Component/filters.js'.$this->getVersion(),
+        'Attachment.Element/Component/upload.js'.$this->getVersion(),
+        'Attachment.Element/Component/embed.js'.$this->getVersion(),
+        'Attachment.Element/Component/browse.js'.$this->getVersion(),
+        'Attachment.Element/Component/input.js'.$this->getVersion()
       ],['block' => true]);
     }
   }
@@ -159,10 +178,10 @@ class AttachmentHelper extends Helper
     $css = ['https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.6.0/ui/trumbowyg.min.css'];
     $js = [
       'https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.6.0/trumbowyg.min.js',
-      'Attachment.Element/Component/trumbowyg-plugin-upload.js',
-      'Attachment.Element/Component/trumbowyg-plugin-browse.js',
-      'Attachment.Element/Component/trumbowyg.js',
-      'Attachment.Element/Component/trumbowyg-options.js'
+      'Attachment.Element/Component/trumbowyg-plugin-upload.js'.$this->getVersion(),
+      'Attachment.Element/Component/trumbowyg-plugin-browse.js'.$this->getVersion(),
+      'Attachment.Element/Component/trumbowyg.js'.$this->getVersion(),
+      'Attachment.Element/Component/trumbowyg-options.js'.$this->getVersion()
     ];
 
     $plugins = ['base64','cleanpaste','colors','emoji','insertaudio','noembed','pasteimage','preformatted','table','template'];
