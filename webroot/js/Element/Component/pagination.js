@@ -5,6 +5,12 @@ Vue.component('attachment-pagination',{
       type: Object,
       required: true
     },
+    lastPage: {
+      type: Number,
+      default: 1
+    },
+    from:{type: Number, default: 1},
+    to:{type: Number, default: 2},
     callback: {
       type: Function,
       required: true
@@ -32,20 +38,24 @@ Vue.component('attachment-pagination',{
         return [];
       }
 
-      var from = this.pagination.current_page - this.offset;
-      if(from < 1) {
-        from = 1;
+      this.from = this.pagination.current_page - Math.floor(this.offset/2);
+      if(this.from + this.offset >= this.pagination.page_count ){
+        this.from = this.pagination.current_page - (this.offset - (this.pagination.page_count - this.pagination.current_page));
+      }
+      if(this.from < 1) {
+        this.from = 1;
       }
 
-      var to = from + (this.offset );
-      if(to >= this.pagination.page_count) {
-        to = this.pagination.page_count;
+      this.to = this.from + (this.offset );
+      if(this.to >= this.pagination.page_count) {
+        this.to = this.pagination.page_count;
       }
 
       var arr = [];
-      while (from <=to) {
-        arr.push(from);
-        from++;
+      var i = this.from;
+      while (i <=this.to) {
+        arr.push(i);
+        i++;
       }
 
       return arr;
@@ -53,6 +63,7 @@ Vue.component('attachment-pagination',{
   },
   methods: {
     changePage: function (page) {
+      this.lastPage = this.pagination.current_page;
       this.pagination.current_page = page;
       this.callback();
     }
