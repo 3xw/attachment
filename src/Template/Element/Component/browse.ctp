@@ -44,7 +44,7 @@
         </div>
 
         <!-- pagination -->
-        <attachment-pagination :pagination="pagination" :callback="getFiles" :offset="4"></attachment-pagination>
+        <attachment-pagination :pagination="pagination" :callback="getFiles" :settings.sync="settings"></attachment-pagination>
 
         <p></p>
         <div class="custom-modal-footer">

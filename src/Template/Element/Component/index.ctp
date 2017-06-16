@@ -26,7 +26,7 @@
     <attachment-files-index :settings.sync="settings" :files.sync="files"></attachment-files-index>
 
     <!-- pagination -->
-    <attachment-pagination :pagination="pagination" :callback="getFiles" :offset="4"></attachment-pagination>
+    <attachment-pagination :pagination="pagination" :callback="getFiles" :settings.sync="settings"></attachment-pagination>
 
     <!-- view -->
     <attachment-view :settings.sync="settings" ></attachment-view>

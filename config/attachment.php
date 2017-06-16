@@ -44,6 +44,11 @@ return [
       'visibility' => 'public',
       'speech' => false,
       'restrictions' => [], // or Attachment\View\Helper\AttachmentHelper::TAG_RESTRICTED
+      'pagination' => [
+        'offset' => 9, // = 10 pages
+        'start' => true,
+        'end' => true,
+      ],
 
       // trumbowyg settings
       'trumbowyg' => [
