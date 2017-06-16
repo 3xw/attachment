@@ -12,10 +12,22 @@ Vue.component('attachment-pagination',{
     offset: {
       type: Number,
       default: 4
-    }
+    },
+    settings: Object,
+    start: {
+      type: Boolean,
+      default: false
+    },
+    end: {
+      type: Boolean,
+      default: false
+    },
   },
   computed: {
     array: function () {
+      this.offset = this.settings.pagination.offset;
+      this.start = this.settings.pagination.start;
+      this.end = this.settings.pagination.end;
       if(this.pagination.page_count == 1) {
         return [];
       }
