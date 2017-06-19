@@ -8,8 +8,9 @@ Vue.component('attachment-trumbowyg',{
   data:function(){
     return {
       $trumbowyg: null,
-      trumbowyg: null,
       options: null,
+      startRange: null,
+      endRange: null,
     };
   },
   events: {
@@ -25,12 +26,11 @@ Vue.component('attachment-trumbowyg',{
         title: "Confirmez l'ajout du média?",
         callback: this.createHtmlElement
       })
-      //this.createHtmlElement();
     }
   },
   ready: function(){
     if(this.settings.trumbowyg.langs && this.settings.trumbowyg.langs[this.settings.trumbowyg.lang]){
-        $.trumbowyg.langs[this.settings.trumbowyg.lang] = this.settings.trumbowyg.langs[this.settings.trumbowyg.lang];
+      $.trumbowyg.langs[this.settings.trumbowyg.lang] = this.settings.trumbowyg.langs[this.settings.trumbowyg.lang];
     }
     this.$trumbowyg = $('.'+this.settings.uuid);
     this.$trumbowyg
@@ -43,6 +43,9 @@ Vue.component('attachment-trumbowyg',{
       this.trumbowyg = trumbowyg;
       this.settings.attachments = [];
       this.file = null;
+
+      this.startRange = this.getCaretCharacterOffsetWithin(this.$trumbowyg.parent().find('.trumbowyg-editor')[0]) || 0;
+      this.endRange = this.startRange;
     },
     upload: function(evt, trumbowyg){
       this.setup(trumbowyg);
@@ -65,6 +68,76 @@ Vue.component('attachment-trumbowyg',{
       path += '/'+this.file.path;
       return path;
     },
+    getCaretCharacterOffsetWithin: function(element) {
+      var caretOffset = 0;
+      var doc = element.ownerDocument || element.document;
+      var win = doc.defaultView || doc.parentWindow;
+      var sel;
+      if (typeof win.getSelection != "undefined") {
+        sel = win.getSelection();
+        if (sel.rangeCount > 0) {
+          var range = win.getSelection().getRangeAt(0);
+          var preCaretRange = range.cloneRange();
+          preCaretRange.selectNodeContents(element);
+          preCaretRange.setEnd(range.endContainer, range.endOffset);
+          caretOffset = preCaretRange.toString().length;
+        }
+      } else if ( (sel = doc.selection) && sel.type != "Control") {
+        var textRange = sel.createRange();
+        var preCaretTextRange = doc.body.createTextRange();
+        preCaretTextRange.moveToElementText(element);
+        preCaretTextRange.setEndPoint("EndToEnd", textRange);
+        caretOffset = preCaretTextRange.text.length;
+      }
+      return caretOffset;
+    },
+    getTextNodesIn: function(node) {
+      var textNodes = [];
+      if (node.nodeType == 3) {
+        textNodes.push(node);
+      } else {
+        var children = node.childNodes;
+        for (var i = 0, len = children.length; i < len; ++i) {
+          textNodes.push.apply(textNodes, this.getTextNodesIn(children[i]));
+        }
+      }
+      return textNodes;
+    },
+    setSelectionRange: function(el, start, end) {
+      if (document.createRange && window.getSelection)
+      {
+        var range = document.createRange();
+        range.selectNodeContents(el);
+        var textNodes = this.getTextNodesIn(el);
+        var foundStart = false;
+        var charCount = 0, endCharCount;
+
+        for (var i = 0, textNode; textNode = textNodes[i++]; ) {
+          endCharCount = charCount + textNode.length;
+          if (!foundStart && start >= charCount && (start < endCharCount || (start == endCharCount && i <= textNodes.length))) {
+            range.setStart(textNode, start - charCount);
+            foundStart = true;
+          }
+          if (foundStart && end <= endCharCount) {
+            range.setEnd(textNode, end - charCount);
+            break;
+          }
+          charCount = endCharCount;
+        }
+
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      } else if (document.selection && document.body.createTextRange)
+      {
+        var textRange = document.body.createTextRange();
+        textRange.moveToElementText(el);
+        textRange.collapse(true);
+        textRange.moveEnd("character", end);
+        textRange.moveStart("character", start);
+        textRange.select();
+      }
+    },
     createHtmlElement: function(values){
       var options = this.options;
       var html = '<img';
@@ -80,14 +153,21 @@ Vue.component('attachment-trumbowyg',{
 
       var node = $(html)[0];
 
-      /*
-      if(!this.trumbowyg.range){
-        this.trumbowyg.range = this.trumbowyg.doc.getSelection().getRangeAt(0);
-        console.log(this.trumbowyg.range);
+      var htmlElem = this.$trumbowyg.parent().find('.trumbowyg-editor')[0];
+      this.setSelectionRange(htmlElem, this.startRange, this.endRange);
+      var range, sel;
+      sel = window.getSelection();
+      if (sel.rangeCount && sel.getRangeAt) {
+        range = sel.getRangeAt(0);
       }
-      */
-      this.trumbowyg.range.deleteContents();
-      this.trumbowyg.range.insertNode(node);
+      if (range) {
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+      this.$trumbowyg.trumbowyg('saveRange');
+      range = this.$trumbowyg.trumbowyg('getRange');
+      range.deleteContents();
+      range.insertNode(node);
       return true;
     }
   }
