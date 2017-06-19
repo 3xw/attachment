@@ -18,16 +18,35 @@ Vue.component('attachment-trumbowyg-options',{
   },
   events: {
     'show-options': function(){
+      this.addEventListeners();
       this.show = true;
     }
   },
   methods: {
+    addEventListeners : function(){
+      $(document).bind('keypress', this.preventEnter);
+      $('form').bind('submit', this.preventSubmit);
+    },
+    removeEventListeners : function(){
+      $(document).unbind('keypress', this.preventEnter);
+      $('form').unbind('submit', this.preventSubmit);
+    },
+    preventEnter: function(e){
+      if(e.which == 13) {
+        this.preventSubmit(e);
+      }
+    },
+    preventSubmit: function(e){
+      e.preventDefault();
+      e.stopPropagation();
+    },
     close: function(){
+      this.removeEventListeners();
       this.show = false;
     },
     success: function(){
-      this.$dispatch('options-success', [this.options]);
       this.close();
+      this.$dispatch('options-success', [this.options]);
     }
   }
 });
