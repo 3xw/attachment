@@ -14,17 +14,15 @@ class TagRestricted extends BaseRestriction
     if(!empty($settings['atags']))
     {
 
-      $query->innerJoin(['AAtags' => 'attachments_atags'],['AAtags.attachment_id = Attachments.id']);
-      $query->innerJoin(['Atags' => 'atags'],['Atags.id = AAtags.atag_id']);
-
-      $where = [];
-
       foreach($settings['atags'] as $tag )
       {
+        $alias = Inflector::classify(str_replace(['-'],[''],$tag));
+        $query->innerJoin([$alias.'AAtags' => 'attachments_atags'],[$alias.'AAtags.attachment_id = Attachments.id']);
+        $query->innerJoin([$alias.'Atags' => 'atags'],[$alias.'Atags.id = '.$alias.'AAtags.atag_id']);
         array_push($where,[
           'OR' => [
-            'Atags.name' => $tag,
-            'Atags.slug' => $tag
+            $alias.'Atags.name' => $tag,
+            $alias.'Atags.slug' => $tag
           ]
         ]);
       }
