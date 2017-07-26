@@ -23,7 +23,7 @@ class TagOrRestricted extends BaseRestriction
         array_push($where['OR'],[
           'OR' => [
             'Atags.name' => $tag,
-            'Atags.slug' => $tag
+            'Atags.slug' => Inflector::slug($tag,'-')
           ]
         ]);
       }
