@@ -20,10 +20,15 @@ return [
     		'client' => new Attachment\Fly\ExternalAdapter(),
         'baseUrl' =>  ''
     	],
-      'cache' => [
+      'thumbnails' => [
     		'adapter' => 'League\Flysystem\Adapter\Local',
     		'client' => new League\Flysystem\Adapter\Local(WWW_ROOT.'thumbnails'),
         'baseUrl' =>  '/thumbnails/'
+    	],
+      'sys_temp' => [
+    		'adapter' => 'League\Flysystem\Adapter\Local',
+    		'client' => new League\Flysystem\Adapter\Local(sys_get_temp_dir()),
+        'baseUrl' =>  null
     	],
     ],
 

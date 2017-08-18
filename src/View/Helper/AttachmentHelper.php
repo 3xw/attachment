@@ -1,6 +1,7 @@
 <?php
 namespace Attachment\View\Helper;
 
+use Attachment\Utility\Token;
 use Cake\View\Helper;
 use Cake\View\View;
 use Attachment\Fly\FilesystemRegistry;
@@ -8,6 +9,7 @@ use Cake\Core\Configure;
 use Cake\Routing\Router;
 use Cake\Utility\Text;
 use Cake\Utility\Inflector;
+use Attachment\Model\Entity\Attachment;
 
 class AttachmentHelper extends Helper
 {
@@ -27,6 +29,20 @@ class AttachmentHelper extends Helper
   private $_inputComponentCount = 0;
 
   private $_version = false;
+
+  private $_token;
+
+  protected function _getToken()
+  {
+    if(!$this->_token)
+      $this->_token = new Token();
+    return $this->_token;
+  }
+
+  public function downloadLink(Attachment $attachment )
+  {
+    return $this->_token->url($attachment);
+  }
 
   public function getVersion()
   {

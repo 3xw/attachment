@@ -350,7 +350,7 @@ Global Attachments index :
 
 	<!-- Attachments element -->
     <?= $this->Attachment->buildIndex([
-      'actions' => ['add','edit','delete','view'],
+      'actions' => ['add','edit','delete','view','download'],
       'types' =>['image/jpeg','image/png','embed/youtube','embed/vimeo'],
       'atags' => ['Restricted Tag 1', 'Restricted Tag 2'],
       'profile' => 's3',
@@ -393,6 +393,10 @@ in file
 
 	<!-- Display an embed video  -->
 	<?= $post->attachments[0]->embed ?>
+	
+####Usage.view.download
+	echo $this->Attachment->downloadLink($attachment ); // Attachment $attachment
+	// return the full download url for THIS SESSION ONLY
 
 ####Usage.shell
 Attachment plugin provides a usefull shell script to retrieve width and height of images
