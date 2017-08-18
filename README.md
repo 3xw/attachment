@@ -395,6 +395,7 @@ in file
 	<?= $post->attachments[0]->embed ?>
 	
 ####Usage.view.download
+
 	echo $this->Attachment->downloadLink($attachment ); // Attachment $attachment
 	// return the full download url for THIS SESSION ONLY
 
