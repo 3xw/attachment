@@ -40,7 +40,7 @@ class AttachmentHelper extends Helper
 
   public function downloadLink($attachment )
   {
-    return $this->_token->url($attachment);
+    return $this->_getToken()->url($attachment);
   }
 
   public function getVersion()
