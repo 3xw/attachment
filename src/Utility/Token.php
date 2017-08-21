@@ -1,7 +1,6 @@
 <?php
 namespace Attachment\Utility;
 
-use Attachment\Model\Entity\Attachment;
 use Cake\Utility\Text;
 use Cake\Utility\Security;
 use Cake\Network\Session;
@@ -29,7 +28,7 @@ class Token {
     }
   }
 
-  public function url(Attachment $attachment)
+  public function url($attachment)
   {
     return $this->uri().'/'.$this->encode($attachment->md5);
   }

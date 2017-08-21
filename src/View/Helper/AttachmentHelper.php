@@ -9,7 +9,6 @@ use Cake\Core\Configure;
 use Cake\Routing\Router;
 use Cake\Utility\Text;
 use Cake\Utility\Inflector;
-use Attachment\Model\Entity\Attachment;
 
 class AttachmentHelper extends Helper
 {
@@ -39,7 +38,7 @@ class AttachmentHelper extends Helper
     return $this->_token;
   }
 
-  public function downloadLink(Attachment $attachment )
+  public function downloadLink($attachment )
   {
     return $this->_token->url($attachment);
   }
