@@ -2,6 +2,7 @@
 namespace Attachment\Utility;
 
 use Attachment\Model\Entity\Attachment;
+use Cake\Utility\Text;
 use Cake\Utility\Security;
 use Cake\Network\Session;
 use Cake\Routing\Router;
@@ -51,7 +52,7 @@ class Token {
   public function key()
   {
     if(empty($this->session()->read('Attachment.download.key')))
-      $this->session()->write('Attachment.download.key', random_bytes(32));
+      $this->session()->write('Attachment.download.key', Text::uuid());
     return $this->session()->read('Attachment.download.key');
   }
 }
