@@ -206,7 +206,11 @@ class ResizeController extends AppController
       if(($mimetype == 'image/jpeg' || $mimetype == 'image/jpeg'))
       {
         $convert = Configure::read('Attachment.thumbnails.compression.convert');
-        exec("$convert -colorspace RGB $path $path 2>&1", $out);
+        $imageSize = getimagesize($path);
+        if($imageSize['channels'] == 4)
+        {
+          exec("$convert -colorspace RGB $path $path 2>&1", $out);
+        }
       }
 
       // FORMAT TO webp
