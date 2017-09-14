@@ -3,6 +3,12 @@ Vue.component('attachment-input',{
   props: {
     settings: Object,
   },
+  data: function(){
+    return {
+      types: null,
+      tags: null
+    };
+  },
   methods: {
     dispalyEmbed : function(){
       for( var type in this.settings.types ){

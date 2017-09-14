@@ -28,7 +28,7 @@
               <div v-if="settings.trumbowyg.imageOptions.align" class="input select">
                 <label>Alignement</label>
                 <select v-model="options.align" class="form-control">
-                  <option v-for="(key, value) in settings.trumbowyg.imageOptions.align" value="{{key}}">{{value}}</option>
+                  <option v-for="(value, key) in settings.trumbowyg.imageOptions.align" value="{{key}}">{{value}}</option>
                 </select>
               </div>
 

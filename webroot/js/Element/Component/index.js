@@ -39,23 +39,23 @@ Vue.component('attachment-index',{
       }
     }
   },
-  events: {
-    'show-edit-file': function(index) {
-      this.$broadcast('edit-file',this.files[index]);
-    },
-    'show-view-file': function(index) {
-      this.$broadcast('view-file',this.files[index]);
-    },
-    'edit-progress': function(){
+  created: function(){
+    window.aEventHub.$on('show-edit-file', function(index) {
+      window.aEventHub.$emit('edit-file',this.files[index]);
+    });
+    window.aEventHub.$on('show-view-file', function(index) {
+      window.aEventHub.$emit('view-file',this.files[index]);
+    });
+    window.aEventHub.$on('edit-progress', function(){
       this.loading = true;
-    },
-    'edit-success': function(response, file){
+    });
+    window.aEventHub.$on('edit-success', function(response, file){
       this.loading = false;
       this.successes.push('file: '+file.name+' successfully edited!');
       this.getTags();
       this.getFiles();
-    },
-    'edit-error': function(response, file){
+    });
+    window.aEventHub.$on('edit-error', function(response, file){
       this.loading = false;
       var message = ( response.data && response.data.data && response.data.data.message )? 'file: '+file.name+' '+response.data.data.message : 'Your session is lost, please login again!';
       if( response.data && response.data.message ){
@@ -64,8 +64,8 @@ Vue.component('attachment-index',{
       this.errors.push(message);
       console.log(response);
       this.getFiles();
-    },
-    'delete-file': function(index){
+    });
+    window.aEventHub.$on('delete-file', function(index){
       var file = this.files[index];
       this.fileToDeleteName = file.name;
       if(!confirm('Delete file: '+this.fileToDeleteName+'?')){
@@ -81,13 +81,13 @@ Vue.component('attachment-index',{
       this.loading = true;
       this.$http.delete(this.settings.url+'attachment/attachments/delete/'+file.id+'.json', file,options)
       .then(this.deleteSuccessCallback, this.errorDeleteCallback);
-    },
-    'upload-finished': function(){
+    });
+    window.aEventHub.$on('upload-finished', function(){
       this.getFiles();
-    },
-    'embed-finished': function(){
+    });
+    window.aEventHub.$on('embed-finished', function(){
       this.getFiles();
-    },
+    });
   },
   methods: {
     getFileByIndex: function(index){

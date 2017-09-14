@@ -2,6 +2,7 @@ Vue.component('attachment-upload', {
   template: '#attachment-upload',
   data: function(){
     return {
+      show: false,
       progress: false,
       atags: [],
       files: [],
@@ -15,15 +16,11 @@ Vue.component('attachment-upload', {
   },
   props: {
     settings: Object,
-    show: {
-      type: Boolean,
-      default: false
-    },
   },
-  events: {
-    'show-upload': function(){
+  created: function(){
+    window.aEventHub.$on('show-upload',function() {
       this.open();
-    }
+    });
   },
   methods: {
     dragOver: function(e){
@@ -86,7 +83,7 @@ Vue.component('attachment-upload', {
       this.files = [];
       this.show = false;
       this.errors = [];
-      this.$dispatch('upload-closed');
+      window.aEventHub.$emit('upload-closed')
     },
     open: function(){
       this.atags = this.settings.atags;
@@ -119,7 +116,7 @@ Vue.component('attachment-upload', {
           this.addEventListeners();
           this.tellUser(this.errors.length+' fichiers n\'ont pu être téléverssé!');
         }
-        this.$dispatch('upload-finished');
+        window.aEventHub.$emit('upload-finished');
       }
     },
     tellUser: function(message){
@@ -168,7 +165,7 @@ Vue.component('attachment-upload', {
             if (evt.lengthComputable) {
               var percentComplete = ( (evt.loaded / evt.total)  * 100 ) + "%";
               self.progress = true;
-              self.$els.progressbar.style.width = percentComplete;
+              self.$refs.progressbar.style.width = percentComplete;
             }
           }, false);
 
@@ -177,18 +174,19 @@ Vue.component('attachment-upload', {
 
         success: function(response){
           self.progress = false;
-          self.$els.progressbar.style.width = 0+ "%";
+          self.$refs.progressbar.style.width = 0+ "%";
           if(self.settings.relation != 'belongsToMany'){
             if(self.settings.attachments.length > 0){
               self.settings.attachments.pop();
             }
           }
-          self.settings.attachments.push(response.data);
+          //self.settings.attachments.push(response.data);
+          window.aEventHub.$emit('add-file', response.data);
           self.handleUploads();
         },
         error: function(response){
           self.progress = false;
-          self.$els.progressbar.style.width = 0 + "%";
+          self.$refs.progressbar.style.width = 0 + "%";
 
           var message = response.statusText;
 

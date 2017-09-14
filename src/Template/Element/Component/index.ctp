@@ -6,13 +6,13 @@
     <attachment-filters :types="types" :tags="tags" :callback="getFiles" ></attachment-filters>
 
     <!-- WARNINGS -->
-    <div v-for="(index, error) in errors" track-by="$index" class="alert alert-warning alert-dismissible" role="alert">
+    <div v-for="(error, index) in errors" track-by="$index" class="alert alert-warning alert-dismissible" role="alert">
       <button type="button" class="close"  aria-label="Close" @click="errors = []" ><span aria-hidden="true">&times;</span></button>
       <strong>Attention!</strong> {{error}}
     </div>
 
     <!-- SUCCESS -->
-    <div v-for="(index, success) in successes" track-by="$index" class="alert alert-success alert-dismissible" role="alert">
+    <div v-for="(success, index) in successes" track-by="$index" class="alert alert-success alert-dismissible" role="alert">
       <button type="button" class="close"  aria-label="Close" @click="successes = []" ><span aria-hidden="true">&times;</span></button>
       <strong>OK!</strong> {{success}}
     </div>
@@ -23,22 +23,22 @@
     </div>
 
     <!-- files index -->
-    <attachment-files-index :settings.sync="settings" :files.sync="files"></attachment-files-index>
+    <attachment-files-index :settings="settings" :files="files"></attachment-files-index>
 
     <!-- pagination -->
-    <attachment-pagination :pagination="pagination" :callback="getFiles" :settings.sync="settings"></attachment-pagination>
+    <attachment-pagination :pagination="pagination" :callback="getFiles" :settings="settings"></attachment-pagination>
 
     <!-- view -->
-    <attachment-view :settings.sync="settings" ></attachment-view>
+    <attachment-view :settings="settings" ></attachment-view>
 
     <!-- edit -->
-    <attachment-edit :settings.sync="settings" ></attachment-edit>
+    <attachment-edit :settings="settings" ></attachment-edit>
 
     <!-- upload -->
-    <attachment-upload :settings.sync="settings" ></attachment-upload>
+    <attachment-upload :settings="settings" ></attachment-upload>
 
     <!-- embed -->
-    <attachment-embed :settings.sync="settings" ></attachment-embed>
+    <attachment-embed :settings="settings" ></attachment-embed>
 
     <!-- add btn -->
     <p>

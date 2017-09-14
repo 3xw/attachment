@@ -45,7 +45,7 @@
                 <span class="caret"></span>
               </button>
               <ul class="dropdown-menu" >
-                <li v-for="(index, type) in types"><a href="#">{{type}}</a></li>
+                <li v-for="(type, index) in types"><a href="#">{{type}}</a></li>
               </ul>
             </div>
           </div>

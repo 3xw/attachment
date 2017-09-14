@@ -4,17 +4,17 @@
       <?= __('Edit') ?>
     </button>
     <div class="row" >
-      <div v-for="(index, file) in files" id="{{index}}"  class="attachment-files__item col-xs-4 col-md-3 col-lg-2">
+      <div v-for="(file, index) in files" :id="index"  class="attachment-files__item col-xs-4 col-md-3 col-lg-2">
         <div class="thumbnail" >
-
+          
           <!-- thumb -->
           <attachment-thumb :url="settings.url" :file="file"></attachment-thumb>
 
           <div class="caption">
 
             <!-- infos -->
-            {{file.name | truncate 15 }}<br/>
-            {{file.size | bytesToMegaBytes | decimal 2 }} MB<br/>
+            {{file.name | truncate(15) }}<br/>
+            {{file.size | bytesToMegaBytes | decimal(2) }} MB<br/>
 
             <!-- buttons -->
             <div class="btn-group">

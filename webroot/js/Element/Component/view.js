@@ -12,11 +12,11 @@ Vue.component('attachment-view', {
       default: false
     },
   },
-  events: {
-    'view-file': function(file) {
+  created: function(){
+    window.aEventHub.$on('view-file',function(file) {
       this.file = file;
       this.open();
-    }
+    });
   },
   methods: {
     close: function(){

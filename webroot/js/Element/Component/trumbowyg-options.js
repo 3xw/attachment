@@ -16,11 +16,11 @@ Vue.component('attachment-trumbowyg-options',{
       }
     }
   },
-  events: {
-    'show-options': function(){
+  created: function(){
+    window.aEventHub.$on('show-options', function(){
       this.addEventListeners();
       this.show = true;
-    }
+    });
   },
   methods: {
     addEventListeners : function(){
@@ -46,7 +46,7 @@ Vue.component('attachment-trumbowyg-options',{
     },
     success: function(){
       this.close();
-      this.$dispatch('options-success', [this.options]);
+      window.aEventHub.$emit('options-success', [this.options]);
     }
   }
 });

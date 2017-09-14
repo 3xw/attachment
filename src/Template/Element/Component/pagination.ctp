@@ -18,7 +18,7 @@
             <span aria-hidden="true">&laquo;</span>
           </a>
         </li>
-        <li v-for="( index, num ) in array" :class="{'active': num == pagination.current_page}">
+        <li v-for="( num, index ) in array" :class="{'active': num == pagination.current_page}">
           <a href="#" @click.prevent="changePage(num)">{{ num }}</a>
         </li>
         <li v-bind:class="{ 'disabled': !pagination.has_next_page}">
