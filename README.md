@@ -1,19 +1,10 @@
-# Attachment plugin for CakePHP 3.x
+# Attachment plugin for CakePHP 3.5.x
 Attachment plugin solves common problems with media, files and embed data.
 The goal is to store files where you want ( Dropbox, AWS S3, ... ) and keep a record of it in a table.
 
 Attachment offers both storage layer and database layer as well as frontend and backend solutions for common needs.
 
 It uses [CakePHP 3](https://cakephp.org/), [Flysystem](https://flysystem.thephpleague.com/) and [Intervention Image](http://image.intervention.io/)
-
-Attachment comes packed with following:
-
-	"friendsofcake/crud": "^4.3",
-	"friendsofcake/search": "^2.0",
-	"wyrihaximus/fly-pie": "^1.1",
-	"league/flysystem-aws-s3-v3": "^1.0",
-	"intervention/image": "^2.3",
-	"cakephp/migrations": "@stable"
 
 ## Installation
 
@@ -23,7 +14,7 @@ You can install this plugin into your CakePHP application using [composer](http:
 
 The recommended way to install composer packages is:
 
-		composer require 3xw/attachment:3.3.x
+		composer require 3xw/attachment:3.5.x
 
 ###Installation.boostrap
 Load it in config/boostrap.php like so:
@@ -62,7 +53,7 @@ In order to use backend tools you need to have following libs installed:
 javascript:
 
 	jquery >= 1.11 (maybe lower works as well)
-	vuejs 1.0.x (tested with 1.0.26)
+	vuejs 2.x (tested with 2.4.0)
 	vue-resource 0.9.x (tested with 0.9.3)
 
 css:
@@ -170,14 +161,14 @@ Exemple of settings:
 	      'types' =>['image/jpeg','image/png','image/gif'],
 	      'atags' => [],
 	      'profile' => 's3',
-	      
+
 	      // pagination setting in browse views
 	      'pagination' => [
 	        'offset' => 9, // = 10 pages
 	        'start' => true,
 	        'end' => true,
 	      ],
-	      
+
 	      // trumbowyg settings
 	      'trumbowyg' => [
 	        'svgPath' => '/attachment/icons/icons.svg',
@@ -359,7 +350,7 @@ Global Attachments index :
         Attachment\View\Helper\AttachmentHelper::TYPES_RESTRICTED
       ]
     ]) ?>
-    
+
 NEW! you can use trumbowyg now!!
 
 	$this->Attachment->trumbowyg('content',[
@@ -393,7 +384,7 @@ in file
 
 	<!-- Display an embed video  -->
 	<?= $post->attachments[0]->embed ?>
-	
+
 ####Usage.view.download
 
 	echo $this->Attachment->downloadLink($attachment ); // Attachment $attachment
