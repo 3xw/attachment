@@ -10,7 +10,8 @@
         "wyrihaximus/fly-pie": "^1.1",
         "league/flysystem-aws-s3-v3": "^1.0",
         "intervention/image": "^2.3",
-        "cakephp/migrations": "@stable"
+        "cakephp/migrations": "@stable",
+        "firebase/php-jwt": "^5.0"
     },
     "require-dev": {
         "phpunit/phpunit": "*"

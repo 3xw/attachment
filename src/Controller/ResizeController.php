@@ -24,7 +24,7 @@ class ResizeController extends AppController
   public function proceed($profile, $dim, ...$image )
   {
     // test profile
-    if(!Configure::check('Attachment.profiles.'.$profile) || $profile == 'cache' ){ throw new NotFoundException(); }
+    if(!Configure::check('Attachment.profiles.'.$profile) || $profile == 'thumbnails' ){ throw new NotFoundException(); }
 
     // test $dim
     preg_match_all('/([a-z])([0-9]*-[0-9]*|[0-9]*)/', $dim, $dims, PREG_SET_ORDER);
@@ -156,7 +156,7 @@ class ResizeController extends AppController
 
     // create folders
     $folder = $profile.DS.$dim.DS.substr($image, 0, strrpos($image, '/') );
-    $folder = $this->_filesystem('cache')->getAdapter()->applyPathPrefix($folder);
+    $folder = $this->_filesystem('thumbnails')->getAdapter()->applyPathPrefix($folder);
     $folder = new Folder($folder, true, 0777);
 
     // quality
@@ -178,8 +178,8 @@ class ResizeController extends AppController
       }
     }
     $path = $profile.DS.$dim.DS.$image;
-    $this->_filesystem('cache')->put($profile.DS.$dim.DS.$image, $img);
-    $path = $this->_filesystem('cache')->getAdapter()->applyPathPrefix($path);
+    $this->_filesystem('thumbnails')->put($profile.DS.$dim.DS.$image, $img);
+    $path = $this->_filesystem('thumbnails')->getAdapter()->applyPathPrefix($path);
 
 
     // jpegoptim
@@ -200,13 +200,17 @@ class ResizeController extends AppController
     {
 
       $output = $profile.DS.$dim.DS.$webp[0][0];
-      $output = $this->_filesystem('cache')->getAdapter()->applyPathPrefix($output);
+      $output = $this->_filesystem('thumbnails')->getAdapter()->applyPathPrefix($output);
 
       // CMYK to RGB
       if(($mimetype == 'image/jpeg' || $mimetype == 'image/jpeg'))
       {
         $convert = Configure::read('Attachment.thumbnails.compression.convert');
-        exec("$convert -colorspace RGB $path $path 2>&1", $out);
+        $imageSize = getimagesize($path);
+        if($imageSize['channels'] == 4)
+        {
+          exec("$convert -colorspace RGB $path $path 2>&1", $out);
+        }
       }
 
       // FORMAT TO webp

@@ -18,6 +18,9 @@
 
             <!-- buttons -->
             <div class="btn-group">
+              <a class="btn btn-fill btn-xs btn-success" target="_blank" role="button" v-bind:href="file.download_link" v-if="settings.actions.indexOf('download') != -1">
+                <?= __('Download') ?>
+              </a>
               <button class="btn btn-fill btn-xs btn-success" role="button" v-on:click="$dispatch('show-view-file',index)" v-if="settings.actions.indexOf('view') != -1">
                 <?= __('View') ?>
               </button>

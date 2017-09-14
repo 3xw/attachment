@@ -79,7 +79,6 @@ class AttachmentsController extends AppController
         $event->subject->query->find('translations');
       }
     });
-
     return $this->Crud->execute();
   }
 
