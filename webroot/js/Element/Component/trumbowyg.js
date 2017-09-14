@@ -13,20 +13,16 @@ Vue.component('attachment-trumbowyg',{
       endRange: null,
     };
   },
-  events: {
-    'browse-closed': function(){
-      this.openOptions();
-    },
-    'upload-closed': function(){
-      this.openOptions();
-    },
-    'options-success': function(args){
+  created: function(){
+    window.aEventHub.$on('browse-closed', this.openOptions);
+    window.aEventHub.$on('upload-closed', this.openOptions);
+    window.aEventHub.$on('options-success', function(args){
       this.options = args[0];
       this.$trumbowyg.trumbowyg("openModalInsert", {
         title: "Confirmez l'ajout du média?",
         callback: this.createHtmlElement
       })
-    }
+    });
   },
   ready: function(){
     if(this.settings.trumbowyg.langs && this.settings.trumbowyg.langs[this.settings.trumbowyg.lang]){
@@ -49,16 +45,16 @@ Vue.component('attachment-trumbowyg',{
     },
     upload: function(evt, trumbowyg){
       this.setup(trumbowyg);
-      this.$broadcast('show-upload');
+      window.aEventHub.$emit('show-upload');
     },
     browse: function(evt, trumbowyg){
       this.setup(trumbowyg);
-      this.$broadcast('show-browse');
+      window.aEventHub.$emit('show-browse');
     },
     openOptions: function(){
       this.file = this.settings.attachments.shift();
       if(this.file){
-        this.$broadcast('show-options');
+        window.aEventHub.$emit('show-options');
       }
     },
     getImagePath: function(options){

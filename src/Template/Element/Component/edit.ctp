@@ -9,7 +9,7 @@
         <div class="custom-modal-body">
 
           <!-- WARNINGS -->
-          <div v-for="(index, error) in errors" track-by="$index" class="alert alert-warning alert-dismissible" role="alert">
+          <div v-for="(error, index) in errors" track-by="$index" class="alert alert-warning alert-dismissible" role="alert">
             <button type="button" class="close"  aria-label="Close" @click="errors = []" ><span aria-hidden="true">&times;</span></button>
             <strong>Attention!</strong> {{error}}
           </div>
@@ -57,7 +57,7 @@
                 <!-- _translations[en_GB][name] -->
                 <div v-if="settings.i18n.enable" class="col-md-6 attachment-locale-area">
                   <ul class="nav nav-tabs" role="tablist">
-                    <li v-for="(index, language) in settings.i18n.languages" v-bind:class="{ 'active': language ==  settings.i18n.defaultLocale}" role="presentation">
+                    <li v-for="(language, index) in settings.i18n.languages" v-bind:class="{ 'active': language ==  settings.i18n.defaultLocale}" role="presentation">
                       <a href="#a-{{language}}" aria-controls="a-{{language}}" role="tab" data-toggle="tab" >
                         {{language}}
                       </a>

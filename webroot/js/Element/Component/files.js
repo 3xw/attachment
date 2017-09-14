@@ -8,16 +8,47 @@ Vue.component('attachment-files',{
     }
   },
   data: function(){
-    return {};
+    return {
+      files: [],
+      ids: []
+    };
+  },
+  created: function(){
+
+    window.aEventHub.$on('add-file',this.add);
+    window.aEventHub.$on('remove-file', this.remove);
+    window.aEventHub.$on('order-file', this.order);
+    window.aEventHub.$on('check-ids-file', this.order);
+
+    for(var i in this.settings.attachments){
+      this.files.push(this.settings.attachments[i]);
+      this.ids.push(this.settings.attachments[i].id);
+    }
   },
   methods: {
-    remove: function(index){
-      this.settings.attachments.splice(index,1);
+    add: function(file){
+      this.files.push(file);
+      this.ids.push(file.id);
+      window.aEventHub.$emit('add-file-id', file.id);
     },
-    onEnd: function(evt){
-      var file = this.settings.attachments[evt.item.id];
-      this.settings.attachments.splice(evt.oldIndex,1);
-      this.settings.attachments.splice(evt.newIndex,0,file);
+    remove: function(id){
+
+      var index = this.ids.indexOf(id);
+      if(index != -1){
+        this.files.splice(index,1);
+        this.ids.splice(index,1);
+        window.aEventHub.$emit('remove-file-id', id);
+      }
+    },
+    order: function(evt){
+      var index = this.ids.indexOf(evt.item.id);
+      if(index != -1){
+        var file = this.files[index];
+        this.files.splice(evt.oldIndex,1);
+        this.files.splice(evt.newIndex,0,file);
+        this.ids.splice(evt.oldIndex,1);
+        this.ids.splice(evt.newIndex,0,file.id);
+      }
     }
   }
 });

@@ -3,25 +3,19 @@ Vue.component('attachment-files-index',{
   props: {
     settings: {
       type: Object,
-      required: true,
-      twoWay: true
+      required: true
     },
     files: {
       type: Array,
-      required: true,
-      twoWay: true
+      required: true
     }
   },
   data: function(){
     return {};
   },
-  /*events: {
-    'edit-file': function(index) {
-      //this.$dispatch('edit-file',index);
-      console.log(index);
-      return true;
-    }
-  },*/
   methods: {
+    log:function(input){
+      console.log(input);
+    }
   }
 });

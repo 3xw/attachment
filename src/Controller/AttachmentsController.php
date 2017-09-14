@@ -70,6 +70,12 @@ class AttachmentsController extends AppController
 
   }
 
+  public function add()
+  {
+    //debug($this->request->data);
+    return $this->Crud->execute();
+  }
+
   public function index()
   {
     $this->Crud->on('beforePaginate', function(Event $event) {

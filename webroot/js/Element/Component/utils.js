@@ -1,3 +1,16 @@
+/* EVENT HUB
+*******************************/
+window.aEventHub = new Vue();
+
+/* DIRECTIVES
+*******************************/
+Vue.directive('sortable', function (el, binding) {
+  options = binding.value || {}
+  window.Sortable.create(el, options);
+});
+
+/* FILTERS
+*******************************/
 Vue.filter('bytesToMegaBytes', function (input) {
   return input / 1024 / 1024;
 });
@@ -114,9 +127,4 @@ Vue.filter('isNotThumbable', function (file) {
     default:
     return true;
   }
-});
-
-Vue.directive('sortable', function (options) {
-  options = options || {}
-  window.Sortable.create(this.el, options);
 });

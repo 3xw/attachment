@@ -5,19 +5,16 @@ Vue.component('attachment-embed', {
       atags: [],
       errors: [],
       success: [] ,
+      show: false,
     };
   },
   props: {
     settings: Object,
-    show: {
-      type: Boolean,
-      default: false
-    },
   },
-  events: {
-    'show-embed': function(){
+  created: function(){
+    window.aEventHub.$on('show-embed', function(){
       this.open();
-    }
+    });
   },
   methods: {
     close: function(){
@@ -87,9 +84,10 @@ Vue.component('attachment-embed', {
               self.settings.attachments.pop();
             }
           }
-          self.settings.attachments.push(response.data);
+          //self.settings.attachments.push(response.data);
+          window.aEventHub.$emit('add-file', response.data);
           self.close();
-          self.$dispatch('embed-finished');
+          window.aEventHub.$emit('embed-finished');
         },
         error: function(response){
           var message = response.statusText;

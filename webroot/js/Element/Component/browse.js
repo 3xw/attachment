@@ -9,6 +9,9 @@ Vue.component('attachment-browse', {
       files: [],
       ids: [],
       loading: true,
+      show: false,
+      tags: [],
+      types: [],
       pagination: {
         "page_count": 1,
         "current_page": 1,
@@ -20,38 +23,31 @@ Vue.component('attachment-browse', {
     };
   },
   props: {
-    tags: Array,
-    types: Array,
     settings: Object,
-    show: {
-      type: Boolean,
-      default: false
-    },
   },
-  events: {
-    'show-browse': function(){
+  created: function(){
+    window.aEventHub.$on('show-browse', function(){
       this.open();
-    }
+    });
+    window.aEventHub.$on('add-file-id',this.addId);
+    window.aEventHub.$on('remove-file-id', this.removeId);
   },
-  watch: {
-    'settings.attachments' : function(val, oldVal){
-      var newIds = [];
-      for(var i in val ){
-        newIds.push(val[i].id);
-      }
-      this.ids = newIds;
-    }
-  },
-  ready: function(){
-    for(var i in this.settings.attachments ){
-      this.ids.push(this.settings.attachments[i].id);
-    }
+  mounted: function(){
     this.getTags();
     this.types = this.settings.types;
   },
   methods: {
     isSelected: function(id){
       return this.ids.indexOf(id) != -1;
+    },
+    addId: function(id){
+      this.ids.push(id);
+    },
+    removeId: function(id){
+      var index = this.ids.indexOf(id);
+      if(index != -1){
+        this.ids.splice(index,1);
+      }
     },
     addEventListeners : function(){
       $(document).bind('keypress', this.preventEnter);
@@ -75,7 +71,7 @@ Vue.component('attachment-browse', {
       this.files = [];
       this.show = false;
       this.loading = false;
-      this.$dispatch('browse-closed');
+      window.aEventHub.$emit('browse-closed');
     },
     open: function(){
       this.addEventListeners();
@@ -123,7 +119,6 @@ Vue.component('attachment-browse', {
       this.loading = false;
       this.files = response.data.data;
       this.pagination = response.data.pagination;
-      //console.log(this.pagination);
     },
     getTags: function(){
       var options = {
@@ -147,16 +142,10 @@ Vue.component('attachment-browse', {
       console.log(response);
     },
     add: function(index){
-      if(this.settings.relation != 'belongsToMany'){
-        if(this.settings.attachments.length > 0){
-          this.settings.attachments.pop();
-        }
-      }
-      this.settings.attachments.push(this.files[index]);
+      window.aEventHub.$emit('add-file', this.files[index]);
     },
     remove: function(id){
-      var index = this.ids.indexOf(id);
-      this.settings.attachments.splice(index,1);
+      window.aEventHub.$emit('remove-file', id);
     }
   }
 });

@@ -16,11 +16,11 @@ Vue.component('attachment-edit', {
       default: false
     },
   },
-  events: {
-    'edit-file': function(file) {
+  created: function(){
+    window.aEventHub.$on('edit-file', function(){
       this.file = file;
       this.open();
-    }
+    });
   },
   methods: {
     close: function(){
@@ -43,7 +43,7 @@ Vue.component('attachment-edit', {
     },
     edit: function(){
       this.close();
-      this.$dispatch('edit-progress');
+      window.aEventHub.$emit('edit-progress');
 
       var options = {
         headers:{
@@ -72,10 +72,10 @@ Vue.component('attachment-edit', {
       return this;
     },
     editSuccessCallback: function(response){
-      this.$dispatch('edit-success', response, this.file);
+      window.aEventHub.$emit('edit-success', response, this.file);
     },
     errorCallback: function(response){
-      this.$dispatch('edit-error', response, this.file);
+      window.aEventHub.$emit('edit-error', response, this.file);
     }
   }
 });

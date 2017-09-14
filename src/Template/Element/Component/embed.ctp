@@ -9,7 +9,7 @@
         <div class="custom-modal-body">
 
           <!-- WARNINGS -->
-          <div v-for="(index, error) in errors" track-by="$index" class="alert alert-warning alert-dismissible" role="alert">
+          <div v-for="(error, index) in errors" track-by="$index" class="alert alert-warning alert-dismissible" role="alert">
             <button type="button" class="close"  aria-label="Close" @click="errors = []" ><span aria-hidden="true">&times;</span></button>
             <strong>Attention!</strong> {{error}}
           </div>
@@ -18,7 +18,7 @@
           <div v-if="this.settings.restrictions.indexOf('tag_restricted') == -1" id="attachment-atags">
             <label >Tags</label>
             <select id="atagsinput" multiple class="form-control">
-              <option v-for="(index, atag) in atags" value="{{atag}}">{{atag}}</option>
+              <option v-for="(atag, index) in atags" :value="atag">{{atag}}</option>
             </select>
           </div>
 
@@ -32,8 +32,8 @@
                 <!-- _translations[en_GB][name] -->
                 <div v-if="settings.i18n.enable" class="col-md-6 attachment-locale-area">
                   <ul class="nav nav-tabs" role="tablist">
-                    <li v-for="(index, language) in settings.i18n.languages" v-bind:class="{ 'active': language ==  settings.i18n.defaultLocale}" role="presentation">
-                      <a href="#a-{{language}}" aria-controls="a-{{language}}" role="tab" data-toggle="tab" >
+                    <li v-for="(language, index) in settings.i18n.languages" v-bind:class="{ 'active': language ==  settings.i18n.defaultLocale}" role="presentation">
+                      <a :href="'#a-'+language" :aria-controls="'a-'+language" role="tab" data-toggle="tab" >
                         {{language}}
                       </a>
                     </li>
@@ -41,7 +41,7 @@
                   <div class="tab-content">
 
                     <!-- defaultLocale -->
-                    <div role="tabpanel" class="tab-pane active" id="a-{{settings.i18n.defaultLocale}}">
+                    <div role="tabpanel" class="tab-pane active" :id="'a-'+settings.i18n.defaultLocale">
                       <div class="input text">
                         <label for="title">Title</label>
                         <input type="text" name="title" class="form-control" id="title">
@@ -53,14 +53,14 @@
                     </div>
 
                     <!-- other locales -->
-                    <div v-for="(index, language) in settings.i18n.languages"  v-if="language != settings.i18n.defaultLocale" role="tabpanel" class="tab-pane active" id="a-{{language}}">
+                    <div v-for="(language, index) in settings.i18n.languages"  v-if="language != settings.i18n.defaultLocale" role="tabpanel" class="tab-pane active" :id="'a-'+language">
                       <div class="input text">
                         <label for="title">Title {{language}}</label>
-                        <input type="text" name="_translations[{{language}}][title]" class="form-control" id="a-{{language}}-title">
+                        <input type="text" :name="'_translations['+language+'][title]'" class="form-control" :id="'a-'+language+'-title'">
                       </div>
                       <div class="input text">
                         <label for="title">Description {{language}}</label>
-                        <textarea name="_translations[{{language}}][description]" class="form-control" id="a-{{language}}-description" rows="5"></textarea>
+                        <textarea :name="'_translations['+language+'][description]'" class="form-control" :id="'a-'+language+'-description'" rows="5"></textarea>
                       </div>
                     </div>
 
@@ -105,16 +105,17 @@
               <textarea name="embed" class="form-control attachment-embed__embed" id="embed" rows="5"></textarea>
             </div>
 
-        </div>
-        <p></p>
-        <div class="custom-modal-footer">
-          <div class="btn-group">
-            <button type="button" class="modal-default-button btn btn-success" @click="upload">
-              Téléversser
-            </button>
-            <button type="button" class="modal-default-button btn btn-warning" @click="close()">
-              Fermer
-            </button>
+          </div>
+          <p></p>
+          <div class="custom-modal-footer">
+            <div class="btn-group">
+              <button type="button" class="modal-default-button btn btn-success" @click="upload">
+                Téléversser
+              </button>
+              <button type="button" class="modal-default-button btn btn-warning" @click="close()">
+                Fermer
+              </button>
+            </div>
           </div>
         </div>
       </div>

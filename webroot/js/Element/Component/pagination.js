@@ -5,29 +5,21 @@ Vue.component('attachment-pagination',{
       type: Object,
       required: true
     },
-    lastPage: {
-      type: Number,
-      default: 1
-    },
-    from:{type: Number, default: 1},
-    to:{type: Number, default: 2},
     callback: {
       type: Function,
       required: true
     },
-    offset: {
-      type: Number,
-      default: 4
-    },
     settings: Object,
-    start: {
-      type: Boolean,
-      default: false
-    },
-    end: {
-      type: Boolean,
-      default: false
-    },
+  },
+  data: function(){
+    return {
+      lastPage: 1,
+      offset: 4,
+      start: false,
+      end: false,
+      from: 1,
+      to: 2,
+    };
   },
   computed: {
     array: function () {
