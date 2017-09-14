@@ -25,7 +25,7 @@
             <select name="atags" id="atagsinput" multiple class="form-control">
               <option
                 v-for="atag in file.atags"
-                value="{{atag.name}}"
+                :value="atag.name"
                 selected="selected">
                   {{atag.name}}
               </option>
@@ -58,7 +58,7 @@
                 <div v-if="settings.i18n.enable" class="col-md-6 attachment-locale-area">
                   <ul class="nav nav-tabs" role="tablist">
                     <li v-for="(language, index) in settings.i18n.languages" v-bind:class="{ 'active': language ==  settings.i18n.defaultLocale}" role="presentation">
-                      <a href="#a-{{language}}" aria-controls="a-{{language}}" role="tab" data-toggle="tab" >
+                      <a :href="'#a-'+language" :aria-controls="'a-'+language" role="tab" data-toggle="tab" >
                         {{language}}
                       </a>
                     </li>
@@ -66,7 +66,7 @@
                   <div class="tab-content">
 
                     <!-- defaultLocale -->
-                    <div role="tabpanel" class="tab-pane active" id="a-{{settings.i18n.defaultLocale}}">
+                    <div role="tabpanel" class="tab-pane active" :id="'a-'+settings.i18n.defaultLocale">
                       <div class="input text">
                         <label for="title">Title</label>
                         <input v-model="file.title" type="text" name="title" class="form-control" id="title">
@@ -78,14 +78,14 @@
                     </div>
 
                     <!-- other locales -->
-                    <div v-for="(index, language) in settings.i18n.languages"  v-if="language != settings.i18n.defaultLocale" role="tabpanel" class="tab-pane active" id="a-{{language}}">
+                    <div v-for="(index, language) in settings.i18n.languages"  v-if="language != settings.i18n.defaultLocale" role="tabpanel" class="tab-pane active" :id="'a-'+language">
                       <div class="input text">
                         <label for="title">Title {{language}}</label>
-                        <input v-model="file['_translations'][language].title" type="text" name="_translations[{{language}}][title]" class="form-control" id="a-{{language}}-title">
+                        <input v-model="file['_translations'][language].title" type="text" :name="'_translations['+language+'][title]'" class="form-control" :id="'a-'+language+'-title'">
                       </div>
                       <div class="input text">
                         <label for="title">Description {{language}}</label>
-                        <textarea v-model="file['_translations'][language].description" name="_translations[{{language}}][description]" class="form-control" id="a-{{language}}-description" rows="5"></textarea>
+                        <textarea v-model="file['_translations'][language].description" :name="'_translations['+language+'][description]'" class="form-control" :id="'a-'+language+'-description'" rows="5"></textarea>
                       </div>
                     </div>
 
@@ -116,7 +116,7 @@
                 </div>
               </div>
             </div>
-
+          </div>
         </div>
         <p></p>
         <div class="custom-modal-footer">
@@ -132,4 +132,5 @@
       </div>
     </div>
   </div>
+
 </script>

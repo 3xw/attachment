@@ -43,11 +43,11 @@
     <!-- add btn -->
     <p>
       <div v-if="settings.actions.indexOf('add') != -1" class="btn-group" data-intro="Ajouter des médias à l'aide de ces boutons" data-position="right">
-        <button type="button" class="btn btn-fill btn-xs btn-info" @click="$broadcast('show-upload')">
+        <button type="button" class="btn btn-fill btn-xs btn-info" @click="dispatch('show-upload')">
           <i class="fa fa-cloud-upload" aria-hidden="true"></i>
           <?= __('Téléverser'); ?>
         </button>
-        <button v-if="dispalyEmbed()" type="button" class="btn btn-fill btn-xs btn-info" @click="$broadcast('show-embed')">
+        <button v-if="dispalyEmbed()" type="button" class="btn btn-fill btn-xs btn-info" @click="dispatch('show-embed')">
           <i class="fa fa-code" aria-hidden="true"></i>
           <?= __('Ajouter un embed code'); ?>
         </button>

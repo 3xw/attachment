@@ -4,7 +4,7 @@
     <div class="modal-wrapper">
       <div class="modal-container container" style="max-height: 600px; scroll:auto;">
         <div class="custom-modal-header">
-          <h4>{{{file.type+'/'+file.subtype | icon }}} - {{file.name}}</h4>
+          <h4 v-html="$options.filters.icon(file.type+'/'+file.subtype)"></h4>
         </div>
         <div class="custom-modal-body" >
 

@@ -12,11 +12,12 @@ Vue.component('attachment-embed', {
     settings: Object,
   },
   created: function(){
-    window.aEventHub.$on('show-embed', function(){
-      this.open();
-    });
+    window.aEventHub.$on('show-embed', this.showEmbed);
   },
   methods: {
+    showEmbed: function(){
+      this.open();
+    },
     close: function(){
       this.show = false;
       this.errors = [];

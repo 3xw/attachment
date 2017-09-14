@@ -1,13 +1,13 @@
 Vue.component('attachment-index',{
   template: '#attachment-index',
   props: {
-    tags: Array,
-    types: Array,
     settings: Object,
     //files: Array,
   },
   data:function(){
     return {
+      tags: [],
+      types: [],
       search: '',
       tag: '',
       sort: { query: '', term: ''},
@@ -27,7 +27,7 @@ Vue.component('attachment-index',{
       }
     };
   },
-  ready: function(){
+  mounted: function(){
     this.types = this.settings.types;
     this.getTags();
     this.getFiles();
@@ -40,32 +40,42 @@ Vue.component('attachment-index',{
     }
   },
   created: function(){
-    window.aEventHub.$on('show-edit-file', function(index) {
+    window.aEventHub.$on('show-edit-file', this.showEditFile);
+    window.aEventHub.$on('show-view-file', this.showViewFile);
+    window.aEventHub.$on('edit-progress', this.editProgress);
+    window.aEventHub.$on('edit-success', this.editSuccess);
+    window.aEventHub.$on('edit-error', this.editError);
+    window.aEventHub.$on('upload-finished', this.getFiles);
+    window.aEventHub.$on('embed-finished', this.getFiles);
+    window.aEventHub.$on('delete-file', this.deleteFile);
+  },
+  methods: {
+    showEditFile:function(index) {
       window.aEventHub.$emit('edit-file',this.files[index]);
-    });
-    window.aEventHub.$on('show-view-file', function(index) {
+    },
+    showViewFile:function(index) {
       window.aEventHub.$emit('view-file',this.files[index]);
-    });
-    window.aEventHub.$on('edit-progress', function(){
+    },
+    editProgress: function(){
       this.loading = true;
-    });
-    window.aEventHub.$on('edit-success', function(response, file){
+    },
+    editSuccess: function(data){
       this.loading = false;
-      this.successes.push('file: '+file.name+' successfully edited!');
+      this.successes.push('file: '+data.file.name+' successfully edited!');
       this.getTags();
       this.getFiles();
-    });
-    window.aEventHub.$on('edit-error', function(response, file){
+    },
+    editError: function(data){
       this.loading = false;
-      var message = ( response.data && response.data.data && response.data.data.message )? 'file: '+file.name+' '+response.data.data.message : 'Your session is lost, please login again!';
-      if( response.data && response.data.message ){
-        message = 'file: '+file.name+' '+response.data.message;
+      var message = ( data.response.data && data.response.data.data && data.response.data.data.message )? 'file: '+data.file.name+' '+data.response.data.data.message : 'Your session is lost, please login again!';
+      if( data.response.data && data.response.data.message ){
+        message = 'file: '+data.file.name+' '+data.response.data.message;
       }
       this.errors.push(message);
-      console.log(response);
+      console.log(data.response);
       this.getFiles();
-    });
-    window.aEventHub.$on('delete-file', function(index){
+    },
+    deleteFile: function(index){
       var file = this.files[index];
       this.fileToDeleteName = file.name;
       if(!confirm('Delete file: '+this.fileToDeleteName+'?')){
@@ -81,15 +91,10 @@ Vue.component('attachment-index',{
       this.loading = true;
       this.$http.delete(this.settings.url+'attachment/attachments/delete/'+file.id+'.json', file,options)
       .then(this.deleteSuccessCallback, this.errorDeleteCallback);
-    });
-    window.aEventHub.$on('upload-finished', function(){
-      this.getFiles();
-    });
-    window.aEventHub.$on('embed-finished', function(){
-      this.getFiles();
-    });
-  },
-  methods: {
+    },
+    dispatch(evt, data){
+      window.aEventHub.$emit(evt, data);
+    },
     getFileByIndex: function(index){
       return this.files[index];
     },

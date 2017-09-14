@@ -2,6 +2,7 @@ Vue.component('attachment-edit', {
   template: '#attachment-edit',
   data: function(){
     return {
+      show:false,
       loading: false,
       atags: [],
       file: {},
@@ -11,18 +12,15 @@ Vue.component('attachment-edit', {
   },
   props: {
     settings: Object,
-    show: {
-      type: Boolean,
-      default: false
-    },
   },
   created: function(){
-    window.aEventHub.$on('edit-file', function(){
-      this.file = file;
-      this.open();
-    });
+    window.aEventHub.$on('edit-file', this.editFile);
   },
   methods: {
+    editFile: function(file){
+      this.file = file;
+      this.open();
+    },
     close: function(){
       this.show = false;
       this.errors = [];
@@ -72,10 +70,10 @@ Vue.component('attachment-edit', {
       return this;
     },
     editSuccessCallback: function(response){
-      window.aEventHub.$emit('edit-success', response, this.file);
+      window.aEventHub.$emit('edit-success', {response:response, file:this.file});
     },
     errorCallback: function(response){
-      window.aEventHub.$emit('edit-error', response, this.file);
+      window.aEventHub.$emit('edit-error', {response:response, file:this.file});
     }
   }
 });

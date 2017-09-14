@@ -18,11 +18,12 @@ Vue.component('attachment-upload', {
     settings: Object,
   },
   created: function(){
-    window.aEventHub.$on('show-upload',function() {
-      this.open();
-    });
+    window.aEventHub.$on('show-upload',this.showUpload);
   },
   methods: {
+    showUpload: function(){
+      this.open();
+    },
     dragOver: function(e){
       e.preventDefault();
       $('#attachment-dropzone').css({
