@@ -21,7 +21,7 @@
 
           <!-- TAGS -->
           <div id="attachment-atags" v-if="this.settings.restrictions.indexOf('tag_restricted') == -1">
-            <label ><?= __d('Tags','Watch out') ?></label>
+            <label ><?= __d('Attachment','Watch out') ?></label>
             <select name="atags" id="atagsinput" multiple class="form-control">
               <option
                 v-for="atag in file.atags"

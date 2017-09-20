@@ -47,7 +47,7 @@ Trait SessionRestrictionTrait {
         }
 
       }else{
-        throw new UnauthorizedException(__("Error Processing Request, reload the page or try login again!"));
+        throw new UnauthorizedException(__d('Attachment',"Error Processing Request, reload the page or try login again!"));
       }
     }
   }

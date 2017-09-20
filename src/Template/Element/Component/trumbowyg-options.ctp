@@ -4,7 +4,7 @@
     <div class="modal-wrapper">
       <div class="modal-container container">
         <div class="custom-modal-header">
-          <?= __('Choisir les options') ?>
+          <?= __d('Attachment','Choose options') ?>
         </div>
         <div class="custom-modal-body">
 

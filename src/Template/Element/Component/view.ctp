@@ -12,12 +12,12 @@
 
             <!-- url -->
             <p v-if="file | isNotEmbed">
-              <?= __('Url') ?>: {{settings.baseUrls[file.profile]}}{{file.path}}
+              <?= __d('Attachment','Url') ?>: {{settings.baseUrls[file.profile]}}{{file.path}}
             </p>
 
             <!-- url -->
             <p>
-              <?= __('Type') ?>: {{file.type+'/'+file.subtype}}
+              <?= __d('Attachment','Type') ?>: {{file.type+'/'+file.subtype}}
             </p>
 
             <!-- embed -->

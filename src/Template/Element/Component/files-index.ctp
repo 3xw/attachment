@@ -1,7 +1,7 @@
 <!-- files -->
 <script type="text/x-template" id="attachment-files-index">
   <div id="attachment-files-index" data-intro="Liste des vos médias." data-position="top">
-      <?= __('Edit') ?>
+      <?= __d('Attachment','Edit') ?>
     </button>
     <div class="row" >
       <div v-for="(file, index) in files" :id="index"  class="attachment-files__item col-6 col-sm-4 col-md-3 col-lg-2">
