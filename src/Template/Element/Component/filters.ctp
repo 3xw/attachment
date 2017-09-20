@@ -2,17 +2,17 @@
 <script type="text/x-template" id="attachment-filters">
   <div id="attachment-filters">
     <div class="card border-0">
-      <div class="card-header">
+      <div class="card-header border-0 bg-white">
         <h4 v-show="$parent.search || $parent.tag || $parent.sort.term">
           <span v-show="$parent.tag">
-            <span class="label label-primary"><a href="#" @click.prevent="clearTags(), find()"><i class="fa fa-times" style="color:white;" aria-hidden="true"></i></a> <?= __d('Attachment','Filter') ?>: #{{$parent.tag}}</span>
+            <span class="badge badge-primary"><a href="#" @click.prevent="clearTags(), find()"><i class="fa fa-times" style="color:white;" aria-hidden="true"></i></a> <?= __d('Attachment','Filter') ?>: #{{$parent.tag}}</span>
             &nbsp;
           </span>
           <span v-show="$parent.search">
-            <span class="label label-primary"><a href="#" @click.prevent="clearSearch(null,true), find()"><i class="fa fa-times" style="color:white;" aria-hidden="true"></i></a> <?= __d('Attachment','Filter') ?>: {{$parent.search}} ?</span>
+            <span class="badge badge-primary"><a href="#" @click.prevent="clearSearch(null,true), find()"><i class="fa fa-times" style="color:white;" aria-hidden="true"></i></a> <?= __d('Attachment','Filter') ?>: {{$parent.search}} ?</span>
             &nbsp;
           </span>
-          <span v-show="$parent.sort.term" class="label label-info"><a href="#"><i class="fa fa-times" style="color:white;" aria-hidden="true"></i></a> <?= __d('Attachment','Order') ?>: {{$parent.sort.term}}</span>
+          <span v-show="$parent.sort.term" class="badge badge-info"><a href="#"><i class="fa fa-times" style="color:white;" aria-hidden="true"></i></a> <?= __d('Attachment','Order') ?>: {{$parent.sort.term}}</span>
         </h4>
       </div>
       <div class="card-body">

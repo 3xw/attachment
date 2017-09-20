@@ -13,7 +13,7 @@
           <div class="card-body">
 
             <!-- infos -->
-            <p class="card-text">
+            <p class="card-text small">
               {{file.name | truncate(15) }}<br/>
               {{file.size | bytesToMegaBytes | decimal(2) }} MB<br/>
             </p>
