@@ -20,15 +20,15 @@
         <div class="btn-group" data-intro="Ajouter des médias à l'aide de ces boutons" data-position="right">
           <button type="button" class="btn btn-fill btn-xs btn-info" @click="$children[0].open()">
             <i class="fa fa-cloud-upload" aria-hidden="true"></i>
-            <?= __('Téléverser'); ?>
+            <?= __d('Attachment','Upload') ?>
           </button>
           <button type="button" class="btn btn-fill btn-xs btn-info" @click="$children[1].open()">
             <i class="fa fa-cloud" aria-hidden="true"></i>
-            <?= __('Parcourir'); ?>
+            <?= __d('Attachment','Browse') ?>
           </button>
           <button v-if="dispalyEmbed()" type="button" class="btn btn-fill btn-xs btn-info" @click="$children[2].open()">
             <i class="fa fa-code" aria-hidden="true"></i>
-            <?= __('Ajouter un embed code'); ?>
+            <?= __d('Attachment','Add an embed code') ?>
           </button>
         </div>
       </p>

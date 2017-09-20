@@ -4,14 +4,14 @@
     <div class="modal-wrapper">
       <div class="modal-container container">
         <div class="custom-modal-header">
-          <?= __('Edit') ?>
+          <?= __d('Attachment','Edit') ?>
         </div>
         <div class="custom-modal-body">
 
           <!-- WARNINGS -->
           <div v-for="(error, index) in errors" track-by="$index" class="alert alert-warning alert-dismissible" role="alert">
             <button type="button" class="close"  aria-label="Close" @click="errors = []" ><span aria-hidden="true">&times;</span></button>
-            <strong>Attention!</strong> {{error}}
+            <strong><?= __d('Attachment','Watch out') ?>!</strong> {{error}}
           </div>
 
           <!-- loading -->
@@ -21,7 +21,7 @@
 
           <!-- TAGS -->
           <div id="attachment-atags" v-if="this.settings.restrictions.indexOf('tag_restricted') == -1">
-            <label >Tags</label>
+            <label ><?= __d('Tags','Watch out') ?></label>
             <select name="atags" id="atagsinput" multiple class="form-control">
               <option
                 v-for="atag in file.atags"
@@ -39,13 +39,13 @@
             <div v-if="file.type == 'embed'">
               <!-- Name HERE -->
               <div class="input text required">
-                <label for="name"><?= __('Name') ?></label>
+                <label for="name"><?= __d('Attachment','Name') ?></label>
                 <input v-model="file.name" type="text" name="name" class="form-control attachment-embed__name" id="name" />
               </div>
 
               <!-- EMBED CODE HERE -->
               <div class="input text required">
-                <label for="embed"><?= __('Embed code') ?></label>
+                <label for="embed"><?= __d('Attachment','Embed code') ?></label>
                 <textarea v-model="file.embed" name="embed" class="form-control attachment-embed__embed" id="embed" rows="5"></textarea>
               </div>
             </div>
@@ -68,11 +68,11 @@
                     <!-- defaultLocale -->
                     <div role="tabpanel" class="tab-pane active" :id="'a-'+settings.i18n.defaultLocale">
                       <div class="input text">
-                        <label for="title">Title</label>
+                        <label for="title"><?= __d('Attachment','Title') ?></label>
                         <input v-model="file.title" type="text" name="title" class="form-control" id="title">
                       </div>
                       <div class="input text">
-                        <label for="title">Description</label>
+                        <label for="title"><?= __d('Attachment','Description') ?></label>
                         <textarea v-model="file.description" name="description" class="form-control" id="description" rows="5"></textarea>
                       </div>
                     </div>
@@ -80,11 +80,11 @@
                     <!-- other locales -->
                     <div v-for="(index, language) in settings.i18n.languages"  v-if="language != settings.i18n.defaultLocale" role="tabpanel" class="tab-pane active" :id="'a-'+language">
                       <div class="input text">
-                        <label for="title">Title {{language}}</label>
+                        <label for="title"><?= __d('Attachment','Title') ?> {{language}}</label>
                         <input v-model="file['_translations'][language].title" type="text" :name="'_translations['+language+'][title]'" class="form-control" :id="'a-'+language+'-title'">
                       </div>
                       <div class="input text">
-                        <label for="title">Description {{language}}</label>
+                        <label for="title"><?= __d('Attachment','Description') ?> {{language}}</label>
                         <textarea v-model="file['_translations'][language].description" :name="'_translations['+language+'][description]'" class="form-control" :id="'a-'+language+'-description'" rows="5"></textarea>
                       </div>
                     </div>
@@ -95,22 +95,22 @@
                 <!-- no translate -->
                 <div v-if="!settings.i18n.enable" class="col-md-6">
                   <div class="input text">
-                    <label for="title">Title</label>
+                    <label for="title"><?= __d('Attachment','Title') ?></label>
                     <input v-model="file.title" type="text" name="title" class="form-control" id="title">
                   </div>
                   <div class="input text">
-                    <label for="title">Description</label>
+                    <label for="title"><?= __d('Attachment','Description') ?></label>
                     <textarea v-model="file.description" name="description" class="form-control" id="description" rows="5"></textarea>
                   </div>
                 </div>
 
                 <div class="col-md-6">
                   <div class="input text">
-                    <label for="author">Author</label>
+                    <label for="author"><?= __d('Attachment','Author') ?></label>
                     <input v-model="file.author" type="text" name="author" class="form-control" id="author">
                   </div>
                   <div class="input text">
-                    <label for="copyright">Copyright</label>
+                    <label for="copyright"><?= __d('Attachment','Copyright') ?></label>
                     <input v-model="file.copyright" type="text" name="copyright" class="form-control" id="copyright">
                   </div>
                 </div>
@@ -122,10 +122,10 @@
         <div class="custom-modal-footer">
           <div class="btn-group">
             <button type="button" class="modal-default-button btn btn-success" @click="edit">
-              <?= __('Edit') ?>
+              <?= __d('Attachment','Edit') ?>
             </button>
             <button type="button" class="modal-default-button btn btn-warning" @click="close()">
-              Fermer
+              <?= __d('Attachment','Close') ?>
             </button>
           </div>
         </div>

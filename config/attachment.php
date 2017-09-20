@@ -43,7 +43,7 @@ return [
       'maxsize' => 30, // 30MB
       'types' =>[],
       'atags' => [],
-      'cols' => 'col-xs-4 col-md-3 col-lg-2',
+      'cols' => 'col-6 col-sm-4 col-md-3 col-lg-2',
       'relation' => 'belongsToMany',
       'profile' => 'default',
       'visibility' => 'public',

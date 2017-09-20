@@ -10,14 +10,16 @@
 
     <div class="row" v-sortable="{draggable:'.attachment-files__item', onEnd:order}" >
       <div v-for="(file, index) in files" :id="file.id"  class="attachment-files__item" v-bind:class="settings.cols">
-        <div class="thumbnail" >
+        <div class="card mb-4" >
 
           <!-- thumb -->
           <attachment-thumb :url="settings.url" :file="file"></attachment-thumb>
 
-          <div class="caption">
-              {{file.name | truncate(15) }}<br/>
-              {{file.size | bytesToMegaBytes | decimal(2) }} MB<br/>
+          <div class="card-body">
+              <p class="card-text">
+                {{file.name | truncate(15) }}<br/>
+                {{file.size | bytesToMegaBytes | decimal(2) }} MB<br/>
+              </p>
             <!-- data -->
             <input v-if="settings.relation == 'belongsToMany'" type="hidden" :name="'attachments['+index+'][id]'" :value="file.id">
             <input v-if="settings.relation == 'belongsToMany'" type="hidden" :name="'attachments['+index+'][_joinData][order]'" :value="index">
@@ -25,9 +27,9 @@
             <input v-if="settings.relation != 'belongsToMany'" type="hidden" :name="settings.field" :value="file.id">
 
 
-            <button class="btn btn-fill btn-xs btn-warning" v-on:click.prevent="remove(file.id)" >Enlever</button>
+            <button class="btn btn-fill btn-xs btn-warning" v-on:click.prevent="remove(file.id)" ><?= __d('Attachment','Remove') ?></button>
           </div>
-        </div>
+        </div><!-- end card -->
       </div>
     </div>
   </div>

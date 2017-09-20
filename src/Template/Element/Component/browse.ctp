@@ -4,7 +4,7 @@
     <div class="modal-wrapper">
       <div class="modal-container container">
         <div class="custom-modal-header">
-          <?= __('Parcourir les fichiers') ?>
+          <?= __d('Attachment','Browse files') ?>
         </div>
         <div class="custom-modal-body">
 
@@ -14,7 +14,7 @@
           <!-- WARNINGS -->
           <div v-for="(error, index) in errors" track-by="$index" class="alert alert-warning alert-dismissible" role="alert">
             <button type="button" class="close"  aria-label="Close" @click="errors = []" ><span aria-hidden="true">&times;</span></button>
-            <strong>Attention!</strong> {{error}}
+            <strong><?= __d('Attachment','Watch out') ?>!</strong> {{error}}
           </div>
 
           <!-- loading -->
@@ -24,22 +24,24 @@
 
           <!-- file list -->
           <div v-if="!loading" class="row" >
-            <div v-for="(file, index) in files" :id="index"  class="attachment-files__item col-xs-4 col-md-2">
-              <div class="thumbnail" >
+            <div v-for="(file, index) in files" :id="index"  class="attachment-files__item col-6 col-sm-4 col-md-3 col-lg-2">
+              <div class="card mb-4" >
 
                 <!-- thumb -->
                 <attachment-thumb :url="settings.url" :file="file"></attachment-thumb>
 
-                <div class="caption">
-                  {{file.name | truncate(15) }}<br/>
-                  {{file.size | bytesToMegaBytes | decimal(2) }} MB<br/>
+                <div class="card-body">
+                  <p class="card-text">
+                    {{file.name | truncate(15) }}<br/>
+                    {{file.size | bytesToMegaBytes | decimal(2) }} MB<br/>
+                  </p>
 
                   <!-- data -->
-                  <a v-show="!isSelected(file.id)" href="#" class="btn btn-xs btn-fill btn-info" role="button" @click="add(index)" >Ajouter</a>
-                  <a v-show="isSelected(file.id)" href="#" class="btn btn-xs btn-fill btn-warning" role="button" @click="remove(file.id)" >Enlever</a>
+                  <a v-show="!isSelected(file.id)" href="#" class="btn btn-xs btn-fill btn-info" role="button" @click="add(index)" ><?= __d('Attachment','Add') ?></a>
+                  <a v-show="isSelected(file.id)" href="#" class="btn btn-xs btn-fill btn-warning" role="button" @click="remove(file.id)" ><?= __d('Attachment','Remove') ?></a>
 
                 </div>
-              </div>
+              </div><!-- end card -->
             </div>
           </div>
 
@@ -50,7 +52,7 @@
           <div class="custom-modal-footer">
             <div class="btn-group">
               <button type="button" class="modal-default-button btn btn-fill btn-warning" @click="close()">
-                Fermer
+                <?= __d('Attachment','Close') ?>
               </button>
             </div>
           </div>

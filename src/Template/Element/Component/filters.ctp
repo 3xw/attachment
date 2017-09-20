@@ -1,21 +1,21 @@
 <!-- filters -->
 <script type="text/x-template" id="attachment-filters">
   <div id="attachment-filters">
-    <div class="panel panel-default">
-      <div class="panel-heading">
+    <div class="card border-0">
+      <div class="card-header">
         <h4 v-show="$parent.search || $parent.tag || $parent.sort.term">
           <span v-show="$parent.tag">
-            <span class="label label-primary"><a href="#" @click.prevent="clearTags(), find()"><i class="fa fa-times" style="color:white;" aria-hidden="true"></i></a> Filtre: #{{$parent.tag}}</span>
+            <span class="label label-primary"><a href="#" @click.prevent="clearTags(), find()"><i class="fa fa-times" style="color:white;" aria-hidden="true"></i></a> <?= __d('Attachment','Filter') ?>: #{{$parent.tag}}</span>
             &nbsp;
           </span>
           <span v-show="$parent.search">
-            <span class="label label-primary"><a href="#" @click.prevent="clearSearch(null,true), find()"><i class="fa fa-times" style="color:white;" aria-hidden="true"></i></a> Filtre: {{$parent.search}} ?</span>
+            <span class="label label-primary"><a href="#" @click.prevent="clearSearch(null,true), find()"><i class="fa fa-times" style="color:white;" aria-hidden="true"></i></a> <?= __d('Attachment','Filter') ?>: {{$parent.search}} ?</span>
             &nbsp;
           </span>
-          <span v-show="$parent.sort.term" class="label label-info"><a href="#"><i class="fa fa-times" style="color:white;" aria-hidden="true"></i></a> Ordre: {{$parent.sort.term}}</span>
+          <span v-show="$parent.sort.term" class="label label-info"><a href="#"><i class="fa fa-times" style="color:white;" aria-hidden="true"></i></a> <?= __d('Attachment','Order') ?>: {{$parent.sort.term}}</span>
         </h4>
       </div>
-      <div class="panel-body">
+      <div class="card-body">
         <div class="form-inline">
 
           <!-- tags -->
@@ -23,7 +23,7 @@
           <div class="form-group">
             <div class="input-group">
               <span class="input-group-addon" id="basic-addon1">#</span>
-              <select class="form-control" id="tagsInputSearch" placeholder="tag" ></select>
+              <select class="form-control" id="tagsInputSearch" placeholder="<?= __d('Attachment','tag') ?>" ></select>
             </div>
           </div>
           -->
@@ -32,7 +32,7 @@
           <div class="form-group">
             <div class="input-group">
               <span class="input-group-addon" id="basic-addon1">?</span>
-              <input type="text" class="form-control" id="searchInputSearch" placeholder="nom du fichier ou titre">
+              <input type="text" class="form-control" id="searchInputSearch" placeholder="<?= __d('Attachment','file name or title') ?>">
             </div>
           </div>
 
@@ -69,7 +69,7 @@
           -->
 
           <!-- SEARCH -->
-          <button type="button" class="btn btn-fill btn-success" @click.prevent="find()"><i class="fa fa-search" aria-hidden="true"></i> Chercher</button>
+          <button type="button" class="btn btn-fill btn-success" @click.prevent="find()"><i class="fa fa-search" aria-hidden="true"></i> <?= __d('Attachment','Search') ?></button>
 
         </div>
       </div>

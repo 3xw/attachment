@@ -5,7 +5,7 @@
       <ul class="pagination">
         <li v-if="start" v-bind:class="{ 'disabled': !pagination.has_prev_page}">
           <a href="#" aria-label="First" @click.prevent="changePage(1)">
-            <span aria-hidden="true"><?= __('first') ?></span>
+            <span aria-hidden="true"><?= __d('Attachment','first') ?></span>
           </a>
         </li>
         <li v-if="(pagination.current_page-offset-1) > 1">
@@ -33,11 +33,11 @@
         </li>
         <li  v-if="end" v-bind:class="{ 'disabled': !pagination.has_next_page}">
           <a href="#" aria-label="Last" @click.prevent="changePage(pagination.page_count)">
-            <span aria-hidden="true"><?= __('last') ?></span>
+            <span aria-hidden="true"><?= __d('Attachment','last') ?></span>
           </a>
         </li>
       </ul>
     </nav>
-    Page {{pagination.current_page}} sur {{pagination.page_count}} ( total: {{pagination.count}}  médias )
+    <?= __d('Attachment','Page') ?> {{pagination.current_page}} <?= __d('Attachment','on') ?> {{pagination.page_count}} (<?= __d('Attachment','total') ?>: {{pagination.count}})
   </div>
 </script>

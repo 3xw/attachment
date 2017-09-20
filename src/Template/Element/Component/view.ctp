@@ -26,7 +26,7 @@
             </div>
 
             <!-- thumb -->
-            <img v-if="file | isNiceImage" v-bind:src="settings.url+'thumbnails/'+file.profile+'/w1200/'+file.path" class="img-responsive" />
+            <img v-if="file | isNiceImage" v-bind:src="settings.url+'thumbnails/'+file.profile+'/w1200/'+file.path" class="img-fluid" />
           </div>
 
         </div>
@@ -34,7 +34,7 @@
         <div class="custom-modal-footer">
           <div class="btn-group">
             <button type="button" class="modal-default-button btn btn-warning" @click="close()">
-              Fermer
+              <?= __d('Attachment','Close') ?>
             </button>
           </div>
         </div>
