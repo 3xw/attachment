@@ -40,6 +40,7 @@ return [
 
     // upload settings
     'upload' => [
+      'dir' => false,
       'maxsize' => 30, // 30MB
       'types' =>[],
       'atags' => [],

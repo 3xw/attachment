@@ -33,6 +33,8 @@ class FlyBehavior extends Behavior
 
   protected $_uuid = '';
 
+  protected $_session = null;
+
   /**
   * Build the behaviour
   *
@@ -114,8 +116,8 @@ class FlyBehavior extends Behavior
         $type = $type[0];
 
         // GET CONFIG
-        $session = new Session();
-        $sessionAttachment = $session->read('Attachment.'.$this->_uuid);
+        $this->_session = new Session();
+        $sessionAttachment = $this->_session->read('Attachment.'.$this->_uuid);
         if(!$sessionAttachment){
           $event->stopPropagation();
           $entity->errors($field,['Attachment keys not found in session! Please pass Attachment settings throught session!']);
@@ -153,6 +155,14 @@ class FlyBehavior extends Behavior
         $profile = $conf['profile'];
         $entity->set('profile', $profile);
 
+        // resolve dir...
+        if($conf['dir'] !== false && $conf['dir'] !== true)
+        {
+          $dir = $this->_resolveDir($conf['dir'],$type,$subtype);
+          $this->filesystem($profile)->createDir($dir);
+          $name = $dir.DS.$name;
+        }
+
         // delete if exists
         if($this->filesystem($profile)->has($name))
         {
@@ -169,6 +179,15 @@ class FlyBehavior extends Behavior
         $entity->{$field} = $name;
       }
     }
+  }
+
+  protected function _resolveDir($dir,$type,$subtype)
+  {
+    return str_replace(
+      ['{DS}','{$role}','{$username}','{$year}','{$month}','{$type}','{$subtype}'],
+      [DS,$this->_session->read('Auth.User.role'),$this->_session->read('Auth.User.username'),date("Y"),date("m"),$type,$subtype],
+      $dir
+    );
   }
 
   public function beforeDelete(Event $event, EntityInterface $entity, ArrayObject $options)
