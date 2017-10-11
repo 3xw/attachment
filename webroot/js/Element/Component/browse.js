@@ -157,6 +157,16 @@ Vue.component('attachment-browse', {
     remove: function(id){
       var index = this.ids.indexOf(id);
       this.settings.attachments.splice(index,1);
+    },
+    getFullLink: function(index){
+      console.log(this.settings.attachments);
+      var file = this.files[index];
+      var fullUrl = this.settings.baseUrls[file.profile]+file.path;
+      this.showLink(fullUrl);
+    },
+    showLink(val){
+      $('#attachment-full-url').remove();
+      $('#attachment-browse .row').after('<div id="attachment-full-url"><label>Attachment Full URL</label><input type="text" class="form-control" value="'+val+'"/></a></div>');
     }
   }
 });

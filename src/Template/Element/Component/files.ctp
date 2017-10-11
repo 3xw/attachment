@@ -22,9 +22,9 @@
             <input v-if="settings.relation == 'belongsToMany'" type="hidden" name="attachments[{{index}}][id]" value="{{file.id}}">
             <input v-if="settings.relation == 'belongsToMany'" type="hidden" name="attachments[{{index}}][_joinData][order]" value="{{index}}">
 
-            <input v-if="settings.relation != 'belongsToMany'" type="hidden" name="{{settings.field}}" value="{{file.id}}">
-
-
+            <a class="btn btn-fill btn-xs btn-success" role="button" @click="getFullLink(index)" >
+              <?= __('Show Link') ?>
+            </a>
             <button class="btn btn-fill btn-xs btn-warning" role="button" @click="remove(index)" >Enlever</button>
           </div>
         </div>

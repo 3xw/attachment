@@ -249,6 +249,11 @@ class AttachmentHelper extends Helper
   {
     $settings['relation'] = ($field == 'Attachments')? 'belongsToMany' : 'belongsTo';
     $settings['field'] = ($field == 'Attachments')? '' : $field;
+    $profiles = Configure::read('Attachment.profiles');
+    $settings['baseUrls'] = [];
+    foreach($profiles as $key => $value){
+      $settings['baseUrls'][$key] = $value['baseUrl'];
+    }
     $this->_setupInputComponent();
 
     return "<attachment-input :settings='".htmlspecialchars(json_encode($this->_getSettings($field,$settings)), ENT_QUOTES, 'UTF-8')."' ></attachment-input>";
