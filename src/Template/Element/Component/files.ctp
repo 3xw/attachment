@@ -19,6 +19,7 @@
               {{file.name | truncate 15 }}<br/>
               {{file.size | bytesToMegaBytes | decimal 2 }} MB<br/>
             <!-- data -->
+            <input v-if="settings.relation != 'belongsToMany'" type="hidden" name="{{settings.field}}" value="{{file.id}}">
             <input v-if="settings.relation == 'belongsToMany'" type="hidden" name="attachments[{{index}}][id]" value="{{file.id}}">
             <input v-if="settings.relation == 'belongsToMany'" type="hidden" name="attachments[{{index}}][_joinData][order]" value="{{index}}">
 
