@@ -27,8 +27,14 @@ Vue.component('attachment-files',{
   },
   methods: {
     add: function(file){
-      this.files.push(file);
-      this.ids.push(file.id);
+      if(!this.ids.includes(file.id)){
+        if(this.settings.relation == 'belongsTo'){
+          this.files = [];
+          this.ids = [];
+        }
+        this.files.push(file);
+        this.ids.push(file.id);
+      };
       window.aEventHub.$emit('add-file-id', file.id);
     },
     remove: function(id){

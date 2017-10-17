@@ -26,9 +26,12 @@ Vue.component('attachment-browse', {
     settings: Object,
   },
   created: function(){
-    window.aEventHub.$on('show-browse', function(){
-      this.open();
-    });
+
+    for(var i in this.settings.attachments){
+      this.files.push(this.settings.attachments[i]);
+      this.ids.push(this.settings.attachments[i].id);
+    }
+    window.aEventHub.$on('show-browse', function(){ this.open(); });
     window.aEventHub.$on('add-file-id',this.addId);
     window.aEventHub.$on('remove-file-id', this.removeId);
   },
@@ -41,6 +44,9 @@ Vue.component('attachment-browse', {
       return this.ids.indexOf(id) != -1;
     },
     addId: function(id){
+      if(this.settings.relation == 'belongsTo'){
+        this.ids = [];
+      }
       this.ids.push(id);
     },
     removeId: function(id){
