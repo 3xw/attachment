@@ -180,6 +180,10 @@ Vue.component('attachment-upload', {
             if(self.settings.attachments.length > 0){
               self.settings.attachments.pop();
             }
+          }else{
+            if(self.settings.maxquantity != -1 && (self.settings.attachments.length == self.settings.maxquantity)){
+              self.settings.attachments.shift();
+            }
           }
           //self.settings.attachments.push(response.data);
           window.aEventHub.$emit('add-file', response.data);

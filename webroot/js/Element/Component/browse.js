@@ -46,6 +46,10 @@ Vue.component('attachment-browse', {
     addId: function(id){
       if(this.settings.relation == 'belongsTo'){
         this.ids = [];
+      }else{
+        if(this.settings.maxquantity != -1 && (this.ids.length == this.settings.maxquantity)){
+          this.ids.shift();
+        }
       }
       this.ids.push(id);
     },

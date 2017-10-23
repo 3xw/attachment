@@ -41,7 +41,8 @@ return [
     // upload settings
     'upload' => [
       'dir' => false,
-      'maxsize' => 30, // 30MB
+      'maxsize' => 30, // 30MB,
+      'maxquantity' => -1,
       'types' =>[],
       'atags' => [],
       'cols' => 'col-6 col-sm-4 col-md-3 col-lg-2',

@@ -31,6 +31,11 @@ Vue.component('attachment-files',{
         if(this.settings.relation == 'belongsTo'){
           this.files = [];
           this.ids = [];
+        }else{
+          if(this.settings.maxquantity != -1 && (this.ids.length == this.settings.maxquantity)){
+            this.files.shift();
+            this.ids.shift();
+          }
         }
         this.files.push(file);
         this.ids.push(file.id);
