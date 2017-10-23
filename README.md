@@ -311,7 +311,7 @@ In add.ctp
 		  	'atags' => ['Restricted Tag 1', 'Restricted Tag 2'],
 		  	'profile' => 's3', // optional as it was set in config/attachment.php
 		  	'cols' => 'col-xs-6 col-md-6 col-lg-4', // optional as it was set in config/attachment.php,
-				'maxquantity' => -1,
+		  	'maxquantity' => -1,
 		  	'restrictions' => [
 		    	Attachment\View\Helper\AttachmentHelper::TAG_RESTRICTED,
 		    	Attachment\View\Helper\AttachmentHelper::TYPES_RESTRICTED
@@ -330,7 +330,7 @@ In edit.ctp
 		  	'atags' => ['Restricted Tag 1', 'Restricted Tag 2'],
 		  	'profile' => 's3', // optional as it was set in config/attachment.php
 		  	'cols' => 'col-xs-6 col-md-6 col-lg-4', // optional as it was set in config/attachment.php,
-				'maxquantity' => -1,
+		  	'maxquantity' => -1,
 		  	'restrictions' => [
 		    	Attachment\View\Helper\AttachmentHelper::TAG_RESTRICTED,
 		    	Attachment\View\Helper\AttachmentHelper::TYPES_RESTRICTED
