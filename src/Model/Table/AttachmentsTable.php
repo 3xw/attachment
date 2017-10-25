@@ -2,6 +2,7 @@
 namespace Attachment\Model\Table;
 
 use Attachment\Model\Entity\Attachment;
+use Cake\Datasource\EntityInterface;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
@@ -112,6 +113,36 @@ class AttachmentsTable extends Table
         });
       }
     ]);
+  }
+
+  public function patchEntity(EntityInterface $entity, array $data, array $options = [])
+  {
+    if(!Configure::read('Attachment.translate')) return parent::patchEntity($entity, $data, $options);
+
+    if (!isset($options['associated']))
+    {
+        $options['associated'] = $this->_associations->keys();
+    }
+    $marshaller = $this->marshaller();
+    $entity = $marshaller->merge($entity, $data, $options);
+
+    if(!empty($entity['_translations']))
+    {
+      foreach ($entity['_translations'] as $locale => $fields)
+      {
+        foreach($fields as $key => $value)
+        {
+          if(!empty($value)){
+            $entity->translation($locale)->set([$key => $value], ['guard' => false]);
+          }else{
+            $entity->translation($locale)->set([$key => $entity[$key]], ['guard' => false]);
+          }
+        }
+        unset($data['_translations'][$locale]);
+      }
+    }
+
+    return $entity;
   }
 
   /**
