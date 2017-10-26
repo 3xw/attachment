@@ -164,7 +164,7 @@ Vue.component('attachment-browse', {
       var fullUrl = this.settings.baseUrls[file.profile]+file.path;
       this.showLink(fullUrl);
     },
-    showLink(val){
+    showLink: function(val){
       $('#attachment-full-url').remove();
       $('#attachment-browse .row').after('<div id="attachment-full-url"><label>Attachment Full URL</label><input type="text" class="form-control" value="'+val+'"/></a></div>');
     }

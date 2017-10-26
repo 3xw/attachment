@@ -24,7 +24,7 @@ Vue.component('attachment-files',{
       this.settings.attachments.splice(evt.oldIndex,1);
       this.settings.attachments.splice(evt.newIndex,0,file);
     },
-    showLink(val){
+    showLink: function(val){
       $('#attachment-full-url').remove();
       $('#attachment-files').after('<div id="attachment-full-url"><label>Attachment Full URL</label><input type="text" class="form-control" value="'+val+'"/></a></div>');
     }
