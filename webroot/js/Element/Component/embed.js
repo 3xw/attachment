@@ -65,10 +65,7 @@ Vue.component('attachment-embed', {
       $('.optional-fields input, .optional-fields textarea, .optional-fields select').each(function(){
         var $input = $(this);
         var value = $input.val();
-        if(value)
-        {
-            formData.append($input.attr('name'), value.trim());
-        }
+        formData.append($input.attr('name'), value.trim());
       });
 
       $.ajax({
