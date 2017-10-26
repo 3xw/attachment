@@ -400,6 +400,10 @@ in file
 	// return the full download url for THIS SESSION ONLY
 
 ####Usage.shell
-Attachment plugin provides a usefull shell script to retrieve width and height of images
+1) Attachment plugin provides a usefull shell script to retrieve width and height of images
 
 	bin/cake Attachment.GetImageSizes
+	
+2) CReate missing attachment transaltions for loacle:
+
+	bin/cake CreateMissingTranslations en_GB de_CH ...
