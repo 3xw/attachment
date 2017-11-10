@@ -9,10 +9,11 @@ Vue.component('attachment-embed', {
     };
   },
   props: {
+    aid:String,
     settings: Object,
   },
   created: function(){
-    window.aEventHub.$on('show-embed', this.showEmbed);
+    window.aEventHub[this.aid].$on('show-embed', this.showEmbed);
   },
   methods: {
     showEmbed: function(){
@@ -87,9 +88,9 @@ Vue.component('attachment-embed', {
             }
           }
           //self.settings.attachments.push(response.data);
-          window.aEventHub.$emit('add-file', response.data);
+          window.aEventHub[this.aid].$emit('add-file', response.data);
           self.close();
-          window.aEventHub.$emit('embed-finished');
+          window.aEventHub[this.aid].$emit('embed-finished');
         },
         error: function(response){
           var message = response.statusText;

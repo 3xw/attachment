@@ -6,6 +6,7 @@ Vue.component('attachment-view', {
     };
   },
   props: {
+    aid:String,
     settings: Object,
     show: {
       type: Boolean,
@@ -13,7 +14,7 @@ Vue.component('attachment-view', {
     },
   },
   created: function(){
-    window.aEventHub.$on('view-file',function(file) {
+    window.aEventHub[this.aid].$on('view-file',function(file) {
       this.file = file;
       this.open();
     });

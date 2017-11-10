@@ -10,6 +10,11 @@ Vue.component('attachment-input',{
       tags: null
     };
   },
+  created: function(){
+    if(window.aEventHub[this.aid] == undefined){
+      window.aEventHub[this.aid] = new Vue();
+    }
+  },
   methods: {
     dispalyEmbed : function(){
       for( var type in this.settings.types ){

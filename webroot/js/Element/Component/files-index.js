@@ -1,6 +1,7 @@
 Vue.component('attachment-files-index',{
   template: '#attachment-files-index',
   props: {
+    aid:String,
     settings: {
       type: Object,
       required: true
@@ -18,7 +19,7 @@ Vue.component('attachment-files-index',{
       console.log(input);
     },
     dispatch(evt, data){
-      window.aEventHub.$emit(evt, data);
+      window.aEventHub[this.aid].$emit(evt, {data:data, aid:aid});
     },
   }
 });

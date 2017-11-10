@@ -5,16 +5,16 @@
     <div class="attachment-trumbowyg">
 
       <!-- upload -->
-      <attachment-upload :settings.sync="settings" ></attachment-upload>
+      <attachment-upload :aid="aid" :settings.sync="settings" ></attachment-upload>
 
       <!-- browse -->
-      <attachment-browse :types="types" :tags="tags" :settings="settings" ></attachment-browse>
+      <attachment-browse :aid="aid" :types="types" :tags="tags" :settings="settings" ></attachment-browse>
 
       <!-- trumbowyg-options -->
       <attachment-trumbowyg-options :settings.sync="settings" :file.sync="file" ></attachment-trumbowyg-options>
 
       <!-- trumbowyg -->
-      <textarea name="{{settings.field}}" v-bind:class="settings.uuid">{{settings.content}}</textarea>
+      <textarea :aid="aid" :name="settings.field" v-bind:class="settings.uuid">{{settings.content}}</textarea>
 
     </div>
   </div>

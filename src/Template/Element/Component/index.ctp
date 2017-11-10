@@ -23,22 +23,22 @@
     </div>
 
     <!-- files index -->
-    <attachment-files-index :settings="settings" :files="files"></attachment-files-index>
+    <attachment-files-index :aid="aid" :settings="settings" :files="files"></attachment-files-index>
 
     <!-- pagination -->
     <attachment-pagination :pagination="pagination" :callback="getFiles" :settings="settings"></attachment-pagination>
 
     <!-- view -->
-    <attachment-view :settings="settings" ></attachment-view>
+    <attachment-view :aid="aid" :settings="settings" ></attachment-view>
 
     <!-- edit -->
-    <attachment-edit :settings="settings" ></attachment-edit>
+    <attachment-edit :aid="aid" :settings="settings" ></attachment-edit>
 
     <!-- upload -->
-    <attachment-upload :settings="settings" ></attachment-upload>
+    <attachment-upload :aid="aid" :settings="settings" ></attachment-upload>
 
     <!-- embed -->
-    <attachment-embed :settings="settings" ></attachment-embed>
+    <attachment-embed :aid="aid" :settings="settings" ></attachment-embed>
 
     <!-- add btn -->
     <p>

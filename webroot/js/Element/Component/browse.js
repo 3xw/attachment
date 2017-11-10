@@ -23,6 +23,7 @@ Vue.component('attachment-browse', {
     };
   },
   props: {
+    aid:String,
     settings: Object,
   },
   created: function(){
@@ -31,9 +32,9 @@ Vue.component('attachment-browse', {
       this.files.push(this.settings.attachments[i]);
       this.ids.push(this.settings.attachments[i].id);
     }
-    window.aEventHub.$on('show-browse', function(){ this.open(); });
-    window.aEventHub.$on('add-file-id',this.addId);
-    window.aEventHub.$on('remove-file-id', this.removeId);
+    window.aEventHub[this.aid].$on('show-browse', function(){ this.open(); });
+    window.aEventHub[this.aid].$on('add-file-id',this.addId);
+    window.aEventHub[this.aid].$on('remove-file-id', this.removeId);
   },
   mounted: function(){
     this.getTags();
@@ -81,7 +82,7 @@ Vue.component('attachment-browse', {
       this.files = [];
       this.show = false;
       this.loading = false;
-      window.aEventHub.$emit('browse-closed');
+      window.aEventHub[this.aid].$emit('browse-closed');
     },
     open: function(){
       this.addEventListeners();
@@ -152,10 +153,10 @@ Vue.component('attachment-browse', {
       console.log(response);
     },
     add: function(index){
-      window.aEventHub.$emit('add-file', this.files[index]);
+      window.aEventHub[this.aid].$emit('add-file', this.files[index]);
     },
     remove: function(id){
-      window.aEventHub.$emit('remove-file', id);
+      window.aEventHub[this.aid].$emit('remove-file', id);
     }
   }
 });

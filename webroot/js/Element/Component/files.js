@@ -1,6 +1,7 @@
 Vue.component('attachment-files',{
   template: '#attachment-files',
   props: {
+    aid:String,
     settings: {
       type: Object,
       required: true,
@@ -15,10 +16,10 @@ Vue.component('attachment-files',{
   },
   created: function(){
 
-    window.aEventHub.$on('add-file',this.add);
-    window.aEventHub.$on('remove-file', this.remove);
-    window.aEventHub.$on('order-file', this.order);
-    window.aEventHub.$on('check-ids-file', this.order);
+    window.aEventHub[this.aid].$on('add-file',this.add);
+    window.aEventHub[this.aid].$on('remove-file', this.remove);
+    window.aEventHub[this.aid].$on('order-file', this.order);
+    window.aEventHub[this.aid].$on('check-ids-file', this.order);
 
     for(var i in this.settings.attachments){
       this.files.push(this.settings.attachments[i]);
@@ -40,7 +41,7 @@ Vue.component('attachment-files',{
         this.files.push(file);
         this.ids.push(file.id);
       };
-      window.aEventHub.$emit('add-file-id', file.id);
+      window.aEventHub[this.aid].$emit('add-file-id', file.id);
     },
     remove: function(id){
 
@@ -48,7 +49,7 @@ Vue.component('attachment-files',{
       if(index != -1){
         this.files.splice(index,1);
         this.ids.splice(index,1);
-        window.aEventHub.$emit('remove-file-id', id);
+        window.aEventHub[this.aid].$emit('remove-file-id', id);
       }
     },
     order: function(evt){

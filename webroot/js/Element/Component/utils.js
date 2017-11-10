@@ -1,6 +1,6 @@
 /* EVENT HUB
 *******************************/
-window.aEventHub = new Vue();
+window.aEventHub = {};//new Vue();
 
 /* DIRECTIVES
 *******************************/

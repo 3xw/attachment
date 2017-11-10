@@ -11,10 +11,11 @@ Vue.component('attachment-edit', {
     };
   },
   props: {
+    aid:String,
     settings: Object,
   },
   created: function(){
-    window.aEventHub.$on('edit-file', this.editFile);
+    window.aEventHub[this.aid].$on('edit-file', this.editFile);
   },
   methods: {
     editFile: function(file){
@@ -41,7 +42,7 @@ Vue.component('attachment-edit', {
     },
     edit: function(){
       this.close();
-      window.aEventHub.$emit('edit-progress');
+      window.aEventHub[this.aid].$emit('edit-progress');
 
       var options = {
         headers:{
@@ -70,10 +71,10 @@ Vue.component('attachment-edit', {
       return this;
     },
     editSuccessCallback: function(response){
-      window.aEventHub.$emit('edit-success', {response:response, file:this.file});
+      window.aEventHub[this.aid].$emit('edit-success', {response:response, file:this.file});
     },
     errorCallback: function(response){
-      window.aEventHub.$emit('edit-error', {response:response, file:this.file});
+      window.aEventHub[this.aid].$emit('edit-error', {response:response, file:this.file});
     }
   }
 });

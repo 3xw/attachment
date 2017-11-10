@@ -41,21 +41,25 @@ Vue.component('attachment-index',{
     }
   },
   created: function(){
-    window.aEventHub.$on('show-edit-file', this.showEditFile);
-    window.aEventHub.$on('show-view-file', this.showViewFile);
-    window.aEventHub.$on('edit-progress', this.editProgress);
-    window.aEventHub.$on('edit-success', this.editSuccess);
-    window.aEventHub.$on('edit-error', this.editError);
-    window.aEventHub.$on('upload-finished', this.getFiles);
-    window.aEventHub.$on('embed-finished', this.getFiles);
-    window.aEventHub.$on('delete-file', this.deleteFile);
+    if(window.aEventHub[this.aid] == undefined){
+      window.aEventHub[this.aid] = new Vue();
+    }
+    
+    window.aEventHub[this.aid].$on('show-edit-file', this.showEditFile);
+    window.aEventHub[this.aid].$on('show-view-file', this.showViewFile);
+    window.aEventHub[this.aid].$on('edit-progress', this.editProgress);
+    window.aEventHub[this.aid].$on('edit-success', this.editSuccess);
+    window.aEventHub[this.aid].$on('edit-error', this.editError);
+    window.aEventHub[this.aid].$on('upload-finished', this.getFiles);
+    window.aEventHub[this.aid].$on('embed-finished', this.getFiles);
+    window.aEventHub[this.aid].$on('delete-file', this.deleteFile);
   },
   methods: {
     showEditFile:function(index) {
-      window.aEventHub.$emit('edit-file',this.files[index]);
+      window.aEventHub[this.aid].$emit('edit-file',this.files[index]);
     },
     showViewFile:function(index) {
-      window.aEventHub.$emit('view-file',this.files[index]);
+      window.aEventHub[this.aid].$emit('view-file',this.files[index]);
     },
     editProgress: function(){
       this.loading = true;
@@ -94,7 +98,7 @@ Vue.component('attachment-index',{
       .then(this.deleteSuccessCallback, this.errorDeleteCallback);
     },
     dispatch(evt, data){
-      window.aEventHub.$emit(evt, data);
+      window.aEventHub[this.aid].$emit(evt, data);
     },
     getFileByIndex: function(index){
       return this.files[index];

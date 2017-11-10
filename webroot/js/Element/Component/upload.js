@@ -15,10 +15,11 @@ Vue.component('attachment-upload', {
     };
   },
   props: {
+    aid:String,
     settings: Object,
   },
   created: function(){
-    window.aEventHub.$on('show-upload',this.showUpload);
+    window.aEventHub[this.aid].$on('show-upload',this.showUpload);
   },
   methods: {
     showUpload: function(){
@@ -84,7 +85,7 @@ Vue.component('attachment-upload', {
       this.files = [];
       this.show = false;
       this.errors = [];
-      window.aEventHub.$emit('upload-closed')
+      window.aEventHub[this.aid].$emit('upload-closed')
     },
     open: function(){
       this.atags = this.settings.atags;
@@ -117,7 +118,7 @@ Vue.component('attachment-upload', {
           this.addEventListeners();
           this.tellUser(this.errors.length+' fichiers n\'ont pu être téléverssé!');
         }
-        window.aEventHub.$emit('upload-finished');
+        window.aEventHub[this.aid].$emit('upload-finished');
       }
     },
     tellUser: function(message){
@@ -183,7 +184,7 @@ Vue.component('attachment-upload', {
             }
           }
           //self.settings.attachments.push(response.data);
-          window.aEventHub.$emit('add-file', response.data);
+          window.aEventHub[this.aid].$emit('add-file', response.data);
           self.handleUploads();
         },
         error: function(response){

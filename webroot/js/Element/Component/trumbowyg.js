@@ -4,10 +4,10 @@ Vue.component('attachment-trumbowyg',{
     settings: Object,
     aid:String,
     content: {type: String, default: 'coucou'},
-    file: {},
   },
   data:function(){
     return {
+      file: {},
       $trumbowyg: null,
       options: null,
       startRange: null,
@@ -15,9 +15,13 @@ Vue.component('attachment-trumbowyg',{
     };
   },
   created: function(){
-    window.aEventHub.$on('browse-closed', this.openOptions);
-    window.aEventHub.$on('upload-closed', this.openOptions);
-    window.aEventHub.$on('options-success', function(args){
+    if(window.aEventHub[this.aid] == undefined){
+      window.aEventHub[this.aid] = new Vue();
+    }
+
+    window.aEventHub[this.aid].$on('browse-closed', this.openOptions);
+    window.aEventHub[this.aid].$on('upload-closed', this.openOptions);
+    window.aEventHub[this.aid].$on('options-success', function(args){
       this.options = args[0];
       this.$trumbowyg.trumbowyg("openModalInsert", {
         title: "Confirmez l'ajout du média?",
@@ -46,16 +50,16 @@ Vue.component('attachment-trumbowyg',{
     },
     upload: function(evt, trumbowyg){
       this.setup(trumbowyg);
-      window.aEventHub.$emit('show-upload');
+      window.aEventHub[this.aid].$emit('show-upload');
     },
     browse: function(evt, trumbowyg){
       this.setup(trumbowyg);
-      window.aEventHub.$emit('show-browse');
+      window.aEventHub[this.aid].$emit('show-browse');
     },
     openOptions: function(){
       this.file = this.settings.attachments.shift();
       if(this.file){
-        window.aEventHub.$emit('show-options');
+        window.aEventHub[this.aid].$emit('show-options');
       }
     },
     getImagePath: function(options){
