@@ -2,6 +2,7 @@ Vue.component('attachment-trumbowyg',{
   template: '#attachment-trumbowyg',
   props: {
     settings: Object,
+    aid:String,
     content: {type: String, default: 'coucou'},
     file: {},
   },

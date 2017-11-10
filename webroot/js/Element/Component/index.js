@@ -2,6 +2,7 @@ Vue.component('attachment-index',{
   template: '#attachment-index',
   props: {
     settings: Object,
+    aid:String,
     //files: Array,
   },
   data:function(){

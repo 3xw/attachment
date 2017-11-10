@@ -124,7 +124,7 @@ class AttachmentHelper extends Helper
     foreach($profiles as $key => $value){
       $settings['baseUrls'][$key] = $value['baseUrl'];
     }
-    return "<attachment-index :settings='".htmlspecialchars(json_encode($settings), ENT_QUOTES, 'UTF-8')."' ></attachment-index>";
+    return "<attachment-index :aid='".Text::uuid()."' :settings='".htmlspecialchars(json_encode($settings), ENT_QUOTES, 'UTF-8')."' ></attachment-index>";
   }
 
   private function _setupInputComponent()
@@ -242,7 +242,7 @@ class AttachmentHelper extends Helper
     $settings['attachments'] = [];
     $this->_setTrumbowygComponent($settings);
 
-    return "<attachment-trumbowyg :settings='".htmlspecialchars(json_encode($settings), ENT_QUOTES, 'UTF-8')."' ></attachment-trumbowyg>";
+    return "<attachment-trumbowyg :aid='".Text::uuid()."' :settings='".htmlspecialchars(json_encode($settings), ENT_QUOTES, 'UTF-8')."' ></attachment-trumbowyg>";
   }
 
   public function input($field, $settings = [])
@@ -251,7 +251,7 @@ class AttachmentHelper extends Helper
     $settings['field'] = ($field == 'Attachments')? '' : $field;
     $this->_setupInputComponent();
 
-    return "<attachment-input :settings='".htmlspecialchars(json_encode($this->_getSettings($field,$settings)), ENT_QUOTES, 'UTF-8')."' ></attachment-input>";
+    return "<attachment-input :aid='".Text::uuid()."' :settings='".htmlspecialchars(json_encode($this->_getSettings($field,$settings)), ENT_QUOTES, 'UTF-8')."' ></attachment-input>";
   }
 
   public function filesystem($profile)
