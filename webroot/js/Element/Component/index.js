@@ -43,8 +43,9 @@ Vue.component('attachment-index',{
   created: function(){
     if(window.aEventHub[this.aid] == undefined){
       window.aEventHub[this.aid] = new Vue();
+      console.log('index',this.aid);
     }
-    
+
     window.aEventHub[this.aid].$on('show-edit-file', this.showEditFile);
     window.aEventHub[this.aid].$on('show-view-file', this.showViewFile);
     window.aEventHub[this.aid].$on('edit-progress', this.editProgress);

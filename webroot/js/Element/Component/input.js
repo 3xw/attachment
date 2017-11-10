@@ -13,6 +13,7 @@ Vue.component('attachment-input',{
   created: function(){
     if(window.aEventHub[this.aid] == undefined){
       window.aEventHub[this.aid] = new Vue();
+      console.log('input',this.aid);
     }
   },
   methods: {

@@ -7,6 +7,7 @@ Vue.component('attachment-trumbowyg-options',{
       type: Boolean,
       default: false
     },
+    aid: String
   },
   data: function(){
     return {

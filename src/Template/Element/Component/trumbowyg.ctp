@@ -11,7 +11,7 @@
       <attachment-browse :aid="aid" :types="types" :tags="tags" :settings="settings" ></attachment-browse>
 
       <!-- trumbowyg-options -->
-      <attachment-trumbowyg-options :settings.sync="settings" :file.sync="file" ></attachment-trumbowyg-options>
+      <attachment-trumbowyg-options :aid="aid" :settings.sync="settings" :file.sync="file" ></attachment-trumbowyg-options>
 
       <!-- trumbowyg -->
       <textarea :aid="aid" :name="settings.field" v-bind:class="settings.uuid">{{settings.content}}</textarea>

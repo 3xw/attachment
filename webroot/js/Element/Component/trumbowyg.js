@@ -12,11 +12,14 @@ Vue.component('attachment-trumbowyg',{
       options: null,
       startRange: null,
       endRange: null,
+      types: null,
+      tags: null
     };
   },
   created: function(){
     if(window.aEventHub[this.aid] == undefined){
       window.aEventHub[this.aid] = new Vue();
+      console.log('one',this.aid);
     }
 
     window.aEventHub[this.aid].$on('browse-closed', this.openOptions);

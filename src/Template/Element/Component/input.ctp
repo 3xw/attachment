@@ -5,16 +5,16 @@
     <div class="attachment-input">
 
       <!-- upload -->
-      <attachment-upload :settings="settings" ></attachment-upload>
+      <attachment-upload :aid="aid" :settings="settings" ></attachment-upload>
 
       <!-- browse -->
-      <attachment-browse :types="types" :tags="tags" :settings="settings" ></attachment-browse>
+      <attachment-browse :aid="aid" :types="types" :tags="tags" :settings="settings" ></attachment-browse>
 
       <!-- embed -->
-      <attachment-embed :settings="settings" ></attachment-embed>
+      <attachment-embed :aid="aid" :settings="settings" ></attachment-embed>
 
       <!-- files -->
-      <attachment-files :settings="settings" ></attachment-files>
+      <attachment-files :aid="aid" :settings="settings" ></attachment-files>
 
       <p>
         <div class="btn-group" data-intro="Ajouter des médias à l'aide de ces boutons" data-position="right">
