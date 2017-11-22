@@ -8,7 +8,7 @@
       <attachment-upload :aid="aid" :settings="settings" ></attachment-upload>
 
       <!-- browse -->
-      <attachment-browse :aid="aid" :types="types" :tags="tags" :settings="settings" ></attachment-browse>
+      <attachment-browse :aid="aid" :types="types" :tags="tags" :settings="settings" :from="'input'"></attachment-browse>
 
       <!-- embed -->
       <attachment-embed :aid="aid" :settings="settings" ></attachment-embed>

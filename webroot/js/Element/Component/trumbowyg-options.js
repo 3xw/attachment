@@ -1,16 +1,13 @@
 Vue.component('attachment-trumbowyg-options',{
   template: '#attachment-trumbowyg-options',
   props: {
-    settings: Object,
     file: {},
-    show: {
-      type: Boolean,
-      default: false
-    },
+    settings: Object,
     aid: String
   },
   data: function(){
     return {
+      show: false,
       options: {
         crop: false,
         align: ''
@@ -18,12 +15,13 @@ Vue.component('attachment-trumbowyg-options',{
     }
   },
   created: function(){
-    window.aEventHub[this.aid].$on('show-options', function(){
-      this.addEventListeners();
-      this.show = true;
-    });
+    window.aEventHub[this.aid].$on('show-options', this.showOptions);
   },
   methods: {
+    showOptions: function(){
+      this.addEventListeners();
+      this.show = true;
+    },
     addEventListeners : function(){
       $(document).bind('keypress', this.preventEnter);
       $('form').bind('submit', this.preventSubmit);

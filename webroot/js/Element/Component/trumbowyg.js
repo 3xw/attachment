@@ -23,16 +23,11 @@ Vue.component('attachment-trumbowyg',{
     }
 
     window.aEventHub[this.aid].$on('browse-closed', this.openOptions);
+    window.aEventHub[this.aid].$on('add', this.addBrowse);
     window.aEventHub[this.aid].$on('upload-closed', this.openOptions);
-    window.aEventHub[this.aid].$on('options-success', function(args){
-      this.options = args[0];
-      this.$trumbowyg.trumbowyg("openModalInsert", {
-        title: "Confirmez l'ajout du média?",
-        callback: this.createHtmlElement
-      })
-    });
+    window.aEventHub[this.aid].$on('options-success', this.optionSuccess);
   },
-  ready: function(){
+  mounted: function(){
     if(this.settings.trumbowyg.langs && this.settings.trumbowyg.langs[this.settings.trumbowyg.lang]){
       $.trumbowyg.langs[this.settings.trumbowyg.lang] = this.settings.trumbowyg.langs[this.settings.trumbowyg.lang];
     }
@@ -64,6 +59,13 @@ Vue.component('attachment-trumbowyg',{
       if(this.file){
         window.aEventHub[this.aid].$emit('show-options');
       }
+    },
+    optionSuccess: function(args){
+      this.options = args[0];
+      this.$trumbowyg.trumbowyg("openModalInsert", {
+        title: "Confirmez l'ajout du média?",
+        callback: this.createHtmlElement
+      })
     },
     getImagePath: function(options){
       var path = this.settings.url+'thumbnails/'+this.file.profile+'/';
@@ -145,7 +147,7 @@ Vue.component('attachment-trumbowyg',{
     createHtmlElement: function(values){
       var options = this.options;
       var html = '<img';
-      var classes = 'img-responsive ';
+      var classes = 'img-responsive img-fluid ';
       classes += (options.classes)? options.classes+' ': '';
       classes += (options.align)? options.align+' ': '';
       html += ' class=\'' + classes + '\'';

@@ -82,7 +82,9 @@ Vue.component('attachment-index',{
       this.getFiles();
     },
     deleteFile: function(index){
+      console.log(index);
       var file = this.files[index];
+      console.log(file);
       this.fileToDeleteName = file.name;
       if(!confirm('Delete file: '+this.fileToDeleteName+'?')){
         return false;
@@ -98,8 +100,10 @@ Vue.component('attachment-index',{
       this.$http.delete(this.settings.url+'attachment/attachments/delete/'+file.id+'.json', file,options)
       .then(this.deleteSuccessCallback, this.errorDeleteCallback);
     },
-    dispatch(evt, data){
-      window.aEventHub[this.aid].$emit(evt, data);
+    dispatch(evt,aid,data){
+      console.log('allo');
+      console.log(evt, aid, data);
+      window.aEventHub[aid].$emit(evt, data);
     },
     getFileByIndex: function(index){
       return this.files[index];

@@ -184,8 +184,9 @@ Vue.component('attachment-upload', {
               self.settings.attachments.shift();
             }
           }
-          //self.settings.attachments.push(response.data);
-          window.aEventHub[this.aid].$emit('add-file', response.data);
+          if(!self.settings.attachments){ self.settings.attachments = []; }
+          self.settings.attachments.push(response.data);
+          window.aEventHub[self.aid].$emit('add-file', response.data);
           self.handleUploads();
         },
         error: function(response){

@@ -23,13 +23,13 @@
               <a class="btn btn-fill btn-xs btn-success" target="_blank" role="button" v-bind:href="file.download_link" v-if="settings.actions.indexOf('download') != -1">
                 <?= __d('Attachment','Download') ?>
               </a>
-              <button class="btn btn-fill btn-xs btn-success" role="button" v-on:click="dispatch('show-view-file',index)" v-if="settings.actions.indexOf('view') != -1">
+              <button class="btn btn-fill btn-xs btn-success" role="button" v-on:click="dispatch('show-view-file',aid,index)" v-if="settings.actions.indexOf('view') != -1">
                 <?= __d('Attachment','View') ?>
               </button>
-              <button class="btn btn-fill btn-xs btn-info" role="button" v-on:click="dispatch('show-edit-file',index)" v-if="settings.actions.indexOf('edit') != -1">
+              <button class="btn btn-fill btn-xs btn-info" role="button" v-on:click="dispatch('show-edit-file',aid,index)" v-if="settings.actions.indexOf('edit') != -1">
                 <?= __d('Attachment','Edit') ?>
               </button>
-              <button class="btn btn-fill btn-xs btn-danger" role="button" v-on:click="dispatch('delete-file',index)" v-if="settings.actions.indexOf('delete') != -1">
+              <button class="btn btn-fill btn-xs btn-danger" role="button" v-on:click="dispatch('delete-file',aid,index)" v-if="settings.actions.indexOf('delete') != -1">
                 <?= __d('Attachment','Delete') ?>
               </button>
             </div>

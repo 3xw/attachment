@@ -8,7 +8,7 @@
       <attachment-upload :aid="aid" :settings.sync="settings" ></attachment-upload>
 
       <!-- browse -->
-      <attachment-browse :aid="aid" :types="types" :tags="tags" :settings="settings" ></attachment-browse>
+      <attachment-browse :aid="aid" :types="types" :tags="tags" :settings="settings" :from="'trumbowyg'"></attachment-browse>
 
       <!-- trumbowyg-options -->
       <attachment-trumbowyg-options :aid="aid" :settings.sync="settings" :file.sync="file" ></attachment-trumbowyg-options>

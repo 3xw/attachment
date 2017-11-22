@@ -18,8 +18,8 @@ Vue.component('attachment-files-index',{
     log:function(input){
       console.log(input);
     },
-    dispatch(evt, data){
-      window.aEventHub[this.aid].$emit(evt, {data:data, aid:aid});
+    dispatch(evt,aid,data){
+      window.aEventHub[this.aid].$emit(evt, data);
     },
   }
 });

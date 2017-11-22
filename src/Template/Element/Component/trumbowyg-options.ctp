@@ -16,8 +16,8 @@
                 <attachment-thumb :url="settings.url" :file="file"></attachment-thumb>
 
                 <div class="caption">
-                  {{file.name | truncate 100 }}<br/>
-                  {{file.size | bytesToMegaBytes | decimal 2 }} MB<br/>
+                  {{file.name | truncate(100) }}<br/>
+                  {{file.size | bytesToMegaBytes | decimal(2) }} MB<br/>
                 </div>
               </div>
             </div>
