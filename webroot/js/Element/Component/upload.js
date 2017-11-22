@@ -19,7 +19,6 @@ Vue.component('attachment-upload', {
     settings: Object,
   },
   created: function(){
-    console.log('two',this.aid);
     window.aEventHub[this.aid].$on('show-upload',this.showUpload);
   },
   methods: {

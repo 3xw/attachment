@@ -19,7 +19,6 @@ Vue.component('attachment-trumbowyg',{
   created: function(){
     if(window.aEventHub[this.aid] == undefined){
       window.aEventHub[this.aid] = new Vue();
-      console.log('one',this.aid);
     }
 
     window.aEventHub[this.aid].$on('browse-closed', this.openOptions);
