@@ -71,6 +71,11 @@
           <!-- SEARCH -->
           <button type="button" class="btn btn-fill btn-success" @click.prevent="find()"><i class="fa fa-search" aria-hidden="true"></i> Chercher</button>
 
+          <span class="pull-right">
+            <button type="button" class="btn btn-fill btn-default btn-xs" @click.prevent="$parent.listStyle = false"><i class="fa fa-th active" aria-hidden="true"></i></button>
+            <button type="button" class="btn btn-fill btn-default btn-xs" @click.prevent="$parent.listStyle = true"><i class="fa fa-list" aria-hidden="true"></i></button>
+          </span>
+
         </div>
       </div>
     </div>

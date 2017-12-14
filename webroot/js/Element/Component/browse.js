@@ -9,6 +9,7 @@ Vue.component('attachment-browse', {
       files: [],
       ids: [],
       loading: true,
+      listStyle: false,
       pagination: {
         "page_count": 1,
         "current_page": 1,

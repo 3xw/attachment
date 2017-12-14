@@ -1,6 +1,7 @@
 Vue.component('attachment-files-index',{
   template: '#attachment-files-index',
   props: {
+    listStyle: false,
     settings: {
       type: Object,
       required: true,
