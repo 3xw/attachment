@@ -1,8 +1,8 @@
 <!-- input -->
 <script type="text/x-template" id="attachment-trumbowyg">
-  <div class="input form-group">
+  <div class="input form-group" >
     <label>{{settings.label}}</label>
-    <div class="attachment-trumbowyg">
+    <div class="attachment-trumbowyg" :class="settings.class">
 
       <!-- upload -->
       <attachment-upload :aid="aid" :settings.sync="settings" ></attachment-upload>
