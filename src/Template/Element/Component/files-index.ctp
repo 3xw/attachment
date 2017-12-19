@@ -7,7 +7,7 @@
 
 
       <!-- list option -->
-      <div class="col-xs-12">
+      <div class="col-12">
         <table v-if="listStyle" class="table table-bordered table-striped table-condensed table-hover" >
           <tr>
             <th></th>
@@ -53,7 +53,7 @@
       </div>
 
       <!-- thumb option -->
-      <div v-if="!listStyle" v-for="(index, file) in files" :id="index"  class="attachment-files__item col-xs-4 col-md-3 col-lg-2">
+      <div v-if="!listStyle" v-for="(index, file) in files" :id="index"  class="attachment-files__item col-4 col-md-3 col-lg-2">
         <div class="thumbnail" >
 
           <!-- thumb -->

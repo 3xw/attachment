@@ -23,9 +23,10 @@
           </div>
 
           <!-- file list -->
-          <div v-if="!loading" class="row" >
+          <div v-if="!loading" class="row">
+
             <!-- list option -->
-            <div class="col-xs-12">
+            <div class="col-12">
               <table v-if="listStyle" class="table table-bordered table-striped table-condensed table-hover">
                 <!-- row -->
                 <tr>
