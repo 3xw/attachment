@@ -24,7 +24,45 @@
 
           <!-- file list -->
           <div v-if="!loading" class="row" >
-            <div v-for="(file, index) in files" :id="index"  class="attachment-files__item col-6 col-sm-4 col-md-3 col-lg-2">
+            <!-- list option -->
+            <div class="col-xs-12">
+              <table v-if="listStyle" class="table table-bordered table-striped table-condensed table-hover">
+                <!-- row -->
+                <tr>
+                  <th></th>
+                  <th><?= __('Name') ?></th>
+                  <th><?= __('Size') ?></th>
+                  <th><?= __('Created') ?></th>
+                  <th><?= __('Actions') ?></th>
+                </tr>
+                <tr v-for="(index, file) in files" :id="index">
+                  <td>
+                    <span v-html="$options.filters.icon(file.type+'/'+file.subtype)"></span>
+                  </td>
+                  <td>
+                    {{file.name}}
+                  </td>
+                  <td>
+                    {{file.size | bytesToMegaBytes | decimal 2 }} MB
+                  </td>
+                  <td>
+                    {{file.created}}
+                  </td>
+                  <td>
+                    <div class="btn-group">
+                      <!-- data -->
+                      <a class="btn btn-fill btn-xs btn-success" role="button" @click="getFullLink(index)" > <?= __('Show Link') ?> </a>
+                      <a v-if="!isSelected(file.id)" href="#" class="btn btn-xs btn-fill btn-info" role="button" @click="add(index)" >Ajouter</a>
+                      <a v-if="isSelected(file.id)" href="#" class="btn btn-xs btn-fill btn-warning" role="button" @click="remove(file.id)" >Enlever</a>
+                    </div>
+                  </td>
+
+                </tr>
+              </table>
+            </div>
+
+            <!-- thumb option -->
+            <div v-if="!listStyle"  v-for="(file, index) in files" :id="index"  class="attachment-files__item col-6 col-sm-4 col-md-3 col-lg-2">
               <div class="card mb-4" >
 
                 <!-- thumb -->

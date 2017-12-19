@@ -23,7 +23,7 @@
     </div>
 
     <!-- files index -->
-    <attachment-files-index :aid="aid" :settings="settings" :files="files"></attachment-files-index>
+    <attachment-files-index :aid="aid" :settings="settings" :files="files" :list-style="listStyle"></attachment-files-index>
 
     <!-- pagination -->
     <attachment-pagination :pagination="pagination" :callback="getFiles" :settings="settings"></attachment-pagination>

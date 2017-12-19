@@ -16,62 +16,35 @@
         </h4>
       </div>
       <div class="card-body">
-        <div class="form-inline">
-
-          <!-- tags -->
-          <!--
-          <div class="form-group">
-            <div class="input-group">
-              <span class="input-group-addon" id="basic-addon1">#</span>
-              <select class="form-control" id="tagsInputSearch" placeholder="<?= __d('Attachment','tag') ?>" ></select>
-            </div>
-          </div>
-          -->
+        <div class="row no-gutters" >
 
           <!-- serach -->
-          <div class="form-group">
+          <div class="col">
             <div class="input-group">
               <span class="input-group-addon" id="basic-addon1">?</span>
               <input type="text" class="form-control" id="searchInputSearch" placeholder="<?= __d('Attachment','file name or title') ?>">
             </div>
           </div>
 
-          <!-- TYPES -->
-          <!--
-          <div class="form-group">
-            <div class="dropdown">
-              <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" >
-                Afficher les
-                <span class="caret"></span>
-              </button>
-              <ul class="dropdown-menu" >
-                <li v-for="(type, index) in types"><a href="#">{{type}}</a></li>
-              </ul>
-            </div>
-          </div>
-          -->
-
-          <!-- SORT -->
-          <!--
-          <div class="form-group">
-            <div class="dropdown">
-              <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" >
-                Ordonner par
-                <span class="caret"></span>
-              </button>
-              <ul class="dropdown-menu" >
-                <li><a @click="sortHandler('name','nom')">nom</a></li>
-                <li><a @click="sortHandler('created','date de création')">date de création</a></li>
-                <li><a @click="sortHandler('subtype','type')">type</a></li>
-              </ul>
-            </div>
-          </div>
-          -->
-
           <!-- SEARCH -->
-          <button type="button" class="btn btn-fill btn-success" @click.prevent="find()"><i class="fa fa-search" aria-hidden="true"></i> <?= __d('Attachment','Search') ?></button>
+          <div class="col">
+            <button type="button" class="btn btn-fill btn-success" @click.prevent="find()"><i class="fa fa-search" aria-hidden="true"></i> <?= __d('Attachment','Search') ?></button>
+          </div>
+
+          <!-- view mode -->
+          <div class="col ml-auto text-right">
+            <div class="btn-group">
+              <button type="button" class="btn btn-fill btn-secondary" @click.prevent="$parent.listStyle = false">
+                <i class="material-icons">view_module</i>
+              </button>
+              <button type="button" class="btn btn-fill btn-secondary" @click.prevent="$parent.listStyle = true">
+                <i class="material-icons">view_list</i>
+              </button>
+            </div>
+          </div>
 
         </div>
+
       </div>
     </div>
   </div>

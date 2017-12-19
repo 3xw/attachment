@@ -12,6 +12,7 @@ Vue.component('attachment-browse', {
       show: false,
       tags: [],
       types: [],
+      listStyle: false,
       pagination: {
         "page_count": 1,
         "current_page": 1,
