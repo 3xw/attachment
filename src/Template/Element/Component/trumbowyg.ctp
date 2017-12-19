@@ -14,7 +14,7 @@
       <attachment-trumbowyg-options :aid="aid" :settings.sync="settings" :file.sync="file" ></attachment-trumbowyg-options>
 
       <!-- trumbowyg -->
-      <textarea :aid="aid" :name="settings.field" v-bind:class="settings.uuid">{{settings.content}}</textarea>
+      <textarea :aid="aid" :name="$options.filters.inputName(settings.field)" v-bind:class="settings.uuid">{{settings.content}}</textarea>
 
     </div>
   </div>

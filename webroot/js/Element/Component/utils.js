@@ -11,6 +11,10 @@ Vue.directive('sortable', function (el, binding) {
 
 /* FILTERS
 *******************************/
+Vue.filter('inputName', function (input) {
+  return input.split('.').reduce((o,i)=>o+'['+i+']');
+});
+
 Vue.filter('bytesToMegaBytes', function (input) {
   return input / 1024 / 1024;
 });
