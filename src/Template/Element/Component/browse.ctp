@@ -44,7 +44,7 @@
                     {{file.name}}
                   </td>
                   <td>
-                    {{file.size | bytesToMegaBytes | decimal 2 }} MB
+                    {{file.size | bytesToMegaBytes | decimal(2) }} MB
                   </td>
                   <td>
                     {{file.created}}

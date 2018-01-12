@@ -25,7 +25,7 @@
               {{file.name}}
             </td>
             <td>
-              {{file.size | bytesToMegaBytes | decimal 2 }} MB
+              {{file.size | bytesToMegaBytes | decimal(2) }} MB
             </td>
             <td>
               {{file.created}}
@@ -63,7 +63,7 @@
 
             <!-- infos -->
             {{file.name | truncate 15 }}<br/>
-            {{file.size | bytesToMegaBytes | decimal 2 }} MB<br/>
+            {{file.size | bytesToMegaBytes | decimal(2) }} MB<br/>
 
             <!-- buttons -->
             <div class="btn-group">
