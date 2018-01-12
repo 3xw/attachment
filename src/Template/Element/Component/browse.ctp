@@ -36,7 +36,7 @@
                   <th><?= __('Created') ?></th>
                   <th><?= __('Actions') ?></th>
                 </tr>
-                <tr v-for="(index, file) in files" :id="index">
+                <tr v-for="(file, index) in files" :id="'file-'+index">
                   <td>
                     <span v-html="$options.filters.icon(file.type+'/'+file.subtype)"></span>
                   </td>
@@ -52,9 +52,10 @@
                   <td>
                     <div class="btn-group">
                       <!-- data -->
-                      <a class="btn btn-fill btn-xs btn-success" role="button" @click="getFullLink(index)" > <?= __('Show Link') ?> </a>
-                      <a v-if="!isSelected(file.id)" href="#" class="btn btn-xs btn-fill btn-info" role="button" @click="add(index)" >Ajouter</a>
-                      <a v-if="isSelected(file.id)" href="#" class="btn btn-xs btn-fill btn-warning" role="button" @click="remove(file.id)" >Enlever</a>
+                      <a v-if="from == 'input'" v-show="!isSelected(file.id)" href="#" class="btn btn-xs btn-fill btn-info" role="button" @click="add(index);"  ><?= __d('Attachment','Add') ?></a>
+                      <a v-if="from == 'trumbowyg'" v-show="!isSelected(file.id)" href="#" class="btn btn-xs btn-fill btn-info" role="button" @click="trumbAdd(file);"  ><?= __d('Attachment','Add') ?></a>
+
+                      <a v-show="isSelected(file.id)" href="#" class="btn btn-xs btn-fill btn-warning" role="button" @click="remove(file.id)" ><?= __d('Attachment','Remove') ?></a>
                     </div>
                   </td>
 

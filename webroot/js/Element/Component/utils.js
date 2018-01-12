@@ -40,22 +40,23 @@ Vue.filter('icon', function (input) {
     case input == 'image/jpeg':
     case input == 'image/png':
     case input == 'image/gif':
-    return '<i class="fa fa-file-image-o" aria-hidden="true"></i>';
+    return '<i class="material-icons">photo</i>';
     break;
     case input.lastIndexOf('embed') != -1:
-    return '<i class="fa fa-file-code-o" aria-hidden="true"></i>';
+    return '<i class="material-icons">code</i>';
     break;
     case input == 'application/pdf':
-    return '<i class="fa fa-file-pdf-o" aria-hidden="true"></i>';
+    return '<i class="material-icons">picture_as_pdf</i>';
     break;
     case input == 'video/mp4':
     case input == 'video/ogg':
-    return '<i class="fa fa-file-video-o" aria-hidden="true"></i>';
+    return '<i class="material-icons">videocam</i>';
     break;
     case input == 'audio/mp3':
     case input == 'audio/ogg':
-    return '<i class="fa fa-file-audio-o" aria-hidden="true"></i>';
+    return '<i class="material-icons">audiotrack</i>';
     break;
+    /*
     case input == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
     return '<i class="fa fa-file-excel-o" aria-hidden="true"></i>';
     break;
@@ -65,8 +66,9 @@ Vue.filter('icon', function (input) {
     case input == 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
     return '<i class="fa fa-file-powerpoint-o" aria-hidden="true"></i>';
     break;
+    */
     default:
-    return '<i class="fa fa-file-o" aria-hidden="true"></i>';
+    return '<i class="material-icons">insert_drive_file</i>';
   }
 });
 

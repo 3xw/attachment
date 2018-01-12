@@ -17,7 +17,7 @@
             <th><?= __('Actions') ?></th>
           </tr>
           <!-- row -->
-          <tr v-for="(index, file) in files" :id="index">
+          <tr v-for="(file, index) in files" :id="index">
             <td>
               <span v-html="$options.filters.icon(file.type+'/'+file.subtype)"></span>
             </td>
