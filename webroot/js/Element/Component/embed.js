@@ -88,9 +88,9 @@ Vue.component('attachment-embed', {
             }
           }
           //self.settings.attachments.push(response.data);
-          window.aEventHub[this.aid].$emit('add-file', response.data);
+          window.aEventHub[self.aid].$emit('add-file', response.data);
           self.close();
-          window.aEventHub[this.aid].$emit('embed-finished');
+          window.aEventHub[self.aid].$emit('embed-finished');
         },
         error: function(response){
           var message = response.statusText;

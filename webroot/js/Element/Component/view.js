@@ -3,20 +3,19 @@ Vue.component('attachment-view', {
   data: function(){
     return {
       file: {},
+      show: false
     };
   },
   props: {
     aid:String,
     settings: Object,
-    show: {
-      type: Boolean,
-      default: false
-    },
   },
   created: function(){
+    var instance = this;
     window.aEventHub[this.aid].$on('view-file',function(file) {
-      this.file = file;
-      this.open();
+      console.log(file);
+      instance.file = file;
+      instance.open();
     });
   },
   methods: {

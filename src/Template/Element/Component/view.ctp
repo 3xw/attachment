@@ -11,7 +11,7 @@
           <div>
 
             <!-- url -->
-            <p v-if="file | isNotEmbed">
+            <p v-if="$options.filters.isNotEmbed(file)">
               <?= __d('Attachment','Url') ?>: {{settings.baseUrls[file.profile]}}{{file.path}}
             </p>
 
@@ -21,12 +21,10 @@
             </p>
 
             <!-- embed -->
-            <div v-if="file | isEmbed">
-              {{file.embed}}
-            </div>
+            <div v-if="$options.filters.isEmbed(file)" v-html="file.embed"></div>
 
             <!-- thumb -->
-            <img v-if="file | isNiceImage" v-bind:src="settings.url+'thumbnails/'+file.profile+'/w1200/'+file.path" class="img-fluid" />
+            <img v-if="$options.filters.isNiceImage(file)" v-bind:src="settings.url+'thumbnails/'+file.profile+'/w1200/'+file.path" class="img-fluid" />
           </div>
 
         </div>

@@ -61,6 +61,8 @@ Vue.component('attachment-index',{
       window.aEventHub[this.aid].$emit('edit-file',this.files[index]);
     },
     showViewFile:function(index) {
+      console.log(index);
+      console.log(this.files[index]);
       window.aEventHub[this.aid].$emit('view-file',this.files[index]);
     },
     editProgress: function(){

@@ -15,13 +15,13 @@ Vue.component('attachment-edit', {
     settings: Object,
   },
   created: function(){
-    window.aEventHub[this.aid].$on('edit-file', this.editFile);
+    var instance = this;
+    window.aEventHub[this.aid].$on('edit-file',function(file){
+      instance.file = file;
+      instance.open();
+    });
   },
   methods: {
-    editFile: function(file){
-      this.file = file;
-      this.open();
-    },
     close: function(){
       this.show = false;
       this.errors = [];

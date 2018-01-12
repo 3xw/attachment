@@ -43,11 +43,11 @@
     <!-- add btn -->
     <p>
       <div v-if="settings.actions.indexOf('add') != -1" class="btn-group" data-intro="Ajouter des médias à l'aide de ces boutons" data-position="right">
-        <button type="button" class="btn btn-fill btn-xs btn-info" @click="dispatch('show-upload')">
+        <button type="button" class="btn btn-fill btn-xs btn-info" @click="dispatch('show-upload',aid)">
           <i class="fa fa-cloud-upload" aria-hidden="true"></i>
           <?= __d('Attachment','Upload') ?>
         </button>
-        <button v-if="dispalyEmbed()" type="button" class="btn btn-fill btn-xs btn-info" @click="dispatch('show-embed')">
+        <button v-if="dispalyEmbed()" type="button" class="btn btn-fill btn-xs btn-info" @click="dispatch('show-embed',aid)">
           <i class="fa fa-code" aria-hidden="true"></i>
         <?= __d('Attachment','Add an embed code') ?>
         </button>
