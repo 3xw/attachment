@@ -53,7 +53,7 @@
       </div>
 
       <!-- thumb option -->
-      <div v-if="!listStyle" v-for="(index, file) in files" :id="index"  class="attachment-files__item col-4 col-md-3 col-lg-2">
+      <div v-if="!listStyle" v-for="(file, index) in files" :id="index"  class="attachment-files__item col-4 col-md-3 col-lg-2">
         <div class="thumbnail" >
 
           <!-- thumb -->
@@ -62,7 +62,7 @@
           <div class="caption">
 
             <!-- infos -->
-            {{file.name | truncate 15 }}<br/>
+            {{file.name | truncate(15) }}<br/>
             {{file.size | bytesToMegaBytes | decimal(2) }} MB<br/>
 
             <!-- buttons -->
