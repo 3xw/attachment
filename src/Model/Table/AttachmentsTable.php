@@ -9,6 +9,7 @@ use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use Search\Manager;
 use Cake\Core\Configure;
+use Attachment\Model\Rule\ExternalUrlIsValideRule;
 
 /**
 * Attachments Model
@@ -40,6 +41,9 @@ class AttachmentsTable extends Table
     $this->addBehavior('Timestamp');
 
     // custom behaviors
+    $this->addBehavior('Attachment.External');
+
+
     $this->addBehavior('Attachment.Embed', [
       'embed_field' => 'embed',
       'file_field' => 'path'
@@ -195,7 +199,6 @@ class AttachmentsTable extends Table
       ->notEmpty('md5');
     }
 
-
     $validator
     ->allowEmpty('profile');
 
@@ -222,5 +225,14 @@ class AttachmentsTable extends Table
     ->allowEmpty('embed');
 
     return $validator;
+  }
+
+  public function externalUrlIsValide($value, array $context)
+  {
+    $rules->add(new ExternalUrlIsValideRule(), 'externalUrlIsValide',[
+      'errorField' => 'path',
+      'message' => 'Invalide url, the response status is not 200!'
+    ]);
+    return $rules;
   }
 }
