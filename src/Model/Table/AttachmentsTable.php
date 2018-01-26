@@ -43,7 +43,6 @@ class AttachmentsTable extends Table
     // custom behaviors
     $this->addBehavior('Attachment.External');
 
-
     $this->addBehavior('Attachment.Embed', [
       'embed_field' => 'embed',
       'file_field' => 'path'
@@ -125,7 +124,7 @@ class AttachmentsTable extends Table
 
     if (!isset($options['associated']))
     {
-        $options['associated'] = $this->_associations->keys();
+      $options['associated'] = $this->_associations->keys();
     }
     $marshaller = $this->marshaller();
     $entity = $marshaller->merge($entity, $data, $options);
@@ -185,7 +184,7 @@ class AttachmentsTable extends Table
     ->integer('height')
     ->allowEmpty('height');
 
-    // MD% Uique
+    // MD5 Uique
     if(Configure::check('Attachment.md5Unique') )
     {
       $validator
@@ -219,7 +218,12 @@ class AttachmentsTable extends Table
     ->allowEmpty('copyright');
 
     $validator
-    ->allowEmpty('path');
+    ->allowEmpty('path')
+    ->add('path', 'externalUrlValide', [
+      'rule' => 'externalUrlIsValide',
+      'message' => __('You need to provide a valid url'),
+      'provider' => 'table',
+    ]);
 
     $validator
     ->allowEmpty('embed');
@@ -229,10 +233,11 @@ class AttachmentsTable extends Table
 
   public function externalUrlIsValide($value, array $context)
   {
-    $rules->add(new ExternalUrlIsValideRule(), 'externalUrlIsValide',[
-      'errorField' => 'path',
-      'message' => 'Invalide url, the response status is not 200!'
-    ]);
-    return $rules;
+    if (!empty($value) && substr($value, 0, 4) == 'http')
+    {
+      $headers = get_headers($value,1);
+      if(substr($headers[0], 9, 3) != 200) return false;
+    }
+    return true;
   }
 }
