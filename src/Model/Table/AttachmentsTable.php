@@ -39,6 +39,8 @@ class AttachmentsTable extends Table
     $this->addBehavior('Timestamp');
 
     // custom behaviors
+    $this->addBehavior('Attachment.External');
+
     $this->addBehavior('Attachment.Embed', [
       'embed_field' => 'embed',
       'file_field' => 'path'
@@ -185,11 +187,26 @@ class AttachmentsTable extends Table
     ->allowEmpty('copyright');
 
     $validator
-    ->allowEmpty('path');
+    ->allowEmpty('path')
+    ->add('path', 'externalUrlValide', [
+      'rule' => 'externalUrlIsValide',
+      'message' => __('You need to provide a valid url'),
+      'provider' => 'table',
+    ]);
 
     $validator
     ->allowEmpty('embed');
 
     return $validator;
+  }
+
+  public function externalUrlIsValide($value, array $context)
+  {
+    if (!empty($value) && substr($value, 0, 4) == 'http')
+    {
+      $headers = get_headers($value,1);
+      if(substr($headers[0], 9, 3) != 200) return false;
+    }
+    return true;
   }
 }
