@@ -53,7 +53,7 @@ Vue.component('attachment-files',{
       }
     },
     order: function(evt){
-      var index = this.ids.indexOf(evt.item.id);
+      var index = this.ids.indexOf(parseInt(evt.item.id));
       if(index != -1){
         var file = this.files[index];
         this.files.splice(evt.oldIndex,1);
