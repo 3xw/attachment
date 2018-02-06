@@ -52,15 +52,23 @@ Vue.component('attachment-files',{
         window.aEventHub[this.aid].$emit('remove-file-id', id);
       }
     },
+    move: function (array, old_index, new_index) {
+        if (new_index >= array.length) {
+            var k = new_index - array.length;
+            while ((k--) + 1) {
+                array.push(undefined);
+            }
+        }
+        array.splice(new_index, 0, array.splice(old_index, 1)[0]);
+    },
     order: function(evt){
-      var index = this.ids.indexOf(parseInt(evt.item.id));
-      if(index != -1){
-        var file = this.files[index];
-        this.files.splice(evt.oldIndex,1);
-        this.files.splice(evt.newIndex,0,file);
-        this.ids.splice(evt.oldIndex,1);
-        this.ids.splice(evt.newIndex,0,file.id);
-      }
+      this.move(this.ids,evt.oldIndex,evt.newIndex);
+      var file = this.files[evt.oldIndex];
+      this.files.splice(evt.oldIndex,1);
+
+      // hardcore solution...
+      var self = this;
+      setTimeout(function(){ self.files.splice(parseInt(evt.newIndex),0,file); }, 100);
     }
   }
 });
