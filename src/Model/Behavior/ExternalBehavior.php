@@ -14,12 +14,13 @@ class ExternalBehavior extends Behavior
 {
   public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options)
   {
-    if (!empty($data['path']) && substr($data['path'], 0, 4) == 'http')
+    if (!empty($data['path']) && substr($data['path'], 0, 4) == 'http' && empty($data['md5']))
     {
+      $data['path'] = str_replace(' ','%20',$data['path']);
       $headers = get_headers($data['path'],1);
       if(substr($headers[0], 9, 3) != 200) return;
       $pathPieces = explode('/',$data['path']);
-      $data['name'] = empty($data['name'])? array_pop($pathPieces): $data['name'];
+      $data['name'] = empty($data['name'])? urldecode(array_pop($pathPieces)): $data['name'];
       $data['type'] = explode('/',$headers['Content-Type'])[0];
       $data['subtype'] = explode('/',$headers['Content-Type'])[1];
       $data['md5'] = md5($data['path']);
