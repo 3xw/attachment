@@ -16,10 +16,11 @@ class ExternalBehavior extends Behavior
   {
     if (!empty($data['path']) && substr($data['path'], 0, 4) == 'http' && empty($data['md5']))
     {
-      $data['path'] = str_replace(' ','%20',$data['path']);
+      // urlencode if needed
       $pathPieces = explode('/',$data['path']);
       $fileName = array_pop($pathPieces);
-      $data['path'] = implode('/',$pathPieces).'/'.urlencode($fileName);
+      $data['path'] = implode('/',$pathPieces).'/';
+      $data['path'] .= (strpos($fileName,'%') === false )? urlencode($fileName): $fileName;
 
       $headers = get_headers($data['path'],1);
       if(substr($headers[0], 9, 3) != 200) return;
