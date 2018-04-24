@@ -4,15 +4,17 @@ use Cake\Routing\Router;
 
 // set thumbnails route
 Router::connect('/thumbnails/*', ['plugin' => 'Attachment', 'controller' => 'Resize', 'action' => 'proceed']);
-// protect from direct access
-Router::redirect('/attachment/resize/*', '/');
 
 // set plugin stuff : )
 Router::plugin(
     'Attachment',
     ['path' => '/attachment'],
-    function (RouteBuilder $routes) {
-      $routes->extensions(['json']);
+    function (RouteBuilder $routes)
+    {
+      // protect from direct access
+      $routes->redirect('/resize/*', '/');
+
+      $routes->setExtensions(['json']);
       $routes->fallbacks('DashedRoute');
     }
 );
