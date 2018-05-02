@@ -180,7 +180,8 @@ Exemple of settings:
 	          ['viewHTML'],['media'],['formatting'],'btnGrp-semantic',['superscript', 'subscript'],
 	          ['link'],'btnGrp-justify','btnGrp-lists',['horizontalRule'],['removeformat'],['foreColor', 'backColor'],['fullscreen']
 	        ],
-	        'resetCss' => true, 'removeformatPasted'=> true, 'autogrow'=> true
+	        'resetCss' => true, 'removeformatPasted'=> false, 'autogrow'=> true,
+	        'customPlugins' => ['cleanpaste' => 'Attachment.vendor/3xw/trumbowyg.cleanpaste.js']
 	      ]
 	    ],
 
