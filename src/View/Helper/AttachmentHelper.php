@@ -169,43 +169,51 @@ class AttachmentHelper extends Helper
     }
   }
 
-  private function _createTrumbowygUrl($value, $plugins, &$js, &$css)
+  private function _createTrumbowygUrl($value, $plugins, $version, &$js, &$css)
   {
     if(is_string($value)){
       if($value == 'foreColor' || $value == 'backColor'){ $value = 'colors'; }
-      if($value == 'colors'){$css[] = 'https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.6.0/plugins/colors/ui/trumbowyg.colors.min.css';}
+      if($value == 'colors'){$css[] = 'https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/'.$version.'/plugins/colors/ui/trumbowyg.colors.min.css';}
       if(array_search($value, $plugins) !== false ){
-        $js[] = "https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.6.0/plugins/$value/trumbowyg.$value.min.js";
+        $js[] = 'https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/'.$version.'/plugins/'.$value.'/trumbowyg.'.$value.'.min.js';
       }
     }
 
     if(is_array($value)){
       foreach($value as $v ){
-        $this->_createTrumbowygUrl($v, $plugins, $js, $css);
+        $this->_createTrumbowygUrl($v, $plugins, $version, $js, $css);
       }
     }
   }
 
   private function _setTrumbowygComponent($settings)
   {
+    $version = $settings['trumbowyg']['version'];
+
     $this->_View->append('template', $this->_View->element('Attachment.Component/trumbowyg-options'));
     $this->_View->append('template', $this->_View->element('Attachment.Component/trumbowyg'));
-    $css = ['https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.6.0/ui/trumbowyg.min.css'];
+    $css = ['https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/'.$version.'/ui/trumbowyg.min.css'];
     $js = [
-      'https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.6.0/trumbowyg.min.js',
-      'https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.6.0/langs/'.$settings['trumbowyg']['lang'].'.min.js',
+      'https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/'.$version.'/trumbowyg.min.js',
+      'https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/'.$version.'/langs/'.$settings['trumbowyg']['lang'].'.min.js',
       'Attachment.Element/Component/trumbowyg-plugin-upload.js'.$this->getVersion(),
       'Attachment.Element/Component/trumbowyg-plugin-browse.js'.$this->getVersion(),
       'Attachment.Element/Component/trumbowyg.js'.$this->getVersion(),
       'Attachment.Element/Component/trumbowyg-options.js'.$this->getVersion()
     ];
 
+    if(!empty($settings['trumbowyg']['customPlugins'])){
+      foreach($settings['trumbowyg']['customPlugins'] as $name => $url){
+        $js[] = $url.$this->getVersion();
+      }
+    }
+
     $plugins = ['base64','cleanpaste','colors','emoji','insertaudio','noembed','pasteimage','preformatted','table','template'];
 
-    foreach($settings['trumbowyg']['btns'] as $btn){ $this->_createTrumbowygUrl($btn, $plugins, $js, $css); }
+    foreach($settings['trumbowyg']['btns'] as $btn){ $this->_createTrumbowygUrl($btn, $plugins, $version, $js, $css); }
     if(!empty($settings['trumbowyg']['btnsDef'])){
       foreach($settings['trumbowyg']['btnsDef'] as $btn){
-        if(array_key_exists('dropdown', $btn)){$this->_createTrumbowygUrl($btn['dropdown'], $plugins, $js, $css);}
+        if(array_key_exists('dropdown', $btn)){$this->_createTrumbowygUrl($btn['dropdown'], $plugins, $version, $js, $css);}
       }
     }
 

@@ -57,6 +57,7 @@ return [
 
       // trumbowyg settings
       'trumbowyg' => [
+        'version' => '2.10.0',
         'svgPath' => '/attachment/icons/icons.svg',
         'lang'=>'fr',
         'btnsDef'=> [
@@ -66,7 +67,7 @@ return [
           ['viewHTML'],['media'],['formatting'],'btnGrp-semantic',['superscript', 'subscript'],
           ['link'],'btnGrp-justify','btnGrp-lists',['horizontalRule'],['removeformat'],['foreColor', 'backColor'],['fullscreen']
         ],
-        'resetCss' => true, 'removeformatPasted'=> true, 'autogrow'=> true,
+        'resetCss' => true, 'removeformatPasted'=> false, 'autogrow'=> true,
         'imageOptions' => [
           'align' => [
             '' => 'ne pas toucher',
@@ -75,7 +76,8 @@ return [
             'img-center' => 'centré'
           ],
           'classes' => true, 'altTitle' => true, 'width' => true, 'crop' => true
-        ]
+        ],
+        'customPlugins' => ['cleanpaste' => 'Attachment.vendor/3xw/trumbowyg.cleanpaste.js']
       ]
     ],
 
