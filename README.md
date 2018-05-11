@@ -317,7 +317,7 @@ In add.ctp
 		    	Attachment\View\Helper\AttachmentHelper::TAG_RESTRICTED,
 		    	Attachment\View\Helper\AttachmentHelper::TYPES_RESTRICTED
 		  	],
-		  	'attachments' => [] // array of exisiting Attachment entities ( HABTM ) or entity ( belongsTo )
+		  	'attachments' => [] // array of exisiting Attachment entities ( HABTM ) or [entity] ( belongsTo )
 		]
 	) ?>
 
@@ -397,7 +397,7 @@ in file
 1) Attachment plugin provides a usefull shell script to retrieve width and height of images
 
 	bin/cake Attachment.GetImageSizes
-	
+
 2) CReate missing attachment transaltions for loacle:
 
 	bin/cake CreateMissingTranslations en_GB de_CH ...
