@@ -255,8 +255,9 @@ class AttachmentHelper extends Helper
 
   public function input($field, $settings = [])
   {
-    $settings['relation'] = ($field == 'Attachments')? 'belongsToMany' : 'belongsTo';
-    $settings['field'] = ($field == 'Attachments')? '' : $field;
+    $conf['relation'] = ($field == 'Attachments')? 'belongsToMany' : 'belongsTo';
+    $conf['field'] = ($field == 'Attachments')? '' : $field;
+    $settings = array_merge($conf,$settings);
     $this->_setupInputComponent();
 
     return "<attachment-input :aid='\"".Text::uuid()."\"' :settings='".htmlspecialchars(json_encode($this->_getSettings($field,$settings)), ENT_QUOTES, 'UTF-8')."' ></attachment-input>";

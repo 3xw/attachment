@@ -24,7 +24,7 @@ Trait SessionRestrictionTrait {
           if (class_exists($restriction))
           {
             $restriction = new $restriction;
-            $restriction->process($this->query(), $settings);
+            $restriction->process($this->getQuery(), $settings);
           }
         }
 
