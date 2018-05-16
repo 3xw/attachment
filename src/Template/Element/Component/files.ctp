@@ -9,7 +9,7 @@
     <input v-if="settings.relation != 'belongsToMany'" type="hidden" :name="settings.field" value="0">
 
     <div class="row" v-sortable="{draggable:'.attachment-files__item', onEnd:order}" >
-      <div v-for="(file, index) in files" :id="file.id"  class="attachment-files__item" v-bind:class="settings.cols">
+      <div v-for="(file, index) in files" :id="file.id"  class="attachment-files__item" v-bind:class="settings.cols" :key="file.id">
         <div class="card mb-4" >
 
           <!-- thumb -->

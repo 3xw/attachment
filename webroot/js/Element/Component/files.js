@@ -62,13 +62,11 @@ Vue.component('attachment-files',{
         array.splice(new_index, 0, array.splice(old_index, 1)[0]);
     },
     order: function(evt){
+
       this.move(this.ids,evt.oldIndex,evt.newIndex);
       var file = this.files[evt.oldIndex];
       this.files.splice(evt.oldIndex,1);
-
-      // hardcore solution...
-      var self = this;
-      setTimeout(function(){ self.files.splice(parseInt(evt.newIndex),0,file); }, 100);
+      this.files.splice(parseInt(evt.newIndex),0,file);
     }
   }
 });
