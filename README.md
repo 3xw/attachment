@@ -387,6 +387,23 @@ in file
 
 	<!-- Display an embed video  -->
 	<?= $post->attachments[0]->embed ?>
+	
+Url Only
+	
+	<?= $this->Attachment->thumbSrc([
+		'image' => $post->attachments[0]->path,
+		'profile' => $post->attachments[0]->profile,
+		'width' => '600',
+		'cropratio' => '16:9,
+		'quality' => 50, // from 0 to 100 ( default 25 in plugin's config file attachment.php )
+		'srcset' => [
+	      'lg' => [360,720],
+	      'md' => [293, 586],
+	      'sm' => [283, 566],
+	      'xs' => [767,1534],
+	    ]
+	]) ?>
+	
 
 ####Usage.view.download
 
