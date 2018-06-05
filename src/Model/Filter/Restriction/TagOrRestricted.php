@@ -12,9 +12,11 @@ class TagOrRestricted extends BaseRestriction
   {
     if(!empty($settings['atags']))
     {
-
-      $query->innerJoin(['AAtags' => 'attachments_atags'],['AAtags.attachment_id = Attachments.id']);
-      $query->innerJoin(['Atags' => 'atags'],['Atags.id = AAtags.atag_id']);
+      if(strpos($query->sql(), 'Atags') === false)
+      {
+        $query->innerJoin(['AA' => 'attachments_atags'],['AA.attachment_id = Attachments.id']);
+        $query->innerJoin(['Atags' => 'atags'],['Atags.id = AA.atag_id']);
+      }
 
       $where = ['OR' => []];
 
@@ -27,7 +29,6 @@ class TagOrRestricted extends BaseRestriction
           ]
         ]);
       }
-
       $query->where($where);
     }
   }
