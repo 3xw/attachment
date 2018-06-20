@@ -12,7 +12,7 @@
         "intervention/image": "^2.3",
         "cakephp/migrations": "@stable",
         "firebase/php-jwt": "^5.0",
-        "3xw/cakephp-utils":"^3.5"
+        "3xw/cakephp-utils":"dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "*"
