@@ -89,19 +89,25 @@ class EmbedBehavior extends Behavior
       }
 
       // extract only data we need!!
-      preg_match('/src="([^"]+)"/', $data[$embed_field], $match);
-      $src = $match[1];
+      $attributes = [
+        'frameborder' => '"0"'
+      ];
 
-      preg_match('/height="([^"]+)"/', $data[$embed_field], $match);
-      $height = $match[1];
+      $testAttributes = [
+        'src' => '/src="([^"]+)"/',
+        'height' => '/height="([^"]+)"/',
+        'width' => '/width="([^"]+)"/',
+        'scrolling' => '/scrolling="([^"]+)"/',
+        'allowfullscreen' => '/allowfullscreen="([^"]+)"/'
+      ];
 
-      preg_match('/width="([^"]+)"/', $data[$embed_field], $match);
-      $width = $match[1];
+      foreach($testAttributes as $key => $test){
+        preg_match($test, $data[$embed_field], $match);
+        if( !empty($match) && count($match > 1)) $attributes[$key] = "\"$match[1]\"";
+      }
 
-      preg_match('/scrolling="([^"]+)"/', $data[$embed_field], $match);
-      $scrolling = ( !empty($match) )? ' scrolling="'.$match[1].'" ' : '';
-
-      $data[$embed_field] = '<iframe src="'.$src.'" width="'.$width.'" height="'.$height.'" '.$scrolling.' frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>';
+      // replace with cleaned iframe
+      $data[$embed_field] = sprintf('<iframe %s></iframe>',http_build_query($attributes,'',' '));
 
       // md5
       $data['md5'] = md5($data[$embed_field]);
