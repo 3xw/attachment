@@ -55,21 +55,21 @@
         html = html.replace(/<!(?:--[\s\S]*?--\s*)?>\s*/g, '');
 
         // strip out &nbsp; -cgCraft
-        html = html.replace(/&nbsp;/gi, ' ');
+        //html = html.replace(/&nbsp;/gi, ' ');
         // strip out extra spaces -cgCraft
-        html = html.replace(/ <\//gi, '</');
+        //html = html.replace(/ <\//gi, '</');
 
-        while (html.indexOf('  ') !== -1) {
+        /*while (html.indexOf('  ') !== -1) {
             html = html.split('  ').join(' ');
-        }
+        }*/
 
         // strip &nbsp; -cgCraft
-        html = html.replace(/^\s*|\s*$/g, '');
+        //html = html.replace(/^\s*|\s*$/g, '');
 
         // Strip out unaccepted attributes
         html = html.replace(/<[^>]*>/g, function (match) {
             match = match.replace(/ ([^=]+)="[^"]*"/g, function (match2, attributeName) {
-                if (['alt', 'href', 'src', 'title'].indexOf(attributeName) !== -1) {
+                if (['alt', 'src', 'title'].indexOf(attributeName) !== -1) {
                     return match2;
                 }
                 return '';
@@ -83,7 +83,7 @@
         html = html.replace(/<\/[^ >]+:[^>]*>/g, '');
 
         // remove unwanted tags
-        html = html.replace(/<(div|span|style|meta|link|pclass|a).*?>/gi, '');
+        html = html.replace(/<(div|span|style|meta|link|pclass).*?>/gi, '');
 
         return html;
     }
