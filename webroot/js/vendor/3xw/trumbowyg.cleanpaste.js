@@ -66,10 +66,12 @@
         // strip &nbsp; -cgCraft
         //html = html.replace(/^\s*|\s*$/g, '');
 
+        html = html.replace(/<span style="font-weight: 900;">([\s\S]*?)<\/span>/g, '<strong>$1</strong>');
+
         // Strip out unaccepted attributes
         html = html.replace(/<[^>]*>/g, function (match) {
             match = match.replace(/ ([^=]+)="[^"]*"/g, function (match2, attributeName) {
-                if (['alt', 'src', 'title'].indexOf(attributeName) !== -1) {
+                if (['alt', 'href', 'src', 'title', 'target'].indexOf(attributeName) !== -1) {
                     return match2;
                 }
                 return '';
