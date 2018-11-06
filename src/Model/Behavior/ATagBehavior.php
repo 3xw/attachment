@@ -56,7 +56,7 @@ class ATagBehavior extends Behavior
     {
       foreach($sessionAttachment['restrictions'] as $restriction )
       {
-        if($restriction == 'tag_restricted')
+        if($restriction == 'tag_restricted' || $restriction == 'tag_or_restricted')
         {
           $isTagRestricted = true;
         }
