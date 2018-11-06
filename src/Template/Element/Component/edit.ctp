@@ -21,7 +21,7 @@
 
           <!-- TAGS -->
           <div id="attachment-atags" v-if="this.settings.restrictions.indexOf('tag_restricted') == -1">
-            <label ><?= __d('Attachment','Watch out') ?></label>
+            <label ><?= __d('Attachment','Tags') ?></label>
             <select name="atags" id="atagsinput" multiple class="form-control">
               <option
                 v-for="atag in file.atags"
@@ -47,6 +47,26 @@
               <div class="input text required">
                 <label for="embed"><?= __d('Attachment','Embed code') ?></label>
                 <textarea v-model="file.embed" name="embed" class="form-control attachment-embed__embed" id="embed" rows="5"></textarea>
+              </div>
+            </div>
+
+            <!-- IF !EMBED -->
+            <div v-if="file.type != 'embed'">
+              <div class="input text">
+                <label ><?= __d('Attachment','File') ?> </label>
+                <p>
+                  <!-- file select -->
+                  <button v-if="!fileToUpload" @click.prevent="select" role="button" class="btn btn-fill btn-xs btn-info"><?= __d('Attachment','Change file') ?></button>
+                  <input v-show="false" type="file" ref="fileInput" @change="validate($event)" :accept="settings.types.join()" />
+
+                  <!-- file info -->
+                  <div v-if="fileToUpload" class="alert alert-info" role="alert">
+                    <button type="button" class="close"  aria-label="Close" @click.prevent="select" >
+                      <span aria-hidden="true">&times; <?= __d('Attachment','Change') ?></span>
+                    </button>
+                    <strong><?= __d('Attachment','New file to upload') ?>:</strong> {{fileToUpload.name}}
+                  </div>
+                </p>
               </div>
             </div>
 

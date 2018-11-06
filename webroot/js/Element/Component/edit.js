@@ -6,6 +6,7 @@ Vue.component('attachment-edit', {
       loading: false,
       atags: [],
       file: {},
+      fileToUpload: null,
       errors: [],
       success: [] ,
     };
@@ -40,16 +41,39 @@ Vue.component('attachment-edit', {
         $('.attachment-locale-area ul a:first').tab('show');
       }
     },
-    edit: function(){
+    validate: function(event)
+    {
+      this.errors = errors = []
+      var file = event.target.files[0]
+
+      // test size
+      var size = file.size / 1024 / 1024 ;
+      if ( !(size > 0) || !(size <= this.settings.maxsize)) {
+        errors.push(file.name +  ' ce fichier est trop lourd. La taille max est de ' + this.settings.maxsize + 'MB.')
+      }
+      // test
+      if(this.settings.types.indexOf(file.type) === false || file.type == "" ){
+        errors.push(file.name +  ' ce type de fichier n\' est pas supporté.')
+      }
+      this.errors = errors;
+      if(this.errors.length == 0) this.fileToUpload = file
+    },
+    select: function()
+    {
+      this.unselect()
+      this.$refs.fileInput.click()
+    },
+    unselect: function()
+    {
+      this.fileToUpload = null
+      this.errors = []
+    },
+    edit: function()
+    {
       this.close();
       window.aEventHub[this.aid].$emit('edit-progress');
 
-      var options = {
-        headers:{
-          "Accept":"application/json",
-          "Content-Type":"application/json"
-        }
-      };
+      // start gather data
       this.file.uuid = this.settings.uuid;
       delete(this.file.date);
       delete(this.file.created);
@@ -66,7 +90,25 @@ Vue.component('attachment-edit', {
           this.file.atags[i] = {name: atags[i].trim()}
         }
       }
-      this.$http.post(this.settings.url+'attachment/attachments/edit/'+this.file.id+'.json', this.file,options)
+
+      // if new file...
+      if(this.fileToUpload)
+      {
+        this.file.path = this.fileToUpload;
+        delete(this.file.md5);
+        delete(this.file.profile);
+        delete(this.file.size);
+        delete(this.file.type);
+        delete(this.file.subtype);
+        delete(this.file.name);
+        delete(this.file.width);
+        delete(this.file.height);
+      }
+
+      var options = {headers:{"Accept":"application/json"}};
+      var formData = new FormData();
+      for( i in this.file ) if(this.file[i] != '' && this.file[i] != null) formData.append(i, this.file[i]);
+      this.$http.post(this.settings.url+'attachment/attachments/edit/'+this.file.id+'.json', formData,options)
       .then(this.editSuccessCallback, this.errorCallback);
       return this;
     },

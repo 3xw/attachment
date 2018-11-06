@@ -58,6 +58,7 @@ class FlyBehavior extends Behavior
   {
     $settings = $this->config();
     $field = $settings['file_field'];
+
     if (!empty($data[$field]) && is_array($data[$field])) {
 
       if ($data[$field]['error'] != 0)
@@ -98,6 +99,11 @@ class FlyBehavior extends Behavior
   {
     $settings = $this->config();
     $field = $settings['file_field'];
+    $orginalValues = $entity->extractOriginalChanged([
+      'path',
+      'profile',
+      'md5'
+    ]);
 
     if (isset($entity->{$field}))
     {
@@ -161,6 +167,13 @@ class FlyBehavior extends Behavior
           $dir = $this->_resolveDir($conf['dir'],$type,$subtype);
           $this->filesystem($profile)->createDir($dir);
           $name = $dir.DS.$name;
+        }
+
+        // delete old one exists
+        if(!empty($orginalValues['path']))
+        {
+          $oldProfile = empty($orginalValues['profile'])? $profile: $orginalValues['profile'];
+          $this->filesystem($oldProfile)->delete($orginalValues['path']);
         }
 
         // delete if exists
