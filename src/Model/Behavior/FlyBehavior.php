@@ -61,10 +61,10 @@ class FlyBehavior extends Behavior
 
     if (!empty($data[$field]) && is_array($data[$field])) {
 
-      if ($data[$field]['error'] != 0)
+      if ($data[$field]['error'] != UPLOAD_ERR_OK)
       {
-        unset($data[$field]);
-        return;
+        $event->stopPropagation();
+        return false;
       }
 
       // store file!

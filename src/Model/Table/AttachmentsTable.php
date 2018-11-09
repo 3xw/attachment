@@ -8,26 +8,11 @@ use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use Search\Manager;
 use Cake\Core\Configure;
+use Attachment\Http\Exception\UploadException;
 
-/**
-* Attachments Model
-*
-* @property \Cake\ORM\Association\BelongsToMany $Atags
-* @property \Cake\ORM\Association\BelongsToMany $Highlights
-* @property \Cake\ORM\Association\BelongsToMany $Paths
-* @property \Cake\ORM\Association\BelongsToMany $Visits
-*/
 class AttachmentsTable extends Table
 {
 
-  //use \Attachment\Model\Behavior\CustomTranslateTrait;
-
-  /**
-  * Initialize method
-  *
-  * @param array $config The configuration for the Table.
-  * @return void
-  */
   public function initialize(array $config)
   {
     parent::initialize($config);
@@ -192,6 +177,10 @@ class AttachmentsTable extends Table
       'rule' => 'externalUrlIsValide',
       'message' => __('You need to provide a valid url'),
       'provider' => 'table',
+    ])
+    ->add('path', 'uploadValide', [
+      'rule' => 'uploadIsValide',
+      'provider' => 'table',
     ]);
 
     $validator
@@ -207,6 +196,12 @@ class AttachmentsTable extends Table
       $headers = get_headers($value,1);
       if(substr($headers[0], 9, 3) != 200) return false;
     }
+    return true;
+  }
+
+  public function uploadIsValide($value, array $context)
+  {
+    if (!empty($value) && is_array($value) && $value['error'] !== UPLOAD_ERR_OK) throw new UploadException($value['error']);
     return true;
   }
 }

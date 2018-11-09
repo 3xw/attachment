@@ -33,17 +33,18 @@ class ValidationException extends BadRequestException
      * @param \Cake\ORM\Entity $entity Entity
      * @param int $code code to report to client
      */
-    public function __construct(Entity $entity, $code = 422)
+     public function __construct(Entity $entity, $code = 422)
     {
         $this->_validationErrors = array_filter((array)$entity->errors());
         $flat = Hash::flatten($this->_validationErrors);
         $this->_validationErrorCount = count($flat);
 
+        $this->message = '';
+
         $error_msg = [];
-        foreach( $this->_validationErrors as $errors){
-          if(is_array($errors)){ foreach($errors as $error){ $error_msg[] = $error;} }else{$error_msg[] = $errors;}
+        foreach( $this->_validationErrors as $field => $error){
+          if(is_array($error)){ foreach($error as $f => $e){ $this->message .= $field." as following error: $e."; } }else{ $this->message .= $e.'. '; }
         }
-        $this->message = implode("& ", $error_msg);
 
         parent::__construct($this->message, $code);
     }
