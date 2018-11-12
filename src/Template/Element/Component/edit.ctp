@@ -16,11 +16,11 @@
 
           <!-- loading -->
           <div v-if="loading" class="attachment-loading-container">
-            <img v-bind:src="this.settings.url+'attachment/img/loading.gif'" class="img-responsive" />
+            <img v-bind:src="settings.url+'attachment/img/loading.gif'" class="img-responsive" />
           </div>
 
           <!-- TAGS -->
-          <div id="attachment-atags" v-if="this.settings.restrictions.indexOf('tag_restricted') == -1 && this.settings.restrictions.indexOf('tag_or_restricted') == -1">
+          <div id="attachment-atags" v-if="settings.restrictions.indexOf('tag_restricted') == -1 && settings.restrictions.indexOf('tag_or_restricted') == -1">
             <label ><?= __d('Attachment','Tags') ?></label>
             <select name="atags" id="atagsinput" multiple class="form-control">
               <option

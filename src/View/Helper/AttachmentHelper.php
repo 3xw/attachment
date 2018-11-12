@@ -248,6 +248,7 @@ class AttachmentHelper extends Helper
     $settings['relation'] = 'belongsTo';
     $settings['trumbowyg']['svgPath'] = $this->Url->build($settings['trumbowyg']['svgPath'], true);
     $settings['attachments'] = [];
+    $settings['baseUrl'] = Configure::read('Attachment.profiles.'.$settings['profile'].'.baseUrl');
     $this->_setTrumbowygComponent($settings);
 
     return "<attachment-trumbowyg :aid='\"".Text::uuid()."\"' :settings='".htmlspecialchars(json_encode($settings), ENT_QUOTES, 'UTF-8')."' ></attachment-trumbowyg>";

@@ -15,6 +15,7 @@ class TagOrRestricted extends BaseRestriction
 
       $query->innerJoin(['AAtags' => 'attachments_atags'],['AAtags.attachment_id = Attachments.id']);
       $query->innerJoin(['Atags' => 'atags'],['Atags.id = AAtags.atag_id']);
+      $query->group(['Attachments.id']);
 
       $where = ['OR' => []];
 

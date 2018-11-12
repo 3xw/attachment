@@ -143,20 +143,9 @@ Vue.component('attachment-trumbowyg',{
         textRange.select();
       }
     },
-    createHtmlElement: function(values){
-      var options = this.options;
-      var html = '<img';
-      var classes = 'img-responsive img-fluid ';
-      classes += (options.classes)? options.classes+' ': '';
-      classes += (options.align)? options.align+' ': '';
-      html += ' class=\'' + classes + '\'';
-      if(options.alt){
-        html += ' alt=\'' + options.alt.replace(/['"]+/g, '') + '\'';
-      }
-      html += ' src=\'' + this.getImagePath(options) + '\'';
-      html += ' />';
-
-      var node = $(html)[0];
+    createHtmlElement: function(values)
+    {
+      var node = (this.file.type == 'image')? this.createImageNode(this.options): this.createLinkNode();
 
       var htmlElem = this.$trumbowyg.parent().find('.trumbowyg-editor')[0];
       this.setSelectionRange(htmlElem, this.startRange, this.endRange);
@@ -174,6 +163,22 @@ Vue.component('attachment-trumbowyg',{
       range.deleteContents();
       range.insertNode(node);
       return true;
+    },
+    createLinkNode: function(){
+      return $('<a href="'+this.settings.baseUrl+this.file.path+'" target="_blank">'+this.file.name+'</a>')[0];
+    },
+    createImageNode: function(options){
+      var html = '<img';
+      var classes = 'img-responsive img-fluid ';
+      classes += (options.classes)? options.classes+' ': '';
+      classes += (options.align)? options.align+' ': '';
+      html += ' class=\'' + classes + '\'';
+      if(options.alt){
+        html += ' alt=\'' + options.alt.replace(/['"]+/g, '') + '\'';
+      }
+      html += ' src=\'' + this.getImagePath(options) + '\'';
+      html += ' />';
+      return $(html)[0];
     }
   }
 });
