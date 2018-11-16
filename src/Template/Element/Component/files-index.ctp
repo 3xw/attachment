@@ -63,6 +63,7 @@
 
             <!-- infos -->
             <p class="card-text small">
+              {{file.title | truncate(15) }}<br/>
               {{file.name | truncate(15) }}<br/>
               {{file.size | bytesToMegaBytes | decimal(2) }} MB<br/>
             </p>

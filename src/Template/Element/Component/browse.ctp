@@ -71,8 +71,10 @@
                 <attachment-thumb :url="settings.url" :file="file"></attachment-thumb>
 
                 <div class="card-body">
-                  <p class="card-text small">
-                    {{file.name | truncate(15) }}<br/>
+                  <p class="card-text small" style="overflow:auto;">
+                    <span v-if="file.title">{{file.title}}</span>
+                    <span v-else>{{file.name}}</span>
+                    <br/>
                     {{file.size | bytesToMegaBytes | decimal(2) }} MB<br/>
                   </p>
 
