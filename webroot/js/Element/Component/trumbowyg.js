@@ -165,7 +165,7 @@ Vue.component('attachment-trumbowyg',{
       return true;
     },
     createLinkNode: function(){
-      return $('<a href="'+this.settings.baseUrl+this.file.path+'" target="_blank">'+this.file.name+'</a>')[0];
+      return $('<a href="'+this.settings.baseUrl+this.file.path+'" target="_blank">'+((this.file.title)? this.file.title: this.file.name)+'</a>')[0];
     },
     createImageNode: function(options){
       var html = '<img';
