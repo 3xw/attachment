@@ -53,7 +53,7 @@
                     <div class="btn-group">
                       <!-- data -->
                       <a v-if="from == 'input'" v-show="!isSelected(file.id)" href="#" class="btn btn-xs btn-fill btn-info" role="button" @click="add(index);"  ><?= __d('Attachment','Add') ?></a>
-                      <a v-if="from == 'trumbowyg'" v-show="!isSelected(file.id)" href="#" class="btn btn-xs btn-fill btn-info" role="button" @click="trumbAdd(file);"  ><?= __d('Attachment','Add') ?></a>
+                      <a v-if="from != 'input'" v-show="!isSelected(file.id)" href="#" class="btn btn-xs btn-fill btn-info" role="button" @click="trumbAdd(file);"  ><?= __d('Attachment','Add') ?></a>
 
                       <a v-show="isSelected(file.id)" href="#" class="btn btn-xs btn-fill btn-warning" role="button" @click="remove(file.id)" ><?= __d('Attachment','Remove') ?></a>
                     </div>
@@ -81,7 +81,7 @@
                   <!-- data -->
 
                   <a v-if="from == 'input'" v-show="!isSelected(file.id)" href="#" class="btn btn-xs btn-fill btn-info" role="button" @click="add(index);"  ><?= __d('Attachment','Add') ?></a>
-                  <a v-if="from == 'trumbowyg'" v-show="!isSelected(file.id)" href="#" class="btn btn-xs btn-fill btn-info" role="button" @click="trumbAdd(file);"  ><?= __d('Attachment','Add') ?></a>
+                  <a v-if="from != 'input'" v-show="!isSelected(file.id)" href="#" class="btn btn-xs btn-fill btn-info" role="button" @click="trumbAdd(file);"  ><?= __d('Attachment','Add') ?></a>
 
                   <a v-show="isSelected(file.id)" href="#" class="btn btn-xs btn-fill btn-warning" role="button" @click="remove(file.id)" ><?= __d('Attachment','Remove') ?></a>
 

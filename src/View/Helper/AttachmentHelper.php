@@ -31,6 +31,8 @@ class AttachmentHelper extends Helper
 
   private $_token;
 
+
+
   protected function _getToken()
   {
     if(!$this->_token)
@@ -144,6 +146,7 @@ class AttachmentHelper extends Helper
       $this->_View->append('template', $this->_View->element('Attachment.Component/embed'));
       $this->_View->append('template', $this->_View->element('Attachment.Component/browse'));
       $this->_View->append('template', $this->_View->element('Attachment.Component/input'));
+      $this->_View->append('template', $this->_View->element('Attachment.Component/inline-options'));
 
       // add css
       $this->Html->css([
@@ -164,7 +167,8 @@ class AttachmentHelper extends Helper
         'Attachment.Element/Component/upload.js'.$this->getVersion(),
         'Attachment.Element/Component/embed.js'.$this->getVersion(),
         'Attachment.Element/Component/browse.js'.$this->getVersion(),
-        'Attachment.Element/Component/input.js'.$this->getVersion()
+        'Attachment.Element/Component/input.js'.$this->getVersion(),
+        'Attachment.Element/Component/inline-options.js'.$this->getVersion()
       ],['block' => true]);
     }
   }
@@ -240,15 +244,21 @@ class AttachmentHelper extends Helper
     return $settings;
   }
 
-  public function trumbowyg($field, $settings = [])
+  public function jsSetup($field,$settings = [])
   {
     $this->_setupInputComponent();
     $settings = $this->_getSettings($field,$settings);
     $settings['field'] = $field;
     $settings['relation'] = 'belongsTo';
-    $settings['trumbowyg']['svgPath'] = $this->Url->build($settings['trumbowyg']['svgPath'], true);
     $settings['attachments'] = [];
     $settings['baseUrl'] = Configure::read('Attachment.profiles.'.$settings['profile'].'.baseUrl');
+    return $settings;
+  }
+
+  public function trumbowyg($field, $settings = [])
+  {
+    $settings = $this->jsSetup($field, $settings);
+    $settings['trumbowyg']['svgPath'] = $this->Url->build($settings['trumbowyg']['svgPath'], true);
     $this->_setTrumbowygComponent($settings);
 
     return "<attachment-trumbowyg :aid='\"".Text::uuid()."\"' :settings='".htmlspecialchars(json_encode($settings), ENT_QUOTES, 'UTF-8')."' ></attachment-trumbowyg>";
