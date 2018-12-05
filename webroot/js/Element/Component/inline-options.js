@@ -25,7 +25,9 @@ Vue.component('attachment-inline-options',{
       if(!val) return
       this.selection = {
         displayAs:'Link',
-        title: val.title? val.title: val.name
+        title: val.title? val.title: val.name,
+        width: null,
+        crop: 0
       }
     }
   },

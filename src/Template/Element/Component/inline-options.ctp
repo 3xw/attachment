@@ -25,7 +25,7 @@
 
             <!-- ACTION -->
             <div class="col-md-6">
-              <select v-model="selection.displayAs" class="form-control">
+              <select v-if="file.type == 'image'" v-model="selection.displayAs" class="form-control">
                 <option v-for="(value, key) in options.displayAs" :value="value">{{value}}</option>
               </select>
 
