@@ -25,19 +25,18 @@
 
             <!-- ACTION -->
             <div class="col-md-6">
-              <select v-model="selection.displayAs">
+              <select v-model="selection.displayAs" class="form-control">
                 <option v-for="(value, key) in options.displayAs" :value="value">{{value}}</option>
               </select>
 
 
               <!-- LINK -->
               <div v-if="selection.displayAs == 'Link'">
-
-              </div>
-
-              <!-- ICON -->
-              <div v-if="selection.displayAs == 'Icon'">
-
+                <!-- link title -->
+                <div class="input">
+                  <label><?= __d('Attachment','Title') ?></label>
+                  <input type="text" class="form-control" v-model="selection.title" placeholder="<?= __d('Attachment','Title') ?>">
+                </div>
               </div>
 
               <!-- IMAGE -->
@@ -49,7 +48,7 @@
                     <div class="input select">
                       <label><?= __d('Attachment','Align') ?></label>
                       <select v-model="selection.align" class="form-control">
-                        <option v-for="(value, key) in options.align" :value="key">{{value}}</option>
+                        <option v-for="(value, key) in options.align" :value="value">{{value}}</option>
                       </select>
                     </div>
                     <!-- classes -->
@@ -63,20 +62,20 @@
                     <!-- width -->
                     <div class="input">
                       <label><?= __d('Attachment','Width') ?></label>
-                      <input type="number" class="form-control" v-model="options.width" min="0" step="5" v-bind:max="(file.width < 1200)? file.width: 1200" v-bind:value="(file.width < 1200)? file.width: 1200">
+                      <input type="number" class="form-control" v-model="selection.width" min="0" step="5" v-bind:max="(file.width < 1200)? file.width: 1200" v-bind:value="(file.width < 1200)? file.width: 1200">
                     </div>
                     <!-- crop -->
-                    <div v-if="options.width" class="input">
+                    <div v-if="selection.width" class="input">
                       <label><?= __d('Attachment','Crop') ?></label>
                       <div class="clearfix"></div>
-                      <input type="checkbox" class="" v-model="options.crop" value="settings.trumbowyg.imageOptions.crop">
+                      <input type="checkbox" class="" v-model="selection.crop" value="0">
                       <?= __d('Attachment','Yes / no') ?>
                     </div>
                     <!-- crop settings-->
-                    <div v-if="options.width && options.crop" class="input">
+                    <div v-if="selection.width && selection.crop" class="input">
                       <label><?= __d('Attachment','Ratio') ?></label>
                       <div class="clearfix"></div>
-                      <input type="number" v-model="options.cropWidth" min="1" step="1" max="32" value="16">:<input type="number" v-model="options.cropHeight" min="1" step="1" max="32" value="9">
+                      <input type="number" v-model="selection.cropWidth" min="1" step="1" max="32" value="16">:<input type="number" v-model="selection.cropHeight" min="1" step="1" max="32" value="9">
                     </div>
                   </div>
 

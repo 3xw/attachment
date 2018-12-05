@@ -12,8 +12,8 @@
     created: function()
     {
       scope.aEventHub[this.aid] = new Vue()
-      window.aEventHub[this.aid].$on('browse-closed', this.openOptions)
-      window.aEventHub[this.aid].$on('upload-closed', this.openOptions)
+      scope.aEventHub[this.aid].$on('browse-closed', this.openOptions)
+      scope.aEventHub[this.aid].$on('upload-closed', this.openOptions)
     },
     methods:
     {
@@ -25,7 +25,7 @@
     }
   })
 
-  // plugin...
+  // Plugin
   var attachment = (function()
   {
     var
@@ -34,24 +34,64 @@
     conf = tinymce.settings.attachment_settings,
     aid = conf.field
 
-    // log stuff...
-    console.log(conf)
+    var Plugin =
+    {
+      createVueEl: function()
+      {
+        var component = new Atinymce({propsData: {settings: conf,aid: aid}})
+        component.$mount()
+        scope.vueTinymce[aid].$el.appendChild(component.$el)
+      },
+      addEventListener: function(editor)
+      {
+        scope.aEventHub[aid].$on('options-success', function(options, file){ Plugin.addAttachment(editor, file, options) })
+      },
+      addAttachment: function(editor, file, options)
+      {
+        if(options.displayAs == 'Link') editor.insertContent('<a href="'+conf.baseUrl+file.path+'" target="_blank">'+file.path+'</a>')
+        else editor.insertContent(Plugin.createImageNode(file, options))
+      },
+      createImageNode: function(file, options)
+      {
+        console.log(options)
+        console.log(conf)
 
-    // create vuejs component
-    var component = new Atinymce({propsData: {settings: conf,aid: aid}})
-    component.$mount()
-    scope.vueTinymce[aid].$el.appendChild(component.$el)
+        var html = '<img'
+        var classes = 'uk-responsive-width img-fluid '
+        classes += (options.classes)? options.classes+' ': ''
+        classes += (options.align)? options.align+' ': ''
+        html += ' class=\'' + classes + '\''
+        if(options.alt) html += ' alt=\'' + options.alt.replace(/['"]+/g, '') + '\''
+        html += ' src=\'' + Plugin.getImagePath(file, options) + '\''
+        html += ' />'
+        return html
+      },
+      getImagePath: function(file, options)
+      {
+        var path = conf.url+'thumbnails/'+file.profile+'/'
+        path += (options.width)? 'w'+options.width: 'w1200'
+        path += (options.crop)? 'c'+options.cropWidth+'-'+options.cropHeight: '';
+        path += '/'+file.path;
+        return path;
+      },
+      addButton: function(editor)
+      {
+        editor.addButton('attachment',
+        {
+          type: 'splitbutton',text: 'Média',icon: 'image', menu: [
+            {text: 'Télécharger', onclick: function(){scope.aEventHub[aid].$emit('show-upload')}},
+            {text: 'Parcourir', onclick: function(){scope.aEventHub[aid].$emit('show-browse')}},
+          ]
+        })
+      },
+    }
 
-    // create button and bin functions
+    // init
     global.add('attachment', function (editor)
     {
-      editor.addButton('attachment',
-      {
-        type: 'splitbutton',text: 'Média',icon: 'image', menu: [
-          {text: 'Télécharger', onclick: function(){scope.aEventHub[aid].$emit('show-upload')}},
-          {text: 'Parcourir', onclick: function(){scope.aEventHub[aid].$emit('show-browse')}},
-        ]
-      })
+      Plugin.createVueEl()
+      Plugin.addEventListener(editor)
+      Plugin.addButton(editor)
     })
 
   }())
