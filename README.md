@@ -340,7 +340,7 @@ In edit.ctp
 		]
 	) ?>
 
-Global Attachments index :
+#####Global Attachments index :
 
 	<!-- Attachments element -->
     <?= $this->Attachment->buildIndex([
@@ -353,8 +353,40 @@ Global Attachments index :
         Attachment\View\Helper\AttachmentHelper::TYPES_RESTRICTED
       ]
     ]) ?>
+#####TinyMCE Plugin
+Attachment comes with a TinyMCE plugin. Working with package [cakephp-tinymce](https://github.com/3xw/cakephp-tinymce)
 
-NEW! you can use trumbowyg now!!
+	echo $this->element('Trois/Tinymce.tinymce',[
+      'field' => 'content',
+      'value' => $post->content,
+      'init' => [
+        'external_plugins' => [
+          'attachment' => 'attachment/js/Plugins/tinymce/plugin.min.js',
+        ],
+        'attachment_settings' => $this->Attachment->jsSetup('content',[
+        	
+          // overrides config/attachment.php settings
+          'types' => [
+            'application/pdf',
+            'application/msword',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'application/vnd.ms-excel',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'image/jpeg',
+            'image/png',
+            'embed/youtube',
+            'embed/vimeo'
+          ],
+          'atags' => ($connected['role']== 'superuser') ? [] : [$att_tags],
+          'restrictions' => [
+            Attachment\View\Helper\AttachmentHelper::TAG_OR_RESTRICTED,
+            Attachment\View\Helper\AttachmentHelper::TYPES_RESTRICTED
+          ],
+        ])
+      ]
+    ]);
+
+#####Trumbowyg ( deprecated )
 
 	$this->Attachment->trumbowyg('content',[
        'types' =>['image/jpeg','image/png','image/gif'],
@@ -365,7 +397,7 @@ NEW! you can use trumbowyg now!!
        ],
        'content' => '',
     ]);
-This will let you insert mages right into trumbowyg textarea !!! heepee!
+This will let you insert image right into trumbowyg textarea !!! heepee!
 
 ####Usage.view.frontend
 in file
