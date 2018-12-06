@@ -48,7 +48,7 @@
       },
       addAttachment: function(editor, file, options)
       {
-        if(options.displayAs == 'Link') editor.insertContent('<a href="'+conf.baseUrl+file.path+'" target="_blank">'+file.path+'</a>')
+        if(options.displayAs == 'Link') editor.insertContent('<a href="'+conf.baseUrl+file.path+'" target="_blank">'+options.title+'</a>')
         else editor.insertContent(Plugin.createImageNode(file, options))
       },
       createImageNode: function(file, options)
