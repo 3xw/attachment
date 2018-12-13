@@ -26,6 +26,7 @@ Vue.filter('decimal', function (input, places) {
 });
 
 Vue.filter('truncate', function(value, length) {
+  if(!value) return ''
   if(value.length < length) {
     return value;
   }
