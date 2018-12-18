@@ -30,43 +30,46 @@
   {
     var
     global = tinymce.util.Tools.resolve('tinymce.PluginManager'),
-    env = tinymce.util.Tools.resolve('tinymce.Env'),
-    conf = tinymce.settings.attachment_settings,
-    aid = conf.field
-
-    var Plugin =
+    Plugin =
     {
-      createVueEl: function()
+      createVueEl: function(editor)
       {
-        var component = new Atinymce({propsData: {settings: conf,aid: aid}})
+        var conf = editor.settings.attachment_settings,
+        aid = conf.field,
+        component = new Atinymce({propsData: {settings: conf,aid: aid}})
+
         component.$mount()
         scope.vueTinymce[aid].$el.appendChild(component.$el)
       },
       addEventListener: function(editor)
       {
+        var conf = editor.settings.attachment_settings,
+        aid = conf.field
+
         scope.aEventHub[aid].$on('options-success', function(options, file){ Plugin.addAttachment(editor, file, options) })
       },
       addAttachment: function(editor, file, options)
       {
-        if(options.displayAs == 'Link') editor.insertContent('<a href="'+conf.baseUrl+file.path+'" target="_blank">'+options.title+'</a>')
-        else editor.insertContent(Plugin.createImageNode(file, options))
-      },
-      createImageNode: function(file, options)
-      {
-        console.log(options)
-        console.log(conf)
+        var conf = editor.settings.attachment_settings,
+        aid = conf.field
+        console.log(conf);
 
+        if(options.displayAs == 'Link') editor.insertContent('<a href="'+file.fullpath+'" target="_blank">'+options.title+'</a>')
+        else editor.insertContent(Plugin.createImageNode(conf, file, options))
+      },
+      createImageNode: function(conf, file, options)
+      {
         var html = '<img'
         var classes = 'uk-responsive-width img-fluid '
         classes += (options.classes)? options.classes+' ': ''
         classes += (options.align)? options.align+' ': ''
         html += ' class=\'' + classes + '\''
         if(options.alt) html += ' alt=\'' + options.alt.replace(/['"]+/g, '') + '\''
-        html += ' src=\'' + Plugin.getImagePath(file, options) + '\''
+        html += ' src=\'' + Plugin.getImagePath(conf, file, options) + '\''
         html += ' />'
         return html
       },
-      getImagePath: function(file, options)
+      getImagePath: function(conf, file, options)
       {
         var path = conf.url+'thumbnails/'+file.profile+'/'
         path += (options.width)? 'w'+options.width: 'w1200'
@@ -76,6 +79,9 @@
       },
       addButton: function(editor)
       {
+        var conf = editor.settings.attachment_settings,
+        aid = conf.field
+
         editor.addButton('attachment',
         {
           type: 'splitbutton',text: 'Média',icon: 'image', menu: [
@@ -89,7 +95,7 @@
     // init
     global.add('attachment', function (editor)
     {
-      Plugin.createVueEl()
+      Plugin.createVueEl(editor)
       Plugin.addEventListener(editor)
       Plugin.addButton(editor)
     })

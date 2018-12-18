@@ -15,6 +15,7 @@ use Cake\Core\Configure;
 class AttachmentsController extends AppController
 {
 
+  use \Crud\Controller\ControllerTrait;
 
   public $paginate = [
     'page' => 1,
@@ -25,8 +26,6 @@ class AttachmentsController extends AppController
     ]
   ];
 
-  use \Crud\Controller\ControllerTrait;
-
   public function initialize(){
     parent::initialize();
 
@@ -34,17 +33,17 @@ class AttachmentsController extends AppController
       'actions' => [
         //'Crud.Index',
         'index' => [
-          'className' => 'Crud.Index',
+          'className' => 'Crud.Index'
         ],
         'view' => [
           'className' => 'Crud.View',
         ],
         'add' =>[
           'className' => 'Crud.Add',
-          'api.success.data.entity' => ['id','profile','path','type','subtype','name','size'],
+          'api.success.data.entity' => ['id','profile','path','type','subtype','name','size','fullpath'],
           'api.error.exception' => [
-              'type' => 'validate',
-              'class' => 'Attachment\Crud\Error\Exception\ValidationException'
+            'type' => 'validate',
+            'class' => 'Attachment\Crud\Error\Exception\ValidationException'
           ],
         ],
         'edit' => [
@@ -78,13 +77,23 @@ class AttachmentsController extends AppController
 
   public function index()
   {
-    $this->Crud->on('beforePaginate', function(Event $event) {
+    $this->Crud->on('beforePaginate', function(Event $event)
+    {
       $event->subject->query->contain(['Atags']);
       if(Configure::read('Attachment.translate'))
       {
         $event->subject->query->find('translations');
       }
     });
+
+    $this->Crud->on('afterPaginate', function(Event $event)
+    {
+      foreach ($event->getSubject()->entities as $entity)
+      {
+        $entity->set('fullpath', $entity->get('fullpath'));
+      }
+    });
+
     return $this->Crud->execute();
   }
 

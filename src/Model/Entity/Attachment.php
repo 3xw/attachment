@@ -2,28 +2,9 @@
 namespace Attachment\Model\Entity;
 
 use Cake\ORM\Entity;
+use Cake\Core\Configure;
+use Cake\Routing\Router;
 
-
-/**
-* Attachment Entity.
-*
-* @property int $id
-* @property string $name
-* @property \Cake\I18n\Time $created
-* @property \Cake\I18n\Time $modified
-* @property string $type
-* @property string $subtype
-* @property int $size
-* @property string $md5
-* @property \Cake\I18n\Time $date
-* @property string $title
-* @property string $description
-* @property string $author
-* @property string $copyright
-* @property string $path
-* @property string $embed
-* @property \App\Model\Entity\Atag[] $atags
-*/
 class Attachment extends Entity
 {
 
@@ -41,9 +22,17 @@ class Attachment extends Entity
     'id' => false,
   ];
 
-  protected function _getFullType()
+  protected function _getFullpath()
   {
-      return $this->_properties['type'].'/'.$this->_properties['subtype'];
+    $baseUrl = Configure::read('Attachment.profiles.'.$this->profile.'.baseUrl');
+    $start = substr($baseUrl,0 , 4);
+    $baseUrl = ( $start == 'http' )? $baseUrl : Router::url($baseUrl, true);
+    return $baseUrl.$this->path;
+  }
+
+  protected function _getUrl()
+  {
+    return $this->_properties['type'].'/'.$this->_properties['subtype'];
   }
 
 
