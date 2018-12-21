@@ -52,15 +52,14 @@
       {
         var conf = editor.settings.attachment_settings,
         aid = conf.field
-        console.log(conf);
 
-        if(options.displayAs == 'Link') editor.insertContent('<a href="'+file.fullpath+'" target="_blank">'+options.title+'</a>')
+        if(options.displayAs == 'Link') editor.insertContent('<a href="'+file.fullpath+'" target="'+options.target+'">'+options.title+'</a>')
         else editor.insertContent(Plugin.createImageNode(conf, file, options))
       },
       createImageNode: function(conf, file, options)
       {
         var html = '<img'
-        var classes = 'uk-responsive-width img-fluid '
+        var classes = 'img-responsive img-fluid '
         classes += (options.classes)? options.classes+' ': ''
         classes += (options.align)? options.align+' ': ''
         html += ' class=\'' + classes + '\''

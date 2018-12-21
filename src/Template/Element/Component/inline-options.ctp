@@ -26,7 +26,8 @@
             <!-- ACTION -->
             <div class="col-md-6">
               <select v-if="file.type == 'image'" v-model="selection.displayAs" class="form-control">
-                <option v-for="(value, key) in options.displayAs" :value="value">{{value}}</option>
+                <option selected value="Link"><?= __d('Attachment', 'Link') ?></option>
+                <option value="Image"><?= __d('Attachment', 'Image') ?></option>
               </select>
 
 
@@ -34,6 +35,13 @@
               <div v-if="selection.displayAs == 'Link'">
                 <!-- link title -->
                 <div class="input">
+                  <div class="utils--spacer-mini"></div>
+                  <label><?= __d('Attachment', 'Target') ?></label>
+                  <select v-model="selection.target" class="form-control">
+                    <option selected value="_blank"><?= __d('Attachment', 'New window') ?></option>
+                    <option value="_self"><?= __d('Attachment', 'Default') ?></option>
+                  </select>
+                  <div class="utils--spacer-mini"></div>
                   <label><?= __d('Attachment','Title') ?></label>
                   <input type="text" class="form-control" v-model="selection.title" placeholder="<?= __d('Attachment','Title') ?>">
                 </div>
@@ -48,7 +56,10 @@
                     <div class="input select">
                       <label><?= __d('Attachment','Align') ?></label>
                       <select v-model="selection.align" class="form-control">
-                        <option v-for="(value, key) in options.align" :value="value">{{value}}</option>
+                        <option selected value="normal"><?= __d('Attachment', 'Normal') ?></option>
+                        <option value="left"><?= __d('Attachment', 'Left') ?></option>
+                        <option value="center"><?= __d('Attachment', 'Center') ?></option>
+                        <option value="right"><?= __d('Attachment', 'Right') ?></option>
                       </select>
                     </div>
                     <!-- classes -->

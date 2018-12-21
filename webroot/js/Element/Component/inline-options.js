@@ -10,7 +10,8 @@ Vue.component('attachment-inline-options',{
     options: {
       crop: [true,false],
       align: ['normal','left','center','right'],
-      displayAs: ['Image','Link']
+      displayAs: ['Image', 'Link'],
+      target: ['_blank', '_self']
     },
     selection:{}
   }},
