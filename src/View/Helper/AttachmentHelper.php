@@ -74,6 +74,7 @@ class AttachmentHelper extends Helper
       $this->_View->append('template', $this->_View->element('Attachment.Component/files-index'));
       $this->_View->append('template', $this->_View->element('Attachment.Component/edit'));
       $this->_View->append('template', $this->_View->element('Attachment.Component/view'));
+      $this->_View->append('template', $this->_View->element('Attachment.Component/atags'));
       $this->_View->append('template', $this->_View->element('Attachment.Component/upload'));
       $this->_View->append('template', $this->_View->element('Attachment.Component/embed'));
       $this->_View->append('template', $this->_View->element('Attachment.Component/pagination'));
@@ -94,6 +95,7 @@ class AttachmentHelper extends Helper
         'Attachment.Element/Component/utils.js'.$this->getVersion(),
         'Attachment.Element/Component/thumb.js'.$this->getVersion(),
         'Attachment.Element/Component/files-index.js'.$this->getVersion(),
+        'Attachment.Element/Component/atags.js'.$this->getVersion(),
         'Attachment.Element/Component/edit.js'.$this->getVersion(),
         'Attachment.Element/Component/view.js'.$this->getVersion(),
         'Attachment.Element/Component/upload.js'.$this->getVersion(),
@@ -143,6 +145,7 @@ class AttachmentHelper extends Helper
       $this->_View->append('template', $this->_View->element('Attachment.Component/pagination'));
       $this->_View->append('template', $this->_View->element('Attachment.Component/filters'));
       $this->_View->append('template', $this->_View->element('Attachment.Component/upload'));
+      $this->_View->append('template', $this->_View->element('Attachment.Component/atags'));
       $this->_View->append('template', $this->_View->element('Attachment.Component/embed'));
       $this->_View->append('template', $this->_View->element('Attachment.Component/browse'));
       $this->_View->append('template', $this->_View->element('Attachment.Component/input'));
@@ -164,6 +167,7 @@ class AttachmentHelper extends Helper
         'Attachment.Element/Component/files.js'.$this->getVersion(),
         'Attachment.Element/Component/pagination.js'.$this->getVersion(),
         'Attachment.Element/Component/filters.js'.$this->getVersion(),
+        'Attachment.Element/Component/atags.js'.$this->getVersion(),
         'Attachment.Element/Component/upload.js'.$this->getVersion(),
         'Attachment.Element/Component/embed.js'.$this->getVersion(),
         'Attachment.Element/Component/browse.js'.$this->getVersion(),

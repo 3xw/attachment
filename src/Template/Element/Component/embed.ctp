@@ -15,12 +15,7 @@
           </div>
 
           <!-- TAGS -->
-          <div v-if="settings.restrictions.indexOf('tag_restricted') == -1 && settings.restrictions.indexOf('tag_or_restricted') == -1" id="attachment-atags">
-            <label ><?= __d('Attachment','Tags') ?></label>
-            <select id="atagsinput" multiple class="form-control">
-              <option v-for="(atag, index) in atags" :value="atag">{{atag}}</option>
-            </select>
-          </div>
+          <attachment-atags :settings="settings"></attachment-atags>
 
           <!-- INPUTS -->
           <div v-if="show">
