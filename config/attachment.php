@@ -45,12 +45,13 @@ return [
       'maxquantity' => -1,
       'types' =>[],
       'atags' => [],
+      'atagsDisplay' => false, // false | 'select' | 'input'
+      'restrictions' => [], // or Attachment\View\Helper\AttachmentHelper::TAG_RESTRICTED
       'cols' => 'col-6 col-sm-4 col-md-3 col-lg-2',
       'relation' => 'belongsToMany',
       'profile' => 'default',
       'visibility' => 'public',
       'speech' => false,
-      'restrictions' => [], // or Attachment\View\Helper\AttachmentHelper::TAG_RESTRICTED
       'pagination' => [
         'offset' => 9, // = 10 pages
         'start' => true,
