@@ -361,10 +361,10 @@ Attachment comes with a TinyMCE plugin. Working with package [cakephp-tinymce](h
       'value' => $post->content,
       'init' => [
         'external_plugins' => [
-          'attachment' => 'attachment/js/Plugins/tinymce/plugin.min.js',
+          'attachment' => $this->Url->build('/attachment/js/Plugins/tinymce/plugin.min.js', true),
         ],
         'attachment_settings' => $this->Attachment->jsSetup('content',[
-        	
+
           // overrides config/attachment.php settings
           'types' => [
             'application/pdf',
@@ -377,7 +377,7 @@ Attachment comes with a TinyMCE plugin. Working with package [cakephp-tinymce](h
             'embed/youtube',
             'embed/vimeo'
           ],
-          'atags' => ($connected['role']== 'superuser') ? [] : [$att_tags],
+          'atags' => [],
           'restrictions' => [
             Attachment\View\Helper\AttachmentHelper::TAG_OR_RESTRICTED,
             Attachment\View\Helper\AttachmentHelper::TYPES_RESTRICTED
@@ -419,9 +419,9 @@ in file
 
 	<!-- Display an embed video  -->
 	<?= $post->attachments[0]->embed ?>
-	
+
 Url Only
-	
+
 	<?= $this->Attachment->thumbSrc([
 		'image' => $post->attachments[0]->path,
 		'profile' => $post->attachments[0]->profile,
@@ -435,7 +435,7 @@ Url Only
 	      'xs' => [767,1534],
 	    ]
 	]) ?>
-	
+
 
 ####Usage.view.download
 
