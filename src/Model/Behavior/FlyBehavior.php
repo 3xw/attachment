@@ -127,7 +127,7 @@ class FlyBehavior extends Behavior
         // manage existing file...
         if(!empty($orginalValues[$field]))
         {
-          $oldProfile = new Profile($orginalValues['profile']);
+          $oldProfile = new Profile(empty($orginalValues['profile'])? $conf['profile']: $orginalValues['profile']);
           $oldProfile->delete($orginalValues[$field]);
         }
 
@@ -157,7 +157,7 @@ class FlyBehavior extends Behavior
 
   protected function _resolveDir($dir,$type,$subtype)
   {
-    if($conf['dir'] === false || $conf['dir'] === true) return false;
+    if($dir === false || $dir === true) return false;
     return str_replace(
       ['{DS}','{$role}','{$username}','{$year}','{$month}','{$type}','{$subtype}'],
       [DS,$this->_session->read('Auth.User.role'),$this->_session->read('Auth.User.username'),date("Y"),date("m"),$type,$subtype],

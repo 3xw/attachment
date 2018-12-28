@@ -6,13 +6,13 @@ use Attachment\Fly\FilesystemRegistry;
 
 class Profile
 {
-  $name = 'profileName';
+  public $name = 'profileName';
 
-  $settings = [];
+  public $settings = [];
 
-  $replaceOnEdit = false;
+  public $replaceOnEdit = false;
 
-  $deleteExisting = true;
+  public $deleteExisting = true;
 
   function __construct($name)
   {
@@ -52,5 +52,20 @@ class Profile
   public function delete($file, $force = false)
   {
     if(($force || $this->deleteExisting)) $this->filesystem()->delete($file);
+  }
+
+  public function has($path)
+  {
+    return $this->filesystem()->has($path);
+  }
+
+  public function listContents($directory = '', $recursive = false)
+  {
+    return $this->filesystem()->listContents($directory, $recursive);
+  }
+
+  public function getMimetype($path)
+  {
+    return $this->filesystem()->getMimetype($path);
   }
 }
