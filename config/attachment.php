@@ -12,7 +12,8 @@ return [
     		'client' => null,
         'baseUrl' =>  null,
         'delete' => true,
-        'replaceOnEdit' => false
+        'replace' => false,
+        'afterReplace' => null // null | callback fct($entity)
       ],
 
       // child profiles

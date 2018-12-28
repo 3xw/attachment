@@ -10,17 +10,20 @@ class Profile
 
   public $settings = [];
 
-  public $replaceOnEdit = false;
+  public $replaceExisting = false;
 
   public $deleteExisting = true;
+
+  public $afterReplace = null;
 
   function __construct($name)
   {
     $this->name = $name;
     if(empty(Configure::read('Attachment.profiles.'.$name))) throw new \Exception('Profile '.$name.' does not exists!');
     $this->settings = array_merge(Configure::read('Attachment.profiles.parent'), Configure::read('Attachment.profiles.'.$name));
-    $this->replaceOnEdit = $this->settings['replaceOnEdit'];
+    $this->replaceExisting = $this->settings['replace'];
     $this->deleteExisting = $this->settings['delete'];
+    $this->afterReplace = $this->settings['afterReplace'];
   }
 
   public function filesystem()

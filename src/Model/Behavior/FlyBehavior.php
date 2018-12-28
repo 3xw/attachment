@@ -125,10 +125,12 @@ class FlyBehavior extends Behavior
         }
 
         // manage existing file...
+        $afterReplace = null;
         if(!empty($orginalValues[$field]))
         {
           $oldProfile = new Profile(empty($orginalValues['profile'])? $conf['profile']: $orginalValues['profile']);
           $oldProfile->delete($orginalValues[$field]);
+          $afterReplace = $oldProfile->afterReplace;
         }
 
         // store
@@ -140,7 +142,7 @@ class FlyBehavior extends Behavior
         $dir = $this->_resolveDir($conf['dir'],$type,$subtype);
 
         // if replace on edit in profile
-        if(!empty($orginalValues[$field]) && $profile->replaceOnEdit)
+        if(!empty($orginalValues[$field]) && $profile->replaceExisting)
         {
           $name = $orginalValues[$field];
           $dir = false;
@@ -151,6 +153,9 @@ class FlyBehavior extends Behavior
 
         // set entity
         $entity->{$field} = $dir? $dir.DS.$name: $name;
+
+        // excute callback fct if needed
+        if(is_callable($afterReplace) && !empty($orginalValues[$field]) && $profile->replaceExisting) $afterReplace($entity);
       }
     }
   }
