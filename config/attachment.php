@@ -5,6 +5,17 @@ return [
 
     // set profiles
     'profiles' => [
+
+      // every other profile will herit from 'parent' settings
+      'parent' => [
+        'adapter' => null,
+    		'client' => null,
+        'baseUrl' =>  null,
+        'delete' => true,
+        'replaceOnEdit' => false
+      ],
+
+      // child profiles
       'default' => [
     		'adapter' => 'League\Flysystem\Adapter\Local',
     		'client' => new League\Flysystem\Adapter\Local('files'),

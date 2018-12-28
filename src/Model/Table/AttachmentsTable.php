@@ -31,8 +31,7 @@ class AttachmentsTable extends Table
       'file_field' => 'path'
     ]);
     $this->addBehavior('Attachment.Fly', [
-      'file_field' => 'path',
-      'delete' => true
+      'file_field' => 'path'
     ]);
     $this->addBehavior('Attachment.ATag', [
       'file_field' => 'path'

@@ -8,23 +8,13 @@ use Cake\Utility\Inflector;
 use Cake\Core\Configure;
 use Cake\Datasource\EntityInterface;
 use Cake\Network\Session;
-
 use Cake\ORM\Behavior;
 use Cake\ORM\Table;
+use Attachment\Fly\Profile;
 
-use Attachment\Fly\FilesystemRegistry;
-
-/**
-* Storage behavior
-*/
 class FlyBehavior extends Behavior
 {
 
-  /**
-  * Default configuration.
-  *
-  * @var array
-  */
   protected $_defaultConfig = [];
 
   protected $_file = [];
@@ -35,23 +25,10 @@ class FlyBehavior extends Behavior
 
   protected $_session = null;
 
-  /**
-  * Build the behaviour
-  *
-  * @param array $config Passed configuration
-  * @return void
-  */
   public function initialize(array $config)
   {
     // check for a datafield field (there is no default)
-    if (!isset($config['file_field']) || '' === $config['file_field']) {
-      throw new Exception('Must specify a field for FileBehavior');
-    }
-  }
-
-  public function filesystem($profile)
-  {
-    return FilesystemRegistry::retrieve($profile);
+    if (!isset($config['file_field']) || '' === $config['file_field']) throw new Exception('Must specify a field for FileBehavior');
   }
 
   public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options)
@@ -59,8 +36,8 @@ class FlyBehavior extends Behavior
     $settings = $this->config();
     $field = $settings['file_field'];
 
-    if (!empty($data[$field]) && is_array($data[$field])) {
-
+    if (!empty($data[$field]) && is_array($data[$field]))
+    {
       if ($data[$field]['error'] != UPLOAD_ERR_OK)
       {
         $event->stopPropagation();
@@ -74,12 +51,12 @@ class FlyBehavior extends Behavior
       $this->_uuid = empty($data['uuid'])? '' : $data['uuid'];
 
       // md5
-      $data['md5'] = md5_file($data[$field]['tmp_name']);
+      $data['md5'] = md5_file($this->_file['tmp_name']);
 
-      $types = explode('/', $data[$field]['type']);
+      $types = explode('/', $this->_file['type']);
       $data['type'] = $types[0];
       $data['subtype'] = $types[1];
-      $data['size'] = $data[$field]['size'];
+      $data['size'] = $this->_file['size'];
 
       // date...
       if (!isset($data['date']))
@@ -99,39 +76,29 @@ class FlyBehavior extends Behavior
   {
     $settings = $this->config();
     $field = $settings['file_field'];
-    $orginalValues = $entity->extractOriginalChanged([
-      'path',
-      'profile',
-      'md5'
-    ]);
+    $orginalValues = $entity->extractOriginalChanged([$field,'profile','md5']);
 
     if (isset($entity->{$field}))
     {
       if (!empty($this->_file))
       {
-        // NAME
-        $name = strtolower( time() . '_' . preg_replace('/[^a-z0-9_.]/i', '', $this->_file['name']) );
-
-        // TEMPNAME
-        $temp_name = $this->_file['tmp_name'];
-
         // TYPE
-        $fullType = $this->_file['type'];
-        $type = explode('/', $fullType);
+        $type = explode('/', $this->_file['type']);
         $subtype = $type[1];
         $type = $type[0];
 
         // GET CONFIG
         $this->_session = new Session();
         $sessionAttachment = $this->_session->read('Attachment.'.$this->_uuid);
-        if(!$sessionAttachment){
+        if(!$sessionAttachment)
+        {
           $event->stopPropagation();
           $entity->errors($field,['Attachment keys not found in session! Please pass Attachment settings throught session!']);
         }
         $conf = array_merge($sessionAttachment, $settings);
 
         // CHECK type
-        if (( in_array($fullType, $conf['types']) === false))
+        if (!in_array($this->_file['type'], $conf['types']))
         {
           $event->stopPropagation();
           $entity->errors($field,['This file type is not suported!']);
@@ -146,10 +113,10 @@ class FlyBehavior extends Behavior
           return false;
         }
 
-        // get sizes if file is image...
-        if($fullType == 'image/jpeg' || $fullType == 'image/png' || $fullType == 'image/gif')
+        // add image meta
+        if(in_array($this->_file['type'], ['image/jpeg','image/png','image/gif']))
         {
-          $image_info = getimagesize($temp_name);
+          $image_info = getimagesize($this->_file['tmp_name']);
           $image_width = $image_info[0];
           $image_height = $image_info[1];
           $entity->set('width', $image_width);
@@ -157,45 +124,40 @@ class FlyBehavior extends Behavior
           unset($img);
         }
 
-        // store file
-        $profile = $conf['profile'];
-        $entity->set('profile', $profile);
-
-        // resolve dir...
-        if($conf['dir'] !== false && $conf['dir'] !== true)
+        // manage existing file...
+        if(!empty($orginalValues[$field]))
         {
-          $dir = $this->_resolveDir($conf['dir'],$type,$subtype);
-          $this->filesystem($profile)->createDir($dir);
-          $name = $dir.DS.$name;
+          $oldProfile = new Profile($orginalValues['profile']);
+          $oldProfile->delete($orginalValues[$field]);
         }
 
-        // delete old one exists
-        if(!empty($orginalValues['path']))
+        // store
+        $profile = new Profile($conf['profile']);
+        $entity->set('profile', $profile->name);
+
+        // name & dir
+        $name = strtolower( time() . '_' . preg_replace('/[^a-z0-9_.]/i', '', $this->_file['name']) );
+        $dir = $this->_resolveDir($conf['dir'],$type,$subtype);
+
+        // if replace on edit in profile
+        if(!empty($orginalValues[$field]) && $profile->replaceOnEdit)
         {
-          $oldProfile = empty($orginalValues['profile'])? $profile: $orginalValues['profile'];
-          $this->filesystem($oldProfile)->delete($orginalValues['path']);
+          $name = $orginalValues[$field];
+          $dir = false;
         }
 
-        // delete if exists
-        if($this->filesystem($profile)->has($name))
-        {
-          $this->filesystem($profile)->delete($name);
-        }
+        // write
+        $profile->store($this->_file['tmp_name'], $name, $dir, $conf['visibility'], $this->_file['type']);
 
-        // store file
-        $stream = fopen($temp_name, 'r+');
-        $this->filesystem($profile)->writeStream($name, $stream,[
-          'visibility' => $conf['visibility'],
-          'mimetype' => $fullType
-        ]);
-        fclose($stream);
-        $entity->{$field} = $name;
+        // set entity
+        $entity->{$field} = $dir? $dir.DS.$name: $name;
       }
     }
   }
 
   protected function _resolveDir($dir,$type,$subtype)
   {
+    if($conf['dir'] === false || $conf['dir'] === true) return false;
     return str_replace(
       ['{DS}','{$role}','{$username}','{$year}','{$month}','{$type}','{$subtype}'],
       [DS,$this->_session->read('Auth.User.role'),$this->_session->read('Auth.User.username'),date("Y"),date("m"),$type,$subtype],
@@ -203,32 +165,10 @@ class FlyBehavior extends Behavior
     );
   }
 
-  public function beforeDelete(Event $event, EntityInterface $entity, ArrayObject $options)
-  {
-    $settings = $this->config();
-    $field = $settings['file_field'];
-    $delete = $settings['delete'];
-
-    if (!empty($entity[$field]) && $delete)
-    {
-      $this->_fileToRemove = [
-        'file' => $entity[$field],
-        'profile' => $entity['profile']
-      ];
-    }
-  }
-
   public function afterDelete(Event $event, EntityInterface $entity, ArrayObject $options)
   {
-    if ($this->_fileToRemove)
-    {
-      $file = $this->_fileToRemove['file'];
-      $profile = $this->_fileToRemove['profile'];
-      if($this->filesystem($profile)->has($file))
-      {
-        $this->filesystem($profile)->delete($file);
-      }
-    }
+    $field = $settings['file_field'];
+    if(!empty($entity->get($field))) (new Profile($entity->get('profile')))->delete($entity->get($field));
   }
 
 }
