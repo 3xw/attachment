@@ -19,7 +19,7 @@ Vue.component('attachment-files-index',{
     log:function(input){
       console.log(input);
     },
-    dispatch(evt,aid,data){
+    dispatch:function(evt,aid,data){
       window.aEventHub[this.aid].$emit(evt, data);
     },
   }

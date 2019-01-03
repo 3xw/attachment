@@ -97,7 +97,7 @@ Vue.component('attachment-index',{
       this.$http.delete(this.settings.url+'attachment/attachments/delete/'+file.id+'.json', file,options)
       .then(this.deleteSuccessCallback, this.errorDeleteCallback);
     },
-    dispatch(evt,aid,data){
+    dispatch:function(evt,aid,data){
       window.aEventHub[aid].$emit(evt, data);
     },
     getFileByIndex: function(index){
