@@ -1,4 +1,4 @@
-# Attachment plugin for CakePHP ^3.5
+# Attachment plugin for CakePHP ^3.6
 Attachment plugin solves common problems with media, files and embed data.
 The goal is to store files where you want ( Dropbox, AWS S3, ... ) and keep a record of it in a table.
 
@@ -16,15 +16,15 @@ The recommended way to install composer packages is:
 
 		composer require 3xw/attachment
 
-###Installation.boostrap
-Load it in config/boostrap.php like so:
+###Installation.load
+In src/Application.php
 
-	Plugin::load('Attachment', ['bootstrap' => true, 'routes' => true]);
+	$this->addPlugin(\ Attachment\Plugin::class, ['bootstrap' => true, 'routes' => true]);
 
 Alternatively you can overload with your own settings (config/attachment.php):
 
 	Configure::write('Attachment.config', ['attachment']);
-	Plugin::load('Attachment', ['bootstrap' => true, 'routes' => true]);
+	$this->addPlugin(\ Attachment\Plugin::class, ['bootstrap' => true, 'routes' => true]);
 
 ###Installation.db
 
