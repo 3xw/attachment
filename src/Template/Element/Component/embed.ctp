@@ -15,7 +15,7 @@
           </div>
 
           <!-- TAGS -->
-          <attachment-atags :settings="settings"></attachment-atags>
+          <attachment-atags :aid="aid" :settings="settings"></attachment-atags>
 
           <!-- INPUTS -->
           <div v-if="show">

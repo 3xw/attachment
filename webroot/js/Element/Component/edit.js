@@ -21,6 +21,7 @@ Vue.component('attachment-edit', {
       instance.file = file;
       instance.open();
     });
+    window.aEventHub[this.aid].$on('change-tags',this.changeTags);
   },
   methods: {
     close: function(){
@@ -31,6 +32,9 @@ Vue.component('attachment-edit', {
       this.atags = this.settings.atags;
       this.show = true;
       setTimeout(this.setupUI, 500);
+    },
+    changeTags: function(){
+      this.atags = $('#atagsinput').val();
     },
     setupUI: function(){
       if(this.settings.i18n.enable){
@@ -75,11 +79,8 @@ Vue.component('attachment-edit', {
       delete(this.file.date);
       delete(this.file.created);
       delete(this.file.modified);
-      if(this.settings.restrictions.indexOf('tag_restricted') != -1 || this.settings.restrictions.indexOf('tag_or_restricted') == -1)
-      {
-        delete(this.file.atags);
-      }else
-      {
+
+      if($('#atagsinput').length > 0){
         var atags = $('#atagsinput').val();
         this.file.atags = [];
         for( var i in atags )
@@ -105,6 +106,10 @@ Vue.component('attachment-edit', {
       var options = {headers:{"Accept":"application/json"}};
       var formData = new FormData();
       for( i in this.file ) if(this.file[i] != '' && this.file[i] != null) formData.append(i, this.file[i]);
+      for( var t in this.file.atags )
+      {
+        formData.append('atags['+t+'][name]', this.file.atags[t].name);
+      }
       this.$http.post(this.settings.url+'attachment/attachments/edit/'+this.file.id+'.json', formData,options)
       .then(this.editSuccessCallback, this.errorCallback);
       return this;

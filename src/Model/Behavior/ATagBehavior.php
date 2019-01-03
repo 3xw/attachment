@@ -62,17 +62,17 @@ class ATagBehavior extends Behavior
         }
       }
     }
-
     if($isTagRestricted)
     {
-      $data['atags'] = [];
-      $tags = empty($sessionAttachment['atags'])? []: $sessionAttachment['atags'];
-      foreach($tags as $tag)
-      {
-        array_push($data['atags'],['name' => $tag]);
+      if(($sessionAttachment['atagsDisplay'] != 'select') || empty($data['atags'])){
+        $data['atags'] = [];
+        $tags = empty($sessionAttachment['atags'])? []: $sessionAttachment['atags'];
+        foreach($tags as $tag)
+        {
+          array_push($data['atags'],['name' => $tag]);
+        }
       }
     }
-
     if(!empty($data['atags']))
     {
       $atags = $this->_table->Atags;

@@ -14,10 +14,14 @@ Vue.component('attachment-embed', {
   },
   created: function(){
     window.aEventHub[this.aid].$on('show-embed', this.showEmbed);
+    window.aEventHub[this.aid].$on('change-tags',this.changeTags);
   },
   methods: {
     showEmbed: function(){
       this.open();
+    },
+    changeTags: function(){
+      this.atags = $('#atagsinput').val();
     },
     close: function(){
       this.show = false;
@@ -55,7 +59,7 @@ Vue.component('attachment-embed', {
       formData.append('uuid', this.settings.uuid);
 
       // retrieve tags
-      var tags = (this.settings.restrictions.indexOf('tag_restricted') == -1)? $('#atagsinput').val(): this.atags;
+      var tags = (this.settings.atagsDisplay == 'input')? $('#atagsinput').val(): this.atags;
       for( var t in tags )
       {
         formData.append('atags['+t+'][name]', tags[t].trim());

@@ -20,10 +20,15 @@ Vue.component('attachment-upload', {
   },
   created: function(){
     window.aEventHub[this.aid].$on('show-upload',this.showUpload);
+    window.aEventHub[this.aid].$on('change-tags',this.changeTags);
   },
   methods: {
     showUpload: function(){
       this.open();
+
+    },
+    changeTags: function(){
+      this.atags = $('#atagsinput').val();
     },
     dragOver: function(e){
       e.preventDefault();
@@ -89,6 +94,9 @@ Vue.component('attachment-upload', {
     },
     open: function(){
       this.atags = this.settings.atags;
+      if(this.settings.atagsDisplay == 'select'){
+        this.atags = [];
+      }
       this.show = true;
       setTimeout(this.setupUI, 500);
     },
@@ -135,7 +143,7 @@ Vue.component('attachment-upload', {
       var fileName = file.name;
 
       // retrieve tags
-      var tags = (this.settings.restrictions.indexOf('tag_restricted') == -1)? $('#atagsinput').val(): this.atags;
+      var tags = (this.settings.atagsDisplay == 'input')? $('#atagsinput').val() : this.atags;
       for( var t in tags )
       {
         formData.append('atags['+t+'][name]', tags[t].trim());
