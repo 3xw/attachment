@@ -13,7 +13,7 @@ Vue.component('attachment-view', {
   created: function(){
     var instance = this;
     window.aEventHub[this.aid].$on('view-file',function(file) {
-      console.log(file);
+      //console.log(file);
       instance.file = file;
       instance.open();
     });
@@ -27,7 +27,7 @@ Vue.component('attachment-view', {
       setTimeout(this.setupUI, 500);
     },
     setupUI: function(){
-      console.log('setup UI');
+      //console.log('setup UI');
     },
   }
 });

@@ -44,7 +44,6 @@ Vue.component('attachment-index',{
   created: function(){
     if(window.aEventHub[this.aid] == undefined){
       window.aEventHub[this.aid] = new Vue();
-      console.log('index',this.aid);
     }
 
     window.aEventHub[this.aid].$on('show-edit-file', this.showEditFile);
@@ -61,8 +60,6 @@ Vue.component('attachment-index',{
       window.aEventHub[this.aid].$emit('edit-file',this.files[index]);
     },
     showViewFile:function(index) {
-      console.log(index);
-      console.log(this.files[index]);
       window.aEventHub[this.aid].$emit('view-file',this.files[index]);
     },
     editProgress: function(){
@@ -81,13 +78,10 @@ Vue.component('attachment-index',{
         message = 'file: '+data.file.name+' '+data.response.data.message;
       }
       this.errors.push(message);
-      console.log(data.response);
       this.getFiles();
     },
     deleteFile: function(index){
-      console.log(index);
       var file = this.files[index];
-      console.log(file);
       this.fileToDeleteName = file.name;
       if(!confirm('Delete file: '+this.fileToDeleteName+'?')){
         return false;
@@ -104,8 +98,6 @@ Vue.component('attachment-index',{
       .then(this.deleteSuccessCallback, this.errorDeleteCallback);
     },
     dispatch(evt,aid,data){
-      console.log('allo');
-      console.log(evt, aid, data);
       window.aEventHub[aid].$emit(evt, data);
     },
     getFileByIndex: function(index){
@@ -182,13 +174,11 @@ Vue.component('attachment-index',{
       this.loading = false;
       var message = ( response.data )? response.data.data.message : 'Your session is lost, please login again!';
       this.errors.push(message);
-      console.log(response);
     },
     errorDeleteCallback: function(response){
       this.loading = false;
       var message = ( response.data )? response.data.data.message : 'Your session is lost, please login again!';
       this.errors.push(message);
-      console.log(response);
       this.getFiles();
     },
   }
