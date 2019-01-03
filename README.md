@@ -14,7 +14,7 @@ You can install this plugin into your CakePHP application using [composer](http:
 
 The recommended way to install composer packages is:
 
-		composer require 3xw/attachment:^3.5
+		composer require 3xw/attachment
 
 ###Installation.boostrap
 Load it in config/boostrap.php like so:
@@ -52,13 +52,13 @@ In order to use backend tools you need to have following libs installed:
 
 javascript:
 
-	jquery >= 1.11 (maybe lower works as well)
-	vuejs 2.x (tested with 2.4.0)
-	vue-resource 0.9.x (tested with 0.9.3)
+	jquery >= 1.x
+	vuejs = 2.x
+	vue-resource = 1.x
 
 css:
 
-	bootstrap v3.x (tested with 3.3.5)
+	bootstrap = 3.x
 
 ### BackendDependencies.html
 Vuejs components are nested to a top parent you need to setup.
@@ -99,34 +99,12 @@ in your layout.ctp:
 in your app.js
 
 	(function(scope, $, Vue){
-
-		// init vue
-		var initViewJs = function()
-		{
-			Vue.http.interceptors.unshift(function(request, next) {
-				next(function(response) {
-					if(typeof response.headers['content-type'] != 'undefined') {
-					    response.headers['Content-Type'] = response.headers['content-type'];
-					}
-				});
-			});
-			var adminApp = new Vue({el: "#admin-app"});
-		}
-
-		// your main fct
-		var main = function()
-		{
-			initViewJs();
-			//...
-		}
-
+		
 		// boostrap
-		$(document).ready(main);
+		$(document).ready(function(){ var adminApp = new Vue({el: "#admin-app"}) })
 
 
-	})(window, jQuery, Vue);
-
-Done!
+	})(window, jQuery, Vue)
 
 ## Settings
 Default settings are present at following path: vendor/3xw/attachment/config/attachment.php
@@ -142,16 +120,19 @@ Exemple of settings:
 	    // set profiles
 	    'profiles' => [
 	      's3' => [
-	        'adapter' => 'League\Flysystem\AwsS3v3\AwsS3Adapter',
-	        'client' => new League\Flysystem\AwsS3v3\AwsS3Adapter(Aws\S3\S3Client::factory([
-	          'credentials' => [
-	            'key'    => '***',
-	            'secret' => '***',
-	          ],
-	          'region' => 'eu-central-1',
-	          'version' => 'latest',
-	        ]),'s3.example.com',''),
-	        'baseUrl' =>  's3.example.com'
+			'replace' => false,
+			'afterReplace' => null // null | callback fct($entity),
+			'delete' => true,	
+			'adapter' => 'League\Flysystem\AwsS3v3\AwsS3Adapter',
+			'client' => new League\Flysystem\AwsS3v3\AwsS3Adapter(Aws\S3\S3Client::factory([
+				'credentials' => [
+					'key'    => '***',
+					'secret' => '***',
+				],
+				'region' => 'eu-central-1',
+				'version' => 'latest',
+			]),'s3.example.com',''),
+			'baseUrl' =>  's3.example.com'
 	      ],
 	    ],
 
@@ -168,21 +149,6 @@ Exemple of settings:
 	        'start' => true,
 	        'end' => true,
 	      ],
-
-	      // trumbowyg settings
-	      'trumbowyg' => [
-	        'svgPath' => '/attachment/icons/icons.svg',
-	        'lang'=>'fr',
-	        'btnsDef'=> [
-	          'media'=> [ 'dropdown'=> ['attachment-browse','attachment-upload','noembed'], 'ico'=> 'noembed']
-	        ],
-	        'btns'=> [
-	          ['viewHTML'],['media'],['formatting'],'btnGrp-semantic',['superscript', 'subscript'],
-	          ['link'],'btnGrp-justify','btnGrp-lists',['horizontalRule'],['removeformat'],['foreColor', 'backColor'],['fullscreen']
-	        ],
-	        'resetCss' => true, 'removeformatPasted'=> false, 'autogrow'=> true,
-	        'customPlugins' => ['cleanpaste' => 'Attachment.vendor/3xw/trumbowyg.cleanpaste.js']
-	      ]
 	    ],
 
 	    // thumbnails settings
@@ -386,17 +352,6 @@ Attachment comes with a TinyMCE plugin. Working with package [cakephp-tinymce](h
       ]
     ]);
 
-#####Trumbowyg ( deprecated )
-
-	$this->Attachment->trumbowyg('content',[
-       'types' =>['image/jpeg','image/png','image/gif'],
-       'atags' => [],
-       'restrictions' => [
-          Attachment\View\Helper\AttachmentHelper::TAG_RESTRICTED,
-          Attachment\View\Helper\AttachmentHelper::TYPES_RESTRICTED
-       ],
-       'content' => '',
-    ]);
 This will let you insert image right into trumbowyg textarea !!! heepee!
 
 ####Usage.view.frontend
