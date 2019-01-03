@@ -141,6 +141,7 @@ Exemple of settings:
 	      'maxsize' => 30, // 30MB
 	      'types' =>['image/jpeg','image/png','image/gif'],
 	      'atags' => [],
+	      'atagsDisplay' => false, // false | 'select' | 'input'
 	      'profile' => 's3',
 
 	      // pagination setting in browse views
