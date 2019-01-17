@@ -45,7 +45,6 @@ Vue.component('attachment-index',{
     if(window.aEventHub[this.aid] == undefined){
       window.aEventHub[this.aid] = new Vue();
     }
-
     window.aEventHub[this.aid].$on('show-edit-file', this.showEditFile);
     window.aEventHub[this.aid].$on('show-view-file', this.showViewFile);
     window.aEventHub[this.aid].$on('edit-progress', this.editProgress);
@@ -54,6 +53,9 @@ Vue.component('attachment-index',{
     window.aEventHub[this.aid].$on('upload-finished', this.getFiles);
     window.aEventHub[this.aid].$on('embed-finished', this.getFiles);
     window.aEventHub[this.aid].$on('delete-file', this.deleteFile);
+    if(this.settings.listStyle !== undefined){
+      this.listStyle = this.settings.listStyle
+    }
   },
   methods: {
     showEditFile:function(index) {

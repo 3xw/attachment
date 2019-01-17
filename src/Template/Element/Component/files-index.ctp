@@ -22,6 +22,9 @@
               <span v-html="$options.filters.icon(file.type+'/'+file.subtype)"></span>
             </td>
             <td>
+              <span v-if="file.title.length > 0">
+                <b>{{file.title}}</b><br/>
+              </span>
               {{file.name}}
             </td>
             <td>

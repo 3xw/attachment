@@ -99,7 +99,7 @@ in your layout.ctp:
 in your app.js
 
 	(function(scope, $, Vue){
-		
+
 		// boostrap
 		$(document).ready(function(){ var adminApp = new Vue({el: "#admin-app"}) })
 
@@ -122,7 +122,7 @@ Exemple of settings:
 	      's3' => [
 			'replace' => false,
 			'afterReplace' => null // null | callback fct($entity),
-			'delete' => true,	
+			'delete' => true,
 			'adapter' => 'League\Flysystem\AwsS3v3\AwsS3Adapter',
 			'client' => new League\Flysystem\AwsS3v3\AwsS3Adapter(Aws\S3\S3Client::factory([
 				'credentials' => [
@@ -314,7 +314,8 @@ In edit.ctp
       'actions' => ['add','edit','delete','view','download'],
       'types' =>['image/jpeg','image/png','embed/youtube','embed/vimeo'],
       'atags' => ['Restricted Tag 1', 'Restricted Tag 2'],
-      'profile' => 's3',
+			'listStyle' => true,
+			'profile' => 's3', // optional as it was set in config/attachment.php
       'restrictions' => [
         Attachment\View\Helper\AttachmentHelper::TAG_RESTRICTED,
         Attachment\View\Helper\AttachmentHelper::TYPES_RESTRICTED

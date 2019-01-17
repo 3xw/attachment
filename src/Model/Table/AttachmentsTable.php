@@ -60,8 +60,8 @@ class AttachmentsTable extends Table
         $needle = '%'.$args['search'].'%';
         return $query
         ->distinct($this->aliasField('id'))
-        ->leftJoin(['AA' => 'attachments_atags'],['AA.attachment_id = Attachments.id'])
-        ->leftJoin(['Atags' => 'atags'],['Atags.id = AA.atag_id'])
+        ->leftJoin(['AAtags' => 'attachments_atags'],['AAtags.attachment_id = Attachments.id'])
+        ->leftJoin(['Atags' => 'atags'],['Atags.id = AAtags.atag_id'])
         ->where([
           'OR' => [
             'Atags.name LIKE' => $needle,
