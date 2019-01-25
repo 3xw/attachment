@@ -356,6 +356,45 @@ Attachment comes with a TinyMCE plugin. Working with package [cakephp-tinymce](h
 
 This will let you insert image right into trumbowyg textarea !!! heepee!
 
+Exemple in locale.ctp:
+
+		$this->element('locale',['fields' => ['meta',
+				'header' => [
+					'Trois/Tinymce.tinymce' => [
+						'value' => $post,
+						'init' => []
+					]
+				],
+				'body' => [
+					'Trois/Tinymce.tinymce' => [
+						'value' => $post,
+						'init' => [
+							'external_plugins' => [
+								'attachment' => $this->Url->build('/attachment/js/Plugins/tinymce/plugin.min.js', true),
+							],
+							'attachment_settings' => [
+								'types' => [
+									'application/pdf',
+									'application/msword',
+									'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+									'application/vnd.ms-excel',
+									'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+									'image/jpeg',
+									'image/png',
+									'embed/youtube',
+									'embed/vimeo'
+								],
+								'atags' => [],
+								'restrictions' => [
+									Attachment\View\Helper\AttachmentHelper::TAG_OR_RESTRICTED,
+									Attachment\View\Helper\AttachmentHelper::TYPES_RESTRICTED
+								],
+							]
+						]
+					]
+				]
+			], 'labels' => ['meta (description google, facebook)', 'lead', 'text']]);
+
 ####Usage.view.frontend
 in file
 
