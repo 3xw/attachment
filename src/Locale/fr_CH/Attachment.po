@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "POT-Creation-Date: 2018-12-21 10:38+0100\n"
-"PO-Revision-Date: 2018-12-21 10:40+0100\n"
+"PO-Revision-Date: 2019-01-28 16:06+0100\n"
 "Last-Translator: \n"
 "Language-Team: EMAIL@ADDRESS\n"
 "Language: fr\n"
@@ -108,7 +108,7 @@ msgstr "Titre"
 #: Template/Element/Component/embed.ctp:50;62;77
 #: Template/Element/Component/upload.ctp:55;67;82
 msgid "Description"
-msgstr "Déscription"
+msgstr "Description"
 
 #: Template/Element/Component/edit.ctp:129
 #: Template/Element/Component/embed.ctp:85
