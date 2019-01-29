@@ -9,6 +9,11 @@
         <div class="custom-modal-body">
 
           <!-- filters -->
+          <div class="btn-group float-right">
+            <button type="button" class="modal-default-button btn btn-fill btn-warning" @click="close()">
+              <?= __d('Attachment','Close') ?>
+            </button>
+          </div>
           <attachment-filters :types="types" :tags="tags" :callback="getFiles" ></attachment-filters>
 
           <!-- WARNINGS -->
@@ -41,6 +46,9 @@
                     <span v-html="$options.filters.icon(file.type+'/'+file.subtype)"></span>
                   </td>
                   <td>
+                    <span v-if="file.title">
+                      <b>{{file.title}}</b><br/>
+                    </span>
                     {{file.name}}
                   </td>
                   <td>

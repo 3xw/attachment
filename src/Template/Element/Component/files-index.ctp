@@ -36,18 +36,18 @@
             <td>
               <div class="btn-group">
                 <!-- data -->
-                <a class="btn btn-fill btn-xs btn-success" target="_blank" role="button" v-bind:href="file.download_link" v-if="settings.actions.indexOf('download') != -1">
+                <a class="btn btn-xs btn-simple btn-success btn-icon" target="_blank" role="button" v-bind:href="file.download_link" v-if="settings.actions.indexOf('download') != -1">
                   <?= __('Download') ?>
                 </a>
-                <button class="btn btn-fill btn-xs btn-success" role="button" v-on:click="dispatch('show-view-file',aid,index)" v-if="settings.actions.indexOf('view') != -1">
-                  <?= __('View') ?>
-                </button>
-                <button class="btn btn-fill btn-xs btn-info" role="button" v-on:click="dispatch('show-edit-file',aid,index)" v-if="settings.actions.indexOf('edit') != -1">
-                  <?= __('Edit') ?>
-                </button>
-                <button class="btn btn-fill btn-xs btn-danger" role="button" v-on:click="dispatch('delete-file',aid,index)" v-if="settings.actions.indexOf('delete') != -1">
-                  <?= __('Delete') ?>
-                </button>
+                <a class="btn btn-xs btn-simple btn-info btn-icon edit " role="button" v-on:click="dispatch('show-view-file',aid,index)" v-if="settings.actions.indexOf('view') != -1">
+                  <i class="material-icons color--white">visibility</i>
+                </a>
+                <a class="btn btn-xs btn-simple btn-warning btn-icon edit color--white" role="button" v-on:click="dispatch('show-edit-file',aid,index)" v-if="settings.actions.indexOf('edit') != -1">
+                  <i class="material-icons color--white">mode_edit</i>
+                </a>
+                <a class="btn btn-xs btn-simple btn-danger btn-icon remove color--white" role="button" v-on:click="dispatch('delete-file',aid,index)" v-if="settings.actions.indexOf('delete') != -1">
+                  <i class="material-icons color--white">delete</i>
+                </a>
               </div>
             </td>
 
@@ -66,24 +66,28 @@
 
             <!-- infos -->
             <p class="card-text small">
-              {{file.title | truncate(15) }}<br/>
-              {{file.name | truncate(15) }}<br/>
+              <span v-if="file.title">{{file.title}}</span>
+              <span v-else>{{file.name}}</span>
+              <br/>
               {{file.size | bytesToMegaBytes | decimal(2) }} MB<br/>
             </p>
 
             <!-- buttons -->
-            <a class="btn btn-fill btn-xs btn-success" target="_blank" role="button" v-bind:href="file.download_link" v-if="settings.actions.indexOf('download') != -1">
-              <?= __('Download') ?>
-            </a>
-            <button class="btn btn-fill btn-xs btn-success" role="button" v-on:click="dispatch('show-view-file',aid,index)" v-if="settings.actions.indexOf('view') != -1">
-              <?= __('View') ?>
-            </button>
-            <button class="btn btn-fill btn-xs btn-info" role="button" v-on:click="dispatch('show-edit-file',aid,index)" v-if="settings.actions.indexOf('edit') != -1">
-              <?= __('Edit') ?>
-            </button>
-            <button class="btn btn-fill btn-xs btn-danger" role="button" v-on:click="dispatch('delete-file',aid,index)" v-if="settings.actions.indexOf('delete') != -1">
-              <?= __('Delete') ?>
-            </button>
+            <div class="btn-group">
+
+              <a class="btn btn-xs btn-simple btn-success btn-icon" target="_blank" role="button" v-bind:href="file.download_link" v-if="settings.actions.indexOf('download') != -1">
+                <?= __('Download') ?>
+              </a>
+              <a class="btn btn-xs btn-simple btn-info btn-icon edit color--white" role="button" v-on:click="dispatch('show-view-file',aid,index)" v-if="settings.actions.indexOf('view') != -1">
+                <i class="material-icons color--white ">visibility</i>
+              </a>
+              <a class="btn btn-xs btn-simple btn-warning btn-icon edit color--white" role="button" v-on:click="dispatch('show-edit-file',aid,index)" v-if="settings.actions.indexOf('edit') != -1">
+                <i class="material-icons color--white">mode_edit</i>
+              </a>
+              <a class="btn btn-xs btn-simple btn-danger btn-icon remove color--white" role="button" v-on:click="dispatch('delete-file',aid,index)" v-if="settings.actions.indexOf('delete') != -1">
+                <i class="material-icons color--white">delete</i>
+              </a>
+            </div>
 
           </div>
         </div>
