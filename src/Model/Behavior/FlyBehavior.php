@@ -172,6 +172,7 @@ class FlyBehavior extends Behavior
 
   public function afterDelete(Event $event, EntityInterface $entity, ArrayObject $options)
   {
+    $settings = $this->config();
     $field = $settings['file_field'];
     if(!empty($entity->get($field))) (new Profile($entity->get('profile')))->delete($entity->get($field));
   }
