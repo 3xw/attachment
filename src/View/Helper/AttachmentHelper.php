@@ -368,7 +368,9 @@ class AttachmentHelper extends Helper
     }else{
       $profile = empty($params['profile'])? 'external' : $params['profile'];
     }
-    $url = $this->Url->build('/thumbnails/'.$profile.'/',true);
+    $cdn = Configure::read('Attachment.profiles.thumbnails.cdn');
+    $cdn = $cdn?  $cdn: '/thumbnails/';
+    $url = $this->Url->build($cdn.$profile.'/',true);
     $dims = ['height' => 'h','width' => 'w','align' => 'a', 'quality' => 'q'];
     foreach($dims as $key => $value){
       if(!empty($params[$key])){
