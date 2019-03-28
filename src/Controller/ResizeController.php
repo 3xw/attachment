@@ -224,6 +224,9 @@ class ResizeController extends AppController
       $path = $output;
     }
 
+    // delete file when over
+    if(Configure::read('Attachment.profiles.thumbnails.cdn')) register_shutdown_function(function() use($path) { unlink($path); });
+
     // send file
     $this->response->file($path);
     return $this->response;
