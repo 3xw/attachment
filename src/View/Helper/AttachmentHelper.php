@@ -9,6 +9,7 @@ use Cake\Core\Configure;
 use Cake\Routing\Router;
 use Cake\Utility\Text;
 use Cake\Utility\Inflector;
+use Attachment\Http\Cdn\BaseCdn;
 
 class AttachmentHelper extends Helper
 {
@@ -369,8 +370,8 @@ class AttachmentHelper extends Helper
       $profile = empty($params['profile'])? 'external' : $params['profile'];
     }
     $cdn = Configure::read('Attachment.profiles.thumbnails.cdn');
-    $cdn = $cdn?  $cdn: '/thumbnails/';
-    $url = $this->Url->build($cdn.$profile.'/',true);
+    $url = ($cdn && $cdn instanceof BaseCdn)?  $cdn->getUrl(): '/thumbnails/';
+    $url = $this->Url->build($url.$profile.'/',true);
     $dims = ['height' => 'h','width' => 'w','align' => 'a', 'quality' => 'q'];
     foreach($dims as $key => $value){
       if(!empty($params[$key])){
