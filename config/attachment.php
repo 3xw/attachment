@@ -3,6 +3,8 @@
 return [
   'Attachment' => [
 
+    'listeners' => [],
+
     // set profiles
     'profiles' => [
 
