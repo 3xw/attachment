@@ -278,6 +278,26 @@ recordNotFound
 setFlash
 ```
 
+Listners should extend the BaseListener class:
+
+```php
+namespace App\Listener;
+
+use Attachment\Listener\BaseListener;
+use Cake\Event\Event;
+
+class ExtranetMoveFileListener extends BaseListener
+{
+  // $event->getSubject() returns an object with minimum a request variable
+  // all model events are wrapped on top of:
+  // https://crud.readthedocs.io/en/latest/events.html#crud-beforesave 
+  public function respond(Event $event)  
+  {
+    
+  }
+}
+```
+
 ### Settings.thumbnails
 Attachment.thumbnails is the settings for thumbs generation.
 
