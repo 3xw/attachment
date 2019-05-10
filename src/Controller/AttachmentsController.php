@@ -31,10 +31,6 @@ class AttachmentsController extends AppController
 
     $this->loadComponent('Crud.Crud', [
       'actions' => [
-        //'Crud.Index',
-        'yo' => [
-          'className' => 'Crud.Index'
-        ],
         'index' => [
           'className' => 'Crud.Index'
         ],
@@ -71,19 +67,10 @@ class AttachmentsController extends AppController
     ]);
 
     $this->loadComponent('Attachment.EventDispatcher');
-    $this->Auth->allow('yo');
-
-  }
-
-  public function yo()
-  {
-
-    return $this->Crud->execute();
   }
 
   public function add()
   {
-    //debug($this->request->data);
     return $this->Crud->execute();
   }
 

@@ -47,7 +47,9 @@ class EventDispatcherComponent extends Component
 
     // retrieve listeners
     $listeners = Configure::read('Attachment.listeners');
-    if($uuid = $this->_request->getData('uuid'))
+    $uuid = $this->_request->getQuery('uuid')? $this->_request->getQuery('uuid'): $this->_request->getData('uuid');
+
+    if($uuid)
     {
       if($sessionListeners = $this->_request->getSession()->read('Attachment.'.$uuid.'.listeners'))
       {
@@ -76,6 +78,11 @@ class EventDispatcherComponent extends Component
     $listeners = $this->getConfig('listeners')[$name];
 
     // exec listeners
-    foreach($listeners as $listener) (new $listener())->respond(new Event($name, $subject));
+    foreach($listeners as $key => $value)
+    {
+      $config = is_array($value)? $value: [];
+      $listener = is_array($value)? $key: $value;
+      (new $listener($config))->respond(new Event($name, $subject));
+    }
   }
 }

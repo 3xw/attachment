@@ -32,16 +32,14 @@ class AttachmentHelper extends Helper
 
   private $_token;
 
-
-
   protected function _getToken()
   {
     if(!$this->_token)
-      $this->_token = new Token();
+    $this->_token = new Token();
     return $this->_token;
   }
 
-  public function downloadLink($attachment )
+  public function downloadLink($attachment)
   {
     return $this->_getToken()->url($attachment);
   }
@@ -108,30 +106,6 @@ class AttachmentHelper extends Helper
     }
   }
 
-  public function buildIndex($settings = [])
-  {
-    $this->_setupIndexComponent();
-    $settings['actions'] = (empty($settings['actions']))? ['add','edit','delete','view'] : $settings['actions'];
-    $settings['attachments'] = [];
-    $settings = array_merge(Configure::read('Attachment.upload'),$settings);
-    $uuid = Text::uuid();
-    $this->request->session()->write('Attachment.'.$uuid, $settings);
-    $settings['uuid'] = $uuid;
-    $settings['url'] = $this->Url->build('/', true);
-    $settings['translate'] = Configure::read('Attachment.translate');
-    $settings['i18n'] = [
-      'enable' => Configure::read('Attachment.translate'),
-      'languages' => Configure::read('I18n.languages'),
-      'defaultLocale' => Configure::read('App.defaultLocale')
-    ];
-    $profiles = Configure::read('Attachment.profiles');
-    $settings['baseUrls'] = [];
-    foreach($profiles as $key => $value){
-      $settings['baseUrls'][$key] = $value['baseUrl'];
-    }
-    return "<attachment-index :aid='\"".Text::uuid()."\"' :settings='".htmlspecialchars(json_encode($settings), ENT_QUOTES, 'UTF-8')."' ></attachment-index>";
-  }
-
   private function _setupInputComponent()
   {
     $this->_inputComponentCount++;
@@ -178,61 +152,6 @@ class AttachmentHelper extends Helper
     }
   }
 
-  private function _createTrumbowygUrl($value, $plugins, $version, &$js, &$css)
-  {
-    if(is_string($value)){
-      if($value == 'foreColor' || $value == 'backColor'){ $value = 'colors'; }
-      if($value == 'colors'){$css[] = 'https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/'.$version.'/plugins/colors/ui/trumbowyg.colors.min.css';}
-      if(array_search($value, $plugins) !== false ){
-        $js[] = 'https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/'.$version.'/plugins/'.$value.'/trumbowyg.'.$value.'.min.js';
-      }
-    }
-
-    if(is_array($value)){
-      foreach($value as $v ){
-        $this->_createTrumbowygUrl($v, $plugins, $version, $js, $css);
-      }
-    }
-  }
-
-  private function _setTrumbowygComponent($settings)
-  {
-    $version = $settings['trumbowyg']['version'];
-
-    $this->_View->append('template', $this->_View->element('Attachment.Component/trumbowyg-options'));
-    $this->_View->append('template', $this->_View->element('Attachment.Component/trumbowyg'));
-    $css = ['https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/'.$version.'/ui/trumbowyg.min.css'];
-    $js = [
-      'https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/'.$version.'/trumbowyg.min.js',
-      'https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/'.$version.'/langs/'.$settings['trumbowyg']['lang'].'.min.js',
-      'Attachment.Element/Component/trumbowyg-plugin-upload.js'.$this->getVersion(),
-      'Attachment.Element/Component/trumbowyg-plugin-browse.js'.$this->getVersion(),
-      'Attachment.Element/Component/trumbowyg.js'.$this->getVersion(),
-      'Attachment.Element/Component/trumbowyg-options.js'.$this->getVersion()
-    ];
-
-    if(!empty($settings['trumbowyg']['customPlugins'])){
-      foreach($settings['trumbowyg']['customPlugins'] as $name => $url){
-        $js[] = $url.$this->getVersion();
-      }
-    }
-
-    $plugins = ['base64','cleanpaste','colors','emoji','insertaudio','noembed','pasteimage','preformatted','table','template'];
-
-    foreach($settings['trumbowyg']['btns'] as $btn){ $this->_createTrumbowygUrl($btn, $plugins, $version, $js, $css); }
-    if(!empty($settings['trumbowyg']['btnsDef'])){
-      foreach($settings['trumbowyg']['btnsDef'] as $btn){
-        if(array_key_exists('dropdown', $btn)){$this->_createTrumbowygUrl($btn['dropdown'], $plugins, $version, $js, $css);}
-      }
-    }
-
-    // add css
-    $this->Html->css($css,['block' => 'css']);
-
-    // add script
-    $this->Html->script($js,['block' => true]);
-  }
-
   private function _getSettings($field,$settings)
   {
     $settings = array_merge(Configure::read('Attachment.upload'),$settings);
@@ -241,6 +160,7 @@ class AttachmentHelper extends Helper
     $settings['uuid'] = $uuid;
     $settings['url'] = $this->Url->build('/');
     $settings['label'] = empty($settings['label'])? Inflector::humanize($field) : $settings['label'];
+    $settings['translate'] = Configure::read('Attachment.translate');
     $settings['i18n'] = [
       'enable' => Configure::read('Attachment.translate'),
       'languages' => Configure::read('I18n.languages'),
@@ -249,10 +169,24 @@ class AttachmentHelper extends Helper
     return $settings;
   }
 
+  public function buildIndex($settings = [])
+  {
+    $this->_setupIndexComponent();
+    $settings = $this->_getSettings('Index',$settings);
+
+    $settings['actions'] = (empty($settings['actions']))? ['add','edit','delete','view'] : $settings['actions'];
+    $settings['attachments'] = [];
+    $profiles = Configure::read('Attachment.profiles');
+    $settings['baseUrls'] = [];
+    foreach($profiles as $key => $value) $settings['baseUrls'][$key] = $value['baseUrl'];
+    return "<attachment-index :aid='\"".Text::uuid()."\"' :settings='".htmlspecialchars(json_encode($settings), ENT_QUOTES, 'UTF-8')."' ></attachment-index>";
+  }
+
   public function jsSetup($field,$settings = [])
   {
     $this->_setupInputComponent();
     $settings = $this->_getSettings($field,$settings);
+    
     $settings['field'] = $field;
     $settings['relation'] = 'belongsTo';
     $settings['attachments'] = [];
@@ -260,22 +194,12 @@ class AttachmentHelper extends Helper
     return $settings;
   }
 
-  public function trumbowyg($field, $settings = [])
-  {
-    $settings = $this->jsSetup($field, $settings);
-    $settings['trumbowyg']['svgPath'] = $this->Url->build($settings['trumbowyg']['svgPath'], true);
-    $this->_setTrumbowygComponent($settings);
-
-    return "<attachment-trumbowyg :aid='\"".Text::uuid()."\"' :settings='".htmlspecialchars(json_encode($settings), ENT_QUOTES, 'UTF-8')."' ></attachment-trumbowyg>";
-  }
-
   public function input($field, $settings = [])
   {
+    $this->_setupInputComponent();
     $conf['relation'] = ($field == 'Attachments')? 'belongsToMany' : 'belongsTo';
     $conf['field'] = ($field == 'Attachments')? '' : $field;
     $settings = array_merge($conf,$settings);
-    $this->_setupInputComponent();
-
     return "<attachment-input :aid='\"".Text::uuid()."\"' :settings='".htmlspecialchars(json_encode($this->_getSettings($field,$settings)), ENT_QUOTES, 'UTF-8')."' ></attachment-input>";
   }
 

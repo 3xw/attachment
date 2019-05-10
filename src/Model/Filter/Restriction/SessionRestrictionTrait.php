@@ -16,6 +16,7 @@ Trait SessionRestrictionTrait {
     {
       $session = new Session();
       $settings = $session->read('Attachment.'.Router::getRequest()->query['uuid']);
+
       if(!empty($settings['restrictions']))
       {
         foreach($settings['restrictions'] as $restriction)

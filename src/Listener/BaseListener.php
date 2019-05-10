@@ -15,8 +15,5 @@ class BaseListener
     $this->setConfig($config);
   }
 
-  public function respond(Event $event)
-  {
-    debug($event);
-  }
+  public function respond(Event $event){}
 }
