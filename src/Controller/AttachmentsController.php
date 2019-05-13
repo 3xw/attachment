@@ -4,7 +4,6 @@ namespace Attachment\Controller;
 use Attachment\Controller\AppController;
 use Cake\Event\Event;
 use Crud\Event\Subject;
-use App\Crud\ADelete;
 use Cake\Core\Configure;
 
 /**
@@ -50,12 +49,7 @@ class AttachmentsController extends AppController
         ],
         'delete' => [
           'className' => 'Attachment\Crud\Action\DeleteAction',
-        ],
-        //'Crud.Delete',
-        /*'find' => [
-        'className' => 'Crud.Index',
-        'api.success.data.entity' => ['type','subtype']
-        ]*/
+        ]
       ],
       'listeners' => [
         //'CrudCache',
