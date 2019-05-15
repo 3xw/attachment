@@ -21,12 +21,12 @@ return [
       // child profiles
       'default' => [
     		'adapter' => 'League\Flysystem\Adapter\Local',
-    		'client' => new League\Flysystem\Adapter\Local('files'),
+    		'client' => new League\Flysystem\Adapter\Local(WWW_ROOT.'files'),
         'baseUrl' =>  '/files/'
     	],
       'img' => [
     		'adapter' => 'League\Flysystem\Adapter\Local',
-    		'client' => new League\Flysystem\Adapter\Local('img'),
+    		'client' => new League\Flysystem\Adapter\Local(WWW_ROOT.'img'),
         'baseUrl' =>  '/img/'
     	],
       'external' => [
