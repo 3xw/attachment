@@ -190,6 +190,7 @@ class AttachmentsTable extends Table
 
   public function externalUrlIsValide($value, array $context)
   {
+    if(!empty($context['data']['type']) && $context['data']['type'] == 'embed') return true;
     if (!empty($value) && !is_array($value) && substr($value, 0, 4) == 'http')
     {
       $headers = get_headers($value,1);

@@ -70,7 +70,7 @@ class EmbedBehavior extends Behavior
       // try to get image from vimeo or youtube
       if ($subType == 'youtube')
       {
-        preg_match('~/embed/([0-9a-z_-]+)~i', $data[$embed_field], $matches);
+        preg_match('~/embed/([0-9a-zA-Z_!\-]+)~i', $data[$embed_field], $matches);
         if (!empty($matches))
         {
           $data[$file_field] = 'http://img.youtube.com/vi/' . $matches[1] . '/0.jpg'; //$matches[1];
@@ -78,7 +78,7 @@ class EmbedBehavior extends Behavior
       }
       if ($subType == 'vimeo')
       {
-        preg_match('~/video/([0-9a-z_-]+)~i', $data[$embed_field], $matches);
+        preg_match('~/video/([0-9a-zA-Z_!\-]+)~i', $data[$embed_field], $matches);
         if (!empty($matches))
         {
           $imgid = $matches[1];
