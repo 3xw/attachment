@@ -81,13 +81,30 @@
         var conf = editor.settings.attachment_settings,
         aid = conf.field
 
-        editor.addButton('attachment',
-        {
-          type: 'splitbutton',text: 'Média',icon: 'image', menu: [
-            {text: 'Télécharger', onclick: function(){scope.aEventHub[aid].$emit('show-upload')}},
-            {text: 'Parcourir', onclick: function(){scope.aEventHub[aid].$emit('show-browse')}},
-          ]
-        })
+        editor.ui.registry.addMenuButton('attachment', {
+          text: 'Média',
+          icon: 'image',
+          fetch: function (callback) {
+            var items = [
+              {
+                type: 'menuitem',
+                text: 'Télécharger',
+                onAction: function (_) {
+                  scope.aEventHub[aid].$emit('show-upload')
+                }
+              },
+              {
+                type: 'menuitem',
+                text: 'Parcourir',
+                onAction: function (_) {
+                  scope.aEventHub[aid].$emit('show-browse')
+                }
+              },
+
+            ];
+            callback(items);
+          }
+        });
       },
     }
 
