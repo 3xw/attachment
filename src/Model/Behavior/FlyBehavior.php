@@ -15,7 +15,10 @@ use Attachment\Fly\Profile;
 class FlyBehavior extends Behavior
 {
 
-  protected $_defaultConfig = [];
+  protected $_defaultConfig = [
+    'file_field' => 'path',
+    'sessionControl' => true
+  ];
 
   protected $_file = [];
 
@@ -24,12 +27,6 @@ class FlyBehavior extends Behavior
   protected $_uuid = '';
 
   protected $_session = null;
-
-  public function initialize(array $config)
-  {
-    // check for a datafield field (there is no default)
-    if (!isset($config['file_field']) || '' === $config['file_field']) throw new Exception('Must specify a field for FileBehavior');
-  }
 
   public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options)
   {
@@ -88,14 +85,18 @@ class FlyBehavior extends Behavior
         $type = $type[0];
 
         // GET CONFIG
-        $this->_session = new Session();
-        $sessionAttachment = $this->_session->read('Attachment.'.$this->_uuid);
-        if(!$sessionAttachment)
+        if($this->getConfig('sessionControl'))
         {
-          $event->stopPropagation();
-          $entity->errors($field,['Attachment keys not found in session! Please pass Attachment settings throught session!']);
+          $this->_session = new Session();
+          $sessionAttachment = $this->_session->read('Attachment.'.$this->_uuid);
+          if(!$sessionAttachment)
+          {
+            $event->stopPropagation();
+            $entity->errors($field,['Attachment keys not found in session! Please pass Attachment settings throught session!']);
+          }
+          $conf = array_merge($sessionAttachment, $settings);
         }
-        $conf = array_merge($sessionAttachment, $settings);
+        else $conf = $settings;
 
         // CHECK type
         if (!in_array($this->_file['type'], $conf['types']))
