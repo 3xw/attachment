@@ -96,7 +96,7 @@ class FlyBehavior extends Behavior
           }
           $conf = array_merge($sessionAttachment, $settings);
         }
-        else $conf = $settings;
+        else $conf = array_merge(Configure::read('Attachment.upload'), $settings);
 
         // CHECK type
         if (!in_array($this->_file['type'], $conf['types']))
