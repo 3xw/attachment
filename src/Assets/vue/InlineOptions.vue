@@ -72,7 +72,7 @@
                     <!-- width -->
                     <div class="input">
                       <label>Width</label>
-                      <input type="number" class="form-control" v-model="selection.width" min="0" step="5" v-bind:max="(file.width < 1200)? file.width: 1200" v-bind:value="(file.width < 1200)? file.width: 1200">
+                      <input type="number" class="form-control" v-model="selection.width" min="0" step="5" :max="(file.width < 1200)? file.width: 1200" >
                     </div>
                     <!-- crop -->
                     <div v-if="selection.width" class="input">
