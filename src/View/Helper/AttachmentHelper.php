@@ -44,22 +44,6 @@ class AttachmentHelper extends Helper
     return $this->_getToken()->url($attachment);
   }
 
-  public function getVersion()
-  {
-    if(!$this->_version){
-      $string = file_get_contents(APP."../composer.lock");
-      $composer = json_decode($string, true);
-      foreach($composer['packages'] as $package)
-      {
-        if($package['name'] == '3xw/attachment'){
-          $this->_version = '?version='.$package['version'];
-          break;
-        }
-      }
-    }
-    return $this->_version;
-  }
-
   private function _setupIndexComponent()
   {
     $this->_inputComponentCount++;
@@ -68,40 +52,10 @@ class AttachmentHelper extends Helper
       // session clear
       $this->request->session()->write('Attachment', '');
 
-      // add template
-      $this->_View->append('template', $this->_View->element('Attachment.Component/thumb'));
-      $this->_View->append('template', $this->_View->element('Attachment.Component/files-index'));
-      $this->_View->append('template', $this->_View->element('Attachment.Component/edit'));
-      $this->_View->append('template', $this->_View->element('Attachment.Component/view'));
-      $this->_View->append('template', $this->_View->element('Attachment.Component/atags'));
-      $this->_View->append('template', $this->_View->element('Attachment.Component/upload'));
-      $this->_View->append('template', $this->_View->element('Attachment.Component/embed'));
-      $this->_View->append('template', $this->_View->element('Attachment.Component/pagination'));
-      $this->_View->append('template', $this->_View->element('Attachment.Component/filters'));
-      $this->_View->append('template', $this->_View->element('Attachment.Component/index'));
-
-      // add css
-      $this->Html->css([
-        'Attachment.vendor/TimSchlechter/bootstrap-tagsinput/bootstrap-tagsinput.css',
-        'Attachment.attachment.css'.$this->getVersion(),
-      ],['block' => 'css']);
-
       // add script
       $this->Html->script([
-        'Attachment.vendor/TimSchlechter/bootstrap-tagsinput/bootstrap-tagsinput.js',
-        'Attachment.vendor/twitter/typeahead.js/typeahead.bundle.min.js',
-        'Attachment.vendor/rubaxa/Sortable/Sortable.js',
-        'Attachment.Element/Component/utils.js'.$this->getVersion(),
-        'Attachment.Element/Component/thumb.js'.$this->getVersion(),
-        'Attachment.Element/Component/files-index.js'.$this->getVersion(),
-        'Attachment.Element/Component/atags.js'.$this->getVersion(),
-        'Attachment.Element/Component/edit.js'.$this->getVersion(),
-        'Attachment.Element/Component/view.js'.$this->getVersion(),
-        'Attachment.Element/Component/upload.js'.$this->getVersion(),
-        'Attachment.Element/Component/embed.js'.$this->getVersion(),
-        'Attachment.Element/Component/pagination.js'.$this->getVersion(),
-        'Attachment.Element/Component/filters.js'.$this->getVersion(),
-        'Attachment.Element/Component/index.js'.$this->getVersion()
+        'plugins/attachment/attachment.vendor.min.js',
+        'plugins/attachment/attachment.min.js'
       ],['block' => true]);
     }
   }
@@ -114,40 +68,10 @@ class AttachmentHelper extends Helper
       // session clear
       $this->request->session()->write('Attachment', '');
 
-      // add template
-      $this->_View->append('template', $this->_View->element('Attachment.Component/thumb'));
-      $this->_View->append('template', $this->_View->element('Attachment.Component/files'));
-      $this->_View->append('template', $this->_View->element('Attachment.Component/pagination'));
-      $this->_View->append('template', $this->_View->element('Attachment.Component/filters'));
-      $this->_View->append('template', $this->_View->element('Attachment.Component/upload'));
-      $this->_View->append('template', $this->_View->element('Attachment.Component/atags'));
-      $this->_View->append('template', $this->_View->element('Attachment.Component/embed'));
-      $this->_View->append('template', $this->_View->element('Attachment.Component/browse'));
-      $this->_View->append('template', $this->_View->element('Attachment.Component/input'));
-      $this->_View->append('template', $this->_View->element('Attachment.Component/inline-options'));
-
-      // add css
-      $this->Html->css([
-        'Attachment.vendor/TimSchlechter/bootstrap-tagsinput/bootstrap-tagsinput.css',
-        'Attachment.attachment.css'.$this->getVersion(),
-      ],['block' => 'css']);
-
       // add script
       $this->Html->script([
-        'Attachment.vendor/TimSchlechter/bootstrap-tagsinput/bootstrap-tagsinput.js',
-        'Attachment.vendor/twitter/typeahead.js/typeahead.bundle.min.js',
-        'Attachment.vendor/rubaxa/Sortable/Sortable.js',
-        'Attachment.Element/Component/utils.js'.$this->getVersion(),
-        'Attachment.Element/Component/thumb.js'.$this->getVersion(),
-        'Attachment.Element/Component/files.js'.$this->getVersion(),
-        'Attachment.Element/Component/pagination.js'.$this->getVersion(),
-        'Attachment.Element/Component/filters.js'.$this->getVersion(),
-        'Attachment.Element/Component/atags.js'.$this->getVersion(),
-        'Attachment.Element/Component/upload.js'.$this->getVersion(),
-        'Attachment.Element/Component/embed.js'.$this->getVersion(),
-        'Attachment.Element/Component/browse.js'.$this->getVersion(),
-        'Attachment.Element/Component/input.js'.$this->getVersion(),
-        'Attachment.Element/Component/inline-options.js'.$this->getVersion()
+        'plugins/attachment/attachment.vendor.min.js',
+        'plugins/attachment/attachment.min.js'
       ],['block' => true]);
     }
   }
@@ -179,14 +103,17 @@ class AttachmentHelper extends Helper
     $profiles = Configure::read('Attachment.profiles');
     $settings['baseUrls'] = [];
     foreach($profiles as $key => $value) $settings['baseUrls'][$key] = $value['baseUrl'];
-    return "<attachment-index :aid='\"".Text::uuid()."\"' :settings='".htmlspecialchars(json_encode($settings), ENT_QUOTES, 'UTF-8')."' ></attachment-index>";
+    return $this->_View->Vue->component('attachment-index',[
+      ':aid' => Text::uuid(),
+      ':settings' => htmlspecialchars(json_encode($settings), ENT_QUOTES, 'UTF-8')
+    ]);
   }
 
   public function jsSetup($field,$settings = [])
   {
     $this->_setupInputComponent();
     $settings = $this->_getSettings($field,$settings);
-    
+
     $settings['field'] = $field;
     $settings['relation'] = 'belongsTo';
     $settings['attachments'] = [];
@@ -200,7 +127,10 @@ class AttachmentHelper extends Helper
     $conf['relation'] = ($field == 'Attachments')? 'belongsToMany' : 'belongsTo';
     $conf['field'] = ($field == 'Attachments')? '' : $field;
     $settings = array_merge($conf,$settings);
-    return "<attachment-input :aid='\"".Text::uuid()."\"' :settings='".htmlspecialchars(json_encode($this->_getSettings($field,$settings)), ENT_QUOTES, 'UTF-8')."' ></attachment-input>";
+    return $this->_View->Vue->component('attachment-input',[
+      ':aid' => Text::uuid(),
+      ':settings' => htmlspecialchars(json_encode($this->_getSettings($field,$settings)), ENT_QUOTES, 'UTF-8')
+    ]);
   }
 
   public function filesystem($profile)
