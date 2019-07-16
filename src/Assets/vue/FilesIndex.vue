@@ -96,6 +96,8 @@
 </template>
 
 <script>
+import thumb from './Thumb.vue'
+
 export default
 {
   name: 'attachment-files-index',
@@ -110,6 +112,10 @@ export default
       type: Array,
       required: true
     }
+  },
+  components:
+  {
+    'attachment-thumb': thumb
   },
   data: function(){
     return {};

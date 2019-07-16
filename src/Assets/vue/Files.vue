@@ -36,6 +36,8 @@
 </template>
 
 <script>
+import thumb from './Thumb.vue'
+
 export default
 {
   name: 'attachment-files',
@@ -46,6 +48,10 @@ export default
       required: true,
       twoWay: true
     }
+  },
+  components:
+  {
+    'attachment-thumb': thumb
   },
   data: function(){
     return {
