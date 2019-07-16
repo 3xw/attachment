@@ -10,7 +10,7 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 const attachmentVendorConfig = env => {
   return {
-    mode: 'production',
+    mode: 'development',
     name: 'attachmentVendorConfig',
     entry: './vendor/3xw/attachment/src/Assets/attachment.vendor.conf.js',
     output: {
@@ -91,7 +91,7 @@ const attachmentVendorConfig = env => {
 
 const attachmentConfig = env => {
   return {
-    mode: 'production',
+    mode: 'development',
     name: 'attachmentConfig',
     entry: './vendor/3xw/attachment/src/Assets/attachment.conf.js',
     output: {
@@ -100,6 +100,7 @@ const attachmentConfig = env => {
       filename: 'js/plugins/attachment/attachment.min.js',
       chunkFilename: 'js/plugins/attachment/components/attachment.[name].[hash].min.js',
     },
+    watch: true,
     optimization: {
       minimizer: [new UglifyJsPlugin()],
     },

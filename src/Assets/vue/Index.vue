@@ -90,6 +90,7 @@ export default
     };
   },
   mounted: function(){
+
     this.types = this.settings.types;
     this.getTags();
     this.getFiles();
@@ -102,6 +103,7 @@ export default
     }
   },
   created: function(){
+    
     if(window.aEventHub[this.aid] == undefined){
       window.aEventHub[this.aid] = new Vue();
     }

@@ -39,6 +39,11 @@ class AttachmentHelper extends Helper
     return $this->_token;
   }
 
+  public function component($name, $props = [])
+  {
+    return $this->_View->Html->tag('attachment-loader', '', ['name' => $name, 'props' => json_encode($props)]);
+  }
+
   public function downloadLink($attachment)
   {
     return $this->_getToken()->url($attachment);
@@ -103,8 +108,8 @@ class AttachmentHelper extends Helper
     $profiles = Configure::read('Attachment.profiles');
     $settings['baseUrls'] = [];
     foreach($profiles as $key => $value) $settings['baseUrls'][$key] = $value['baseUrl'];
-    return $this->_View->Vue->component('attachment-index',[
-      ':aid' => Text::uuid(),
+    return $this->component('attachment-index',[
+      'aid' => Text::uuid(),
       ':settings' => htmlspecialchars(json_encode($settings), ENT_QUOTES, 'UTF-8')
     ]);
   }
@@ -127,8 +132,8 @@ class AttachmentHelper extends Helper
     $conf['relation'] = ($field == 'Attachments')? 'belongsToMany' : 'belongsTo';
     $conf['field'] = ($field == 'Attachments')? '' : $field;
     $settings = array_merge($conf,$settings);
-    return $this->_View->Vue->component('attachment-input',[
-      ':aid' => Text::uuid(),
+    return $this->component('attachment-input',[
+      'aid' => Text::uuid(),
       ':settings' => htmlspecialchars(json_encode($this->_getSettings($field,$settings)), ENT_QUOTES, 'UTF-8')
     ]);
   }

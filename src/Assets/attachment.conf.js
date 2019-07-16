@@ -9,4 +9,6 @@ window.aEventHub = {};//new Vue();
 require('./js/filters.js');
 require('./js/directives.js');
 
-import ComponentLoader from './vue/ComponentLaoder.vue';
+import AttachmentLoader from './vue/AttachmentLoader.vue';
+
+Vue.component('AttachmentLoader', AttachmentLoader);
