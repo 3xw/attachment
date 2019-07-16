@@ -7,22 +7,31 @@ export default {
     name: { type: String, default: 'null' },
     props: { type: String }
   },
-  data: function(){
-    return {
-      attributes: JSON.parse(this.props)
-    }
-  },
-  created: function()
+  computed:
   {
-    console.log(this.attributes);
-  },
-  computed: {
-    componentInstance () {
+    componentInstance ()
+    {
       if (this.name == 'null') {
         return null
       }
       const name = this.camelize(this.name.substring(this.name.indexOf('-') + 1))
       return () => import(/* webpackChunkName: "[request]" */ `./${name}.vue`)
+    },
+    attributes()
+    {
+      let baseObj = JSON.parse(this.props);
+      let obj = {}
+      for(let i in baseObj)
+      {
+        if(i.substr(0,1) == ':')
+        {
+          let prop = i.substr(1)
+          obj[prop] = baseObj[i]
+        }
+        else obj[i] = baseObj[i]
+      }
+
+      return obj
     }
   },
   methods:
