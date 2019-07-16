@@ -57,6 +57,15 @@
 </template>
 
 <script>
+
+import filters from './Filters.vue'
+import filesIndex from './FilesIndex.vue'
+import pagination from './Pagination.vue'
+import view from './View.vue'
+import edit from './Edit.vue'
+import upload from './Upload.vue'
+import embed from './Embed.vue'
+
 export default
 {
   name: 'attachment-index',
@@ -64,6 +73,16 @@ export default
     settings: Object,
     aid:String,
     //files: Array,
+  },
+  components:
+  {
+    'attachment-filters': filters,
+    'attachment-files-index': filesIndex,
+    'attachment-pagination': pagination,
+    'attachment-view': view,
+    'attachment-edit': edit,
+    'attachment-upload': upload,
+    'attachment-embed': embed,
   },
   data:function(){
     return {
@@ -103,7 +122,7 @@ export default
     }
   },
   created: function(){
-    
+
     if(window.aEventHub[this.aid] == undefined){
       window.aEventHub[this.aid] = new Vue();
     }
