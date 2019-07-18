@@ -118,6 +118,8 @@
 </template>
 
 <script>
+import atags from './Atags.vue'
+
 export default
 {
   name: 'attachment-embed',
@@ -132,6 +134,10 @@ export default
   props: {
     aid:String,
     settings: Object,
+  },
+  components:
+  {
+    'attachment-atags': atags,
   },
   created: function(){
     window.aEventHub[this.aid].$on('show-embed', this.showEmbed);

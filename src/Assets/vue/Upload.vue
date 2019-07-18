@@ -134,6 +134,8 @@
 </template>
 
 <script>
+import atags from './Atags.vue'
+
 export default
 {
   name: 'attachment-upload',
@@ -154,6 +156,10 @@ export default
   props: {
     aid:String,
     settings: Object,
+  },
+  components:
+  {
+    'attachment-atags': atags,
   },
   created: function(){
     window.aEventHub[this.aid].$on('show-upload',this.showUpload);
