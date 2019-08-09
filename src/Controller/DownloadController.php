@@ -60,6 +60,8 @@ class DownloadController extends AppController
     if($attachment->size < 1048576 * 1) // 1MB
     {
       $this->response->body($this->_filesystem($attachment->profile)->read($attachment->path));
+      $this->response->type(['my-type' => $attachment->type.'/'.$attachment->subtype]);
+      $this->response = $this->response->withType('my-type');
       $this->response = $this->response->withDownload($attachment->name);
       return $this->response;
     }else
@@ -74,6 +76,8 @@ class DownloadController extends AppController
 
       // serve
       $this->response->file($path);
+      $this->response->type(['my-type' => $attachment->type.'/'.$attachment->subtype]);
+      $this->response = $this->response->withType('my-type');
       $this->response = $this->response->withDownload($attachment->name);
       return $this->response;
     }
