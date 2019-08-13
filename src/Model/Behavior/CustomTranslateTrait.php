@@ -24,7 +24,7 @@ trait CustomTranslateTrait
         foreach($fields as $key => $value)
         {
 
-          debug($key);
+          //debug($key);
 
           if(!empty($value)){
             $entity->translation($locale)->set([$key => $value], ['guard' => false]);

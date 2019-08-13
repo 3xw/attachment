@@ -46,7 +46,7 @@ class AttachmentsTable extends Table
 
     if(Configure::read('Attachment.translate'))
     {
-      $this->addBehavior('Trois/Utils.Translate', ['fields' => ['title','description']]);
+      $this->addBehavior('Trois\Utils\ORM\Behavior\TranslateBehavior', ['fields' => ['title','description']]);
     }
 
     // Add the behaviour to your table
