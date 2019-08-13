@@ -8,12 +8,13 @@ class SessionLike extends Like
 {
   use SessionRestrictionTrait;
 
-  public function process()
+  public function process():bool
   {
     if ($this->skip()) {
-        return;
+        return true;
     }
     parent::process();
     $this->restrict();
+    return true;
   }
 }

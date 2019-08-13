@@ -13,13 +13,13 @@ use Attachment\Http\Exception\UploadException;
 class AttachmentsTable extends Table
 {
 
-  public function initialize(array $config)
+  public function initialize(array $config):void
   {
     parent::initialize($config);
 
-    $this->table('attachments');
-    $this->displayField('name');
-    $this->primaryKey('id');
+    $this->setTable('attachments');
+    $this->setDisplayField('name');
+    $this->setPrimaryKey('id');
 
     $this->addBehavior('Timestamp');
 
@@ -106,7 +106,7 @@ class AttachmentsTable extends Table
   * @param \Cake\Validation\Validator $validator Validator instance.
   * @return \Cake\Validation\Validator
   */
-  public function validationDefault(Validator $validator)
+  public function validationDefault(Validator $validator): Validator
   {
     $validator
     ->allowEmpty('id', 'create');

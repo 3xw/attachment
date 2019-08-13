@@ -25,7 +25,8 @@ class AttachmentsController extends AppController
     ]
   ];
 
-  public function initialize(){
+  public function initialize():void
+  {
     parent::initialize();
 
     $this->loadComponent('Crud.Crud', [
@@ -72,10 +73,10 @@ class AttachmentsController extends AppController
   {
     $this->Crud->on('beforePaginate', function(Event $event)
     {
-      $event->subject->query->contain(['Atags']);
+      $event->getSubject()->query->contain(['Atags']);
       if(Configure::read('Attachment.translate'))
       {
-        $event->subject->query->find('translations');
+        $event->getSubject()->query->find('translations');
       }
     });
 
@@ -93,10 +94,10 @@ class AttachmentsController extends AppController
   public function view($id = null)
   {
     $this->Crud->on('beforeFind', function(Event $event) {
-      $event->subject->query->contain(['Atags']);
+      $event->getSubject()->query->contain(['Atags']);
       if(Configure::read('Attachment.translate'))
       {
-        $event->subject->query->find('translations');
+        $event->getSubject()->query->find('translations');
       }
     });
     return $this->Crud->execute();
@@ -105,10 +106,10 @@ class AttachmentsController extends AppController
   public function edit($id = null)
   {
     $this->Crud->on('beforeFind', function(Event $event) {
-      $event->subject->query->contain(['Atags']);
+      $event->getSubject()->query->contain(['Atags']);
       if(Configure::read('Attachment.translate'))
       {
-        $event->subject->query->find('translations');
+        $event->getSubject()->query->find('translations');
       }
     });
     return $this->Crud->execute();

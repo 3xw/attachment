@@ -8,12 +8,13 @@ class SessionCallback extends Like
 {
   use SessionRestrictionTrait;
 
-  public function process()
+  public function process():bool
   {
     if ($this->skip()) {
-        return;
+        return true;
     }
     call_user_func($this->config('callback'), $this->getQuery(), $this->getArgs(), $this);
     $this->restrict();
+    return true;
   }
 }

@@ -30,7 +30,7 @@ class EmbedBehavior extends Behavior
   * @param array $config Passed configuration
   * @return void
   */
-  public function initialize(array $config)
+  public function initialize(array $config):void
   {
     // check for a datafield field (there is no default)
     if (!isset($config['embed_field']) || '' === $config['embed_field']

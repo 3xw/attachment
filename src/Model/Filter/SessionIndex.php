@@ -8,11 +8,12 @@ class SessionIndex extends Base
 {
   use SessionRestrictionTrait;
 
-  public function process()
+  public function process():bool
   {
     if ($this->skip()) {
-        return;
+        return true;
     }
     $this->restrict();
+    return true;
   }
 }
