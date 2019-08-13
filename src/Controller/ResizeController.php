@@ -3,7 +3,7 @@ namespace Attachment\Controller;
 
 use Attachment\Controller\AppController;
 use Cake\Core\Configure;
-use Cake\Network\Exception\NotFoundException;
+use Cake\Http\Exception\NotFoundException;
 use Attachment\Fly\FilesystemRegistry;
 use Cake\Filesystem\Folder;
 use Cake\Core\App;
@@ -228,8 +228,11 @@ class ResizeController extends AppController
     if(Configure::read('Attachment.profiles.thumbnails.cdn')) register_shutdown_function(function() use($path) { unlink($path); });
 
     // send file
-    $this->response->file($path);
-    return $this->response;
+    $response = $this->response;
+    $response = $response->withStringBody(file_get_contents($path));
+    $response = $response->withHeader('Content-Type', $mimetype);
+    //$response = $response->withDownload('filename_for_download.ics');
+    return $response;
 
   }
 }

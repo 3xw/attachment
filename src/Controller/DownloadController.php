@@ -47,21 +47,26 @@ class DownloadController extends AppController
       throw new NotFoundException('File not found');
     }
 
+    // set vars for upcoming tasks
+    $mimetype = $attachment->type.'/'.$attachment->subtype;
+    $response  = $this->response;
+
     // if embed type
     if($attachment->type == 'embed')
     {
-      $this->response->body($attachment->embed);
-      $this->response = $this->response->withType('html');
-      $this->response = $this->response->withDownload($attachment->name.'.html');
-      return $this->response;
+      $response = $response->withStringBody($attachment->embed);
+      $response = $response->withType('html');
+      $response = $response->withDownload($attachment->name.'.html');
+      return $response;
     }
 
     // switch strategy from size
     if($attachment->size < 1048576 * 1) // 1MB
     {
-      $this->response->body($this->_filesystem($attachment->profile)->read($attachment->path));
-      $this->response = $this->response->withDownload($attachment->name);
-      return $this->response;
+      $response->withStringBody($this->_filesystem($attachment->profile)->read($attachment->path));
+      $response = $response->withHeader('Content-Type', $mimetype);
+      $response = $response->withDownload($attachment->name);
+      return $response;
     }else
     {
       // copy file
@@ -73,9 +78,10 @@ class DownloadController extends AppController
       register_shutdown_function(function() use($path) { unlink($path); });
 
       // serve
-      $this->response->file($path);
-      $this->response = $this->response->withDownload($attachment->name);
-      return $this->response;
+      $response = $response->withStringBody(file_get_contents($path));
+      $response = $response->withHeader('Content-Type', $mimetype);
+      $response = $response->withDownload($attachment->name);
+      return $response;
     }
   }
 }

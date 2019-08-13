@@ -230,7 +230,7 @@ class AttachmentHelper extends Helper
     }
     $cdn = Configure::read('Attachment.profiles.thumbnails.cdn');
     $url = ($cdn && $cdn instanceof BaseCdn)?  $cdn->getUrl(): '/thumbnails/';
-    $url = $this->Url->build($url.$profile.'/',true);
+    $url = $this->Url->build($url.$profile.'/',['fullBase' => true]);
     $dims = ['height' => 'h','width' => 'w','align' => 'a', 'quality' => 'q'];
     foreach($dims as $key => $value){
       if(!empty($params[$key])){
@@ -240,7 +240,6 @@ class AttachmentHelper extends Helper
     if(!empty($params['cropratio'])){
       $url .= 'c'.str_replace(':','-',$params['cropratio']);
     }
-
     return $url.'/'.$params['image'];
   }
 }

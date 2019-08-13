@@ -64,8 +64,8 @@ class ExternalAdapter extends AbstractAdapter
     $path = $this->_makeNicePathUrl($path);
     $http = new Client();
     $response = $http->get($path);
-    if($response->code){
-      $contents = $response->body;
+    if($response->getStatusCode()){
+      $contents = $response->getBody();
       return compact('contents', 'path');
     }
     return false;
