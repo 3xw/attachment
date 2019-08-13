@@ -12,7 +12,7 @@ const attachmentVendorConfig = env => {
   return {
     mode: 'development',
     name: 'attachmentVendorConfig',
-    entry: './vendor/3xw/attachment/src/Assets/attachment.vendor.conf.js',
+    entry: path.join(__dirname, 'resources/assets/attachment.vendor.conf.js'),
     output: {
       path: path.resolve(__dirname, '../../../webroot'),
       filename: 'js/plugins/attachment/attachment.vendor.min.js',
@@ -93,7 +93,7 @@ const attachmentConfig = env => {
   return {
     mode: 'development',
     name: 'attachmentConfig',
-    entry: './vendor/3xw/attachment/src/Assets/attachment.conf.js',
+    entry: path.join(__dirname, 'resources/assets/attachment.conf.js'),
     output: {
       path: path.resolve(__dirname, '../../../webroot'),
       publicPath: webroot,

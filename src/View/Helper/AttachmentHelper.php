@@ -55,7 +55,7 @@ class AttachmentHelper extends Helper
     if($this->_inputComponentCount == 1)
     {
       // session clear
-      $this->request->session()->write('Attachment', '');
+      $this->_View->getRequest()->getSession()->write('Attachment', '');
 
       // add script
       $this->Html->script([
@@ -85,7 +85,7 @@ class AttachmentHelper extends Helper
   {
     $settings = array_merge(Configure::read('Attachment.upload'),$settings);
     $uuid = Text::uuid();
-    $this->request->session()->write('Attachment.'.$uuid, $settings);
+    $this->_View->getRequest()->getSession()->write('Attachment.'.$uuid, $settings);
     $settings['uuid'] = $uuid;
     $settings['url'] = $this->Url->build('/');
     $settings['label'] = empty($settings['label'])? Inflector::humanize($field) : $settings['label'];
