@@ -49,7 +49,7 @@ class AttachmentHelper extends Helper
     return $this->_getToken()->url($attachment);
   }
 
-  private function _setupIndexComponent()
+  private function _setupComponent()
   {
     $this->_inputComponentCount++;
     if($this->_inputComponentCount == 1)
@@ -57,21 +57,10 @@ class AttachmentHelper extends Helper
       // session clear
       $this->_View->getRequest()->getSession()->write('Attachment', '');
 
-      // add script
-      $this->Html->script([
-        'plugins/attachment/attachment.vendor.min.js',
-        'plugins/attachment/attachment.min.js'
+      // add css
+      $this->Html->css([
+        'plugins/attachment/attachment.min.css'
       ],['block' => true]);
-    }
-  }
-
-  private function _setupInputComponent()
-  {
-    $this->_inputComponentCount++;
-    if($this->_inputComponentCount == 1)
-    {
-      // session clear
-      $this->request->session()->write('Attachment', '');
 
       // add script
       $this->Html->script([
@@ -100,7 +89,7 @@ class AttachmentHelper extends Helper
 
   public function buildIndex($settings = [])
   {
-    $this->_setupIndexComponent();
+    $this->_setupComponent();
     $settings = $this->_getSettings('Index',$settings);
 
     $settings['actions'] = (empty($settings['actions']))? ['add','edit','delete','view'] : $settings['actions'];
@@ -116,7 +105,7 @@ class AttachmentHelper extends Helper
 
   public function jsSetup($field,$settings = [])
   {
-    $this->_setupInputComponent();
+    $this->_setupComponent();
     $settings = $this->_getSettings($field,$settings);
 
     $settings['field'] = $field;
@@ -128,7 +117,7 @@ class AttachmentHelper extends Helper
 
   public function input($field, $settings = [])
   {
-    $this->_setupInputComponent();
+    $this->_setupComponent();
     $conf['relation'] = ($field == 'Attachments')? 'belongsToMany' : 'belongsTo';
     $conf['field'] = ($field == 'Attachments')? '' : $field;
     $settings = array_merge($conf,$settings);
