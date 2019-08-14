@@ -3,7 +3,7 @@ namespace Attachment\Model\Filter\Restriction;
 
 use Attachment\Utility\Token;
 use Cake\Core\Configure;
-use Cake\Network\Session;
+use Cake\Http\Session;
 use Cake\Routing\Router;
 use Cake\Utility\Inflector;
 use Cake\Network\Exception\UnauthorizedException;

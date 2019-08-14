@@ -1,12 +1,12 @@
 <?php
-namespace Attachment\Model\Behavior;
+namespace Attachment\ORM\Behavior;
 
 use ArrayObject;
 use Cake\Event\Event;
 use Exception;
-use Cake\Utility\Inflector;
+use Cake\Utility\Text;
 use Cake\Datasource\EntityInterface;
-use Cake\Network\Session;
+use Cake\Http\Session;
 
 use Cake\ORM\Behavior;
 use Cake\ORM\Table;
@@ -81,7 +81,7 @@ class ATagBehavior extends Behavior
       {
         $query = $atags->find('all', [
           'conditions' => [
-            'slug' => Inflector::slug($tag['name'])
+            'slug' => Text::slug($tag['name'])
           ]
         ]);
         $atag = $query->first();
@@ -90,7 +90,7 @@ class ATagBehavior extends Behavior
           array_push($tags, $atag->id);
         }else
         {
-          $atag = $atags->newEntity();
+          $atag = $atags->newEntity([]);
           $atag = $atags->patchEntity($atag, $tag);
           $atag = $atags->save($atag);
           if($atag)

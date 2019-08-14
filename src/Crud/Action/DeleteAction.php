@@ -2,6 +2,7 @@
 namespace Attachment\Crud\Action;
 
 use \Crud\Event\Subject;
+use \Cake\Http\Response;
 
 class DeleteAction extends \Crud\Action\DeleteAction
 {
@@ -11,7 +12,7 @@ class DeleteAction extends \Crud\Action\DeleteAction
   * @param string $id Record id
   * @return \Cake\Network\Response
   */
-  protected function _post($id = null)
+  protected function _post($id = null):Response
   {
     $subject = $this->_subject();
     $subject->set(['id' => $id]);

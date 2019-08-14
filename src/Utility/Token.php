@@ -3,7 +3,7 @@ namespace Attachment\Utility;
 
 use Cake\Utility\Text;
 use Cake\Utility\Security;
-use Cake\Network\Session;
+use Cake\Http\Session;
 use Cake\Routing\Router;
 use Firebase\JWT\JWT;
 

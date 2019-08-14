@@ -1,5 +1,5 @@
 <?php
-namespace Attachment\Model\Behavior;
+namespace Attachment\ORM\Behavior;
 
 use DateTime;
 use ArrayObject;
@@ -15,7 +15,7 @@ class ExternalBehavior extends Behavior
   public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options)
   {
     if(!empty($data['path']) && is_array($data['path'])) return;
-    
+
     if (!empty($data['path']) && substr($data['path'], 0, 4) == 'http' && empty($data['md5']))
     {
       // urlencode if needed
@@ -26,6 +26,7 @@ class ExternalBehavior extends Behavior
 
       $headers = get_headers($data['path'],1);
       if(substr($headers[0], 9, 3) != 200) return;
+      $data['meta'] = json_encode($headers);
       $pathPieces = explode('/',$data['path']);
       $data['name'] = empty($data['name'])? urldecode($fileName): $data['name'];
       $data['type'] = explode('/',$headers['Content-Type'])[0];

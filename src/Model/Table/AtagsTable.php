@@ -7,7 +7,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
-use Cake\Utility\Inflector;
+use Cake\Utility\Text;
 use ArrayObject;
 use Cake\Event\Event;
 use Cake\Core\Configure;
@@ -71,7 +71,7 @@ class AtagsTable extends Table
   {
     if(empty($data['slug']) && !empty($data['name']))
     {
-      $data['slug'] = Inflector::slug($data['name']);
+      $data['slug'] = Text::slug($data['name']);
     }
   }
 

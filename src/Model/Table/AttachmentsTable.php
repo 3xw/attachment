@@ -25,15 +25,15 @@ class AttachmentsTable extends Table
     $this->addBehavior('Timestamp');
 
     // custom behaviors
-    $this->addBehavior('Attachment.External');
-    $this->addBehavior('Attachment.Embed', [
+    $this->addBehavior('Attachment\ORM\Behavior\ExternalBehavior');
+    $this->addBehavior('Attachment\ORM\Behavior\EmbedBehavior', [
       'embed_field' => 'embed',
       'file_field' => 'path'
     ]);
-    $this->addBehavior('Attachment.Fly', [
+    $this->addBehavior('Attachment\ORM\Behavior\FlyBehavior', [
       'file_field' => 'path'
     ]);
-    $this->addBehavior('Attachment.ATag', [
+    $this->addBehavior('Attachment\ORM\Behavior\ATagBehavior', [
       'file_field' => 'path'
     ]);
     $this->addBehavior('Search.Search');
