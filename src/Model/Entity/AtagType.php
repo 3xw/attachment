@@ -6,19 +6,17 @@ namespace Attachment\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * Atag Entity
+ * AtagType Entity
  *
  * @property int $id
  * @property string $name
  * @property string $slug
- * @property int|null $atag_type_id
- * @property string|null $user_id
+ * @property bool $exclusive
+ * @property int|null $order
  *
- * @property \Attachment\Model\Entity\AtagType $atag_type
- * @property \Attachment\Model\Entity\User $user
- * @property \Attachment\Model\Entity\Attachment[] $attachments
+ * @property \Attachment\Model\Entity\Atag[] $atags
  */
-class Atag extends Entity
+class AtagType extends Entity
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -32,10 +30,8 @@ class Atag extends Entity
     protected $_accessible = [
         'name' => true,
         'slug' => true,
-        'atag_type_id' => true,
-        'user_id' => true,
-        'atag_type' => true,
-        'user' => true,
-        'attachments' => true,
+        'exclusive' => true,
+        'order' => true,
+        'atags' => true,
     ];
 }

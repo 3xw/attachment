@@ -1,24 +1,35 @@
 <?php
+declare(strict_types=1);
+
 namespace Attachment\Model\Table;
 
-use ArrayObject;
-use Cake\Event\Event;
-use Cake\Utility\Inflector;
-
-use Attachment\Model\Entity\Atag;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\Utility\Inflector;
+use ArrayObject;
+use Cake\Event\Event;
+use Cake\Core\Configure;
 
 /**
 * Atags Model
 *
-* @property \Cake\ORM\Association\BelongsToMany $Attachments
+* @property \Attachment\Model\Table\AtagTypesTable|\Cake\ORM\Association\BelongsTo $AtagTypes
+* @property \Attachment\Model\Table\UsersTable|\Cake\ORM\Association\BelongsTo $Users
+* @property \Attachment\Model\Table\AttachmentsTable|\Cake\ORM\Association\BelongsToMany $Attachments
+*
+* @method \Attachment\Model\Entity\Atag get($primaryKey, $options = [])
+* @method \Attachment\Model\Entity\Atag newEntity($data = null, array $options = [])
+* @method \Attachment\Model\Entity\Atag[] newEntities(array $data, array $options = [])
+* @method \Attachment\Model\Entity\Atag|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
+* @method \Attachment\Model\Entity\Atag saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
+* @method \Attachment\Model\Entity\Atag patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+* @method \Attachment\Model\Entity\Atag[] patchEntities($entities, array $data, array $options = [])
+* @method \Attachment\Model\Entity\Atag findOrCreate($search, callable $callback = null, $options = [])
 */
 class AtagsTable extends Table
 {
-
   /**
   * Initialize method
   *
@@ -33,18 +44,27 @@ class AtagsTable extends Table
     $this->setDisplayField('name');
     $this->setPrimaryKey('id');
 
-    $this->belongsToMany('Attachment.Attachments', [
+    $this->belongsTo('Users', [
+      'type' => 'LEFT',
+      'foreignKey' => 'user_id',
+      'className' => 'Users',
+    ]);
+    $this->belongsTo('AtagTypes', [
+      'type' => 'LEFT',
+      'foreignKey' => 'atag_type_id',
+      'className' => 'Attachment.AtagTypes',
+    ]);
+    $this->belongsToMany('Attachments', [
       'foreignKey' => 'atag_id',
       'targetForeignKey' => 'attachment_id',
-      'joinTable' => 'attachments_atags'
+      'joinTable' => 'attachments_atags',
+      'className' => 'Attachment.Attachments',
     ]);
 
-    // Add the behaviour to your table
-    $this->addBehavior('Search.Search');
-
-    // Setup search filter using search manager
-    $this->searchManager()
-    ->add('index', 'Attachment.SessionIndex', []);
+    if(Configure::read('Attachment.translate'))
+    {
+      $this->addBehavior('Trois\Utils\ORM\Behavior\TranslateBehavior', ['fields' => ['name','slug']]);
+    }
   }
 
   public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options)
@@ -64,17 +84,21 @@ class AtagsTable extends Table
   public function validationDefault(Validator $validator): Validator
   {
     $validator
-    ->add('id', 'valid', ['rule' => 'numeric'])
-    ->allowEmpty('id', 'create');
+    ->nonNegativeInteger('id')
+    ->allowEmptyString('id', 'create');
 
     $validator
+    ->scalar('name')
+    ->maxLength('name', 255)
     ->requirePresence('name', 'create')
-    ->notEmpty('name')
+    ->notEmptyString('name')
     ->add('name', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
 
     $validator
+    ->scalar('slug')
+    ->maxLength('slug', 255)
     ->requirePresence('slug', 'create')
-    ->notEmpty('slug')
+    ->notEmptyString('slug')
     ->add('slug', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
 
     return $validator;
@@ -91,6 +115,7 @@ class AtagsTable extends Table
   {
     $rules->add($rules->isUnique(['name']));
     $rules->add($rules->isUnique(['slug']));
+
     return $rules;
   }
 }

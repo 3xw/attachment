@@ -3,21 +3,21 @@ declare(strict_types=1);
 
 namespace Attachment\Test\TestCase\Model\Table;
 
-use Attachment\Model\Table\AttachmentsTable;
+use Attachment\Model\Table\AtagTypesTable;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
 /**
- * Attachment\Model\Table\AttachmentsTable Test Case
+ * Attachment\Model\Table\AtagTypesTable Test Case
  */
-class AttachmentsTableTest extends TestCase
+class AtagTypesTableTest extends TestCase
 {
     /**
      * Test subject
      *
-     * @var \Attachment\Model\Table\AttachmentsTable
+     * @var \Attachment\Model\Table\AtagTypesTable
      */
-    public $Attachments;
+    public $AtagTypes;
 
     /**
      * Fixtures
@@ -25,8 +25,7 @@ class AttachmentsTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'plugin.Attachment.Attachments',
-        'plugin.Attachment.Users',
+        'plugin.Attachment.AtagTypes',
         'plugin.Attachment.Atags',
     ];
 
@@ -38,8 +37,8 @@ class AttachmentsTableTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $config = TableRegistry::getTableLocator()->exists('Attachments') ? [] : ['className' => AttachmentsTable::class];
-        $this->Attachments = TableRegistry::getTableLocator()->get('Attachments', $config);
+        $config = TableRegistry::getTableLocator()->exists('AtagTypes') ? [] : ['className' => AtagTypesTable::class];
+        $this->AtagTypes = TableRegistry::getTableLocator()->get('AtagTypes', $config);
     }
 
     /**
@@ -49,7 +48,7 @@ class AttachmentsTableTest extends TestCase
      */
     public function tearDown()
     {
-        unset($this->Attachments);
+        unset($this->AtagTypes);
 
         parent::tearDown();
     }
@@ -70,16 +69,6 @@ class AttachmentsTableTest extends TestCase
      * @return void
      */
     public function testValidationDefault()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test buildRules method
-     *
-     * @return void
-     */
-    public function testBuildRules()
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

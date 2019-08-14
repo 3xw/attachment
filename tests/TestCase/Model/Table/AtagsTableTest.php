@@ -3,21 +3,21 @@ declare(strict_types=1);
 
 namespace Attachment\Test\TestCase\Model\Table;
 
-use Attachment\Model\Table\AttachmentsTable;
+use Attachment\Model\Table\AtagsTable;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
 /**
- * Attachment\Model\Table\AttachmentsTable Test Case
+ * Attachment\Model\Table\AtagsTable Test Case
  */
-class AttachmentsTableTest extends TestCase
+class AtagsTableTest extends TestCase
 {
     /**
      * Test subject
      *
-     * @var \Attachment\Model\Table\AttachmentsTable
+     * @var \Attachment\Model\Table\AtagsTable
      */
-    public $Attachments;
+    public $Atags;
 
     /**
      * Fixtures
@@ -25,9 +25,10 @@ class AttachmentsTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'plugin.Attachment.Attachments',
-        'plugin.Attachment.Users',
         'plugin.Attachment.Atags',
+        'plugin.Attachment.AtagTypes',
+        'plugin.Attachment.Users',
+        'plugin.Attachment.Attachments',
     ];
 
     /**
@@ -38,8 +39,8 @@ class AttachmentsTableTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $config = TableRegistry::getTableLocator()->exists('Attachments') ? [] : ['className' => AttachmentsTable::class];
-        $this->Attachments = TableRegistry::getTableLocator()->get('Attachments', $config);
+        $config = TableRegistry::getTableLocator()->exists('Atags') ? [] : ['className' => AtagsTable::class];
+        $this->Atags = TableRegistry::getTableLocator()->get('Atags', $config);
     }
 
     /**
@@ -49,7 +50,7 @@ class AttachmentsTableTest extends TestCase
      */
     public function tearDown()
     {
-        unset($this->Attachments);
+        unset($this->Atags);
 
         parent::tearDown();
     }
