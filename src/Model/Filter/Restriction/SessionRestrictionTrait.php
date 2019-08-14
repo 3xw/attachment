@@ -6,7 +6,7 @@ use Cake\Core\Configure;
 use Cake\Http\Session;
 use Cake\Routing\Router;
 use Cake\Utility\Inflector;
-use Cake\Network\Exception\UnauthorizedException;
+use Cake\Http\UnauthorizedException;
 
 Trait SessionRestrictionTrait {
 

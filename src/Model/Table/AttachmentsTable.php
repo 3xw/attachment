@@ -25,6 +25,7 @@ class AttachmentsTable extends Table
     $this->addBehavior('Timestamp');
 
     // custom behaviors
+    $this->addBehavior('Attachment\ORM\Behavior\UserIDBehavior');
     $this->addBehavior('Attachment\ORM\Behavior\ExternalBehavior');
     $this->addBehavior('Attachment\ORM\Behavior\EmbedBehavior', [
       'embed_field' => 'embed',

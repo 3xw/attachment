@@ -2,10 +2,10 @@
 namespace Attachment\Controller;
 
 use Attachment\Utility\Token;
-use Cake\Network\Exception\ForbiddenException;
+use Cake\Http\Exception\ForbiddenException;
 
 use Cake\Core\Configure;
-use Cake\Network\Exception\NotFoundException;
+use Cake\Http\Exception\NotFoundException;
 use Attachment\Fly\FilesystemRegistry;
 use Cake\Filesystem\Folder;
 use Cake\Core\App;
