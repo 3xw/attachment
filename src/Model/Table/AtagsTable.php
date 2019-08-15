@@ -61,6 +61,8 @@ class AtagsTable extends Table
       'className' => 'Attachment.Attachments',
     ]);
 
+    // custom behaviors
+    $this->addBehavior('Attachment\ORM\Behavior\UserIDBehavior');
     if(Configure::read('Attachment.translate'))
     {
       $this->addBehavior('Trois\Utils\ORM\Behavior\TranslateBehavior', ['fields' => ['name','slug']]);

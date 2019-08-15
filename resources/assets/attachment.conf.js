@@ -1,14 +1,13 @@
 // CSS
 require('./css/sass/attachment.scss')
 
-/* EVENT HUB
-*******************************/
-window.aEventHub = {};//new Vue();
+// utils
+require('./js/filters.js')
+require('./js/directives.js')
 
-//JS
-require('./js/filters.js');
-require('./js/directives.js');
+// init
+import AttachmentLoader from './vue/AttachmentLoader.vue'
+Vue.component('AttachmentLoader', AttachmentLoader)
 
-import AttachmentLoader from './vue/AttachmentLoader.vue';
-
-Vue.component('AttachmentLoader', AttachmentLoader);
+// store
+import attachment from './js/store/modules/attachment.js'

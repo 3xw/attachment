@@ -97,7 +97,7 @@ class AttachmentHelper extends Helper
     $profiles = Configure::read('Attachment.profiles');
     $settings['baseUrls'] = [];
     foreach($profiles as $key => $value) $settings['baseUrls'][$key] = $value['baseUrl'];
-    return $this->component('attachment-index',[
+    return $this->component('attachment-browse',[
       'aid' => Text::uuid(),
       ':settings' => $settings
     ]);
