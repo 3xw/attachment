@@ -1,28 +1,37 @@
 <template>
-  <section class="row">
+  <section class="">
 
-    <div class="col-md-6">
-      <ul v-if="atags">
-        <li v-for="(atag, index) in atags" @click="toggle(index)">{{atag.name}}</li>
-      </ul>
+    <attachment-search-bar></attachment-search-bar>
+
+    <div class="row">
+      <div class="col-md-6">
+        <ul v-if="atags">
+          <li v-for="(atag, index) in atags" @click="toggle(index)">{{atag.name}}</li>
+        </ul>
+      </div>
+
+      <div class="col-md-6">
+        <ul v-if="attachments">
+          <li v-for="attachment in attachments">{{attachment.name}}</li>
+        </ul>
+      </div>
     </div>
-
-    <div class="col-md-6">
-      <ul v-if="attachments">
-        <li v-for="attachment in attachments">{{attachment.name}}</li>
-      </ul>
-    </div>
-
   </section>
 </template>
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
-import attachment from '../js/store/modules/attachment.js'
+import attachment from '../js/store/store.js'
+
+import search from './SearchBar.vue'
 
 export default
 {
   name: 'attachment-browse',
+  components:
+  {
+    'attachment-search-bar':search
+  },
   props: { aid: String, settings: Object },
   computed:
   {

@@ -8,6 +8,3 @@ require('./js/directives.js')
 // init
 import AttachmentLoader from './vue/AttachmentLoader.vue'
 Vue.component('AttachmentLoader', AttachmentLoader)
-
-// store
-import attachment from './js/store/modules/attachment.js'

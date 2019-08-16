@@ -46,7 +46,7 @@ class AttachmentsTable extends Table
       'foreignKey' => 'user_id',
       'className' => 'Users',
     ]);
-    $this->belongsToMany('Atags', [
+    $this->belongsToMany('Attachment.Atags', [
       'foreignKey' => 'attachment_id',
       'targetForeignKey' => 'atag_id',
       'joinTable' => 'attachments_atags',
@@ -84,16 +84,16 @@ class AttachmentsTable extends Table
       'wildcardOne' => '?',
       'field' => [$this->aliasField('type')]
     ])
-    ->add('tag', 'Attachment.SessionCallback',[
-      'callback' => function ($query, $args, $filter) {
+    ->add('atags', 'Attachment.SessionCallback',[
+      'callback' => function ($query, $args, $filter)
+      {
         return $query
-        ->distinct($this->aliasField('id'))
-        ->matching('Atags', function (Query $query) use ($args) {
-          return $query
+        ->matching('Atags', function (Query $q) use ($args) {
+          return $q
           ->where([
             'OR' => [
-              'Atags.name' => $args['tag'],
-              'Atags.slug' => $args['tag']
+              'Atags.name IN' => explode(',', $args['atags']),
+              'Atags.slug IN' =>explode(',', $args['atags'])
             ]
           ]);
         });

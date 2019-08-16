@@ -13,7 +13,7 @@ class SessionCallback extends Like
     if ($this->skip()) {
         return true;
     }
-    call_user_func($this->config('callback'), $this->getQuery(), $this->getArgs(), $this);
+    call_user_func($this->getConfig('callback'), $this->getQuery(), $this->getArgs(), $this);
     $this->restrict();
     return true;
   }

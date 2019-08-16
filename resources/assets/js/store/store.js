@@ -1,16 +1,42 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import { defaultMutations} from 'vuex-easy-access'
+import atags from './modules/atags.js'
+import attachments from './modules/attachments.js'
 
-import attachment from './modules/attachment.js'
+const state = {
+  app: {'*': ''},
+  item:
+  {
+    events: new Vue(),
+    attachments: [],
+    selection:[],
+    settings: {}
+  },
+  aParams:{
+    atags: '',
+    search: ''
+  },
+  tParams:{}
+}
 
-Vue.use(Vuex)
-
-export default new Vuex.Store({
-  state:{},
-  mutations:{},
-  actions:{},
-  mutations:{},
-  modules: {
-    attachment
+export default
+{
+  namespaced: true,
+  state:state,
+  actions:
+  {
+    createChannel({commit}, id)
+    {
+      commit('app.*', {[id]: Object.assign({},state.item)})
+    }
+  },
+  mutations:
+  {
+    ...defaultMutations(state),
+  },
+  modules:
+  {
+    // mettre les vuex-crud Atag etc...
+    atags,
+    attachments
   }
-})
+}
