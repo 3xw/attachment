@@ -1,6 +1,18 @@
 <template>
-  <section>
-    browse
+  <section class="row">
+
+    <div class="col-md-6">
+      <ul v-if="atags">
+        <li v-for="(atag, index) in atags" @click="toggle(index)">{{atag.name}}</li>
+      </ul>
+    </div>
+
+    <div class="col-md-6">
+      <ul v-if="attachments">
+        <li v-for="attachment in attachments">{{attachment.name}}</li>
+      </ul>
+    </div>
+
   </section>
 </template>
 
@@ -11,13 +23,25 @@ import attachment from '../js/store/modules/attachment.js'
 export default
 {
   name: 'attachment-browse',
-  data: function()
+  props: { aid: String, settings: Object },
+  computed:
   {
-    return {}
+    ...mapState('attachment',{aParams: 'aParams', tParams:'tParams' }),
+    ...mapGetters('attachment/atags',{atags: 'list'}),
+    ...mapGetters('attachment/attachments',{attachments: 'list'}),
   },
-  props: {
-    aid: String,
-    settings: Object
+  watch:
+  {
+    aParams:
+    {
+      handler(){ this.fAList() },
+      deep: true
+    },
+    tParams:
+    {
+      handler(){ this.fTList() },
+      deep: true
+    },
   },
   beforeCreate()
   {
@@ -25,14 +49,27 @@ export default
   },
   created()
   {
-    this.init({id:this.aid})
-    console.log(this.$store.get('attachment/app'));
+    this.createChannel(this.aid)
+    if(this.atags.length == 0) this.fTList()
+    this.fAList()
   },
   methods:
   {
-    ...mapActions('attachment',{
-      init: 'init'
-    }),
+    ...mapActions('attachment',{createChannel: 'createChannel'}),
+    ...mapActions('attachment/atags',{_fTList: 'fetchList'}),
+    ...mapActions('attachment/attachments',{_fAList: 'fetchList'}),
+
+    fAList(){ this._fAList({config:{ params: this.aParams}})},
+    fTList(){ this._fTList({config:{ params: this.tParams}})},
+
+    toggle(index)
+    {
+      let atags = []
+      if(!this.atags[index].isActived) this.atags[index].isActived = true
+      else this.atags[index].isActived = false
+      for(let i in this.atags) if(this.atags[i].isActived) atags.push(this.atags[i].slug)
+      this.$store.set('attachment/aParams.atags', atags.join(','))
+    }
   }
 }
 </script>

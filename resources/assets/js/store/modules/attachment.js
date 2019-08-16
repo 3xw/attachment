@@ -1,15 +1,20 @@
 import { defaultMutations} from 'vuex-easy-access'
+import atags from './atags.js'
+import attachments from './attachments.js'
 
-// do the magic 🧙🏻‍♂️
 const state = {
   app: {'*': ''},
   item:
   {
-    eventHub: new Vue(),
+    events: new Vue(),
     attachments: [],
+    selection:[],
     settings: {}
   },
-  count: 0
+  aParams:{
+    atags: ''
+  },
+  tParams:{}
 }
 
 export default
@@ -18,18 +23,23 @@ export default
   state:state,
   actions:
   {
-    init({commit}, id)
+    createChannel({commit}, id)
     {
-      commit('app.*', {id.id: Object.assign({},state.item)})
+      commit('app.*', {[id]: Object.assign({},state.item)})
+    },
+    setAParms({}, )
+    {
+
     }
   },
   mutations:
   {
-    // do the magic 🧙🏻‍♂️
     ...defaultMutations(state),
   },
   modules:
   {
     // mettre les vuex-crud Atag etc...
+    atags,
+    attachments
   }
 }
