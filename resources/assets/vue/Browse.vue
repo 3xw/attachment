@@ -23,7 +23,7 @@ import { mapState, mapGetters, mapActions } from 'vuex'
 import createCrudModule from 'vuex-crud';
 
 // js scripts
-import { client, parseResponse } from '../js/client.js'
+import { client, parseResponse, parseTags } from '../js/client.js'
 import attachment from '../js/store/store.js'
 
 // vue components
@@ -86,7 +86,7 @@ export default
       urlRoot: '../attachment/atags',
       client,
       parseSingle: parseResponse,
-      parseList: parseResponse
+      parseList: parseTags
     }))
 
     // set uuid & fetch data ( all in one because of deep watching )

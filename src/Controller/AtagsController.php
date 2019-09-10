@@ -21,17 +21,7 @@ class AtagsController extends AppController
     parent::initialize();
 
     $this->loadComponent('Crud.Crud', [
-      'actions' => [
-        'Crud.Index',
-        /*
-        'Crud.View',
-        'add' =>[
-          'className' => 'Crud.Add',
-          'api.success.data.entity' => ['id','path','type','subtype','name','size']
-        ],
-        'Crud.Edit',
-        'Crud.Delete'*/
-      ],
+      'actions' => ['Crud.Index'],
       'listeners' => [
         //'CrudCache',
         'Crud.Api',

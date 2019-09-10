@@ -18,8 +18,8 @@ export default
   },
   mutations:
   {
-    'aParams.atags': (state, payload) => {
-      state.aParams.atags = payload
+    'aParams': (state, payload) => {
+      state.aParams = payload
     },
     'settings': (state, payload) => {
       state.settings = payload

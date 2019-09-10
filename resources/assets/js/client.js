@@ -17,6 +17,31 @@ parseResponse = function(response)
   return {
     data: response.data.data// expecting object with ID
   }
+},
+parseTags = function(response)
+{
+  let atagTypes = {}
+  for(let i in response.data.data)
+  {
+    let atag = response.data.data[i]
+    let type = atag.atag_type? atag.atag_type: {
+      id: 0,
+      name: 'uncalssified',
+      exclusive: false,
+      order: 1000
+    }
+
+    if(!atagTypes[type.name]) atagTypes[type.name] = Object.assign({atags: []}, type)
+    atagTypes[type.name].atags.push(atag)
+  }
+
+  // sort
+  let keysSorted = Object.keys(atagTypes).sort(function(a,b){return list[a].order-list[b].order})
+  let types = []
+  for(let i in keysSorted) types.push(atagTypes[keysSorted[i]])
+
+  // return tags
+  return {data: types}
 }
 
-export { client, parseResponse }
+export { client, parseResponse, parseTags }
