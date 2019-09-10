@@ -5,6 +5,7 @@ use Attachment\Controller\AppController;
 use Cake\Event\Event;
 use Crud\Event\Subject;
 use Cake\Core\Configure;
+use Cake\Http\Exception\UnauthorizedException;
 
 /**
 * Attachments Controller
@@ -71,6 +72,9 @@ class AttachmentsController extends AppController
 
   public function index()
   {
+    // security first !!
+    if(empty($this->request->getQuery('uuid'))) throw new UnauthorizedException(__d('Attachment','Missing uuid'));
+
     $this->Crud->on('beforePaginate', function(Event $event)
     {
       $event->getSubject()->query->contain(['Atags']);

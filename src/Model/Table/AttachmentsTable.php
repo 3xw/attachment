@@ -55,8 +55,8 @@ class AttachmentsTable extends Table
 
     // settings
     $this->searchManager()
-    ->add('index', 'Attachment.SessionIndex', [])
-    ->add('search', 'Attachment.SessionCallback',[
+    ->add('uuid', 'Attachment.SessionQuerySettings') // wrapps query with session settings throught uuid
+    ->add('search', 'Search.Callback',[
       'callback' => function ($query, $args, $filter) {
         $needle = '%'.$args['search'].'%';
         return $query
@@ -75,7 +75,7 @@ class AttachmentsTable extends Table
         ;
       }
     ])
-    ->add('type', 'Attachment.SessionLike', [
+    ->add('type', 'Search.Like', [
       'before' => true,
       'after' => true,
       'mode' => 'or',
@@ -84,7 +84,7 @@ class AttachmentsTable extends Table
       'wildcardOne' => '?',
       'field' => [$this->aliasField('type')]
     ])
-    ->add('atags', 'Attachment.SessionCallback',[
+    ->add('atags', 'Search.Callback',[
       'callback' => function ($query, $args, $filter)
       {
         return $query
