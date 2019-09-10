@@ -98,7 +98,7 @@ class AttachmentHelper extends Helper
     $settings['baseUrls'] = [];
     foreach($profiles as $key => $value) $settings['baseUrls'][$key] = $value['baseUrl'];
     return $this->component('attachment-browse',[
-      'aid' => Text::uuid(),
+      'aid' => $settings['uuid'],
       ':settings' => $settings
     ]);
   }
@@ -120,10 +120,10 @@ class AttachmentHelper extends Helper
     $this->_setupComponent();
     $conf['relation'] = ($field == 'Attachments')? 'belongsToMany' : 'belongsTo';
     $conf['field'] = ($field == 'Attachments')? '' : $field;
-    $settings = array_merge($conf,$settings);
+    $settings = $this->_getSettings($field, array_merge($conf,$settings));
     return $this->component('attachment-input',[
-      'aid' => Text::uuid(),
-      ':settings' => $this->_getSettings($field,$settings)
+      'aid' => $settings['uuid'],
+      ':settings' => $settings['uuid']
     ]);
   }
 
