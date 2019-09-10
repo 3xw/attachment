@@ -12,9 +12,13 @@ import { mapState, mapGetters, mapActions } from 'vuex'
 export default
 {
   name:'attachment-atags',
+  props: { aid: String },
   computed:
   {
-    ...mapGetters('attachment/atags',{atags: 'list'})
+    atags()
+    {
+      return this.$store.get(this.aid + '/atags/list')
+    },
   },
   methods:
   {
@@ -24,7 +28,7 @@ export default
       if(!this.atags[index].isActived) this.atags[index].isActived = true
       else this.atags[index].isActived = false
       for(let i in this.atags) if(this.atags[i].isActived) atags.push(this.atags[i].slug)
-      this.$store.set('attachment/aParams.atags', atags.join(','))
+      this.$store.set(this.aid + '/aParams.atags', atags.join(','))
     }
   }
 }

@@ -15,7 +15,6 @@ export default {
         return null
       }
       const name = this.camelize(this.name.substring(this.name.indexOf('-') + 1))
-      console.log(name);
       return () => import(/* webpackChunkName: "[request]" */ `./${name}.vue`)
     },
     attributes()

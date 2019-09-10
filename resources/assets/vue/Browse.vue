@@ -1,15 +1,15 @@
 <template>
   <section class="">
 
-    <attachment-search-bar></attachment-search-bar>
+    <attachment-search-bar :aid="aid"></attachment-search-bar>
 
     <div class="row">
       <div class="col-md-6">
-        <attachment-atags></attachment-atags>
+        <attachment-atags :aid="aid"></attachment-atags>
       </div>
 
       <div class="col-md-6">
-        <attachments></attachments>
+        <attachments :aid="aid"></attachments>
       </div>
     </div>
   </section>
@@ -35,10 +35,14 @@ export default
   props: { aid: String, settings: Object },
   computed:
   {
-    ...mapState('attachment',{
-      aParams: 'aParams',
-      tParams:'tParams'
-    }),
+    aParams()
+    {
+      return this.$store.get(this.aid + '/aParams')
+    },
+    tParams()
+    {
+      return this.$store.get(this.aid + '/tParams')
+    },
   },
   watch:
   {
@@ -53,24 +57,26 @@ export default
       deep: true
     },
   },
-  beforeCreate()
-  {
-    this.$store.registerModule('attachment', attachment)
-  },
   created()
   {
-    // create all we need
-    this.createChannel(this.aid)
-    this.aParams.uuid = this.aid //!!!!!!!!
+    // create new module
+    this.$store.registerModule(this.aid, Object.assign({}, attachment))
 
-    this.fetchTags()
-    this.fetchAttachments({config:{ params: this.aParams}})
+    // set uuid & fetch data ( all in one because of deep watching )
+    this.aParams.uuid = this.tParams.uuid = this.aid
   },
   methods:
   {
-    ...mapActions('attachment',{createChannel: 'createChannel'}),
-    ...mapActions('attachment/atags',{fetchTags: 'fetchList'}),
-    ...mapActions('attachment/attachments',{fetchAttachments: 'fetchList'}),
+    ...mapActions({
+      fetchAttachments(dispatch, payload)
+      {
+        return dispatch(this.aid + '/attachments/fetchList', payload)
+      },
+      fetchTags(dispatch, payload)
+      {
+        return dispatch(this.aid + '/atags/fetchList', payload)
+      }
+    })
   }
 }
 </script>
