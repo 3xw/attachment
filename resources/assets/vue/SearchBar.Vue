@@ -1,5 +1,5 @@
 <template>
-    <div class="col-auto">
+    <div>
       <label class="sr-only" for="inlineFormInputGroup">Username</label>
       <div class="input-group mb-2">
         <div class="input-group-prepend">

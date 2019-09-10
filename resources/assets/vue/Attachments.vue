@@ -1,7 +1,9 @@
 <template>
   <section>
-    <div v-if="attachments">
-      <attachment v-for="(attachment, i ) in attachments" :index="i" :aid="aid" :attachment="attachment"></attachment>
+    <div class="row">
+      <div v-if="attachments" class="col-sm-6 col-md-4 col-xl-3">
+        <attachment v-for="(attachment, i ) in attachments" :index="i" :aid="aid" :attachment="attachment"></attachment>
+      </div>
     </div>
   </section>
 </template>
