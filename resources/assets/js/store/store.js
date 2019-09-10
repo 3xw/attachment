@@ -12,7 +12,8 @@ let state = function(){
     },
     tParams:{
       uuid: '',
-    }
+    },
+    settings: {}
   }
 }
 
@@ -23,8 +24,11 @@ export default
   mutations:
   {
     'aParams.atags': (state, payload) => {
-          state.aParams.atags = payload
-        }
+      state.aParams.atags = payload
+    },
+    'settings': (state, payload) => {
+      state.settings = payload
+    }
   },
   modules:
   {

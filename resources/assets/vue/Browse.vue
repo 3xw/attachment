@@ -17,6 +17,7 @@
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
+import { client } from '../js/client.js'
 import attachment from '../js/store/store.js'
 
 import SearchBar from './SearchBar.vue'
@@ -59,8 +60,12 @@ export default
   },
   created()
   {
-    // create new module
+    // create new module and store settings
     this.$store.registerModule(this.aid, Object.assign({}, attachment))
+    this.$store.set(this.aid + '/settings', this.settings)
+
+    // set client baseURL for our ajax calls
+    client.baseURL = this.settings.url
 
     // set uuid & fetch data ( all in one because of deep watching )
     this.aParams.uuid = this.tParams.uuid = this.aid

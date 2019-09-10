@@ -2,7 +2,6 @@ import axios from 'axios'
 
 const
 Http = axios.create({
-  baseURL: process.env.PUBLIC_PATH,
   headers: {
     //'X-CSRF-TOKEN'    : window.csrfToken,
     'Accept': 'application/json',
@@ -13,7 +12,6 @@ Http = axios.create({
 class client extends Http {}
 
 const
-//client = new Client(), // so client is same instance
 parseResponse = function(response)
 {
   return {

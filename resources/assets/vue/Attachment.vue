@@ -5,7 +5,7 @@
     <!-- thumb -->
     <div class="attachment-thumb__icon-container" >
       <div>
-        <img v-if="$options.filters.isThumbable(attachment)" v-bind:src="url+'thumbnails/'+attachment.proattachment+'/w678c16-9/'+attachment.path" class="card-img-top" />
+        <img v-if="$options.filters.isThumbable(attachment)" v-bind:src="settings.url+'thumbnails/'+attachment.profile+'/w678c16-9/'+attachment.path" class="card-img-top" />
         <span v-html="$options.filters.icon(attachment.type+'/'+attachment.subtype)"></span>
       </div>
     </div>
@@ -33,14 +33,12 @@
 export default
 {
   name:'attachment',
-  props:
+  props:{attachment: Object,index: Number,aid: String},
+  computed:
   {
-    attachment: Object
-  },
-  data: function()
-  {
-    return {
-      url: process.env.PUBLIC_PATH
+    settings()
+    {
+      return this.$store.get(this.aid+'/settings')
     }
   }
 }
