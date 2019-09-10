@@ -59,7 +59,7 @@ class AttachmentsTable extends Table
     ->add('search', 'Search.Callback',[
       'callback' => function ($query, $args, $filter) {
         $needle = '%'.$args['search'].'%';
-        return $query
+        $query
         ->distinct($this->aliasField('id'))
         ->leftJoin(['AAtags' => 'attachments_atags'],['AAtags.attachment_id = Attachments.id'])
         ->leftJoin(['Atags' => 'atags'],['Atags.id = AAtags.atag_id'])
@@ -71,8 +71,9 @@ class AttachmentsTable extends Table
             'Attachments.description LIKE' => $needle,
             'Attachments.name LIKE' => $needle,
           ]
-        ])
-        ;
+        ]);
+
+        return true;
       }
     ])
     ->add('type', 'Search.Like', [
@@ -87,7 +88,7 @@ class AttachmentsTable extends Table
     ->add('atags', 'Search.Callback',[
       'callback' => function ($query, $args, $filter)
       {
-        return $query
+        $query
         ->matching('Atags', function (Query $q) use ($args) {
           return $q
           ->where([
@@ -97,6 +98,7 @@ class AttachmentsTable extends Table
             ]
           ]);
         });
+        return true;
       }
     ]);
   }
