@@ -7,7 +7,7 @@
       </div>
 
       <div class="col-md-3">
-        <attachment-atags :aid="aid"></attachment-atags>
+        <attachment-atags :aid="aid" :upload="false"></attachment-atags>
       </div>
 
       <div class="col-md-9">
