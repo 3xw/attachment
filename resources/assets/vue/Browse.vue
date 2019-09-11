@@ -1,7 +1,19 @@
 <template>
   <section class="">
-    <div class="row">
 
+    <!--- upload -->
+    <div v-if="mode == 'upload'" class="row">
+      <div class="col-md-3">
+        <attachment-atags :aid="aid" :upload="true"></attachment-atags>
+      </div>
+
+      <div class="col-md-9">
+        <attachment-upload :aid="aid"></attachment-upload>
+      </div>
+    </div>
+
+    <!-- browse mode -->
+    <div v-if="mode == 'browse'" class="row">
       <div class="col-12">
         <attachment-search-bar :aid="aid"></attachment-search-bar>
       </div>
@@ -11,9 +23,15 @@
       </div>
 
       <div class="col-md-9">
+        <div class="">
+          <button @click="mode = 'upload'" type="button" name="button" class="btn btn-primary">UPLOAD</button>
+        </div>
         <attachments :aid="aid"></attachments>
       </div>
     </div>
+
+
+
   </section>
 </template>
 
@@ -30,6 +48,7 @@ import attachment from '../js/store/store.js'
 import SearchBar from './SearchBar.vue'
 import Atags from './Atags.vue'
 import Attachments from './Attachments.vue'
+import Upload from './Upload.vue'
 
 
 export default
@@ -39,9 +58,16 @@ export default
   {
     'attachment-search-bar':SearchBar,
     'attachment-atags':Atags,
+    'attachment-upload':Upload,
     'attachments': Attachments
   },
   props: { aid: String, settings: Object },
+  data()
+  {
+    return {
+      mode: 'browse'
+    }
+  },
   computed:
   {
     aParams()
