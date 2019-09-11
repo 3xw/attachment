@@ -12,8 +12,6 @@ class UploadedFile
 
   protected $_path;
 
-  protected $_metadata = [];
-
   public function __construct(ZUploadedFile $zFile)
   {
     $this->zFile = $zFile;
@@ -41,7 +39,7 @@ class UploadedFile
 
   public function getMetadata()
   {
-    return $this->_metadata;
+    return exif_read_data($this->_path);
   }
 
   public function getSize()
