@@ -223,7 +223,7 @@ class AttachmentsTable extends Table
 
   public function uploadIsValid($value, array $context)
   {
-    if (!empty($value) && is_array($value) && $value['error'] !== UPLOAD_ERR_OK) throw new UploadException($value['error']);
+    if (!empty($value) && is_a($value, '\Zend\Diactoros\UploadedFile') && $value->getError() !== UPLOAD_ERR_OK) throw new UploadException($value->getError());
     return true;
   }
 

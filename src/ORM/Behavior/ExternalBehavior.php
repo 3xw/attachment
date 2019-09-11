@@ -14,7 +14,7 @@ class ExternalBehavior extends Behavior
 {
   public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options)
   {
-    if(!empty($data['path']) && is_array($data['path'])) return;
+    if(!empty($data['path']) && is_a($data['path'], '\Zend\Diactoros\UploadedFile')) return;
 
     if (!empty($data['path']) && substr($data['path'], 0, 4) == 'http' && empty($data['md5']))
     {

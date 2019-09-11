@@ -3,6 +3,7 @@ namespace Attachment\Fly;
 
 use Cake\Core\Configure;
 use Attachment\Fly\FilesystemRegistry;
+use Attachment\Fly\Stream;
 
 class Profile
 {

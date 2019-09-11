@@ -133,11 +133,8 @@ export default
       formData.append('path', file)
       formData.append('uuid', this.aid)
 
-      for (var pair of formData.entries()) console.log(pair[0]+ ' - ' + pair[1]);
-      return 
-
       let params = {
-        headers: {'Accept': 'application/json'},
+        headers: {'Accept': 'application/json', 'Content-Type': 'multipart/form-data'},
         progress: this.progressHandler
       }
 

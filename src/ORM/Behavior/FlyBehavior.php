@@ -11,6 +11,7 @@ use Cake\Http\Session;
 use Cake\ORM\Behavior;
 use Cake\ORM\Table;
 use Attachment\Fly\Profile;
+use Attachment\Filesystem\UploadedFile;
 
 class FlyBehavior extends Behavior
 {
@@ -36,34 +37,37 @@ class FlyBehavior extends Behavior
     // rest for bulk;
     $this->_file = null;
 
-    if (!empty($data[$field]) && is_array($data[$field]))
+    if (!empty($data[$field]) && is_a($data[$field], '\Zend\Diactoros\UploadedFile'))
     {
-      if ($data[$field]['error'] != UPLOAD_ERR_OK)
+      $this->_file = new UploadedFile($data[$field]);
+
+      if ($this->_file->getError() !== UPLOAD_ERR_OK)
       {
         $event->stopPropagation();
         return false;
       }
 
-      // store file!
-      $this->_file = $data[$field];
-      $data[$field] = $this->_file['tmp_name'];
+      $data[$field] = $this->_file->getPath();
 
       // set uuid if exists
       $this->_uuid = empty($data['uuid'])? '' : $data['uuid'];
 
-      // md5
-      $data['md5'] = md5_file($this->_file['tmp_name']);
+      // meta
+      $data['meta'] = json_encode($this->_file->getMetadata());
 
-      $types = explode('/', $this->_file['type']);
+      // md5
+      $data['md5'] = md5_file($this->_file->getPath());
+
+      $types = explode('/', $this->_file->getClientMediaType());
       $data['type'] = $types[0];
       $data['subtype'] = $types[1];
-      $data['size'] = $this->_file['size'];
+      $data['size'] = $this->_file->getSize();
 
       // date...
       if (!isset($data['date'])) $data['date'] = date('Y-m-d H:i:s');
 
       // name of file...
-      if (!isset($data['name']) || $data['name'] == '') $data['name'] = $this->_file['name'];
+      if (!isset($data['name']) || $data['name'] == '') $data['name'] = $this->_file->getClientFilename();
     }
   }
 
@@ -76,7 +80,7 @@ class FlyBehavior extends Behavior
     if (!empty($this->_file))
     {
       // TYPE
-      $type = explode('/', $this->_file['type']);
+      $type = explode('/', $this->_file->getClientMediaType());
       $subtype = $type[1];
       $type = $type[0];
 
@@ -95,7 +99,7 @@ class FlyBehavior extends Behavior
       else $conf = array_merge(Configure::read('Attachment.upload'), $settings);
 
       // CHECK type
-      if (!in_array($this->_file['type'], $conf['types']))
+      if (!in_array($this->_file->getClientMediaType(), $conf['types']))
       {
         $event->stopPropagation();
         $entity->setError($field,['This file type is not suported!']);
@@ -103,7 +107,7 @@ class FlyBehavior extends Behavior
       }
 
       // CHECK Size
-      if ($conf['maxsize'] * ( 1024 * 1024 ) < $this->_file['size'])
+      if ($conf['maxsize'] * ( 1024 * 1024 ) < $this->_file->getSize())
       {
         $event->stopPropagation();
         $entity->setError($field,['This file is too large max size is : '  . ( $conf['maxsize']  ) .' MB']);
@@ -111,9 +115,9 @@ class FlyBehavior extends Behavior
       }
 
       // add image meta
-      if(in_array($this->_file['type'], ['image/jpeg','image/png','image/gif']))
+      if(in_array($this->_file->getClientMediaType(), ['image/jpeg','image/png','image/gif']))
       {
-        $image_info = getimagesize($this->_file['tmp_name']);
+        $image_info = getimagesize($this->_file->getPath());
         $image_width = $image_info[0];
         $image_height = $image_info[1];
         $entity->set('width', $image_width);
@@ -135,7 +139,7 @@ class FlyBehavior extends Behavior
       $entity->set('profile', $profile->name);
 
       // name & dir
-      $name = strtolower( time() . '_' . preg_replace('/[^a-z0-9_.]/i', '', $this->_file['name']) );
+      $name = strtolower( time() . '_' . preg_replace('/[^a-z0-9_.]/i', '', $this->_file->getClientFileName()) );
       $dir = $this->_resolveDir($conf['dir'],$type,$subtype);
 
       // if replace on edit in profile
@@ -145,11 +149,8 @@ class FlyBehavior extends Behavior
         $dir = false;
       }
 
-      // meta
-      $entity->set('meta', json_encode(exif_read_data($this->_file['tmp_name'])));
-
       // write
-      $profile->store($this->_file['tmp_name'], $name, $dir, $conf['visibility'], $this->_file['type']);
+      $profile->store($this->_file->getPath(), $name, $dir, $conf['visibility'], $this->_file->getClientMediaType());
 
       // set entity
       $entity->{$field} = $dir? $dir.DS.$name: $name;
