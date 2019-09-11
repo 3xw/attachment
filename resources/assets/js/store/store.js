@@ -4,6 +4,10 @@ export default
   state()
   {
     return {
+      upload: {
+        tags: [],
+        files: []
+      },
       aParams:{
         uuid: '',
         atags: '',
@@ -18,6 +22,9 @@ export default
   },
   mutations:
   {
+    'upload': (state, payload) => {
+      state.upload = payload
+    },
     'aParams': (state, payload) => {
       state.aParams = payload
     },
