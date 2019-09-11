@@ -1,3 +1,72 @@
+/* VARS
+***************************************/
+$margin--mini: 10px;
+$margin--semi: 25px;
+$margin--default: 50px;
+$margin--double: 100px;
+
+/*** VARS -- BREAKPOINTS (TYPE:LIST / KEY:NAME / VALUE:WIDTH) ****/
+$breakpoints: ('small': 576px, 'medium': 768px, 'large': 992px, 'extra large': 1200px);
+
+/*** VARS -- RATIOS (TYPE:LIST / KEY:RATIO / VALUE:HEIGHT ) ****/
+$ratios: ('3:1': 33.33%, '2:1': 50%, '16:9': 56.25%, '3:2': 66.66%, '4:3': 75%, '1:1': 100%, '3:4': 133.33%, '2:3': 150%, '9:16': 177.77%, '1:2': 200%, '1:3': 300%);
+
+/*** VARS -- COLORS (TYPE:LIST / KEY:NAME / VALUE:HEX ) ****/
+$colors: (
+
+  'blue':    #007bff ,
+  'indigo':  #6610f2 ,
+  'purple':  #6f42c1 ,
+  'pink':    #e83e8c ,
+  'red':     #c90123 ,//Default #dc3545
+  'orange':  #fd7e14 ,
+  'yellow':  #ffc107 ,
+  'green':   #28a745 ,
+  'teal':    #20c997 ,
+  'cyan':    #17a2b8 ,
+
+  'grey': #4A4A4A,
+  'grey-light': #E6E5E5,
+  'grey-very-light': #fbfbf9,
+  'grey-heavy': #302F2F,
+
+  'black': #000000,
+  'white': #FFFFFF,
+);
+
+@each $name, $hexa in $colors {
+  .color--#{$name} {
+    color: #{$hexa};
+  }
+  .bg--#{$name} {
+    background: #{$hexa} !important;
+  }
+  .section--#{$name}{
+    background: #{$hexa};
+  }
+  .block--#{$name}{
+    background: #{$hexa};
+  }
+  .btn--#{$name}{
+    background: #{$hexa};
+  }
+}
+
+[data-aspect-ratio] {
+    display: block; max-width: 100%; position: relative;
+    &:before { content: ''; display: block; }
+    > * { display: block; height: 100%; left: 0; position: absolute; top: 0; width: 100%; }
+}
+@each $key, $value in $ratios {
+  [data-aspect-ratio="#{$key}"]:before { padding-top: #{$value}; }
+}
+
+.utils__spacer--mini{height:$margin--mini;}
+.utils__spacer--semi{height:$margin--semi;}
+.utils__spacer--default{height:$margin--default;}
+.utils__spacer--double{height:$margin--double;}
+
+
 .modal-mask { position: fixed; z-index: 9998; top: 0; left: 0;right:0; width: 100%; min-height: 100%; background-color: rgba(0, 0, 0, .5); display: table; transition: opacity .3s ease;}
 .modal-wrapper { display: table-cell; vertical-align: middle;}
 .modal-container { overflow: auto; max-height:98vh; margin: 0px auto; padding: 20px 30px; background-color: #fff; border-radius: 2px; box-shadow: 0 2px 8px rgba(0, 0, 0, .33); transition: all .3s ease; font-family: Helvetica, Arial, sans-serif; }
@@ -18,8 +87,11 @@
 .attachment-upload__item__description{ display: inline-block; }
 
 #attachment-atags{ margin-bottom: 10px;}
-
 #attachment-filters .panel-heading a { padding: 0; display: inline; }
+
+
+
+
 
 /* PAGINATION
 *****************************/
@@ -39,6 +111,23 @@
 .attachment-thumb__icon-container i { z-index: 2; color: white; font-size: 24px; background: rgba(0, 0, 0, 0.36); }
 @media (min-width: 992px){
   .card form [class*="col-"] { padding: 0 15px; }
+}
+
+
+
+/* SECTION
+*****************************/
+.section-attachment{
+  $this: &;
+
+  &--container{
+    position: fixed;top: 0;right: 0;bottom: 0;left: 0;background: white;padding: $margin--semi;
+  }
+
+}
+
+.block-attachment{
+  $this: &;
 }
 
 /* loading

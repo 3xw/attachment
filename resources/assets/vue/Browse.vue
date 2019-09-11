@@ -1,40 +1,54 @@
 <template>
-  <section class="">
+  <main class="section-attachment--container">
+    <transition name="fade">
 
-    <!--- upload -->
-    <div v-if="mode == 'upload'" class="row">
-      <div class="col-md-3">
-        <attachment-atags :aid="aid" :upload="true"></attachment-atags>
-      </div>
-
-      <div class="col-md-9">
-        <attachment-upload :aid="aid"></attachment-upload>
-      </div>
-    </div>
-
-    <!-- browse mode -->
-    <div v-if="mode == 'browse'" class="row">
-      <div class="col-12">
-        <attachment-search-bar :aid="aid"></attachment-search-bar>
-      </div>
-
-      <div class="col-md-3">
-        <attachment-atags :aid="aid" :upload="false"></attachment-atags>
-      </div>
-
-      <div class="col-md-9">
-        <div class="">
-          <button @click="mode = 'upload'" type="button" name="button" class="btn btn-primary">UPLOAD</button>
+      <!--- upload -->
+      <section v-if="mode == 'upload'" class="section-attachment--upload">
+        <div class="section__nav d-flex flex-row justify-content-between">
+          <h1>Téléchager</h1>
+          <div class="action">
+            <button type="button" name="button" class="btn btn-error">FERMER</button>
+            <button @click="mode = 'browse'" type="button" name="button" class="btn btn-danger">ANNULER</button>
+          </div>
         </div>
-        <attachments :aid="aid"></attachments>
-      </div>
-    </div>
+        <div class="row">
+          <div class="col-md-3">
+            <attachment-atags :aid="aid" :upload="true"></attachment-atags>
+          </div>
+          <div class="col-md-9">
+            <attachment-upload :aid="aid"></attachment-upload>
+          </div>
+        </div>
+      </section>
 
+      <!-- browse mode -->
+      <section v-if="mode == 'browse'" class="section-attachment--browse">
+        <div class="section__nav d-flex flex-row justify-content-between">
+          <h1>Fichiers</h1>
+          <div class="action">
+            <button type="button" name="button" class="btn btn-error">FERMER</button>
+            <button @click="mode = 'upload'" type="button" name="button" class="btn btn-primary">TÉLÉCHARGER</button>
+          </div>
+        </div>
+        <div class="row no-gutters">
+          <div class="col-12">
+            <div class="">
+            </div>
+            <attachment-search-bar :aid="aid"></attachment-search-bar>
+            <div class="utils--spacer-semi"></div>
+          </div>
 
-
-  </section>
+          <div class="col-md-3">
+            <attachment-atags :aid="aid" :upload="false"></attachment-atags>
+          </div>
+          <div class="col-md-9">
+            <attachments :aid="aid"></attachments>
+          </div>
+        </div>
+      </section>
+    </transition>
+  </main>
 </template>
-
 <script>
 // npm libs
 import { mapState, mapGetters, mapActions } from 'vuex'
