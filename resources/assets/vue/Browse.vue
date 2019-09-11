@@ -13,6 +13,9 @@
         </div>
         <div class="row">
           <div class="col-md-3">
+            <div class="section__nav d-flex flex-row justify-content-between">
+              <h3 class="mb-0">Tags</h3>
+            </div>
             <attachment-atags :aid="aid" :upload="true"></attachment-atags>
           </div>
           <div class="col-md-9">
@@ -39,6 +42,12 @@
           </div>
 
           <div class="col-md-3">
+            <div class="section__nav d-flex flex-row justify-content-between">
+              <h3 class="mb-0">&nbsp;Filtres et tags</h3>
+              <button type="button" name="button" class="btn mb-0 color--white"><i class="material-icons">view_module</i></button>
+
+            </div>
+            <div class="utils--spacer-semi"></div>
             <attachment-atags :aid="aid" :upload="false"></attachment-atags>
           </div>
           <div class="col-md-9">

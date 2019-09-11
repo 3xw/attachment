@@ -66,6 +66,11 @@ $colors: (
 .utils__spacer--default{height:$margin--default;}
 .utils__spacer--double{height:$margin--double;}
 
+.text{
+
+  &--upper{text-transform: uppercase;}
+}
+
 
 .modal-mask { position: fixed; z-index: 9998; top: 0; left: 0;right:0; width: 100%; min-height: 100%; background-color: rgba(0, 0, 0, .5); display: table; transition: opacity .3s ease;}
 .modal-wrapper { display: table-cell; vertical-align: middle;}
@@ -122,6 +127,35 @@ $colors: (
 
   &--container{
     position: fixed;top: 0;right: 0;bottom: 0;left: 0;background: white;padding: $margin--semi;
+  }
+
+  &--index{
+    .badge{
+      margin: 0 2.5px;cursor: pointer;
+      i{font-size: 14px;vertical-align: text-bottom;}
+    }
+  }
+
+  &--atags{
+
+    padding-right: $margin--default;
+
+    #{$this}__list{
+
+      border: 1px solid #f1f1f1;
+
+      #{$this}__list-title{
+        padding: 7px 10px;background: #6c757d;color: white;cursor: pointer;
+        &.active, &:hover{background: #545b62;}
+      }
+    }
+
+
+
+
+    #{$this}__sublist{
+      >li{padding: 5px 10px;border-bottom: 1px solid #f1f1f1;cursor: pointer;}
+    }
   }
 
 }
