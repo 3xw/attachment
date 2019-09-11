@@ -46,7 +46,7 @@ export default
       this.$forceUpdate()
 
       // loop and fetch attachment by mutating aParams.atags
-      if(upload) return
+      if(this.upload) return
       let atags = []
       for(let i1 in this.atagTypes)for(let i2 in this.atagTypes[i1].atags) if(this.atagTypes[i1].atags[i2].isActive) atags.push(this.atagTypes[i1].atags[i2].slug)
       this.$store.set(this.aid + '/aParams', Object.assign(
