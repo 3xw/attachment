@@ -5,8 +5,9 @@ export default
   {
     return {
       upload: {
-        tags: [],
-        files: []
+        atags: [],
+        files: [],
+        inputs: {}
       },
       aParams:{
         uuid: '',
@@ -22,6 +23,12 @@ export default
   },
   mutations:
   {
+    'addUploadedFile': (state, payload) => {
+      state.upload.files.push(payload)
+    },
+    'flushUploadedFiles': (state, payload) => {
+      state.upload.files = []
+    },
     'upload': (state, payload) => {
       state.upload = payload
     },
