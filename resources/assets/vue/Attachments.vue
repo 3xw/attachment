@@ -10,23 +10,39 @@
     </div>
     <div class="utils--spacer-semi"></div>
     <div v-if="aParams.atags" class="f-flex flex-row">
-      <p class="small color--grey d-inline-block">Filtre: </p>
+      <p class="small color--grey d-inline-block">Filtre(s): </p>
       <span class="badge badge-secondary" @click="removeAtag(atag)" :key="atag" v-for="atag in aParams.atags.split(',')">{{atag}} <i class="material-icons">close</i></span>
+      <div class="utils--spacer-semi"></div>
     </div>
-    <div class="utils--spacer-semi"></div>
     <div class="section__index">
-      <div class="row">
-        <div v-if="attachments" class="col-sm-6 col-md-4 col-xl-3">
-          <attachment v-for="(attachment, i ) in attachments" :index="i" :aid="aid" :mode="mode" :attachment="attachment"></attachment>
+      <transition name="fade">
+        <div v-if="mode == 'mosaic'">
+          <div v-packery='{itemSelector: ".packery-item", percentPosition: true}' class="row">
+            <div v-for="(attachment, i ) in attachments" :key="i" v-packery-item class="packery-item col-lg-4 col-md-6">
+              <attachment :index="i" :aid="aid" :mode="mode" :attachment="attachment"></attachment>
+            </div>
+          </div>
         </div>
-      </div>
+        <div v-else-if="mode == 'thumb'">
+          <div class="row">
+            <div v-if="attachments" class="col-sm-6 col-md-4 col-xl-3">
+              <attachment v-for="(attachment, i ) in attachments" :index="i" :aid="aid" :mode="mode" :attachment="attachment"></attachment>
+            </div>
+          </div>
+        </div>
+        <div v-else-if="mode == 'thumbInfo'">
+          <table class="table w-100">
+            <attachment v-for="(attachment, i ) in attachments" :index="i" :aid="aid" :mode="mode" :attachment="attachment"></attachment>
+          </table>
+        </div>
+      </transition>
     </div>
   </section>
 </template>
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
-
+import {packeryEvents} from 'vue-packery-plugin'
 import Attachment from './Attachment.vue'
 
 export default

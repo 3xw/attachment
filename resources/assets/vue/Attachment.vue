@@ -1,9 +1,9 @@
 <template>
-  <div class="">
+  <div :is="(mode == 'thumbInfo')? 'tbody' : 'div'">
     <div v-if="mode == 'mosaic' && $options.filters.isThumbable(attachment)">
-      <img v-if="$options.filters.isThumbable(attachment)" v-bind:src="settings.url+'thumbnails/'+attachment.profile+'/w678c16-9q90/'+attachment.path"  />
+      <img v-if="$options.filters.isThumbable(attachment)" v-bind:src="settings.url+'thumbnails/'+attachment.profile+'/w678q90/'+attachment.path" class="img-fluid"  />
     </div>
-    <div v-else="mode == 'thumb'">
+    <div v-else-if="mode == 'thumb'">
       <div class="card mb-4" >
         <!-- thumb -->
         <div class="attachment-thumb__icon-container" >
@@ -26,13 +26,15 @@
         </div>
       </div>
     </div>
-    <div v-else>
-
-    </div>
+    <tr v-else-if="mode == 'thumbInfo'">
+      <td>
+        <img v-if="$options.filters.isThumbable(attachment)" v-bind:src="settings.url+'thumbnails/'+attachment.profile+'/w60c1-1q75/'+attachment.path" />
+      </td>
+      <td>
+        <span v-if="attachment.title">{{attachment.title}} - </span>{{attachment.name}} - {{attachment.size | bytesToMegaBytes | decimal(2) }} MB
+      </td>
+    </tr>
   </div>
-
-
-
 </template>
 
 <script>
