@@ -28,7 +28,10 @@ export default
   {
     atagTypes()
     {
-      return this.$store.get(this.aid + '/atags/list')
+      return this.$store.get(this.aid + '/atags/list').map((v, idx) => {
+        let atags = v.atags.map((v2, idx2) => Object.assign({index: idx2}, v2))
+        return Object.assign({index: idx}, v, {atags: atags})
+      })
     },
   },
   methods:
@@ -45,17 +48,14 @@ export default
       // force render
       this.$forceUpdate()
 
-      // loop and fetch attachment by mutating aParams.atags
-      if(this.upload) return
+      // loop
       let atags = []
       for(let i1 in this.atagTypes)for(let i2 in this.atagTypes[i1].atags) if(this.atagTypes[i1].atags[i2].isActive) atags.push(this.atagTypes[i1].atags[i2].slug)
-      this.$store.set(this.aid + '/aParams', Object.assign(
-        this.$store.get(this.aid + '/aParams'),
-        {
-          atags: atags.join(','),
-          page: 1
-        }
-      ))
+
+      // set upload tags OR fetch attachment by mutating aParams
+      if(this.upload) this.$store.set(this.aid + '/upload', Object.assign(this.$store.get(this.aid + '/upload'),{ atags: atags.join(',') }))
+      else this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ atags: atags.join(','), page: 1 }))
+
     }
   }
 }

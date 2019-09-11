@@ -27,7 +27,7 @@ parseTags = function(response)
     let type = atag.atag_type? atag.atag_type: {
       id: 0,
       name: 'uncalssified',
-      exclusive: true,
+      exclusive: false,
       order: 1000
     }
 
