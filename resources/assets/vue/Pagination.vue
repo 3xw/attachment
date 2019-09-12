@@ -48,12 +48,9 @@ export default
 {
   name: 'attachment-pagination',
   props: {
+    aid: String,
     pagination: {
       type: Object,
-      required: true
-    },
-    callback: {
-      type: Function,
       required: true
     },
     settings: Object,
@@ -98,13 +95,17 @@ export default
       }
 
       return arr;
-    }
+    },
+    aParams()
+    {
+      return this.$store.get(this.aid + '/aParams')
+    },
   },
   methods: {
     changePage: function (page) {
       this.lastPage = this.pagination.current_page;
       this.pagination.current_page = page;
-      this.callback();
+      this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ page: this.pagination.current_page }))
     }
   }
 }

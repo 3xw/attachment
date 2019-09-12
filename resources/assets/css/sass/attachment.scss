@@ -118,6 +118,10 @@ $colors: (
   .card form [class*="col-"] { padding: 0 15px; }
 }
 
+.packery-item{
+  margin-bottom: 30px;
+  img{border: 1px solid #efefef;}
+}
 
 
 /* SECTION
@@ -126,7 +130,8 @@ $colors: (
   $this: &;
 
   &--container{
-    position: fixed;top: 0;right: 0;bottom: 0;left: 0;background: white;padding: $margin--semi;
+    position: fixed;top: 0;right: 0;bottom: 0;left: 0;background: white;padding: $margin--semi;overflow-y: scroll;
+    height: 100%;
   }
 
   &--index{

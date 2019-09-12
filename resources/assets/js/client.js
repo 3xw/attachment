@@ -22,11 +22,6 @@ parseResponseWithPaginate = function(response)
 {
   const { data } = response;
 
-  console.log(Object.assign({}, response, {
-    data: data.data, // expecting array of objects with IDs
-    pagination: data.pagination// expecting object with ID
-  }));
-
   return Object.assign({}, response, {
     data: data.data, // expecting array of objects with IDs
     pagination: data.pagination// expecting object with ID

@@ -18,6 +18,7 @@ export default
       tParams:{
         uuid: '',
       },
+      pagination: {},
       settings: {}
     }
   },
@@ -34,6 +35,9 @@ export default
     },
     'aParams': (state, payload) => {
       state.aParams = payload
+    },
+    'pagination': (state, payload) => {
+      state.pagination = payload
     },
     'settings': (state, payload) => {
       state.settings = payload

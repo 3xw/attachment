@@ -14,19 +14,21 @@
       <span class="badge badge-secondary" @click="removeAtag(atag)" :key="atag" v-for="atag in aParams.atags.split(',')">{{atag}} <i class="material-icons">close</i></span>
       <div class="utils--spacer-semi"></div>
     </div>
-    <div class="section__index">
+    <div class="section__index" v-if="attachments">
       <transition name="fade">
-        <div v-if="mode == 'mosaic'">
-          <div v-packery='{itemSelector: ".packery-item", percentPosition: true}' id="mosaic" class="row packery-row">
+        <div v-if="mode == 'mosaic'" v-images-loaded="imgReady">
+          <div  v-packery='{itemSelector: ".packery-item", percentPosition: true}' id="mosaic" class="row packery-row">
             <div v-for="(attachment, i ) in attachments" :key="i" v-packery-item class="packery-item col-lg-4 col-md-6">
               <attachment :index="i" :aid="aid" :mode="mode" :attachment="attachment"></attachment>
             </div>
           </div>
         </div>
         <div v-else-if="mode == 'thumb'">
-          <div class="row" v-if="attachments" >
-            <div v-for="(attachment, i ) in attachments" :key="i" class="col-sm-6 col-md-4 col-xl-3">
-              <attachment :index="i" :aid="aid" :mode="mode" :attachment="attachment"></attachment>
+          <div>
+            <div class="row">
+              <div v-for="(attachment, i ) in attachments" :key="i" class="col-sm-6 col-md-4 col-xl-3">
+                <attachment :index="i" :aid="aid" :mode="mode" :attachment="attachment"></attachment>
+              </div>
             </div>
           </div>
         </div>
@@ -37,18 +39,27 @@
         </div>
       </transition>
     </div>
+    <div class="clearfix"></div>
+    <div class="utils--spacer-semi"></div>
+    <div v-if="pagination">
+      <attachment-pagination :aid="aid" :pagination="pagination" :settings="settings"></attachment-pagination>
+    </div>
   </section>
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex'
-import {packeryEvents} from 'vue-packery-plugin'
+import { packeryEvents } from 'vue-packery-plugin'
 import Attachment from './Attachment.vue'
+import Pagination from './Pagination.vue'
+import imagesLoaded from 'vue-images-loaded'
 
 export default
 {
   name:'attachments',
-  props: { aid: String },
+  directives: {
+    imagesLoaded
+  },
+  props: { aid: String, settings: Object },
   data(){
     return {
       mode: 'mosaic'
@@ -56,7 +67,8 @@ export default
   },
   components:
   {
-    'attachment': Attachment
+    'attachment': Attachment,
+    'attachment-pagination': Pagination
   },
   computed:
   {
@@ -68,19 +80,44 @@ export default
     {
       return this.$store.get(this.aid + '/attachments/list')
     },
+    pagination()
+    {
+      return this.$store.get(this.aid + '/pagination')
+    }
+  },
+  watch: {
+    mode: function(){
+      if(this.mode == 'mosaic'){
+        this.reLayout()
+      }else{
+      }
+    }
   },
   methods:
   {
     removeAtag(atag)
     {
       var list = this.aParams.atags.split(',');
-      console.log(list);
       for(var i = 0 ; i < list.length ; i++) {
         if(list[i] == atag) list.splice(i, 1)
       }
       this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ atags: list.join(','), page: 1 }))
-      this.$forceUpdate()
+    },
+    reLayout()
+    {
+      setTimeout(function(){
+        var grid = document.getElementById('mosaic')
+        packeryEvents.$emit('layout', grid)
+      }, 200)
+    },
+    imgReady()
+    {
+      this.reLayout()
     }
+  },
+  mounted()
+  {
+    this.reLayout()
   }
 }
 </script>
