@@ -5,6 +5,8 @@ namespace Attachment\Filesystem;
 
 use Attachment\Filesystem\Profile;
 use Attachment\Model\Entity\Attachment;
+use League\Flysystem\Filesystem;
+use League\Flysystem\ZipArchive\ZipArchiveAdapter;
 
 class Downloader
 {
@@ -16,19 +18,35 @@ class Downloader
   }
 
   // rmdir
-  public function downloadZip(array $attachments):string
+  public function downloadZip(array $attachments, $fullPath = '', $keepFile = false):string
   {
-    // create dir
-    $dir = uniqid('folder-download-', true);
-    $this->profile->createDir($dir);
+    // zip time
+    $zipName = uniqid('archive-', true).'.zip';
+    $zipPath = empty($fullPath)? sys_get_temp_dir() : $fullPath;
+    $zipPath = $zipPath.DS.$zipName;
+    $zip = new Filesystem(new ZipArchiveAdapter($zipPath));
 
-    $files = [];
-    foreach($attachments as $attachment) $files[] = $this->download($attachment, $dir, true);
+    // copy and add to zip
+    foreach($attachments as $attachment)
+    {
+      // profile
+      $src = new Profile($attachment->profile);
 
-    // delete folder and zip file !!
+      // resolve dest ...
+      $name = strtolower( time() . '_' . preg_replace('/[^a-z0-9_.]/i', '', $attachment->name) );
+      if($attachment->type == 'embed') $name .= '.html';
+
+      // copy file
+      $zip->write($name, $attachment->type == 'embed'? $attachment->embed: $src->read($attachment->path));
+    }
+
+    // delete zip file !!
+    if($keepFile === false) register_shutdown_function(function() use($zipPath) { unlink($zipPath); });
+
+    return $zipPath;
   }
 
-  public function download(Attachment $attachment, $dir = '', $keepName = false): string
+  public function download(Attachment $attachment, $dir = '', $keepName = false, $keepFile = false): string
   {
     // profile
     $src = new Profile($attachment->profile);
@@ -48,7 +66,7 @@ class Downloader
     $path = $this->profile->getFullPath($dest);
 
     // delete file when over
-    register_shutdown_function(function() use($path) { unlink($path); });
+    if($keepFile === false) register_shutdown_function(function() use($path) { unlink($path); });
 
     return $path;
   }
