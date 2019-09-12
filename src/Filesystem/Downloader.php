@@ -7,6 +7,7 @@ use Attachment\Filesystem\Profile;
 use Attachment\Model\Entity\Attachment;
 use League\Flysystem\Filesystem;
 use League\Flysystem\ZipArchive\ZipArchiveAdapter;
+use Cake\Http\Exception\NotFoundException;
 
 class Downloader
 {
@@ -32,6 +33,9 @@ class Downloader
       // profile
       $src = new Profile($attachment->profile);
 
+      // check
+      if(!$src->has($attachment->path)) continue;
+
       // resolve dest ...
       $name = strtolower( time() . '_' . preg_replace('/[^a-z0-9_.]/i', '', $attachment->name) );
       if($attachment->type == 'embed') $name .= '.html';
@@ -50,6 +54,8 @@ class Downloader
   {
     // profile
     $src = new Profile($attachment->profile);
+
+    if(!$src->has($attachment->path)) throw new NotFoundException('File not found');
 
     // resolve dest ...
     $dest = $keepName? strtolower( time() . '_' . preg_replace('/[^a-z0-9_.]/i', '', $attachment->name) ): uniqid('file-download-', true);
