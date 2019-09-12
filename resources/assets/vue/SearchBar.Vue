@@ -19,6 +19,7 @@ import { mapState, mapGetters, mapActions } from 'vuex'
 export default
 {
   name:'attachment-search-bar',
+  props: { aid: String },
   data()
   {
     return {
@@ -29,7 +30,7 @@ export default
   {
     search()
     {
-      this.$store.set('attachment/aParams.search',this.needle)
+      this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ search: this.needle, page: 1 }))
     }
   }
 }
