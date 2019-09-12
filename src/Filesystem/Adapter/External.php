@@ -41,9 +41,7 @@ class External extends AbstractAdapter
     $type = 'file';
     $result = compact('contents', 'type', 'path');
 
-    if ($visibility = $config->get('visibility')) {
-      $result['visibility'] = $visibility;
-    }
+    if ($visibility = $config->get('visibility')) $result['visibility'] = $visibility;
 
     return $result;
   }

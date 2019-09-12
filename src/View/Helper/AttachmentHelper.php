@@ -1,7 +1,6 @@
 <?php
 namespace Attachment\View\Helper;
 
-use Attachment\Utility\Token;
 use Cake\View\Helper;
 use Cake\View\View;
 use Attachment\Filesystem\FilesystemRegistry;
@@ -10,6 +9,7 @@ use Cake\Routing\Router;
 use Cake\Utility\Text;
 use Cake\Utility\Inflector;
 use Attachment\Http\Cdn\BaseCdn;
+use Attachment\Utility\Token;
 
 class AttachmentHelper extends Helper
 {
@@ -30,23 +30,9 @@ class AttachmentHelper extends Helper
 
   private $_version = false;
 
-  private $_token;
-
-  protected function _getToken()
-  {
-    if(!$this->_token)
-    $this->_token = new Token();
-    return $this->_token;
-  }
-
   public function component($name, $props = [])
   {
     return $this->_View->Html->tag('attachment-loader', '', ['name' => $name, 'props' => json_encode($props)]);
-  }
-
-  public function downloadLink($attachment)
-  {
-    return $this->_getToken()->url($attachment);
   }
 
   private function _setupComponent()
@@ -72,9 +58,16 @@ class AttachmentHelper extends Helper
 
   private function _getSettings($field,$settings)
   {
+    // merge global with settings
     $settings = array_merge(Configure::read('Attachment.upload'),$settings);
+
+    // keys
     $uuid = Text::uuid();
+
+    // set session
     $this->_View->getRequest()->getSession()->write('Attachment.'.$uuid, $settings);
+
+    // front side settings
     $settings['uuid'] = $uuid;
     $settings['url'] = $this->Url->build('/');
     $settings['label'] = empty($settings['label'])? Inflector::humanize($field) : $settings['label'];
