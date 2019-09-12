@@ -18,6 +18,20 @@ parseResponse = function(response)
     data: response.data.data// expecting object with ID
   }
 },
+parseResponseWithPaginate = function(response)
+{
+  const { data } = response;
+
+  console.log(Object.assign({}, response, {
+    data: data.data, // expecting array of objects with IDs
+    pagination: data.pagination// expecting object with ID
+  }));
+
+  return Object.assign({}, response, {
+    data: data.data, // expecting array of objects with IDs
+    pagination: data.pagination// expecting object with ID
+  });
+},
 parseTags = function(response)
 {
   let atagTypes = {}
@@ -44,4 +58,4 @@ parseTags = function(response)
   return {data: types}
 }
 
-export { client, parseResponse, parseTags }
+export { client, parseResponse, parseResponseWithPaginate, parseTags }

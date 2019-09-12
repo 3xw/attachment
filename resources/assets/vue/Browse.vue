@@ -54,6 +54,11 @@
             <attachments :aid="aid"></attachments>
           </div>
         </div>
+        <div class="clearfix"></div>
+        <div class="utils--spacer-semi"></div>
+
+        <attachment-pagination :pagination="pagination" :callback="getFiles" :settings.sync="settings"></attachment-pagination>
+
       </section>
     </transition>
   </main>
@@ -64,7 +69,7 @@ import { mapState, mapGetters, mapActions } from 'vuex'
 import createCrudModule from 'vuex-crud';
 
 // js scripts
-import { client, parseResponse, parseTags } from '../js/client.js'
+import { client, parseResponse, parseTags, parseResponseWithPaginate } from '../js/client.js'
 import attachment from '../js/store/store.js'
 
 // vue components
@@ -72,6 +77,7 @@ import SearchBar from './SearchBar.vue'
 import Atags from './Atags.vue'
 import Attachments from './Attachments.vue'
 import Upload from './Upload.vue'
+import Pagination from './Pagination.vue'
 
 
 export default
@@ -82,7 +88,8 @@ export default
     'attachment-search-bar':SearchBar,
     'attachment-atags':Atags,
     'attachment-upload':Upload,
-    'attachments': Attachments
+    'attachments': Attachments,
+    'attachments-pagination': Pagination
   },
   props: { aid: String, settings: Object },
   data()
@@ -101,6 +108,10 @@ export default
     {
       return this.$store.get(this.aid + '/tParams')
     },
+    data()
+    {
+      return this.$store.get(this.aid + '/attachments/list')
+    }
   },
   watch:
   {
@@ -128,7 +139,7 @@ export default
       urlRoot: '../attachment/attachments',
       client,
       parseSingle: parseResponse,
-      parseList: parseResponse
+      parseList: parseResponseWithPaginate
     }))
     this.$store.registerModule(this.aid+'/atags', createCrudModule({
       resource: 'atags',

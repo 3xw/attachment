@@ -17,16 +17,16 @@
     <div class="section__index">
       <transition name="fade">
         <div v-if="mode == 'mosaic'">
-          <div v-packery='{itemSelector: ".packery-item", percentPosition: true}' class="row">
+          <div v-packery='{itemSelector: ".packery-item", percentPosition: true}' id="mosaic" class="row packery-row">
             <div v-for="(attachment, i ) in attachments" :key="i" v-packery-item class="packery-item col-lg-4 col-md-6">
               <attachment :index="i" :aid="aid" :mode="mode" :attachment="attachment"></attachment>
             </div>
           </div>
         </div>
         <div v-else-if="mode == 'thumb'">
-          <div class="row">
-            <div v-if="attachments" class="col-sm-6 col-md-4 col-xl-3">
-              <attachment v-for="(attachment, i ) in attachments" :index="i" :aid="aid" :mode="mode" :attachment="attachment"></attachment>
+          <div class="row" v-if="attachments" >
+            <div v-for="(attachment, i ) in attachments" :key="i" class="col-sm-6 col-md-4 col-xl-3">
+              <attachment :index="i" :aid="aid" :mode="mode" :attachment="attachment"></attachment>
             </div>
           </div>
         </div>
