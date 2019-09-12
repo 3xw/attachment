@@ -8,7 +8,7 @@ use League\Flysystem\Adapter\Polyfill\StreamedTrait;
 use League\Flysystem\Config;
 use Cake\Http\Client;
 
-class ExternalAdapter extends AbstractAdapter
+class External extends AbstractAdapter
 {
   use StreamedTrait;
   use StreamedCopyTrait;
