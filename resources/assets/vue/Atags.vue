@@ -1,6 +1,16 @@
 <template lang="html">
   <section class="section-attachment--atags">
     <ul class="list-unstyled section-attachment__list" v-if="atagTypes">
+      <li v-for="(filter, i) in filters">
+        <div class="section-attachment__list-title d-flex flex-row justify-content-between" :class="{active: filter.isActive}" @click="filter.isActive = !filter.isActive;$forceUpdate()">
+          <p class="text--upper mb-0">{{filter.name}}</p> <i class="material-icons">{{(filter.isActive)? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</i>
+        </div>
+        <ul class="list-unstyled section-attachment__sublist" v-if="filter.isActive">
+          <li v-for="(option, i2) in filter.options" :key="i2" @click="option.isActive = !option.isActive;$forceUpdate();filterOption(option.slug); " class="d-flex flex-row justify-content-between align-items-center" :class="{active: checkFilterActive(i, i2, option.slug)}">
+            {{option.name}} <input type="checkbox" :checked="checkFilterActive(i, i2, option.slug)">
+          </li>
+        </ul>
+      </li>
       <li v-for="(atagType, index1) in atagTypes">
         <div class="section-attachment__list-title d-flex flex-row justify-content-between" :class="{active: atagType.isActive}" @click="atagType.isActive = !atagType.isActive;$forceUpdate()">
           <p class="text--upper mb-0">{{atagType.name}}</p> <i class="material-icons">{{(atagType.isActive)? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</i>
@@ -21,6 +31,34 @@ export default
 {
   name:'attachment-atags',
   props: { aid: String, upload:Boolean },
+  data(){
+    return {
+      filters: [
+        {
+          slug: 'orientation',
+          name: 'Orientation',
+          isActive: false,
+          options: [
+            {
+              slug: 'vertical',
+              name: 'Vertical',
+              isActive: false
+            },
+            {
+              slug: 'horizontal',
+              name: 'Horizontal',
+              isActive: false
+            },
+            {
+              slug: 'square',
+              name: 'Carré',
+              isActive: false
+            }
+          ]
+        }
+      ]
+    }
+  },
   computed:
   {
     atagTypes()
@@ -34,6 +72,10 @@ export default
     {
       return this.$store.get(this.aid + '/aParams')
     },
+  },
+  created()
+  {
+    //this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ filters: filters.join(','), page: 1 }))
   },
   methods:
   {
@@ -57,9 +99,21 @@ export default
       if(this.upload) this.$store.set(this.aid + '/upload', Object.assign(this.$store.get(this.aid + '/upload'),{ atags: atags }))
       else this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ atags: atags.join(','), page: 1 }))
     },
+    filterOption(key)
+    {
+      if(!this.upload){
+        let filters = []
+        for(let i1 in this.filters)for(let i2 in this.filters[i1].options) if(this.filters[i1].options[i2].isActive) filters.push(this.filters[i1].options[i2].slug)
+        this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ filters: filters.join(','), page: 1 }))
+      }
+    },
     checkActive(index1, index2, atag){
       this.atagTypes[index1].atags[index2].isActive = (this.aParams.atags.indexOf(atag) !== -1)
       return this.aParams.atags.indexOf(atag) !== -1
+    },
+    checkFilterActive(index1, index2, filter){
+      this.filters[index1].options[index2].isActive = (this.aParams.filters.indexOf(filter) !== -1)
+      return this.aParams.filters.indexOf(filter) !== -1
     }
   }
 }

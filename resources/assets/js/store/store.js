@@ -12,6 +12,7 @@ export default
       aParams:{
         uuid: '',
         atags: '',
+        filters: '',
         search: '',
         page: 1,
       },

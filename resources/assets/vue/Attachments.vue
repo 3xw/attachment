@@ -9,9 +9,10 @@
       </div>
     </div>
     <div class="utils--spacer-semi"></div>
-    <div v-if="aParams.atags" class="f-flex flex-row">
+    <div v-if="aParams.atags || aParams.filters" class="f-flex flex-row">
       <p class="small color--grey d-inline-block">Filtre(s): </p>
-      <span class="badge badge-secondary" @click="removeAtag(atag)" :key="atag" v-for="atag in aParams.atags.split(',')">{{atag}} <i class="material-icons">close</i></span>
+      <span v-if="aParams.atags" class="badge badge-secondary" @click="removeAtag(atag)" :key="atag" v-for="atag in aParams.atags.split(',')">{{atag}} <i class="material-icons">close</i></span>
+      <span v-if="aParams.filters" class="badge badge-secondary" @click="removeFilter(filter)" :key="atag" v-for="filter in aParams.filters.split(',')">{{filter}} <i class="material-icons">close</i></span>
       <div class="utils--spacer-semi"></div>
     </div>
     <div class="section__index" v-if="attachments">
@@ -102,6 +103,14 @@ export default
         if(list[i] == atag) list.splice(i, 1)
       }
       this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ atags: list.join(','), page: 1 }))
+    },
+    removeFilter(filter)
+    {
+      var list = this.aParams.filters.split(',');
+      for(var i = 0 ; i < list.length ; i++) {
+        if(list[i] == filter) list.splice(i, 1)
+      }
+      this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ filters: list.join(','), page: 1 }))
     },
     reLayout()
     {
