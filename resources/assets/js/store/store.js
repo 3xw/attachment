@@ -13,6 +13,7 @@ export default
         uuid: '',
         atags: '',
         filters: '',
+        type: '',
         search: '',
         page: 1,
       },

@@ -1,6 +1,11 @@
 <template lang="html">
   <section class="section-attachment--atags">
     <ul class="list-unstyled section-attachment__list" v-if="atagTypes">
+      <li>
+        <div class="section-attachment__list-title d-flex flex-row justify-content-between" :class="{active: filter.isActive}" @click="filter.isActive = !filter.isActive;$forceUpdate()">
+          <p class="text--upper mb-0">{{filter.type}}</p> <i class="material-icons">{{(filter.isActive)? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</i>
+        </div>
+      </li>
       <li v-for="(filter, i) in filters">
         <div class="section-attachment__list-title d-flex flex-row justify-content-between" :class="{active: filter.isActive}" @click="filter.isActive = !filter.isActive;$forceUpdate()">
           <p class="text--upper mb-0">{{filter.name}}</p> <i class="material-icons">{{(filter.isActive)? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</i>
@@ -33,6 +38,28 @@ export default
   props: { aid: String, upload:Boolean },
   data(){
     return {
+      types: [
+        name: 'Types',
+        slug: 'type',
+        isActive: false,
+        options: [
+          {
+            name: 'Images',
+            slug: 'image',
+            isActive: false
+          },
+          {
+            name: 'Vidéos',
+            slug: 'video',
+            isActive: false
+          },
+          {
+            name: 'Autres',
+            slug: 'application',
+            isActive: false
+          }
+        ]
+      ],
       filters: [
         {
           slug: 'orientation',
