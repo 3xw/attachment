@@ -2,11 +2,16 @@
   <section class="section-attachment--atags">
     <ul class="list-unstyled section-attachment__list" v-if="atagTypes">
       <li>
-        <div class="section-attachment__list-title d-flex flex-row justify-content-between" :class="{active: filter.isActive}" @click="filter.isActive = !filter.isActive;$forceUpdate()">
-          <p class="text--upper mb-0">{{filter.type}}</p> <i class="material-icons">{{(filter.isActive)? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</i>
+        <div class="section-attachment__list-title d-flex flex-row justify-content-between" :class="{active: types.isActive}" @click="types.isActive = !types.isActive;$forceUpdate()">
+          <p class="text--upper mb-0">{{types.name}}</p> <i class="material-icons">{{(types.isActive)? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</i>
         </div>
+        <ul class="list-unstyled section-attachment__sublist" v-if="types.isActive">
+          <li v-for="(option, i2) in types.options" :key="i2" @click="types.current = option.slug;$forceUpdate();filterType(option.slug);" class="d-flex flex-row justify-content-between align-items-center" :class="{active: types.current == option.slug}">
+            {{option.name}} <input type="radio" :checked="types.current == option.slug">
+          </li>
+        </ul>
       </li>
-      <li v-for="(filter, i) in filters">
+      <li v-if="types.current != 'application'" v-for="(filter, i) in filters">
         <div class="section-attachment__list-title d-flex flex-row justify-content-between" :class="{active: filter.isActive}" @click="filter.isActive = !filter.isActive;$forceUpdate()">
           <p class="text--upper mb-0">{{filter.name}}</p> <i class="material-icons">{{(filter.isActive)? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</i>
         </div>
@@ -38,28 +43,26 @@ export default
   props: { aid: String, upload:Boolean },
   data(){
     return {
-      types: [
+      types: {
         name: 'Types',
         slug: 'type',
         isActive: false,
+        current: 'image',
         options: [
           {
             name: 'Images',
             slug: 'image',
-            isActive: false
           },
           {
             name: 'Vidéos',
             slug: 'video',
-            isActive: false
           },
           {
             name: 'Autres',
             slug: 'application',
-            isActive: false
           }
         ]
-      ],
+      },
       filters: [
         {
           slug: 'orientation',
@@ -125,6 +128,12 @@ export default
       // set upload tags OR fetch attachment by mutating aParams
       if(this.upload) this.$store.set(this.aid + '/upload', Object.assign(this.$store.get(this.aid + '/upload'),{ atags: atags }))
       else this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ atags: atags.join(','), page: 1 }))
+    },
+    filterType()
+    {
+      if(!this.upload){
+        this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ type: this.types.current, filters: '', atags: '', page: 1 }))
+      }
     },
     filterOption(key)
     {
