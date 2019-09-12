@@ -6,7 +6,7 @@ use Cake\Http\Exception\ForbiddenException;
 
 use Cake\Core\Configure;
 use Cake\Http\Exception\NotFoundException;
-use Attachment\Fly\FilesystemRegistry;
+use Attachment\Filesystem\FilesystemRegistry;
 use Cake\Filesystem\Folder;
 use Cake\Core\App;
 use Attachment\Controller\AppController;

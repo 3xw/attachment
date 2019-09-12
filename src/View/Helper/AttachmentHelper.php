@@ -4,7 +4,7 @@ namespace Attachment\View\Helper;
 use Attachment\Utility\Token;
 use Cake\View\Helper;
 use Cake\View\View;
-use Attachment\Fly\FilesystemRegistry;
+use Attachment\Filesystem\FilesystemRegistry;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
 use Cake\Utility\Text;

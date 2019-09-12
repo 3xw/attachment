@@ -30,8 +30,8 @@ return [
         'baseUrl' =>  '/img/'
     	],
       'external' => [
-    		'adapter' => 'Attachment\Fly\ExternalAdapter',
-    		'client' => new Attachment\Fly\ExternalAdapter(),
+    		'adapter' => 'Attachment\Filesystem\Adapter\External',
+    		'client' => new Attachment\Filesystem\Adapter\External(),
         'baseUrl' =>  ''
     	],
       'thumbnails' => [

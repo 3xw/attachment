@@ -1,6 +1,6 @@
 <?php
 
-namespace Attachment\Fly;
+namespace Attachment\Filesystem\Adapter;
 
 use League\Flysystem\Adapter\AbstractAdapter;
 use League\Flysystem\Adapter\Polyfill\StreamedCopyTrait;

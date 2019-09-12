@@ -1,5 +1,5 @@
 <?php
-namespace Attachment\Fly;
+namespace Attachment\Filesystem\Adapter;
 
 use League\Flysystem\Adapter\Ftp;
 

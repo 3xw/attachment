@@ -1,9 +1,8 @@
 <?php
-namespace Attachment\Fly;
+namespace Attachment\Filesystem;
 
 use Cake\Core\Configure;
-use Attachment\Fly\FilesystemRegistry;
-use Attachment\Fly\Stream;
+use Attachment\Filesystem\FilesystemRegistry;
 
 class Profile
 {

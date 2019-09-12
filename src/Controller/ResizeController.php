@@ -4,7 +4,7 @@ namespace Attachment\Controller;
 use Attachment\Controller\AppController;
 use Cake\Core\Configure;
 use Cake\Http\Exception\NotFoundException;
-use Attachment\Fly\FilesystemRegistry;
+use Attachment\Filesystem\FilesystemRegistry;
 use Cake\Filesystem\Folder;
 use Cake\Core\App;
 use Intervention\Image\ImageManagerStatic as Image;

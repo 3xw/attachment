@@ -10,7 +10,7 @@ use Cake\Datasource\EntityInterface;
 use Cake\Http\Session;
 use Cake\ORM\Behavior;
 use Cake\ORM\Table;
-use Attachment\Fly\Profile;
+use Attachment\Filesystem\Profile;
 use Attachment\Filesystem\UploadedFile;
 
 class FlyBehavior extends Behavior
