@@ -4,6 +4,10 @@ export default
   state()
   {
     return {
+      selection: {
+        files: [],
+        token: '',
+      },
       upload: {
         atags: [],
         files: [],
@@ -26,6 +30,24 @@ export default
   },
   mutations:
   {
+    // selection
+    'addFileToSelection': (state, payload) => {
+      state.selection.files.push(payload)
+    },
+    'removeFileFromSelection': (state, payload) => {
+      let idx = state.selection.files.find((file, i) => {
+        if(file == payload) return i
+      })
+      state.selection.files.splice(idx, 1)
+    },
+    'flushSelection': (state, payload) => {
+      state.selection.files = []
+    },
+    'selection.token': (state, payload) => {
+      state.selection.token = payload
+    },
+
+    // upload
     'addUploadedFile': (state, payload) => {
       state.upload.files.push(payload)
     },
@@ -35,12 +57,16 @@ export default
     'upload': (state, payload) => {
       state.upload = payload
     },
+
+    // browse
     'aParams': (state, payload) => {
       state.aParams = payload
     },
     'pagination': (state, payload) => {
       state.pagination = payload
     },
+
+    // settings
     'settings': (state, payload) => {
       state.settings = payload
     }

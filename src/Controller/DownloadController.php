@@ -13,9 +13,10 @@ class DownloadController extends AppController
   public function getZipToken()
   {
     if (!$this->getRequest()->is('post')) throw new BadRequestException('Post Needed');
-    if(empty($this->getRequest()->getData('files')) || !is_array($this->getRequest()->getData('files')))  throw new BadRequestException('Need array of files');
 
-    $this->set($token, (new Token)->encode(['files' => $this->getRequest()->getData('files')]));
+    if(empty($this->getRequest()->getData('files'))) $this->set('token', '');
+    else $this->set('token', (new Token)->encode(['files' => $this->getRequest()->getData('files')]));
+
     $this->set('_serialize', ['token']);
   }
 
@@ -40,9 +41,10 @@ class DownloadController extends AppController
   public function getFileToken()
   {
     if (!$this->getRequest()->is('post')) throw new BadRequestException('Post Needed');
-    if(empty($this->getRequest()->getData('file')) || !is_array($this->getRequest()->getData('file')))  throw new BadRequestException('Need array of file');
 
-    $this->set($token, (new Token)->encode(['file' => $this->getRequest()->getData('file')]));
+    if(empty($this->getRequest()->getData('file'))) $this->set('token', '');
+    else $this->set('token', (new Token)->encode(['file' => $this->getRequest()->getData('file')]));
+
     $this->set('_serialize', ['token']);
   }
 

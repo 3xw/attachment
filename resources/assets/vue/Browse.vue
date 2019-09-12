@@ -103,6 +103,10 @@ export default
     tParams()
     {
       return this.$store.get(this.aid + '/tParams')
+    },
+    selectedFiles()
+    {
+      return this.$store.get(this.aid + '/selection.files')
     }
   },
   watch:
@@ -117,6 +121,10 @@ export default
       handler(){ this.fetchTags({config:{ params: this.tParams}}) },
       deep: true
     },
+    selectedFiles(value)
+    {
+      this.createSelectedFilesToken({data: {files: value}})
+    }
   },
   created()
   {
@@ -144,6 +152,16 @@ export default
       parseSingle: parseResponse,
       parseList: parseTags
     }))
+    this.$store.registerModule(this.aid+'/token', createCrudModule({
+      resource: 'token',
+      only: ['CREATE'],
+      urlRoot: '../attachment/download/get-zip-token',
+      client,
+      idAttribute: 'token',
+      onCreateSuccess: (o, response) => {
+        this.$store.set(this.aid + '/selection.token', response.data.token)
+      },
+    }))
 
     // set uuid & fetch data ( all in one because of deep watching )
     this.aParams.uuid = this.tParams.uuid = this.aid
@@ -158,7 +176,11 @@ export default
       fetchTags(dispatch, payload)
       {
         return dispatch(this.aid + '/atags/fetchList', payload)
-      }
+      },
+      createSelectedFilesToken(dispatch, payload)
+      {
+        return dispatch(this.aid + '/token/create', payload)
+      },
     })
   }
 }
