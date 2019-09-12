@@ -35,13 +35,15 @@ export default
       state.selection.files.push(payload)
     },
     'removeFileFromSelection': (state, payload) => {
-      let idx = state.selection.files.find((file, i) => {
-        if(file == payload) return i
-      })
+      let idx = state.selection.files.findIndex(file => file === payload);
+      console.log(idx);
       state.selection.files.splice(idx, 1)
     },
     'flushSelection': (state, payload) => {
       state.selection.files = []
+    },
+    'selection.files': (state, payload) => {
+      state.selection.files = payload
     },
     'selection.token': (state, payload) => {
       state.selection.token = payload

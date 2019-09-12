@@ -6,6 +6,8 @@
         <button type="button" @click="mode = 'mosaic'" name="button" class="btn btn-secondary mb-0 color--white" :class="{active: mode == 'mosaic'}"><i class="material-icons">view_quilt</i></button>
         <button type="button" @click="mode = 'thumb'" name="button" class="btn btn-secondary mb-0 color--white" :class="{active: mode == 'thumb'}"><i class="material-icons">view_module</i></button>
         <button type="button" @click="mode = 'thumbInfo'" name="button" class="btn btn-secondary mb-0 color--white" :class="{active: mode == 'thumbInfo'}"><i class="material-icons">view_list</i></button>
+        &nbsp;
+        <button type="button" v-if="selectedFiles.length > 0" @click="dowloadSelection" name="button" class="btn btn-primary mb-0 color--white">TÉLÉCHARGER {{selectedFiles.length}} FICHIER(S)</button>
       </div>
     </div>
     <div class="utils--spacer-semi"></div>
@@ -84,6 +86,10 @@ export default
     pagination()
     {
       return this.$store.get(this.aid + '/pagination')
+    },
+    selectedFiles()
+    {
+      return this.$store.get(this.aid + '/selection.files')
     }
   },
   watch: {
@@ -122,6 +128,12 @@ export default
     imgReady()
     {
       this.reLayout()
+    },
+    dowloadSelection()
+    {
+      let token = this.$store.get(this.aid+'/selection.token')
+      let url = this.$store.get(this.aid + '/settings.url')+'attachment/download/files/'+token
+      window.open(url)
     }
   },
   mounted()

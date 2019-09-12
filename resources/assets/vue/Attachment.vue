@@ -2,6 +2,7 @@
   <div :is="(mode == 'thumbInfo')? 'tbody' : 'div'">
     <div v-if="mode == 'mosaic' && $options.filters.isThumbable(attachment)">
       <img v-if="$options.filters.isThumbable(attachment)" v-bind:src="settings.url+'thumbnails/'+attachment.profile+'/w678q90/'+attachment.path" class="img-fluid"  />
+      <button type="button" name="button" @click="toggleFile(attachment.id)">{{isSelected(attachment.id)? '-' : '+'}}</button>
     </div>
     <div v-else-if="mode == 'thumb'">
       <div class="card mb-4" >
@@ -47,6 +48,25 @@ export default
     settings()
     {
       return this.$store.get(this.aid+'/settings')
+    },
+    selectedFiles()
+    {
+      return this.$store.get(this.aid + '/selection.files')
+    }
+
+  },
+  methods: {
+    toggleFile(id)
+    {
+      if(this.selectedFiles.indexOf(id) == -1){
+        this.$store.commit(this.aid+'/addFileToSelection', id)
+      }else{
+        this.$store.commit(this.aid+'/removeFileFromSelection', id)
+      }
+    },
+    isSelected(id)
+    {
+      return (this.selectedFiles.indexOf(id) != -1)
     }
   }
 }
