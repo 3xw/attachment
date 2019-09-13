@@ -101,6 +101,14 @@ class AttachmentsTable extends Table
         return true;
       }
     ])
+    ->add('sort', 'Search.Callback',[
+      'callback' => function ($query, $args, $filter)
+      {
+        $conditions = ($args['sort'] == 'created_desc')? ['Attachments.created' => 'DESC'] : ['Attachments.created' => 'ASC'];
+        $query->order($conditions);
+        return true;
+      }
+    ])
     ->add('filters', 'Search.Callback',[
       'callback' => function ($query, $args, $filter)
       {
