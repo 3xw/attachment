@@ -65,7 +65,6 @@ class AtagsController extends AppController
     ]);
 
     $this->set('atag', $atag);
-    $this->set('_serialize', ['atag']);
   }
 
   /**
@@ -87,7 +86,6 @@ class AtagsController extends AppController
     }
     $atagTypes = $this->Atags->AtagTypes->find('list', ['limit' => 200]);
     $this->set(compact('atag', 'atagTypes'));
-    $this->set('_serialize', ['atag']);
   }
 
   /**
@@ -113,7 +111,6 @@ class AtagsController extends AppController
     }
     $atagTypes = $this->Atags->AtagTypes->find('list', ['limit' => 200]);
     $this->set(compact('atag', 'atagTypes'));
-    $this->set('_serialize', ['atag']);
   }
 
   /**

@@ -63,8 +63,6 @@ class AtagTypesController extends AppController
     ]);
 
     $this->set('atagType', $atagType);
-    $this->set('_serialize', ['atagType']);
-  }
 
   /**
   * Add method
@@ -84,7 +82,6 @@ class AtagTypesController extends AppController
       $this->Flash->error(__('The atag type could not be saved. Please, try again.'));
     }
     $this->set(compact('atagType'));
-    $this->set('_serialize', ['atagType']);
   }
 
   /**
@@ -109,7 +106,6 @@ class AtagTypesController extends AppController
       $this->Flash->error(__('The atag type could not be saved. Please, try again.'));
     }
     $this->set(compact('atagType'));
-    $this->set('_serialize', ['atagType']);
   }
 
   /**
