@@ -20,8 +20,9 @@ use Cake\ORM\Entity;
  */
 class Atag extends Entity
 {
+
     /**
-     * Fields that can be mass assigned using newEntity([]) or patchEntity().
+     * Fields that can be mass assigned using newEntity() or patchEntity().
      *
      * Note that when '*' is set to true, this allows all unspecified fields to
      * be mass assigned. For security purposes, it is advised to set '*' to false
@@ -29,13 +30,8 @@ class Atag extends Entity
      *
      * @var array
      */
-    protected $_accessible = [
-        'name' => true,
-        'slug' => true,
-        'atag_type_id' => true,
-        'user_id' => true,
-        'atag_type' => true,
-        'user' => true,
-        'attachments' => true,
-    ];
+     protected $_accessible = [
+       '*' => true,         
+      'id' => false,
+            ];
 }
