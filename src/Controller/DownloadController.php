@@ -17,7 +17,7 @@ class DownloadController extends AppController
     if(empty($this->getRequest()->getData('files'))) $this->set('token', '');
     else $this->set('token', (new Token)->encode(['files' => $this->getRequest()->getData('files')]));
 
-    $this->set('_serialize', ['token']);
+    $this->viewBuilder()->setOption('serialize', ['token']);
   }
 
   // (new Token)->encode(['files' => [$attachment1->id, $attachment2->id]])
@@ -44,8 +44,6 @@ class DownloadController extends AppController
 
     if(empty($this->getRequest()->getData('file'))) $this->set('token', '');
     else $this->set('token', (new Token)->encode(['file' => $this->getRequest()->getData('file')]));
-
-    $this->set('_serialize', ['token']);
   }
 
   // (new Token)->encode(['file' => $attachment->id])
