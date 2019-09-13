@@ -131,7 +131,7 @@
               </tr>
               <tr>
                 <th scope="row"><?= __('User') ?></th>
-                <td><?= $atag->has('user') ? $this->Html->link($atag->user->username, ['controller' => 'Users', 'action' => 'view', $atag->user->id]) : '' ?></td>
+                <td><?= $atag->has('user') ? $this->Html->link($atag->user->id, ['controller' => 'Users', 'action' => 'view', $atag->user->id]) : '' ?></td>
               </tr>
               <tr>
                 <th scope="row"><?= __('Id') ?></th>

@@ -1,7 +1,7 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \Cake\Datasource\EntityInterface $atag
+ * @var \Cake\Datasource\EntityInterface $atagType
  */
 ?>
 <nav class="navbar navbar-expand-lg">
@@ -20,19 +20,18 @@
 <div class="row no-gutters">
   <div class="col-11 mx-auto">
     <div class="card">
-      <?= $this->Form->create($atag) ?>
+      <?= $this->Form->create($atagType) ?>
       <?php $this->Form->setTemplates(['dateWidget' => "{{day}}{{month}}{{year}}{{hour}}{{minute}}"]);?>
       <div class="card-header">
-        <h2><?= __('Edit Atag') ?></h2>
+        <h2><?= __('Edit Atag Type') ?></h2>
       </div>
       <div class="card-body">
         <div class="row">
           <div class="col-sm-8">
+            <?= $this->Form->control('exclusive', ['class'=>'form-control']);?>
+            <?= $this->Form->control('order', ['class'=>'form-control']);?>
             <?= $this->Form->control('name',['class'=>'form-control']);?>
             <?= $this->Form->control('slug',['class'=>'form-control']);?>
-          </div>
-          <div class="col-sm-4">
-            <?= $this->Form->control('atag_type_id', ['options' => $atagTypes, 'empty' => true, 'class'=>'form-control']);?>
           </div>
         </div>
       </div>

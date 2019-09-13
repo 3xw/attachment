@@ -46,7 +46,7 @@ class AtagsFixture extends TestFixture
                 'name' => 'Lorem ipsum dolor sit amet',
                 'slug' => 'Lorem ipsum dolor sit amet',
                 'atag_type_id' => 1,
-                'user_id' => '6207bc9e-46fb-40a6-9396-5f6caa21d260',
+                'user_id' => '6bfcb922-f543-4a7a-83eb-85ef5228c9c1',
             ],
         ];
         parent::init();

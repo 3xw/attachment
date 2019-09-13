@@ -7,11 +7,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
-use Cake\Utility\Text;
-use ArrayObject;
-use Cake\Event\Event;
 use Cake\Core\Configure;
-
 /**
 * Atags Model
 *
@@ -30,6 +26,7 @@ use Cake\Core\Configure;
 */
 class AtagsTable extends Table
 {
+
   /**
   * Initialize method
   *
@@ -43,16 +40,24 @@ class AtagsTable extends Table
     $this->setTable('atags');
     $this->setDisplayField('name');
     $this->setPrimaryKey('id');
-
-    $this->belongsTo('Users', [
-      'type' => 'LEFT',
-      'foreignKey' => 'user_id',
-      'className' => 'Users',
+    $this->addBehavior('Search.Search');
+    $this->searchManager()
+    ->add('q', 'Search.Like', [
+      'before' => true,
+      'after' => true,
+      'mode' => 'or',
+      'comparison' => 'LIKE',
+      'wildcardAny' => '*',
+      'wildcardOne' => '?',
+      'field' => ['name']
     ]);
     $this->belongsTo('AtagTypes', [
-      'type' => 'LEFT',
       'foreignKey' => 'atag_type_id',
       'className' => 'Attachment.AtagTypes',
+    ]);
+    $this->belongsTo('Users', [
+      'foreignKey' => 'user_id',
+      'className' => 'Attachment.Users',
     ]);
     $this->belongsToMany('Attachments', [
       'foreignKey' => 'atag_id',
@@ -62,18 +67,11 @@ class AtagsTable extends Table
     ]);
 
     // custom behaviors
+    $this->addBehavior('Trois\Utils\ORM\Behavior\SluggableBehavior', ['field' => 'name']);
     $this->addBehavior('Attachment\ORM\Behavior\UserIDBehavior');
     if(Configure::read('Attachment.translate'))
     {
       $this->addBehavior('Trois\Utils\ORM\Behavior\TranslateBehavior', ['fields' => ['name','slug']]);
-    }
-  }
-
-  public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options)
-  {
-    if(empty($data['slug']) && !empty($data['name']))
-    {
-      $data['slug'] = Text::slug($data['name']);
     }
   }
 

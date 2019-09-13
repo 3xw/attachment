@@ -24,9 +24,9 @@
 
       <div class="card-header">
         <h2 class="card-title">
-          <?= __('Atags')?> <small><?= $this->Paginator->counter(['format' => __('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')]) ?></small>
+          <?= __('Atags')?> <small><?= $this->Paginator->counter(__('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')) ?></small>
         </h2>
-        <?= $this->Form->create('Search', ['novalidate', 'class'=>'', 'role'=>'search']) ?>
+        <?= $this->Form->create(null, ['novalidate', 'class'=>'', 'role'=>'search']) ?>
         <?= $this->Form->input('q', ['class'=>'form-control', 'placeholder'=>__('Search...'), 'label'=>false]) ?>
         <?= $this->Form->end() ?>
         <?php if (isset($q)): ?>
@@ -40,9 +40,7 @@
           <table id="datatables" class="table table-no-bordered table-hover dataTable dtr-inline" cellspacing="0" width="100%" style="width: 100%;" role="grid" aria-describedby="datatables_info">
             <thead class="thead-default">
               <tr>
-                <th scope="col"><?= $this->Paginator->sort('id') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('name') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('slug') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('atag_type_id') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('user_id') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
@@ -51,11 +49,9 @@
             <tbody>
             <?php foreach ($atags as $atag): ?>
               <tr>
-                <td><?= $this->Number->format($atag->id) ?></td>
                 <td><?= h($atag->name) ?></td>
-                <td><?= h($atag->slug) ?></td>
                 <td><?= $atag->has('atag_type') ? $this->Html->link($atag->atag_type->name, ['controller' => 'AtagTypes', 'action' => 'view', $atag->atag_type->id]) : '' ?></td>
-                <td><?= $atag->has('user') ? $this->Html->link($atag->user->username, ['controller' => 'Users', 'action' => 'view', $atag->user->id]) : '' ?></td>
+                <td><?= $atag->has('user') ? $this->Html->link($atag->user->email, ['controller' => 'Users', 'action' => 'view', $atag->user->id]) : '' ?></td>
                 <td data-title="actions" class="actions" class="text-right">
                   <div class="btn-group">
                     <?= $this->Html->link('<i class="material-icons">visibility</i>', ['action' => 'view', $atag->id],['class' => 'btn btn-xs btn-simple btn-info btn-icon edit','escape' => false]) ?>
@@ -74,7 +70,7 @@
       <div class="card-footer">
         <div class="row no-gutters">
           <div class="col-6">
-            <?= $this->Paginator->counter(['format' => __('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')]) ?>
+            <?= $this->Paginator->counter(__('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')) ?>
           </div>
           <div class="col-6">
           <nav aria-label="pagination">

@@ -29,33 +29,9 @@
         <div class="row">
           <div class="col-sm-8">
             <?= $this->Form->control('name',['class'=>'form-control']);?>
-            <?= $this->Form->control('slug',['class'=>'form-control']);?>
-            <?= $this->Attachment->input('Attachments',[
-              'label' => __('Medias'),
-              'types' =>[
-                'application/pdf',
-                'application/msword',
-                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                'application/vnd.ms-excel',
-                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                'image/jpeg',
-                'image/png',
-                'embed/youtube',
-                'embed/vimeo'
-              ],
-              'atags' => [],
-              'cols' => 'col-xs-6 col-md-6 col-lg-4',
-              'maxquantity' => -1,
-              'restrictions' => [
-                Attachment\View\Helper\AttachmentHelper::TAG_RESTRICTED,
-                Attachment\View\Helper\AttachmentHelper::TYPES_RESTRICTED
-                ],
-              'attachments' => [],
-            ]);?>
           </div>
           <div class="col-sm-4">
             <?= $this->Form->control('atag_type_id', ['options' => $atagTypes, 'empty' => true, 'class'=>'form-control']);?>
-            <?= $this->Form->control('user_id', ['options' => $users, 'empty' => true, 'class'=>'form-control']);?>
           </div>
         </div>
       </div>

@@ -38,12 +38,24 @@ class AtagTypesTable extends Table
     $this->setTable('atag_types');
     $this->setDisplayField('name');
     $this->setPrimaryKey('id');
-
+    $this->addBehavior('Search.Search');
+    $this->searchManager()
+    ->add('q', 'Search.Like', [
+      'before' => true,
+      'after' => true,
+      'mode' => 'or',
+      'comparison' => 'LIKE',
+      'wildcardAny' => '*',
+      'wildcardOne' => '?',
+      'field' => ['name']
+    ]);
     $this->hasMany('Atags', [
       'foreignKey' => 'atag_type_id',
       'className' => 'Attachment.Atags',
     ]);
 
+    // custom behaviors
+    $this->addBehavior('Trois\Utils\ORM\Behavior\SluggableBehavior', ['field' => 'name']);
     if(Configure::read('Attachment.translate'))
     {
       $this->addBehavior('Trois\Utils\ORM\Behavior\TranslateBehavior', ['fields' => ['name']]);
