@@ -27,7 +27,7 @@ class AtagsController extends AppController
      */
     public function index()
     {
-        $query = $this->Atags->find('search', ['search' => $this->request->query])->contain(['Users', 'AtagTypes']);
+        $query = $this->Atags->find('search', ['search' => $this->request->getQuery()])->contain(['Users', 'AtagTypes']);
         if (!empty($this->request->getQuery('q'))) {
           if (!$query->count()) {
             $this->Flash->error(__('No result.'));

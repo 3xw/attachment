@@ -5,6 +5,12 @@ use Cake\Routing\Router;
 // set thumbnails route
 Router::connect('/thumbnails/*', ['plugin' => 'Attachment', 'controller' => 'Resize', 'action' => 'proceed']);
 
+Router::prefix('admin', function (RouteBuilder $routes) {
+	$routes->plugin('Attachment', function (RouteBuilder $routes) {
+		$routes->fallbacks();
+	});
+});
+
 // set plugin stuff : )
 Router::plugin(
     'Attachment',
