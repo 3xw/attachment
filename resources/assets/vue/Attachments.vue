@@ -2,6 +2,13 @@
   <section class="section-attachment--index">
     <div class="section__header d-flex flex-row justify-content-between align-items-center">
       <h3 class="mb-0">{{attachments.length}} Fichiers</h3>
+      <div class="section__sort d-flex flex-row align-items-center">
+        <p class="small color--grey d-inline-block mb-0">Ordre: &nbsp;&nbsp;</p>
+        <select v-model="sort" @change="changeOrder">
+          <option value="created_desc">Plus récent en premier</option>
+          <option value="created_asc">Plus ancien en premier</option>
+        </select>
+      </div>
       <div class="section__filter d-flex flex-row">
         <button type="button" @click="mode = 'mosaic'" name="button" class="btn btn-secondary mb-0 color--white" :class="{active: mode == 'mosaic'}"><i class="material-icons">view_quilt</i></button>
         <button type="button" @click="mode = 'thumb'" name="button" class="btn btn-secondary mb-0 color--white" :class="{active: mode == 'thumb'}"><i class="material-icons">view_module</i></button>
@@ -65,6 +72,7 @@ export default
   props: { aid: String, settings: Object },
   data(){
     return {
+      sort: 'created_desc',
       mode: 'mosaic'
     }
   },
@@ -117,6 +125,10 @@ export default
         if(list[i] == filter) list.splice(i, 1)
       }
       this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ filters: list.join(','), page: 1 }))
+    },
+    changeOrder()
+    {
+      this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ sort: this.sort, page: 1 }))
     },
     reLayout()
     {

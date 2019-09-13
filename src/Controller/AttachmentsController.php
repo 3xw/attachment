@@ -21,6 +21,9 @@ class AttachmentsController extends AppController
     'page' => 1,
     'limit' => 18,
     'maxLimit' => 200,
+    'order' => [
+      'Attachments.created' => 'DESC'
+    ],
     'sortWhitelist' => [
       'name', 'created', 'type', 'subtype', 'date'
     ]

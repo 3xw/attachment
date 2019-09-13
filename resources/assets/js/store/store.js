@@ -18,6 +18,7 @@ export default
         atags: '',
         filters: '',
         type: '',
+        sort: '',
         search: '',
         page: 1,
       },
@@ -36,7 +37,6 @@ export default
     },
     'removeFileFromSelection': (state, payload) => {
       let idx = state.selection.files.findIndex(file => file === payload);
-      console.log(idx);
       state.selection.files.splice(idx, 1)
     },
     'flushSelection': (state, payload) => {
@@ -48,7 +48,6 @@ export default
     'selection.token': (state, payload) => {
       state.selection.token = payload
     },
-
     // upload
     'addUploadedFile': (state, payload) => {
       state.upload.files.push(payload)

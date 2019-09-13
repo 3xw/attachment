@@ -82,9 +82,9 @@ export default
   name: 'attachment-browse',
   components:
   {
-    'attachment-search-bar':SearchBar,
-    'attachment-atags':Atags,
-    'attachment-upload':Upload,
+    'attachment-search-bar': SearchBar,
+    'attachment-atags': Atags,
+    'attachment-upload': Upload,
     'attachments': Attachments,
   },
   props: { aid: String, settings: Object },
