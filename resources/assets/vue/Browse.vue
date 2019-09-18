@@ -9,7 +9,7 @@
             <h1>Téléchager</h1>
             <div class="action">
               <button type="button" name="button" class="btn btn-error">FERMER</button>
-              <button @click="mode = 'browse'" type="button" name="button" class="btn btn-danger">ANNULER</button>
+              <button @click="mode = 'browse';$forceUpdate();" type="button" name="button" class="btn btn-danger">ANNULER</button>
             </div>
           </div>
           <div class="row">
@@ -31,7 +31,7 @@
             <h1>Fichiers</h1>
             <div class="action">
               <button type="button" name="button" class="btn btn-error">FERMER</button>
-              <button @click="mode = 'upload'" type="button" name="button" class="btn btn-primary">TÉLÉCHARGER</button>
+              <button @click="mode = 'upload';$forceUpdate();" type="button" name="button" class="btn btn-primary">TÉLÉCHARGER</button>
             </div>
           </div>
           <div class="row no-gutters">

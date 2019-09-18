@@ -1,7 +1,7 @@
 <template lang="html">
   <section class="section-attachment--atags">
     <ul class="list-unstyled section-attachment__list" v-if="atagTypes">
-      <li>
+      <li v-if="!upload">
         <div class="section-attachment__list-title d-flex flex-row justify-content-between" :class="{active: types.isActive}" @click="types.isActive = !types.isActive;$forceUpdate()">
           <p class="text--upper mb-0">{{types.name}}</p> <i class="material-icons">{{(types.isActive)? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</i>
         </div>
@@ -11,7 +11,7 @@
           </li>
         </ul>
       </li>
-      <li v-if="types.current != 'application'" v-for="(filter, i) in filters">
+      <li v-if="types.current != 'application' && !upload" v-for="(filter, i) in filters">
         <div class="section-attachment__list-title d-flex flex-row justify-content-between" :class="{active: filter.isActive}" @click="filter.isActive = !filter.isActive;$forceUpdate()">
           <p class="text--upper mb-0">{{filter.name}}</p> <i class="material-icons">{{(filter.isActive)? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</i>
         </div>

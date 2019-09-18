@@ -12,14 +12,9 @@
     <!-- selection -->
     <div class="">
 
-      <!-- inputs -->
-      <attachment-inputs :aid="aid"></attachment-inputs>
-
-      <!-- file input -->
-      <div class="input">
-        <label>Files
-          <input type="file" id="files" ref="files" multiple @change="validate">
-        </label>
+      <!-- files -->
+      <div v-for="(file, i) in files" class="alert alert-secondary">
+        File: {{file.name}} ready to upload!
       </div>
 
       <!-- alerts -->
@@ -30,15 +25,24 @@
         </button>
       </div>
 
+      <!-- inputs -->
+      <attachment-inputs :aid="aid"></attachment-inputs>
+
+      <!-- file input -->
+      <div class="input">
+        <label>Files
+          <input type="file" id="files" ref="files" multiple @change="validate">
+        </label>
+      </div>
+
+
+
       <!-- submit -->
       <div class="input">
         <button type="button" name="button" class="btn btn-success" @click="upload">Upload</button>
       </div>
 
-      <!-- files -->
-      <div v-for="(file, i) in files" class="alert alert-secondary">
-        File: {{file.name}} ready to upload!
-      </div>
+
 
     </div>
 
