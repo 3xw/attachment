@@ -45,7 +45,7 @@ parseTags = function(response)
   }
 
   // sort
-  let keysSorted = Object.keys(atagTypes).sort(function(a,b){return list[a].order-list[b].order})
+  let keysSorted = Object.keys(atagTypes).sort(function(a,b){return atagTypes[a].order-atagTypes[b].order})
   let types = []
   for(let i in keysSorted) types.push(atagTypes[keysSorted[i]])
 
