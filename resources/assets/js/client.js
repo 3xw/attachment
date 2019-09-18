@@ -35,7 +35,7 @@ parseTags = function(response)
     let atag = response.data.data[i]
     let type = atag.atag_type? atag.atag_type: {
       id: 0,
-      name: 'uncalssified',
+      name: 'Autres',
       exclusive: false,
       order: 1000
     }
