@@ -63,6 +63,7 @@ class AtagTypesController extends AppController
     ]);
 
     $this->set('atagType', $atagType);
+  }
 
   /**
   * Add method
