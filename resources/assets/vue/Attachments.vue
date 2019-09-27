@@ -101,7 +101,7 @@ export default
   data(){
     return {
       sort: 'created_desc',
-      mode: 'thumbInfo',
+      mode: 'thumb',
       types: {
         name: 'Types',
         slug: 'type',
