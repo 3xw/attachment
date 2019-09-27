@@ -8,6 +8,10 @@ Vue.filter('bytesToMegaBytes', function (input) {
   return input / 1024 / 1024;
 });
 
+Vue.filter('sqlDate', function(input) {
+  return input.replace('T', '');  
+});
+
 Vue.filter('decimal', function (input, places) {
   if (isNaN(input)) return input;
   var factor = "1" + Array(+(places > 0 && places + 1)).join("0");

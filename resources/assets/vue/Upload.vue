@@ -124,12 +124,18 @@ export default
     },
     upload: function()
     {
+
       if(this.files.length != 0) return this.uploadFile(this.files.shift())
     },
     uploadFile: function(file)
     {
       this.uploading = true
       this.fileName = file.name
+
+      //DATE FOR UPLOAD
+      if(this.inputs.date.length > 0){
+        this.inputs.date = this.inputs.date.replace('T', ' ')+':00'
+      }
 
       let formData = new FormData()
       for( let i in this.inputs ) formData.append(i, this.inputs[i])

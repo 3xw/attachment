@@ -14,7 +14,9 @@ $ratios: ('3:1': 33.33%, '2:1': 50%, '16:9': 56.25%, '3:2': 66.66%, '4:3': 75%, 
 /*** VARS -- COLORS (TYPE:LIST / KEY:NAME / VALUE:HEX ) ****/
 $colors: (
 
-  'blue':    #007bff ,
+  'blue':    #2E7CA9 ,
+  'blue-dark': #123447,
+  'blue-light': #55BCF7 ,
   'indigo':  #6610f2 ,
   'purple':  #6f42c1 ,
   'pink':    #e83e8c ,
@@ -27,7 +29,8 @@ $colors: (
 
   'grey': #4A4A4A,
   'grey-light': #E6E5E5,
-  'grey-very-light': #fbfbf9,
+  'grey-light-text': #A9A9A9,
+  'grey-very-light': #F9f9f9,
   'grey-heavy': #302F2F,
 
   'black': #000000,
@@ -66,10 +69,15 @@ $colors: (
 .utils__spacer--default{height:$margin--default;}
 .utils__spacer--double{height:$margin--double;}
 
+.pointer{cursor: pointer;}
+
 .text{
 
   &--upper{text-transform: uppercase;}
 }
+
+.table tbody+tbody{border: 0px;}
+.table polygon, .table path{fill: map-get($colors, 'white')}
 
 
 .modal-mask { position: fixed; z-index: 9998; top: 0; left: 0;right:0; width: 100%; min-height: 100%; background-color: rgba(0, 0, 0, .5); display: table; transition: opacity .3s ease;}
@@ -109,18 +117,35 @@ $colors: (
 
 /* THUMB
 *****************************/
+.attachment-thumb{position: relative;border: 0px;background: transparent;cursor: pointer;}
+.attachment-thumb__hover{position: absolute;top: 0;right: 0;bottom: 0;left: 0;background: transparent !important;pointer-events: none;}
+.attachment-thumb__hover>div{background: rgba(0,0,0,0.7) !important;width: 100%;height: 100%;color: white;pointer-events: none}
+.attachment-thumb__hover>div svg{width: 40px;height: 20px;}
+.attachment-thumb__hover>div polygon{fill: map-get($colors, 'white');}
+.attachment-thumb__hover .badge{position: relative;padding: 4px 5px 2px;background: map-get($colors, 'white');color: map-get($colors, 'black');font-weight: 400;font-size: 1.4rem;}
+.attachment-thumb__hover .badge:after{content: '';position: absolute;width: 5px;height: 5px;left: 50%;bottom: -5px;transform: rotate(45deg) translateX(-50%);background: map-get($colors, 'white');}
 .attachment-thumb__icon-container { position: relative; }
-.attachment-thumb__icon-container::before { content:''; display:block; padding-bottom: 56.25%; }
+.attachment-thumb__icon-container.table{width: 60px;}
+.attachment-thumb__icon-container::before { content:''; display:block; padding-bottom: 75%; }
+.attachment-thumb__icon-container.table::before { content:''; display:block; padding-bottom: 100%; }
 .attachment-thumb__icon-container img { position: absolute; left: 0; top: 0;}
-.attachment-thumb__icon-container div { position: absolute; top: 0; left: 0; bottom: 0; right: 0; background: #FB404B; display: flex; align-items: center; justify-content: center; }
+.attachment-thumb__icon-container>div { position: absolute; top: 0; left: 0; bottom: 0; right: 0; background: #FB404B; display: flex; align-items: center; justify-content: center; }
 .attachment-thumb__icon-container i { z-index: 2; color: white; font-size: 24px; background: rgba(0, 0, 0, 0.36); }
+.attachment-thumb .card-body{
+  padding: $margin--mini 0;
+  *{
+    color: #A9A9A9;
+
+  }
+
+}
 @media (min-width: 992px){
   .card form [class*="col-"] { padding: 0 15px; }
 }
 
 .packery-item{
   margin-bottom: 30px;
-  img{border: 1px solid #efefef;}
+  //img{border: 1px solid #efefef;}
 }
 
 
@@ -130,8 +155,12 @@ $colors: (
   $this: &;
 
   &--container{
-    position: fixed;top: 0;right: 0;bottom: 0;left: 0;background: white;padding: $margin--semi;overflow-y: scroll;
-    height: 100%;
+    background: white;overflow-y: scroll;
+    min-height: calc(100% - 93px);
+
+    .section__side{min-height: calc(100vh - 93px);height: 100%;border-right: 1px solid 'grey';}
+    .section__add{padding: $margin--semi $margin--semi;border-bottom: 2px solid map-get($colors, 'blue');}
+    .section__nav{padding: $margin--semi;}
   }
 
   &--index{
@@ -139,19 +168,38 @@ $colors: (
       margin: 0 2.5px;cursor: pointer;
       i{font-size: 14px;vertical-align: text-bottom;}
     }
+
+    tr td:first-child{width: 60px;}
+
+    .section__header{
+      padding: $margin--semi;
+      ul li{
+        margin-right: $margin--semi;padding: 4px 0;
+        li.active{border-bottom: 3px solid map-get($colors, 'blue-light')}
+      }
+      .input-group{width: auto;}
+      .input-group path{fill: map-get($colors, 'white');}
+      input.form-control{width: auto !important;flex: 0;}
+    }
+    .section__index{padding: $margin--semi;border-top: 1px solid map-get($colors, 'grey-light'); border-bottom: 1px solid map-get($colors, 'grey-light');background: map-get($colors, 'grey-very-light');}
+    .section__filter{
+      button path{fill: #D4D4D4;}
+      button.active path{fill: #282828;}
+    }
   }
 
   &--atags{
 
-    padding-right: $margin--default;
+    //padding-right: $margin--default;
 
     #{$this}__list{
 
-      border: 1px solid #f1f1f1;
+      //border: 1px solid #f1f1f1;
 
       #{$this}__list-title{
-        padding: 7px 10px;background: #6c757d;color: white;cursor: pointer;
-        &.active, &:hover{background: #545b62;}
+        margin-top: $margin--semi;color: map-get($colors, 'grey');font-weight: 800;
+        //padding: 7px 10px;background: #6c757d;color: white;cursor: pointer;
+        //&.active, &:hover{background: #545b62;}
       }
     }
 
@@ -159,7 +207,7 @@ $colors: (
 
 
     #{$this}__sublist{
-      >li{padding: 5px 10px;border-bottom: 1px solid #f1f1f1;cursor: pointer;}
+      //>li{padding: 5px 10px;border-bottom: 1px solid #f1f1f1;cursor: pointer;}
     }
   }
 

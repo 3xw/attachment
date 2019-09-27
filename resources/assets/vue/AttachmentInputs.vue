@@ -20,6 +20,10 @@
               <input @change="update" v-model="file.title" type="text" name="title" class="form-control" id="title">
             </div>
             <div class="input text">
+              <label for="title">Date</label>
+              <input @change="update" v-model="file.date" type="datetime-local" name="date" class="form-control" id="date">
+            </div>
+            <div class="input text">
               <label for="title">Description</label>
               <textarea @change="update" v-model="file.description" name="description" class="form-control" id="description" rows="5"></textarea>
             </div>
@@ -45,6 +49,10 @@
         <div class="input text">
           <label for="title">Title</label>
           <input @change="update" v-model="file.title" type="text" name="title" class="form-control" id="title">
+        </div>
+        <div class="input text">
+          <label for="title">Date</label>
+          <input @change="update" v-model="file.date" type="datetime-local" name="date" class="form-control" id="date">
         </div>
         <div class="input text">
           <label for="title">Description</label>
@@ -74,7 +82,7 @@ export default
   data()
   {
     return {
-      inputs: {title: '',author: '',description: '',copyright: ''},
+      inputs: {title: '', date:'', author: '', description: '', copyright: ''},
       file: {}
     }
   },

@@ -5,53 +5,49 @@
 
         <!--- upload -->
         <section v-if="mode == 'upload'" class="section-attachment--upload">
-          <div class="section__nav d-flex flex-row justify-content-between">
-            <h1>Téléchager</h1>
-            <div class="action">
-              <button type="button" name="button" class="btn btn-error">FERMER</button>
-              <button @click="mode = 'browse';$forceUpdate();" type="button" name="button" class="btn btn-danger">ANNULER</button>
-            </div>
-          </div>
           <div class="row">
-            <div class="col-md-3">
-              <div class="section__nav d-flex flex-row justify-content-between">
-                <h3 class="mb-0">Tags</h3>
+            <div class="col-md-12">
+              <div class="section__nav">
+                <div class="d-flex flex-row justify-content-between align-items-center">
+                  <h1>Ajouter des fichiers</h1>
+                  <button @click="mode = 'browse';$forceUpdate();" type="button" name="button" class="btn btn-danger">ANNULER</button>
+                </div>
+                <div class="utils--spacer-semi"></div>
+                <div class="row">
+                  <div class="col-12 col-md-3">
+                    <label>Tags</label>
+                    <attachment-atags :aid="aid" :upload="true"></attachment-atags>
+                  </div>
+                  <div class="col-12 col-md-9">
+                    <attachment-upload :aid="aid"></attachment-upload>
+                  </div>
+                </div>
               </div>
-              <attachment-atags :aid="aid" :upload="true"></attachment-atags>
-            </div>
-            <div class="col-md-9">
-              <attachment-upload :aid="aid"></attachment-upload>
             </div>
           </div>
         </section>
 
         <!-- browse mode -->
         <section v-if="mode == 'browse'" class="section-attachment--browse">
-          <div class="section__nav d-flex flex-row justify-content-between">
-            <h1>Fichiers</h1>
-            <div class="action">
-              <button type="button" name="button" class="btn btn-error">FERMER</button>
-              <button @click="mode = 'upload';$forceUpdate();" type="button" name="button" class="btn btn-primary">TÉLÉCHARGER</button>
-            </div>
-          </div>
           <div class="row no-gutters">
             <div class="col-12">
-              <div class="">
-              </div>
-              <attachment-search-bar :aid="aid"></attachment-search-bar>
-              <div class="utils--spacer-semi"></div>
-            </div>
 
-            <div class="col-md-3">
-              <div class="section__nav d-flex flex-row justify-content-between">
-                <h3 class="mb-0">&nbsp;Filtres et tags</h3>
-                <button type="button" name="button" class="btn mb-0 color--white"><i class="material-icons">view_module</i></button>
-
-              </div>
-              <div class="utils--spacer-semi"></div>
-              <attachment-atags :aid="aid" :upload="false"></attachment-atags>
             </div>
-            <div class="col-md-9">
+            <div class="col-md-3 col-xl-2">
+              <div class="section__side">
+                <div class="section__add section--blue-light color--blue-dark action pointer d-flex flex-row align-items-center" @click="mode = 'upload';$forceUpdate();">
+                    <icon-add></icon-add>&nbsp;&nbsp;&nbsp;&nbsp;<p class="mb-0">Ajouter des fichiers</p>
+                </div>
+                <div class="section__nav">
+                  <div class="d-flex flex-row align-items-center">
+                    <icon-filter></icon-filter>&nbsp;&nbsp;&nbsp;&nbsp;<p class="mb-0">Filtres et tags</p>
+                  </div>
+                  <div class="utils--spacer-semi"></div>
+                  <attachment-atags :aid="aid" :upload="false"></attachment-atags>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-9 col-xl-10">
               <attachments :aid="aid" :settings="settings"></attachments>
             </div>
           </div>
@@ -69,8 +65,10 @@ import createCrudModule from 'vuex-crud';
 import { client, parseResponse, parseResponseWithPaginate, parseTags} from '../js/client.js'
 import attachment from '../js/store/store.js'
 
+import iconFilter from './icons/filter.vue'
+import iconAdd from './icons/add.vue'
+
 // vue components
-import SearchBar from './SearchBar.vue'
 import Atags from './Atags.vue'
 import Attachments from './Attachments.vue'
 import Upload from './Upload.vue'
@@ -82,10 +80,11 @@ export default
   name: 'attachment-browse',
   components:
   {
-    'attachment-search-bar': SearchBar,
     'attachment-atags': Atags,
     'attachment-upload': Upload,
     'attachments': Attachments,
+    'icon-add': iconAdd,
+    'icon-filter': iconFilter
   },
   props: { aid: String, settings: Object },
   data()

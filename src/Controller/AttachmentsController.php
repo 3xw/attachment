@@ -43,7 +43,7 @@ class AttachmentsController extends AppController
         ],
         'add' =>[
           'className' => 'Crud.Add',
-          'api.success.data.entity' => ['id','profile','path','type','subtype','name','size','fullpath'],
+          'api.success.data.entity' => ['id','profile','path','type','subtype','name','size','fullpath', 'date'],
           'api.error.exception' => [
             'type' => 'validate',
             'class' => 'Attachment\Crud\Error\Exception\ValidationException'

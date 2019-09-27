@@ -137,7 +137,7 @@ const attachmentConfig = env => {
               plugins: loader => [
                 require('postcss-preset-env')(),
                 require('pixrem')(),
-                require('autoprefixer')({browsers: 'last 10 versions'}),
+                require('autoprefixer')({overrideBrowserslist: 'last 10 versions'}),
                 require('cssnano')()
               ]
             }

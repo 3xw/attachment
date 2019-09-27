@@ -76,14 +76,16 @@ class AttachmentsTable extends Table
         return true;
       }
     ])
-    ->add('type', 'Search.Like', [
-      'before' => true,
-      'after' => true,
-      'mode' => 'or',
-      'comparison' => 'LIKE',
-      'wildcardAny' => '*',
-      'wildcardOne' => '?',
-      'field' => [$this->aliasField('type')]
+    ->add('type', 'Search.Callback', [
+      'callback' => function ($query, $args, $filter)
+      {
+        $field = ($args['type'] == 'pdf')? 'Attachments.subtype' : 'Attachments.type' ;
+        $query->where([$field => $args['type']]);
+        if($args['type'] == 'application'){
+          $query->where(['Attachments.subtype !=' => 'pdf']);
+        }
+        return true;
+      }
     ])
     ->add('atags', 'Search.Callback',[
       'callback' => function ($query, $args, $filter)
@@ -104,7 +106,7 @@ class AttachmentsTable extends Table
     ->add('sort', 'Search.Callback',[
       'callback' => function ($query, $args, $filter)
       {
-        $conditions = ($args['sort'] == 'created_desc')? ['Attachments.created' => 'DESC'] : ['Attachments.created' => 'ASC'];
+        $conditions = ($args['sort'] == 'created_desc')? ['Attachments.date' => 'DESC'] : ['Attachments.date' => 'ASC'];
         $query->order($conditions);
         return true;
       }

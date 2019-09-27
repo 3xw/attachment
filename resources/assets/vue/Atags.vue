@@ -1,21 +1,11 @@
 <template lang="html">
   <section class="section-attachment--atags">
     <ul class="list-unstyled section-attachment__list" v-if="atagTypes">
-      <li v-if="!upload">
-        <div class="section-attachment__list-title d-flex flex-row justify-content-between" :class="{active: types.isActive}" @click="types.isActive = !types.isActive;$forceUpdate()">
-          <p class="text--upper mb-0">{{types.name}}</p> <i class="material-icons">{{(types.isActive)? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</i>
-        </div>
-        <ul class="list-unstyled section-attachment__sublist" v-if="types.isActive">
-          <li v-for="(option, i2) in types.options" :key="i2" @click="types.current = option.slug;$forceUpdate();filterType(option.slug);" class="d-flex flex-row justify-content-between align-items-center" :class="{active: types.current == option.slug}">
-            {{option.name}} <input type="radio" :checked="types.current == option.slug">
-          </li>
-        </ul>
-      </li>
       <li v-if="types.current != 'application' && !upload" v-for="(filter, i) in filters">
         <div class="section-attachment__list-title d-flex flex-row justify-content-between" :class="{active: filter.isActive}" @click="filter.isActive = !filter.isActive;$forceUpdate()">
-          <p class="text--upper mb-0">{{filter.name}}</p> <i class="material-icons">{{(filter.isActive)? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</i>
+          <p class="text--upper mb-0 color--grey-light-text">{{filter.name}}</p> <!--<i class="material-icons">{{(filter.isActive)? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</i>-->
         </div>
-        <ul class="list-unstyled section-attachment__sublist" v-if="filter.isActive">
+        <ul class="list-unstyled section-attachment__sublist" ><!-- v-if="filter.isActive" -->
           <li v-for="(option, i2) in filter.options" :key="i2" @click="option.isActive = !option.isActive;$forceUpdate();filterOption(option.slug); " class="d-flex flex-row justify-content-between align-items-center" :class="{active: checkFilterActive(i, i2, option.slug)}">
             {{option.name}} <input type="checkbox" :checked="checkFilterActive(i, i2, option.slug)">
           </li>
@@ -23,9 +13,9 @@
       </li>
       <li v-for="(atagType, index1) in atagTypes">
         <div class="section-attachment__list-title d-flex flex-row justify-content-between" :class="{active: atagType.isActive}" @click="atagType.isActive = !atagType.isActive;$forceUpdate()">
-          <p class="text--upper mb-0">{{atagType.name}}</p> <i class="material-icons">{{(atagType.isActive)? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</i>
+          <p class="text--upper mb-0 color--grey-light-text">{{atagType.name}}</p> <!--<i class="material-icons">{{(atagType.isActive)? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</i>-->
         </div>
-        <ul class="list-unstyled section-attachment__sublist" v-if="atagType.isActive">
+        <ul class="list-unstyled section-attachment__sublist" > <!--v-if="atagType.isActive"-->
           <li v-for="(atag, index2) in atagType.atags" :key="atag.id" @click="toggle(index1, index2)" class="d-flex flex-row justify-content-between align-items-center" :class="{active: ((upload)? atag.isActive : checkActive(index1, index2, atag.name))}">
             {{atag.name}} <input type="checkbox" :checked="(upload)? atag.isActive : checkActive(index1, index2, atag.name)">
           </li>
@@ -129,12 +119,12 @@ export default
       if(this.upload) this.$store.set(this.aid + '/upload', Object.assign(this.$store.get(this.aid + '/upload'),{ atags: atags }))
       else this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ atags: atags.join(','), page: 1 }))
     },
-    filterType()
+    /*filterType()
     {
       if(!this.upload){
         this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ type: this.types.current, filters: '', atags: '', page: 1 }))
       }
-    },
+    },*/
     filterOption(key)
     {
       if(!this.upload){
