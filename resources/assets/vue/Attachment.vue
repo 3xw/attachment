@@ -39,12 +39,12 @@
                   supprimer de la sélection
                 </div>
                 <div class="utils--spacer-mini"></div>
-                <s>fichier selectioné</s>
+                <s>fichier selectionné</s>
               </div>
               <div v-else-if="!hover && isSelected(attachment.id)" class="d-flex flex-column justify-content-center align-items-center">
                 <icon-check></icon-check>
                 <div class="utils--spacer-mini"></div>
-                fichier selectioné
+                fichier selectionné
               </div>
             </div>
           </div>
