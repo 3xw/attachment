@@ -11,6 +11,10 @@ use Cake\Http\Session;
 use Cake\ORM\Behavior;
 use Cake\ORM\Table;
 
+use Cake\Log\Log;
+
+use Cake\ORM\TableRegistry;
+
 /**
 * Storage behavior
 */
@@ -40,6 +44,7 @@ class ATagBehavior extends Behavior
 
   public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options)
   {
+
     // GET CONFIG
     $session = new Session();
     $uuid = empty($data['uuid'])? '' : $data['uuid'];
@@ -75,16 +80,23 @@ class ATagBehavior extends Behavior
     }
     if(!empty($data['atags']))
     {
-      $atags = $this->_table->Atags;
+
+
+      $atags = TableRegistry::get('Atags');//$this->_table->Atags;
       $tags = [];
       foreach($data['atags'] as $tag)
       {
-        $query = $atags->find('all', [
-          'conditions' => [
+        $query = $atags->find()
+        ->contain([])
+        ->where([
+          'OR' =>[
+            'name' => $tag['name'],
             'slug' => Text::slug($tag['name'])
           ]
         ]);
+
         $atag = $query->first();
+
         if(!empty($atag))
         {
           array_push($tags, $atag->id);
