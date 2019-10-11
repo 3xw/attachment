@@ -9,6 +9,7 @@ use Cake\Routing\Router;
 use Cake\Utility\Text;
 use Cake\Utility\Inflector;
 use Attachment\Http\Cdn\BaseCdn;
+use Attachment\Http\Cdn\CloudFrontCdn;
 use Attachment\Utility\Token;
 
 class AttachmentHelper extends Helper
@@ -222,6 +223,7 @@ class AttachmentHelper extends Helper
     if(!empty($params['cropratio'])){
       $url .= 'c'.str_replace(':','-',$params['cropratio']);
     }
-    return $url.'/'.$params['image'];
+    $url = $url.'/'.$params['image'];
+    return ($cdn && $cdn instanceof CloudFrontCdn && $cdn->signer )?  $cdn->getSignedUrl($url): $url;
   }
 }
