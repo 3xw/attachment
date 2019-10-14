@@ -45,7 +45,11 @@
     </div>
 
     <div class="section__index" v-if="attachments">
-      <h3 class="text-right">{{pagination.count}} Fichiers</h3>
+      <h3 class="text-right">
+        <span v-if="pagination && pagination.count">{{pagination.count}}</span>
+        <span v-else>0</span>
+        Fichiers
+      </h3>
       <div class="utils--spacer-mini"></div>
       <transition name="fade">
         <div v-if="mode == 'mosaic'" v-images-loaded="imgReady">
@@ -156,12 +160,7 @@ export default
     {
       return this.$store.get(this.aid + '/selection.files')
     },
-    filterType()
-    {
-      if(!this.upload){
-        this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ type: this.types.current, filters: '', atags: '', page: 1 }))
-      }
-    },
+
   },
   watch: {
     mode: function(){
@@ -188,6 +187,12 @@ export default
         if(list[i] == filter) list.splice(i, 1)
       }
       this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ filters: list.join(','), page: 1 }))
+    },
+    filterType()
+    {
+      if(!this.upload){
+        this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ type: this.types.current, filters: '', atags: '', page: 1 }))
+      }
     },
     changeOrder()
     {
