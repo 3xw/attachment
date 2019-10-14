@@ -191,6 +191,9 @@ export default
     filterType()
     {
       if(!this.upload){
+        if(this.types.current !== 'image'){
+          this.mode = 'mosaic'
+        }
         this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ type: this.types.current, filters: '', atags: '', page: 1 }))
       }
     },
