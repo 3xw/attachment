@@ -1,7 +1,7 @@
 <template lang="html">
   <section class="section-attachment--atags">
     <ul class="list-unstyled section-attachment__list" v-if="atagTypes">
-      <li v-if="types.current != 'application' && !upload" v-for="(filter, i) in filters">
+      <li v-if="aParams.type == 'image' && !upload" v-for="(filter, i) in filters">
         <div class="section-attachment__list-title d-flex flex-row justify-content-between" :class="{active: filter.isActive}" @click="filter.isActive = !filter.isActive;$forceUpdate()">
           <p class="text--upper mb-0 color--grey-light-text">{{filter.name}}</p> <!--<i class="material-icons">{{(filter.isActive)? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</i>-->
         </div>
@@ -33,7 +33,7 @@ export default
   props: { aid: String, upload:Boolean },
   data(){
     return {
-      types: {
+      /*types: {
         name: 'Types',
         slug: 'type',
         isActive: false,
@@ -52,7 +52,7 @@ export default
             slug: 'application',
           }
         ]
-      },
+      },*/
       filters: [
         {
           slug: 'orientation',

@@ -37,7 +37,7 @@
         </div>
         <div class="section__filter d-flex flex-row">
           <button type="button" @click="mode = 'thumb'" name="button" class="btn btn--white mb-0" :class="{active: mode == 'thumb'}"><icon-grid></icon-grid></button>
-          <button v-if="types.current == 'image' || types.current == 'video'" type="button" @click="mode = 'mosaic'" name="button" class="btn btn--white mb-0" :class="{active: mode == 'mosaic'}"><icon-mosaic></icon-mosaic></button>
+          <button v-if="types.current == 'image'" type="button" @click="mode = 'mosaic'" name="button" class="btn btn--white mb-0" :class="{active: mode == 'mosaic'}"><icon-mosaic></icon-mosaic></button>
           <button type="button" @click="mode = 'thumbInfo'" name="button" class="btn btn--white mb-0" :class="{active: mode == 'thumbInfo'}"><icon-list></icon-list></button>
         </div>
       </div>
@@ -191,8 +191,8 @@ export default
     filterType()
     {
       if(!this.upload){
-        if(this.types.current !== 'image'){
-          this.mode = 'mosaic'
+        if(this.types.current != 'image'){
+          this.mode = 'thumb'
         }
         this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ type: this.types.current, filters: '', atags: '', page: 1 }))
       }
