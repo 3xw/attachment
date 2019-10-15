@@ -23,6 +23,9 @@ class ResizeController extends AppController
 
   public function proceed($profile, $dim, ...$image )
   {
+
+    debug($this->request);
+
     // test profile
     if(!Configure::check('Attachment.profiles.'.$profile) || $profile == 'thumbnails' ){ throw new NotFoundException(); }
 

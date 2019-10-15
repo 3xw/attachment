@@ -214,7 +214,7 @@ class AttachmentHelper extends Helper
     foreach($dims as $key => $value) if (!empty($params[$key])) $url .= $value.$params[$key];
     if (!empty($params['cropratio'])) $url .= 'c'.str_replace(':','-',$params['cropratio']);
     $url = $url.'/'.$params['image'];
-
+    
     return (ThumbProtectionRegistry::exists($profile))? ThumbProtectionRegistry::retrieve($profile)->createUrl($url): $url;
   }
 }

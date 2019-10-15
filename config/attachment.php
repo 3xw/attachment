@@ -31,14 +31,16 @@ return [
         'baseUrl' =>  '/img/'
     	],
       'external' => [
-    		'adapter' => 'Attachment\Filesystem\Adapter\External'
+    		'adapter' => 'Attachment\Filesystem\Adapter\External',
+        'baseUrl' =>  null,
     	],
       'thumbnails' => [
     		'client' => new League\Flysystem\Adapter\Local(WWW_ROOT.'thumbnails'),
         'baseUrl' =>  '/thumbnails/'
     	],
       'sys_temp' => [
-    		'client' => new League\Flysystem\Adapter\Local(sys_get_temp_dir())
+    		'client' => new League\Flysystem\Adapter\Local(sys_get_temp_dir()),
+        'baseUrl' =>  null,
     	],
     ],
 
