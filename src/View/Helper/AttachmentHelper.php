@@ -8,9 +8,7 @@ use Cake\Core\Configure;
 use Cake\Routing\Router;
 use Cake\Utility\Text;
 use Cake\Utility\Inflector;
-use Attachment\Http\Cdn\BaseCdn;
-use Attachment\Http\Cdn\CloudFrontCdn;
-use Attachment\Utility\Token;
+use Attachment\Protect\ThumbProtectionRegistry;
 
 class AttachmentHelper extends Helper
 {
@@ -203,27 +201,20 @@ class AttachmentHelper extends Helper
     return $html;
   }
 
-  public function thumbSrc($params) {
-    $start = substr($params['image'],0 , 4);
+  public function thumbSrc($params)
+  {
+    if (substr($params['image'],0 , 4) == 'http' ) $profile = 'external';
+    else $profile = empty($params['profile'])? 'external' : $params['profile'];
 
-    if(( $start == 'http' )){
-      $profile = 'external';
-    }else{
-      $profile = empty($params['profile'])? 'external' : $params['profile'];
-    }
     $cdn = Configure::read('Attachment.profiles.thumbnails.cdn');
-    $url = ($cdn && $cdn instanceof BaseCdn)?  $cdn->getUrl(): '/thumbnails/';
+    $url = ($cdn)?  $cdn: '/thumbnails/';
     $url = $this->Url->build($url.$profile.'/',['fullBase' => true]);
+
     $dims = ['height' => 'h','width' => 'w','align' => 'a', 'quality' => 'q'];
-    foreach($dims as $key => $value){
-      if(!empty($params[$key])){
-        $url .= $value.$params[$key];
-      }
-    }
-    if(!empty($params['cropratio'])){
-      $url .= 'c'.str_replace(':','-',$params['cropratio']);
-    }
+    foreach($dims as $key => $value) if (!empty($params[$key])) $url .= $value.$params[$key];
+    if (!empty($params['cropratio'])) $url .= 'c'.str_replace(':','-',$params['cropratio']);
     $url = $url.'/'.$params['image'];
-    return ($cdn && $cdn instanceof CloudFrontCdn && $cdn->signer )?  $cdn->getSignedUrl($url): $url;
+
+    return (ThumbProtectionRegistry::exists($profile))? ThumbProtectionRegistry::retrieve($profile)->createUrl($url): $url;
   }
 }

@@ -1,10 +1,10 @@
 <?php
 namespace Attachment\Protect;
 
+use Cake\Core\Configure;
+
 class ProtectionRegistry
 {
-  /* TODO ThumbProtectionRegistry /w => CONFIGURATION_KEY_SUFFIX = '.thumbProtection';
-  */
   const CONFIGURE_KEY_PREFIX = 'Attachment.profiles.';
 
   const CONFIGURATION_KEY_SUFFIX = '.protection';
@@ -17,7 +17,7 @@ class ProtectionRegistry
     return static::$instances[$alias];
   }
 
-  public function static exists($alias)
+  public static function exists($alias)
   {
     return static::existsAndInstanceOf(static::getAliasConfigKey($alias));
   }
@@ -25,7 +25,6 @@ class ProtectionRegistry
   public static function reset()
   {
     static::$instances = [];
-    return static;
   }
 
   protected static function create($alias)
@@ -44,7 +43,7 @@ class ProtectionRegistry
       Configure::read($aliasConfigKey) instanceof ProtectionInterface;
   }
 
-  public function static getAliasConfigKey($alias)
+  public static function getAliasConfigKey($alias)
   {
     return static::CONFIGURE_KEY_PREFIX . $alias . static::CONFIGURATION_KEY_SUFFIX;
   }

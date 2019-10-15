@@ -5,5 +5,5 @@ interface ProtectionInterface
 {
   public function verify(): boolean;
 
-  public function createUrl(string $url, array $settings = null): string;
+  public function createUrl(string $url): string;
 }

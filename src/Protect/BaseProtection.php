@@ -19,7 +19,7 @@ abstract class BaseProtection implements ProtectionInterface
     return false;
   }
 
-  public function createUrl(string $url, array $settings = null): string
+  public function createUrl(string $url): string
   {
     return '';
   }
