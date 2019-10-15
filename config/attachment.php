@@ -15,34 +15,30 @@ return [
         'baseUrl' =>  null,
         'delete' => true,
         'replace' => false,
-        'afterReplace' => null // null | callback fct($entity)
+        'afterReplace' => null, // null | callback fct($entity)
+        'cdn' => false,
+        'thumbProtection' => null,
+        'protection' => null
       ],
 
       // child profiles
       'default' => [
-    		'adapter' => 'League\Flysystem\Adapter\Local',
     		'client' => new League\Flysystem\Adapter\Local(WWW_ROOT.'files'),
         'baseUrl' =>  '/files/'
     	],
       'img' => [
-    		'adapter' => 'League\Flysystem\Adapter\Local',
     		'client' => new League\Flysystem\Adapter\Local(WWW_ROOT.'img'),
         'baseUrl' =>  '/img/'
     	],
       'external' => [
-    		'adapter' => 'Attachment\Filesystem\Adapter\External',
-    		'client' => new Attachment\Filesystem\Adapter\External(),
-        'baseUrl' =>  ''
+    		'adapter' => 'Attachment\Filesystem\Adapter\External'
     	],
       'thumbnails' => [
-    		'adapter' => 'League\Flysystem\Adapter\Local',
     		'client' => new League\Flysystem\Adapter\Local(WWW_ROOT.'thumbnails'),
         'baseUrl' =>  '/thumbnails/'
     	],
       'sys_temp' => [
-    		'adapter' => 'League\Flysystem\Adapter\Local',
-    		'client' => new League\Flysystem\Adapter\Local(sys_get_temp_dir()),
-        'baseUrl' =>  null
+    		'client' => new League\Flysystem\Adapter\Local(sys_get_temp_dir())
     	],
     ],
 
