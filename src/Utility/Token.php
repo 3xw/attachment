@@ -17,7 +17,7 @@ class Token
   {
     try {
       return JWT::decode($cypher, self::key(),['HS256']);
-    } catch (Exception $e) {
+    } catch (\Exception $e) {
       throw $e;
     }
   }

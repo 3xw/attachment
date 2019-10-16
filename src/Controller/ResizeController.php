@@ -77,7 +77,7 @@ class ResizeController extends AppController
     }
     if(!in_array($mimetype, $mimetypes))
     {
-      throw new NotFoundException('Invalide file type! Image only!');
+      throw new NotFoundException('invalid file type! Image only!');
     }
 
     /* all checks god let's resize...
@@ -97,7 +97,7 @@ class ResizeController extends AppController
     // check crop
     if(!empty($crop) && count($crop) < 2)
     {
-      throw new NotFoundException('Invalide args!');
+      throw new NotFoundException('invalid args!');
     }
 
     // retrieve image
