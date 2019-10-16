@@ -4,7 +4,6 @@ namespace Attachment\Filesystem;
 use Cake\Core\Configure;
 use Attachment\Filesystem\FilesystemRegistry;
 use Attachment\Filesystem\Protect\ProtectionRegistry;
-use Attachment\Filesystem\Protect\ThumbProtectionRegistry;
 use Cake\Core\InstanceConfigTrait;
 use Cake\Routing\Router;
 
@@ -21,9 +20,9 @@ class Profile
     'delete' => true,
     'replace' => false,
     'afterReplace' => null, // null | callback fct($entity)
-    'cdn' => false,
     'thumbProtection' => null,
-    'protection' => null
+    'protection' => null,
+    'thumbnails' => 'thumbnails'
   ];
 
   function __construct(string $alias, array $config = [])
@@ -37,6 +36,11 @@ class Profile
     return FilesystemRegistry::retrieve($this->name);
   }
 
+  public function thumbProfile()
+  {
+    return ProfileRegistry::retrieve($this->getConfig('thumbnails'));
+  }
+
   public function hasProtection()
   {
     return ProtectionRegistry::exists($this->name);
@@ -45,16 +49,6 @@ class Profile
   public function protection()
   {
     return ProtectionRegistry::retrieve($this->name);
-  }
-
-  public function hasThumbProtection()
-  {
-    return ThumbProtectionRegistry::exists($this->name);
-  }
-
-  public function thumbProtection()
-  {
-    return ThumbProtectionRegistry::retrieve($this->name);
   }
 
   public function getFullPath($path)
@@ -69,16 +63,10 @@ class Profile
     return $url;
   }
 
-  public function getThumbParams($path)
-  {
-    if (!$this->hasThumbProtection()) return null;
-    return $this->thumbProtection()->getAuthParamsAsString($this->getBaseUrl().$path);
-  }
-
   public function getBaseUrl()
   {
     if (!$this->getConfig('baseUrl')) return Router::url('/', true);
-    
+
     return ( substr($this->getConfig('baseUrl'),0 , 4) == 'http' )? $this->getConfig('baseUrl') : Router::url($this->getConfig('baseUrl'), true);
   }
 

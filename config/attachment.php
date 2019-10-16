@@ -18,7 +18,7 @@ return [
         'baseUrl' =>  '/img/'
     	],
       'external' => [
-    		'adapter' => 'Attachment\Filesystem\Adapter\External',
+    		'client' => new Attachment\Filesystem\Adapter\External(),
         'baseUrl' =>  null,
     	],
       'thumbnails' => [

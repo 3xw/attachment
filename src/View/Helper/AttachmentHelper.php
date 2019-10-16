@@ -8,7 +8,7 @@ use Cake\Core\Configure;
 use Cake\Routing\Router;
 use Cake\Utility\Text;
 use Cake\Utility\Inflector;
-use Attachment\Filesystem\Protect\ThumbProtectionRegistry;
+use Attachment\Filesystem\ProfileRegistry;
 
 class AttachmentHelper extends Helper
 {
@@ -206,15 +206,13 @@ class AttachmentHelper extends Helper
     if (substr($params['image'],0 , 4) == 'http' ) $profile = 'external';
     else $profile = empty($params['profile'])? 'external' : $params['profile'];
 
-    $cdn = Configure::read('Attachment.profiles.thumbnails.cdn');
-    $url = ($cdn)?  $cdn: '/thumbnails/';
-    $url = $this->Url->build($url.$profile.'/',['fullBase' => true]);
+    $url = $profile . '/';
 
     $dims = ['height' => 'h','width' => 'w','align' => 'a', 'quality' => 'q'];
     foreach($dims as $key => $value) if (!empty($params[$key])) $url .= $value.$params[$key];
     if (!empty($params['cropratio'])) $url .= 'c'.str_replace(':','-',$params['cropratio']);
     $url = $url.'/'.$params['image'];
 
-    return (ThumbProtectionRegistry::exists($profile))? ThumbProtectionRegistry::retrieve($profile)->getSignedUrl($url): $url;
+    return ProfileRegistry::retrieve($profile)->thumbProfile()->getUrl($url);
   }
 }

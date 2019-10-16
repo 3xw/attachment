@@ -1,7 +1,0 @@
-<?php
-namespace Attachment\Filesystem\Protect;
-
-class ThumbProtectionRegistry extends ProtectionRegistry
-{
-  const CONFIGURATION_KEY_SUFFIX = '.thumbProtection';
-}
