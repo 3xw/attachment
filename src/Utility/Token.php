@@ -1,9 +1,8 @@
 <?php
 namespace Attachment\Utility;
 
-use Cake\Utility\Text;
-use Cake\Http\Session;
 use Firebase\JWT\JWT;
+use Cake\Utility\Security;
 
 class Token
 {
@@ -24,8 +23,6 @@ class Token
 
   public static function key()
   {
-    $session = new Session();
-    if(empty($session->read('Attachment.download.key'))) $session->write('Attachment.download.key', Text::uuid());
-    return $session->read('Attachment.download.key');
+    return Security::getSalt();
   }
 }
