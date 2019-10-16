@@ -8,12 +8,12 @@ use Firebase\JWT\JWT;
 class Token
 {
 
-  public function encode($obj)
+  public static function encode($obj)
   {
     return JWT::encode($obj, self::key());
   }
 
-  public function decode($cypher)
+  public static function decode($cypher)
   {
     try {
       return JWT::decode($cypher, self::key(),['HS256']);
