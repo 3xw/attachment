@@ -52,7 +52,7 @@ class Profile
     return ProtectionRegistry::retrieve($this->name);
   }
 
-  public function verify(ServerRequest $request): bool;
+  public function verify(ServerRequest $request): bool
   {
     if (!$this->hasProtection()) return true;
     return $this->protection()->verify($request);
