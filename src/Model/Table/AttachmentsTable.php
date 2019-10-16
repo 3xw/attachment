@@ -119,14 +119,14 @@ class AttachmentsTable extends Table
         foreach($args as $filter){
           switch($filter){
             case 'horizontal':
-              array_push($conditions['OR'], ['Attachments.width > Attachments.height']);
-              break;
+            array_push($conditions['OR'], ['Attachments.width > Attachments.height']);
+            break;
             case 'vertical':
-              array_push($conditions['OR'], ['Attachments.width < Attachments.height']);
-              break;
+            array_push($conditions['OR'], ['Attachments.width < Attachments.height']);
+            break;
             case 'square':
-              array_push($conditions['OR'], ['Attachments.width = Attachments.height']);
-              break;
+            array_push($conditions['OR'], ['Attachments.width = Attachments.height']);
+            break;
           }
         }
         $query->where($conditions);
@@ -134,6 +134,12 @@ class AttachmentsTable extends Table
         return true;
       }
     ]);
+  }
+
+  public function find(string $type = 'all', array $options = []): Query
+  {
+    if ($type == 'all' && Configure::read('Attachment.translate')) $type = 'translations';
+    return parent::find($type, $options);
   }
 
   public function validationDefault(Validator $validator): Validator

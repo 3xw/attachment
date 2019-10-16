@@ -12,6 +12,7 @@ use Cake\ORM\Behavior;
 use Cake\ORM\Table;
 use Attachment\Filesystem\Profile;
 use Attachment\Filesystem\UploadedFile;
+use Attachment\Filesystem\ProfileRegistry;
 
 class FlyBehavior extends Behavior
 {
@@ -129,13 +130,13 @@ class FlyBehavior extends Behavior
       $afterReplace = null;
       if(!empty($orginalValues[$field]))
       {
-        $oldProfile = new Profile(empty($orginalValues['profile'])? $conf['profile']: $orginalValues['profile']);
+        $oldProfile = ProfileRegistry::retrieve(empty($orginalValues['profile'])? $conf['profile']: $orginalValues['profile']);
         $oldProfile->delete($orginalValues[$field]);
         $afterReplace = $oldProfile->afterReplace;
       }
 
       // store
-      $profile = new Profile($conf['profile']);
+      $profile = ProfileRegistry::retrieve($conf['profile']);
       $entity->set('profile', $profile->name);
 
       // name & dir
@@ -174,7 +175,7 @@ class FlyBehavior extends Behavior
   {
     $settings = $this->getConfig();
     $field = $settings['file_field'];
-    if(!empty($entity->get($field))) (new Profile($entity->get('profile')))->delete($entity->get($field));
+    if(!empty($entity->get($field))) ProfileRegistry::retrieve($entity->get('profile'))->delete($entity->get($field));
   }
 
 }

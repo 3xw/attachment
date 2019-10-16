@@ -1,5 +1,5 @@
 <?php
-namespace Attachment\Protect;
+namespace Attachment\Filesystem\Protect;
 
 use Cake\Core\InstanceConfigTrait;
 use Cake\Http\ServerRequest;
@@ -20,7 +20,12 @@ abstract class BaseProtection implements ProtectionInterface
     return false;
   }
 
-  public function createUrl(string $url): string
+  public function getSignedUrl(string $url): string
+  {
+    return '';
+  }
+
+  public function getAuthParamsAsString(string $url): string
   {
     return '';
   }

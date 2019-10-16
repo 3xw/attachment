@@ -1,5 +1,5 @@
 <?php
-namespace Attachment\Protect;
+namespace Attachment\Filesystem\Protect;
 
 use Cake\Core\Configure;
 
