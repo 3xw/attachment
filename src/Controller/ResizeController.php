@@ -4,16 +4,13 @@ namespace Attachment\Controller;
 use Attachment\Controller\AppController;
 use Cake\Core\Configure;
 use Cake\Http\Exception\NotFoundException;
+use Cake\Http\Exception\ForbiddenException;
 use Attachment\Filesystem\FilesystemRegistry;
 use Cake\Filesystem\Folder;
 use Cake\Core\App;
 use Intervention\Image\ImageManagerStatic as Image;
+use Attachment\Protect\ThumbProtectionRegistry as Protection;
 
-/**
-* Attachments Controller
-*
-* @property \Attachment\Model\Table\AttachmentsTable $Attachments
-*/
 class ResizeController extends AppController
 {
   private function _filesystem($profile)
@@ -23,11 +20,11 @@ class ResizeController extends AppController
 
   public function proceed($profile, $dim, ...$image )
   {
-
-    debug($this->request);
-
     // test profile
     if(!Configure::check('Attachment.profiles.'.$profile) || $profile == 'thumbnails' ){ throw new NotFoundException(); }
+
+    // protection
+    if (Protection::exists($profile)) if (!Protection::retrieve($profile)->verify($this->request)) throw new ForbiddenException();
 
     // test $dim
     preg_match_all('/([a-z])([0-9]*-[0-9]*|[0-9]*)/', $dim, $dims, PREG_SET_ORDER);

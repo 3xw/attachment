@@ -2,6 +2,8 @@
 namespace Attachment\Protect;
 
 use Aws\CloudFront\UrlSigner;
+use Attachment\Utility\Token;
+use Cake\Http\ServerRequest;
 
 class AwsSignedUrlsProtection extends BaseProtection
 {
@@ -17,14 +19,44 @@ class AwsSignedUrlsProtection extends BaseProtection
     return $this->_urlSigner;
   }
 
-  public function verify(): boolean
+  public function verify(ServerRequest $request): bool
   {
-    return false;
+    if (!$token = $request->getParam('?.token')) return false;
+
+    try {
+      $payload = Token::decode($token);
+    } catch (\Exception $e) {
+      return false;
+    }
+
+    // retrieve file
+    $url = $request->getUri()->getPath();
+    $file = substr($url, strrpos($url, '/') + 1 );
+
+    return $payload->file == $file;
   }
 
   public function createUrl(string $url): string
   {
-    return $this->getUrlSigner()->getSignedUrl($url, $this->getConfig('expires'), $this->getPolicy($url));
+    return $this->getUrlSigner()->getSignedUrl(
+      $this->getReturnUrl($url),
+      $this->getConfig('expires'),
+      $this->getPolicy($url)
+    );
+  }
+
+  public function getReturnUrl(string $url): string
+  {
+    if(!$this->getConfig('expires') && !$this->getConfig('DateLessThan')) throw new \InvalidArgumentException('AwsSignedUrlsProtection "expires" and "DateLessThan" params not present');
+    $exp = $this->getConfig('expires')? $this->getConfig('expires'): time() + $this->getConfig('DateLessThan');
+
+
+    $token = Token::encode([
+      'exp' => $exp,
+      'file' => substr($url, strrpos($url, '/') + 1 )
+    ]);
+    
+    return $url . '?token=' . $token;
   }
 
   public function getPolicy($url)

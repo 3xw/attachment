@@ -2,6 +2,7 @@
 namespace Attachment\Protect;
 
 use Cake\Core\InstanceConfigTrait;
+use Cake\Http\ServerRequest;
 
 abstract class BaseProtection implements ProtectionInterface
 {
@@ -14,7 +15,7 @@ abstract class BaseProtection implements ProtectionInterface
     $this->setConfig($config);
   }
 
-  public function verify(): boolean
+  public function verify(ServerRequest $reuest): bool
   {
     return false;
   }
