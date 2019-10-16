@@ -9,7 +9,7 @@ use Attachment\Filesystem\FilesystemRegistry;
 use Cake\Filesystem\Folder;
 use Cake\Core\App;
 use Intervention\Image\ImageManagerStatic as Image;
-use Attachment\Protect\ThumbProtectionRegistry as Protection;
+use Attachment\Filesystem\Protect\ThumbProtectionRegistry as Protection;
 
 class ResizeController extends AppController
 {

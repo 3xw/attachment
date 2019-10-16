@@ -8,20 +8,7 @@ return [
     // set profiles
     'profiles' => [
 
-      // every other profile will herit from 'parent' settings
-      'parent' => [
-        'adapter' => null,
-    		'client' => null,
-        'baseUrl' =>  null,
-        'delete' => true,
-        'replace' => false,
-        'afterReplace' => null, // null | callback fct($entity)
-        'cdn' => false,
-        'thumbProtection' => null,
-        'protection' => null
-      ],
-
-      // child profiles
+      // packed profiles
       'default' => [
     		'client' => new League\Flysystem\Adapter\Local(WWW_ROOT.'files'),
         'baseUrl' =>  '/files/'

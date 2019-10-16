@@ -39,7 +39,7 @@ class UploadedFile
 
   public function getMetadata()
   {
-    return exif_read_data($this->_path);
+    return @exif_read_data($this->_path);
   }
 
   public function getSize()

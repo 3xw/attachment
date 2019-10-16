@@ -1,39 +1,36 @@
 <?php
 namespace Attachment\Model\Entity;
 
+
 use Cake\ORM\Entity;
-use Cake\Core\Configure;
-use Cake\Routing\Router;
+use Attachment\Filesystem\ProfileRegistry;
 
 class Attachment extends Entity
 {
-
-  /**
-  * Fields that can be mass assigned using newEntity([]) or patchEntity().
-  *
-  * Note that when '*' is set to true, this allows all unspecified fields to
-  * be mass assigned. For security purposes, it is advised to set '*' to false
-  * (or remove it), and explicitly make individual fields accessible as needed.
-  *
-  * @var array
-  */
   protected $_accessible = [
     '*' => true,
     'id' => false,
   ];
 
-  protected function _getFullpath()
+  protected $_virtual = ['mime','url','thumb_params'];
+
+  protected function _getThumbParams()
   {
-    $baseUrl = Configure::read('Attachment.profiles.'.$this->profile.'.baseUrl');
-    $start = substr($baseUrl,0 , 4);
-    $baseUrl = ( $start == 'http' )? $baseUrl : Router::url($baseUrl, true);
-    return $baseUrl.$this->path;
+    return ProfileRegistry::retrieve($this->profile)->getThumbParams($this->path);
   }
 
   protected function _getUrl()
   {
-    return $this->_properties['type'].'/'.$this->_properties['subtype'];
+    return ProfileRegistry::retrieve($this->profile)->getUrl($this->path);
   }
 
+  protected function _getFullpath()
+  {
+    return ProfileRegistry::retrieve($this->profile)->getFullPath($this->path);
+  }
 
+  protected function _getMime()
+  {
+    return $this->_properties['type'].'/'.$this->_properties['subtype'];
+  }
 }

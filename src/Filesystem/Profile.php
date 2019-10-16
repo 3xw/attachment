@@ -3,27 +3,33 @@ namespace Attachment\Filesystem;
 
 use Cake\Core\Configure;
 use Attachment\Filesystem\FilesystemRegistry;
+use Attachment\Filesystem\Protect\ProtectionRegistry;
+use Attachment\Filesystem\Protect\ThumbProtectionRegistry;
+use Cake\Core\InstanceConfigTrait;
+use Cake\Routing\Router;
 
 class Profile
 {
-  public $name = 'profileName';
+  use InstanceConfigTrait;
 
-  public $settings = [];
+  public $name;
 
-  public $replaceExisting = false;
+  protected $_defaultConfig = [
+    'adapter' => null,
+    'client' => null,
+    'baseUrl' =>  null,
+    'delete' => true,
+    'replace' => false,
+    'afterReplace' => null, // null | callback fct($entity)
+    'cdn' => false,
+    'thumbProtection' => null,
+    'protection' => null
+  ];
 
-  public $deleteExisting = true;
-
-  public $afterReplace = null;
-
-  function __construct($name)
+  function __construct(string $alias, array $config = [])
   {
-    $this->name = $name;
-    if(empty(Configure::read('Attachment.profiles.'.$name))) throw new \Exception('Profile '.$name.' does not exists!');
-    $this->settings = array_merge(Configure::read('Attachment.profiles.parent'), Configure::read('Attachment.profiles.'.$name));
-    $this->replaceExisting = $this->settings['replace'];
-    $this->deleteExisting = $this->settings['delete'];
-    $this->afterReplace = $this->settings['afterReplace'];
+    $this->name = $alias;
+    $this->setConfig($config);
   }
 
   public function filesystem()
@@ -31,9 +37,49 @@ class Profile
     return FilesystemRegistry::retrieve($this->name);
   }
 
+  public function hasProtection()
+  {
+    return ProtectionRegistry::exists($this->name);
+  }
+
+  public function protection()
+  {
+    return ProtectionRegistry::retrieve($this->name);
+  }
+
+  public function hasThumbProtection()
+  {
+    return ThumbProtectionRegistry::exists($this->name);
+  }
+
+  public function thumbProtection()
+  {
+    return ThumbProtectionRegistry::retrieve($this->name);
+  }
+
   public function getFullPath($path)
   {
     return $this->filesystem()->getAdapter()->applyPathPrefix($path);
+  }
+
+  public function getUrl($path)
+  {
+    $url = $this->getBaseUrl().$path;
+    if ($this->hasProtection()) $url = $this->protection()->getSignedUrl($url);
+    return $url;
+  }
+
+  public function getThumbParams($path)
+  {
+    if (!$this->hasThumbProtection()) return null;
+    return $this->thumbProtection()->getAuthParamsAsString($this->getBaseUrl().$path);
+  }
+
+  public function getBaseUrl()
+  {
+    if (!$this->getConfig('baseUrl')) return Router::url('/', true);
+    
+    return ( substr($this->getConfig('baseUrl'),0 , 4) == 'http' )? $this->getConfig('baseUrl') : Router::url($this->getConfig('baseUrl'), true);
   }
 
   public function store($tmp, $name, $dir = false, $visibility = 'public', $mimetype = 'text/plain')
@@ -104,7 +150,7 @@ class Profile
 
   public function delete($file, $force = false)
   {
-    if(($force || $this->deleteExisting)) $this->filesystem()->delete($file);
+    if(($force || $this->getConfig('delete'))) $this->filesystem()->delete($file);
   }
 
   public function readAndDelete($path)

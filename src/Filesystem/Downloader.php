@@ -8,6 +8,7 @@ use Attachment\Model\Entity\Attachment;
 use League\Flysystem\Filesystem;
 use League\Flysystem\ZipArchive\ZipArchiveAdapter;
 use Cake\Http\Exception\NotFoundException;
+use Attachment\Filesystem\ProfileRegistry;
 
 class Downloader
 {
@@ -15,7 +16,7 @@ class Downloader
 
   function __construct($profileName = 'sys_temp')
   {
-    $this->profile = new Profile($profileName);
+    $this->profile = ProfileRegistry::retrieve($profileName);
   }
 
   // rmdir
@@ -31,7 +32,7 @@ class Downloader
     foreach($attachments as $attachment)
     {
       // profile
-      $src = new Profile($attachment->profile);
+      $src = ProfileRegistry::retrieve($attachment->profile);
 
       // check
       if(!$src->has($attachment->path)) continue;
@@ -53,7 +54,7 @@ class Downloader
   public function download(Attachment $attachment, $dir = '', $keepName = false, $keepFile = false): string
   {
     // profile
-    $src = new Profile($attachment->profile);
+    $src = ProfileRegistry::retrieve($attachment->profile);
 
     if(!$src->has($attachment->path)) throw new NotFoundException('File not found');
 

@@ -36,10 +36,12 @@ class AttachmentsController extends AppController
     $this->loadComponent('Crud.Crud', [
       'actions' => [
         'index' => [
-          'className' => 'Crud.Index'
+          'className' => 'Crud.Index',
+          'relatedModels' => ['Atags']
         ],
         'view' => [
           'className' => 'Crud.View',
+          'relatedModels' => ['Atags']
         ],
         'add' =>[
           'className' => 'Crud.Add',
@@ -51,6 +53,7 @@ class AttachmentsController extends AppController
         ],
         'edit' => [
           'className' => 'Crud.Edit',
+          'relatedModels' => ['Atags']
         ],
         'delete' => [
           'className' => 'Attachment\Crud\Action\DeleteAction',
@@ -59,6 +62,7 @@ class AttachmentsController extends AppController
       'listeners' => [
         //'CrudCache',
         'Crud.Api',
+        'Crud.RelatedModels',
         'Crud.ApiPagination',
         'Crud.ApiQueryLog',
         'Crud.Search'
@@ -68,62 +72,11 @@ class AttachmentsController extends AppController
     $this->loadComponent('Attachment.EventDispatcher');
   }
 
-  public function add()
-  {
-    return $this->Crud->execute();
-  }
-
   public function index()
   {
     // security first !!
     if(empty($this->request->getQuery('uuid'))) throw new UnauthorizedException(__d('Attachment','Missing uuid'));
 
-    $this->Crud->on('beforePaginate', function(Event $event)
-    {
-      $event->getSubject()->query->contain(['Atags']);
-      if(Configure::read('Attachment.translate'))
-      {
-        $event->getSubject()->query->find('translations');
-      }
-    });
-
-    $this->Crud->on('afterPaginate', function(Event $event)
-    {
-      foreach ($event->getSubject()->entities as $entity)
-      {
-        $entity->set('fullpath', $entity->get('fullpath'));
-      }
-    });
-
-    return $this->Crud->execute();
-  }
-
-  public function view($id = null)
-  {
-    $this->Crud->on('beforeFind', function(Event $event) {
-      $event->getSubject()->query->contain(['Atags']);
-      if(Configure::read('Attachment.translate'))
-      {
-        $event->getSubject()->query->find('translations');
-      }
-    });
-    return $this->Crud->execute();
-  }
-
-  public function edit($id = null)
-  {
-    $this->Crud->on('beforeFind', function(Event $event) {
-      $event->getSubject()->query->contain(['Atags']);
-      if(Configure::read('Attachment.translate'))
-      {
-        $event->getSubject()->query->find('translations');
-      }
-    });
-    return $this->Crud->execute();
-  }
-
-  public function delete($id)
-  {
     return $this->Crud->execute();
   }
 
