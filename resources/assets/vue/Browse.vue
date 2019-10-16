@@ -136,7 +136,7 @@ export default
 
     this.$store.registerModule(this.aid+'/attachments', createCrudModule({
       resource: 'attachments',
-      urlRoot: '../attachment/attachments',
+      urlRoot: this.settings.url+'attachment/attachments',
       client,
       parseSingle: parseResponse,
       parseList: parseResponseWithPaginate,
@@ -146,7 +146,7 @@ export default
     }))
     this.$store.registerModule(this.aid+'/atags', createCrudModule({
       resource: 'atags',
-      urlRoot: '../attachment/atags',
+      urlRoot: this.settings.url+'attachment/atags',
       client,
       parseSingle: parseResponse,
       parseList: parseTags
@@ -154,7 +154,7 @@ export default
     this.$store.registerModule(this.aid+'/token', createCrudModule({
       resource: 'token',
       only: ['CREATE'],
-      urlRoot: '../attachment/download/get-zip-token',
+      urlRoot: this.settings.url+'attachment/download/get-zip-token',
       client,
       idAttribute: 'token',
       onCreateSuccess: (o, response) => {
