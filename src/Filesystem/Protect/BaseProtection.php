@@ -15,17 +15,12 @@ abstract class BaseProtection implements ProtectionInterface
     $this->setConfig($config);
   }
 
-  public function verify(ServerRequest $reuest): bool
+  public function verify(ServerRequest $request): bool
   {
     return false;
   }
 
   public function getSignedUrl(string $url): string
-  {
-    return '';
-  }
-
-  public function getAuthParamsAsString(string $url): string
   {
     return '';
   }

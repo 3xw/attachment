@@ -9,13 +9,13 @@ use Attachment\Filesystem\FilesystemRegistry;
 use Cake\Filesystem\Folder;
 use Cake\Core\App;
 use Intervention\Image\ImageManagerStatic as Image;
-use Attachment\Filesystem\Protect\ThumbProtectionRegistry as Protection;
+use Attachment\Filesystem\ProfileRegistry;
 
 class ResizeController extends AppController
 {
   private function _filesystem($profile)
   {
-    return FilesystemRegistry::retrieve($profile);
+    return ProfileRegistry::retrieve($profile)->filesystem();
   }
 
   public function proceed($profile, $dim, ...$image )
@@ -24,7 +24,7 @@ class ResizeController extends AppController
     if(!Configure::check('Attachment.profiles.'.$profile) || $profile == 'thumbnails' ){ throw new NotFoundException(); }
 
     // protection
-    if (Protection::exists($profile)) if (!Protection::retrieve($profile)->verify($this->request)) throw new ForbiddenException();
+    if (!ProfileRegistry::retrieve($profile)->thumbProfile()->verify($reuest))  throw new ForbiddenException();
 
     // test $dim
     preg_match_all('/([a-z])([0-9]*-[0-9]*|[0-9]*)/', $dim, $dims, PREG_SET_ORDER);

@@ -14,14 +14,22 @@ class Attachment extends Entity
 
   protected $_virtual = ['mime','url','thumb_params'];
 
-  protected function _getThumbParams()
+  protected $fullUrl;
+  protected function getfullUrl()
   {
-    return ProfileRegistry::retrieve($this->profile)->getThumbParams($this->path);
+    if (!$this->fullUrl)  $this->fullUrl = ProfileRegistry::retrieve($this->profile)->getUrl($this->path);
+    return $this->fullUrl;
   }
 
   protected function _getUrl()
   {
-    return ProfileRegistry::retrieve($this->profile)->getUrl($this->path);
+    return $this->getfullUrl();
+  }
+
+  protected function _getThumbParams()
+  {
+    $url = $this->getfullUrl();
+    return strrpos($url, '?') === false ? null: substr($url, strrpos($url, '?') + 1 );
   }
 
   protected function _getFullpath()

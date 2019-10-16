@@ -38,17 +38,12 @@ class AwsSignedUrlsProtection extends BaseProtection
 
   public function getSignedUrl(string $url): string
   {
-    return $this->getUrlSigner()->getSignedUrl(
+    $url = $this->getUrlSigner()->getSignedUrl(
       $this->getReturnUrl($url),
       $this->getConfig('expires'),
       $this->getPolicy($url)
     );
-  }
-
-  public function getAuthParamsAsString(string $url): string
-  {
-    $url = $this->getSignedUrl($url);
-    return substr($url, strrpos($url, '?') + 1 );
+    return $url;
   }
 
   public function getReturnUrl(string $url): string

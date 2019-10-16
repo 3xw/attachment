@@ -6,6 +6,7 @@ use Attachment\Filesystem\FilesystemRegistry;
 use Attachment\Filesystem\Protect\ProtectionRegistry;
 use Cake\Core\InstanceConfigTrait;
 use Cake\Routing\Router;
+use Cake\Http\ServerRequest;
 
 class Profile
 {
@@ -49,6 +50,12 @@ class Profile
   public function protection()
   {
     return ProtectionRegistry::retrieve($this->name);
+  }
+
+  public function verify(ServerRequest $request): bool;
+  {
+    if (!$this->hasProtection()) return true;
+    return $this->protection()->verify($request);
   }
 
   public function getFullPath($path)
