@@ -58,6 +58,37 @@ return [
       ],
     ],
 
+    'browse' => [
+      'topNav' => [
+        'image' => [
+          'label' => __('Images'),
+          'mime' => 'image/*'
+        ],
+        'video' => [
+          'label' => __('Vidéos'),
+          'mime' => ['video/*', 'embed/youtube', 'embed/vimeo']
+        ],
+        'pdf' [
+          'label' => __('PDF'),
+          'mime' => ['application/pdf']
+        ],
+        'other' => [
+          'label' => __('Autres'),
+          'mime' => ['!image/*', '!video/*', '!embed/youtube', '!embed/vimeo', '!application/pdf']
+        ]
+      ],
+      'filters' => [
+        'orientation' => [
+          'label' => __('Orientation'),
+          'options' => [
+            'vertical' => ['label' => __('Vertical')],
+            'horizontal' => ['label' => __('Horizontal')],
+            'square' => ['label' => __('Carré')]
+          ]
+        ]
+      ]
+    ],
+
     // thumbnails settings
     'thumbnails' => [
       'driver' => 'Imagick', // or Imagick if installed,

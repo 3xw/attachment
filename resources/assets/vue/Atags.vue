@@ -33,26 +33,6 @@ export default
   props: { aid: String, upload:Boolean },
   data(){
     return {
-      /*types: {
-        name: 'Types',
-        slug: 'type',
-        isActive: false,
-        current: 'image',
-        options: [
-          {
-            name: 'Images',
-            slug: 'image',
-          },
-          {
-            name: 'Vidéos',
-            slug: 'video',
-          },
-          {
-            name: 'Autres',
-            slug: 'application',
-          }
-        ]
-      },*/
       filters: [
         {
           slug: 'orientation',
