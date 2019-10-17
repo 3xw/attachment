@@ -71,6 +71,13 @@ $colors: (
 
 .pointer{cursor: pointer;}
 
+.alert{
+  &__preview-img{
+    position: absolute;top: 0;right: 0;bottom: 0;
+    img{height: 100%;}
+  }
+}
+
 .text{
 
   &--upper{text-transform: uppercase;}

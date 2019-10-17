@@ -1,7 +1,7 @@
 <template>
   <div :is="(mode == 'thumbInfo')? 'tbody' : 'div'" @mouseover="hover = true" @mouseleave="hover = false">
     <div v-if="mode == 'mosaic' && $options.filters.isThumbable(attachment)" class="attachment-thumb">
-      <img @click="toggleFile(attachment.id)" v-if="$options.filters.isThumbable(attachment)" v-bind:src="settings.url+'thumbnails/'+attachment.profile+'/w678q90/'+attachment.path" class="img-fluid"  />
+      <img @click="toggleFile(attachment.id)" v-if="$options.filters.isThumbable(attachment)" v-bind:src="settings.baseUrls[settings.profile]+'thumbnails/'+attachment.profile+'/w678q90/'+attachment.path+'?'+attachment.thumb_params" class="img-fluid"  />
       <!--<button type="button" name="button" @click="toggleFile(attachment.id)">{{isSelected(attachment.id)? '-' : '+'}}</button>-->
       <div class="attachment-thumb__hover">
         <div v-if="hover && !isSelected(attachment.id)" class="d-flex flex-column justify-content-center align-items-center" >
@@ -27,7 +27,7 @@
         <!-- thumb -->
         <div class="attachment-thumb__icon-container" >
           <div>
-            <img v-if="$options.filters.isThumbable(attachment)" v-bind:src="settings.url+'thumbnails/'+attachment.profile+'/w678c4-3q90/'+attachment.path" class="card-img-top" />
+            <img v-if="$options.filters.isThumbable(attachment)" v-bind:src="settings.baseUrls[settings.profile]+'thumbnails/'+attachment.profile+'/w678c4-3q90/'+attachment.path+'?'+attachment.thumb_params" class="card-img-top" />
             <span v-html="$options.filters.icon(attachment.type+'/'+attachment.subtype)"></span>
             <!-- overlay -->
             <div class="attachment-thumb__hover">
@@ -67,7 +67,7 @@
       <td>
         <div class="attachment-thumb__icon-container table" >
           <div>
-            <img v-if="$options.filters.isThumbable(attachment)" v-bind:src="settings.url+'thumbnails/'+attachment.profile+'/w60c1-1q75/'+attachment.path" width="60" class="card-img-top" />
+            <img v-if="$options.filters.isThumbable(attachment)" v-bind:src="settings.baseUrls[settings.profile]+'thumbnails/'+attachment.profile+'/w60c1-1q75/'+attachment.path+'?'+attachment.thumb_params" width="60" class="card-img-top" />
             <span v-html="$options.filters.icon(attachment.type+'/'+attachment.subtype)"></span>
           </div>
         </div>
@@ -96,7 +96,7 @@ export default
   components: {
     'icon-check': iconCheck
   },
-  props:{attachment: Object,index: Number,aid: String, mode: String},
+  props:{attachment: Object, settings: Object, index: Number, aid: String, mode: String},
   data()
   {
     return {

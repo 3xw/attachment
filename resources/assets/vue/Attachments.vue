@@ -55,7 +55,7 @@
         <div v-if="mode == 'mosaic'" v-images-loaded="imgReady">
           <div  v-packery='{itemSelector: ".packery-item", percentPosition: true}' id="mosaic" class="row packery-row">
             <div v-for="(attachment, i ) in attachments" :key="i" v-packery-item class="packery-item col-lg-3 col-md-6">
-              <attachment :index="i" :aid="aid" :mode="mode" :attachment="attachment"></attachment>
+              <attachment :index="i" :aid="aid" :mode="mode" :attachment="attachment" :settings="settings"></attachment>
             </div>
           </div>
         </div>
@@ -63,14 +63,14 @@
           <div>
             <div class="row">
               <div v-for="(attachment, i ) in attachments" :key="i" class="col-sm-6 col-md-4 col-xl-2">
-                <attachment :index="i" :aid="aid" :mode="mode" :attachment="attachment"></attachment>
+                <attachment :index="i" :aid="aid" :mode="mode" :attachment="attachment" :settings="settings"></attachment>
               </div>
             </div>
           </div>
         </div>
         <div v-else-if="mode == 'thumbInfo'">
           <table class="table w-100">
-            <attachment v-for="(attachment, i ) in attachments" :index="i" :aid="aid" :mode="mode" :attachment="attachment"></attachment>
+            <attachment v-for="(attachment, i ) in attachments" :index="i" :aid="aid" :mode="mode" :attachment="attachment" :settings="settings"></attachment>
           </table>
         </div>
       </transition>

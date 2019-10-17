@@ -10,7 +10,7 @@
               <div class="section__nav">
                 <div class="d-flex flex-row justify-content-between align-items-center">
                   <h1>Ajouter des fichiers</h1>
-                  <button @click="mode = 'browse';$forceUpdate();" type="button" name="button" class="btn btn-danger">ANNULER</button>
+                  <button @click="mode = 'browse';" type="button" name="button" class="btn btn-danger">ANNULER</button>
                 </div>
                 <div class="utils--spacer-semi"></div>
                 <div class="row">
@@ -123,6 +123,14 @@ export default
     selectedFiles(value)
     {
       this.createSelectedFilesToken({data: {files: value}})
+    },
+    mode: function(){
+      this.$forceUpdate()
+      if(this.mode == 'browse'){
+        this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ upload: 0 }))
+      }else{
+        this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ upload: 1 }))
+      }
     }
   },
   created()

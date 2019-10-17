@@ -13,7 +13,10 @@
     <div class="">
 
       <!-- files -->
-      <div v-for="(file, i) in files" class="alert alert-secondary">
+      <div v-for="(file, i) in files" class="alert alert-info">
+        <div v-if="file.preview" class="alert__preview-img">
+          <img :src="file.preview" >
+        </div>
         File: {{file.name}} ready to upload!
       </div>
 
@@ -73,6 +76,7 @@ export default
       fileName: '',
       files: [],
       errors: [],
+      hasUploaded: 0
     }
   },
   computed:
@@ -97,6 +101,20 @@ export default
   created()
   {
     this.$store.commit(this.aid+'/flushUploadedFiles')
+  },
+  watch: {
+    files: function () {
+      for(let i in this.files){
+        if (this.files[i].type && this.files[i].type.match('image/*')) {
+           let reader = new FileReader();
+           reader.onload = (event) => {
+             this.files[i].preview = event.target.result
+             this.$forceUpdate()
+           }
+           reader.readAsDataURL(this.files[i])
+        }
+      }
+    }
   },
   methods:
   {
@@ -124,8 +142,14 @@ export default
     },
     upload: function()
     {
-
-      if(this.files.length != 0) return this.uploadFile(this.files.shift())
+      if(this.files.length != 0){
+        return this.uploadFile(this.files.shift())
+      }else{
+        if(this.errors.length == 0){
+          this.$parent.mode = 'browse'
+          this.$forceUpdate()
+        }
+      }
     },
     uploadFile: function(file)
     {
@@ -149,7 +173,7 @@ export default
       }
 
       client.post(this.settings.url+'attachment/attachments/add.json', formData, params)
-      .then(this.uploadSuccessCb, this.errorCb)
+      .then(this.uploadSuccessCb, this.errorUploadCb)
     },
     progressHandler: function(e)
     {
@@ -159,13 +183,14 @@ export default
     uploadSuccessCb: function(response)
     {
       this.uploading = false
+      this.hasUploaded = true
       this.$store.commit(this.aid+'/addUploadedFile', response.data.data )
       this.upload()
     },
     errorUploadCb: function(response)
     {
       this.uploading = false
-      this.errors.push(response.data.message)
+      this.errors.push(response)
       this.upload()
     },
   }
