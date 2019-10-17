@@ -24,7 +24,7 @@ class ResizeController extends AppController
     if(!Configure::check('Attachment.profiles.'.$profile) || $profile == 'thumbnails' ){ throw new NotFoundException(); }
 
     // protection
-    if (!ProfileRegistry::retrieve($profile)->thumbProfile()->verify($request))  throw new ForbiddenException();
+    if (!ProfileRegistry::retrieve($profile)->thumbProfile()->verify($this->request))  throw new ForbiddenException();
 
     // test $dim
     preg_match_all('/([a-z])([0-9]*-[0-9]*|[0-9]*)/', $dim, $dims, PREG_SET_ORDER);
