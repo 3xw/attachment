@@ -68,7 +68,7 @@ return [
           'label' => __('Vidéos'),
           'mime' => ['video/*', 'embed/youtube', 'embed/vimeo']
         ],
-        'pdf' [
+        'pdf' => [
           'label' => __('PDF'),
           'mime' => ['application/pdf']
         ],
