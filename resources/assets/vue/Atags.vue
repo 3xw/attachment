@@ -137,11 +137,7 @@ export default
       return this.aParams.filters.indexOf(filter) !== -1
     },
     checkForHiddenOptions(){
-      //RESET
-      this.visibility.hiddenValues.filters,
-      this.visibility.hiddenValues.atagTypes,
-      this.visibility.hiddenValues.atags = []
-      //ADD HIDDEN VALUES
+      let hiddenValues = this.visibility.hiddenValues
       for(var i = 0;i < this.visibilityParams.length;i++){
         let condition = this.visibilityParams[i]
         let isComplete = 1
@@ -171,25 +167,28 @@ export default
         }
         if(isComplete){
           switch(condition.model){
+            case '*':
+              hiddenValues.filters = hiddenValues.atagTypes = hiddenValues.atags = []
+              break;
             case 'Filters':
               if(condition.visible){
-                this.visibility.hiddenValues.filters = this.visibility.hiddenValues.filters.filter(e => e != condition.slug)
+                hiddenValues.filters = hiddenValues.filters.filter(e => e != condition.slug)
               }else{
-                this.visibility.hiddenValues.filters.push(condition.slug)
+                if(hiddenValues.filters.indexOf(condition.slug) == -1) hiddenValues.filters.push(condition.slug)
               }
               break;
             case 'AtagTypes':
               if(condition.visible){
-                this.visibility.hiddenValues.atagTypes = this.visibility.hiddenValues.atagTypes.filter(e => e != condition.slug)
+                hiddenValues.atagTypes = hiddenValues.atagTypes.filter(e => e != condition.slug)
               }else{
-                this.visibility.hiddenValues.atagTypes.push(condition.slug)
+                if(hiddenValues.atagTypes.indexOf(condition.slug) == -1) hiddenValues.atagTypes.push(condition.slug)
               }
               break;
             case 'Atags':
               if(condition.visible){
-                this.visibility.hiddenValues.atags = this.visibility.hiddenValues.atags.filter(e => e != condition.slug)
+                hiddenValues.atags = hiddenValues.atags.filter(e => e != condition.slug)
               }else{
-                this.visibility.hiddenValues.atags.push(condition.slug)
+                if(hiddenValues.atags.indexOf(condition.slug) == -1) hiddenValues.atags.push(condition.slug)
               }
               break;
           }
