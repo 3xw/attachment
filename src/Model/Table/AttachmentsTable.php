@@ -79,10 +79,19 @@ class AttachmentsTable extends Table
     ->add('type', 'Search.Callback', [
       'callback' => function ($query, $args, $filter)
       {
-        $field = ($args['type'] == 'pdf')? 'Attachments.subtype' : 'Attachments.type' ;
-        $query->where([$field => $args['type']]);
-        if($args['type'] == 'application'){
-          $query->where(['Attachments.subtype !=' => 'pdf']);
+        $conditions = [];
+        $types = explode(',', $args['type']);
+        foreach($types as $type){
+          $field = (preg_match("/\*/", $type))? 'type' : 'subtype';
+          if(preg_match("/\!/", $type)){
+            $exp = explode('/', $type);
+            $value = ($field == 'type')? substr($exp[0], 1) : $exp[1];
+            $query->andWhere([$field.' !=' => $value]);
+          }else{
+            $exp = explode('/', $type);
+            $value = ($field == 'type')? $exp[0] : $exp[1];
+            $query->where([$field => $value]);
+          }
         }
         return true;
       }

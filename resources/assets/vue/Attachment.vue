@@ -22,7 +22,7 @@
       </div>
     </div>
     <div v-else-if="mode == 'thumb'">
-      <div @click="toggleFile(attachment.id)" class="card attachment-thumb" >
+      <div @click="toggleFile(attachment.id)" class="card attachment-thumb">
 
         <!-- thumb -->
         <div class="attachment-thumb__icon-container" >

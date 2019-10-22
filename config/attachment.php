@@ -37,6 +37,26 @@ return [
     // translate
     'translate' => false,
 
+    'options' => [
+      'visibility' => [
+        [
+          'visible' => false, // Caché ou pas
+          'model' => 'Filters', // QUI est caché ??? Atags | AtagTypes | Filters
+          'slug' => 'orientation', //SLUG | SLUGS ['']
+          // searchManager params du model PHP
+          'atags' => '*',
+          'types' => '*',
+          'filters' => '*'
+        ],
+        [
+          'visible' => true,
+          'model' => 'Filters',
+          'slug' => 'orientation',
+          'types' => ['image/*'],
+        ]
+      ]
+    ],
+
     // upload settings
     'upload' => [
       'dir' => false,
@@ -59,10 +79,10 @@ return [
     ],
 
     'browse' => [
-      'topNav' => [
+      'types' => [
         'image' => [
           'label' => __('Images'),
-          'mime' => 'image/*'
+          'mime' => ['image/*']
         ],
         'video' => [
           'label' => __('Vidéos'),
@@ -78,12 +98,13 @@ return [
         ]
       ],
       'filters' => [
-        'orientation' => [
+        [
           'label' => __('Orientation'),
+          'slug' => 'orientation',
           'options' => [
-            'vertical' => ['label' => __('Vertical')],
-            'horizontal' => ['label' => __('Horizontal')],
-            'square' => ['label' => __('Carré')]
+            ['label' => __('Vertical'), 'slug' => 'vertical'],
+            ['label' => __('Horizontal'), 'slug' => 'horizontal'],
+            ['label' => __('Carré'), 'slug' => 'square']
           ]
         ]
       ]

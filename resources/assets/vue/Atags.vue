@@ -1,23 +1,28 @@
 <template lang="html">
   <section class="section-attachment--atags">
     <ul class="list-unstyled section-attachment__list" v-if="atagTypes">
-      <li v-if="aParams.type == 'image' && !upload" v-for="(filter, i) in filters">
-        <div class="section-attachment__list-title d-flex flex-row justify-content-between" :class="{active: filter.isActive}" @click="filter.isActive = !filter.isActive;$forceUpdate()">
-          <p class="text--upper mb-0 color--grey-light-text">{{filter.name}}</p> <!--<i class="material-icons">{{(filter.isActive)? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</i>-->
+      <li v-for="(filter, i) in filters" v-if="!upload && !visibility.hiddenValues.filters.includes(filter.slug)">
+        <div class="section-attachment__list-title d-flex flex-row justify-content-between">
+          <p class="text--upper mb-0 color--grey-light-text">{{filter.label}}</p>
         </div>
         <ul class="list-unstyled section-attachment__sublist" ><!-- v-if="filter.isActive" -->
           <li v-for="(option, i2) in filter.options" :key="i2" @click="option.isActive = !option.isActive;$forceUpdate();filterOption(option.slug); " class="d-flex flex-row justify-content-between align-items-center" :class="{active: checkFilterActive(i, i2, option.slug)}">
-            {{option.name}} <input type="checkbox" :checked="checkFilterActive(i, i2, option.slug)">
+            {{option.label}} <input type="checkbox" :checked="checkFilterActive(i, i2, option.slug)">
           </li>
         </ul>
       </li>
-      <li v-for="(atagType, index1) in atagTypes">
-        <div class="section-attachment__list-title d-flex flex-row justify-content-between" :class="{active: atagType.isActive}" @click="atagType.isActive = !atagType.isActive;$forceUpdate()">
-          <p class="text--upper mb-0 color--grey-light-text">{{atagType.name}}</p> <!--<i class="material-icons">{{(atagType.isActive)? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</i>-->
+      <li v-for="(atagType, i) in atagTypes" v-if="!visibility.hiddenValues.atagTypes.includes(atagType.slug)">
+        <div class="section-attachment__list-title d-flex flex-row justify-content-between">
+          <p class="text--upper mb-0 color--grey-light-text">{{atagType.name}}</p>
         </div>
         <ul class="list-unstyled section-attachment__sublist" > <!--v-if="atagType.isActive"-->
-          <li v-for="(atag, index2) in atagType.atags" :key="atag.id" @click="toggle(index1, index2)" class="d-flex flex-row justify-content-between align-items-center" :class="{active: ((upload)? atag.isActive : checkActive(index1, index2, atag.name))}">
-            {{atag.name}} <input type="checkbox" :checked="(upload)? atag.isActive : checkActive(index1, index2, atag.name)">
+          <li
+            v-for="(atag, i2) in atagType.atags"
+            v-if="!visibility.hiddenValues.atags.includes(atag.slug)"
+            @click="toggle(i, i2)"
+            class="d-flex flex-row justify-content-between align-items-center"
+            :class="{active: ((upload)? atag.isActive : checkActive(i, i2, atag.name))}">
+            {{atag.name}} <input type="checkbox" :checked="(upload)? atag.isActive : checkActive(i, i2, atag.name)">
           </li>
         </ul>
       </li>
@@ -30,33 +35,24 @@ import { mapState, mapGetters, mapActions } from 'vuex'
 export default
 {
   name:'attachment-atags',
-  props: { aid: String, upload:Boolean },
+  props: { aid: String, upload:Boolean, filters: Object, options: Object },
   data(){
     return {
-      filters: [
-        {
-          slug: 'orientation',
-          name: 'Orientation',
-          isActive: false,
-          options: [
-            {
-              slug: 'vertical',
-              name: 'Vertical',
-              isActive: false
-            },
-            {
-              slug: 'horizontal',
-              name: 'Horizontal',
-              isActive: false
-            },
-            {
-              slug: 'square',
-              name: 'Carré',
-              isActive: false
-            }
-          ]
+      visibility: {
+        default: {
+          visible: true,
+          model: '*',
+          slug: '*',
+          atags: '*',
+          types: '*',
+          filters: '*'
+        },
+        hiddenValues: {
+          filters: [],
+          atagTypes: [],
+          atags: []
         }
-      ]
+      }
     }
   },
   computed:
@@ -72,10 +68,32 @@ export default
     {
       return this.$store.get(this.aid + '/aParams')
     },
+    visibilityParams()
+    {
+        let visibilityParams = [this.visibility.default]
+        for(let i = 0;i < this.options.visibility.length;i++){
+          let defaultParam = Object.assign({}, this.visibility.default)
+          visibilityParams.push(Object.assign(defaultParam, this.options.visibility[i]))
+        }
+        return visibilityParams
+    },
+  },
+  watch: {
+    aParams:
+    {
+      handler(){
+        this.checkForHiddenOptions()
+      },
+      deep: true
+    }
   },
   created()
   {
-    //this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ filters: filters.join(','), page: 1 }))
+
+  },
+  mounted()
+  {
+    this.checkForHiddenOptions()
   },
   methods:
   {
@@ -96,15 +114,12 @@ export default
       for(let i1 in this.atagTypes)for(let i2 in this.atagTypes[i1].atags) if(this.atagTypes[i1].atags[i2].isActive) atags.push(this.atagTypes[i1].atags[i2].name)
 
       // set upload tags OR fetch attachment by mutating aParams
-      if(this.upload) this.$store.set(this.aid + '/upload', Object.assign(this.$store.get(this.aid + '/upload'),{ atags: atags }))
-      else this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ atags: atags.join(','), page: 1 }))
-    },
-    /*filterType()
-    {
-      if(!this.upload){
-        this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ type: this.types.current, filters: '', atags: '', page: 1 }))
+      this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ atags: atags.join(','), page: 1 }))
+      if(this.upload){
+        this.$store.set(this.aid + '/upload', Object.assign(this.$store.get(this.aid + '/upload'),{ atags: atags }))
+        this.checkForHiddenOptions()
       }
-    },*/
+    },
     filterOption(key)
     {
       if(!this.upload){
@@ -120,6 +135,67 @@ export default
     checkFilterActive(index1, index2, filter){
       this.filters[index1].options[index2].isActive = (this.aParams.filters.indexOf(filter) !== -1)
       return this.aParams.filters.indexOf(filter) !== -1
+    },
+    checkForHiddenOptions(){
+      //RESET
+      this.visibility.hiddenValues.filters,
+      this.visibility.hiddenValues.atagTypes,
+      this.visibility.hiddenValues.atags = []
+      //ADD HIDDEN VALUES
+      for(var i = 0;i < this.visibilityParams.length;i++){
+        let condition = this.visibilityParams[i]
+        let isComplete = 1
+        if(condition.atags != '*'){
+          for(let y = 0; y < condition.atags.length;y++){
+            if(!this.aParams.atags.split(',').includes(condition.atags[y])){
+              isComplete = 0
+              break;
+            }
+          }
+        }
+        if(condition.types != '*' && isComplete){
+          for(let y = 0; y < condition.types.length;y++){
+            if(!this.aParams.type.split(',').includes(condition.types[y])){
+              isComplete = 0
+              break;
+            }
+          }
+        }
+        if(condition.filters != '*' && isComplete){
+          for(let y = 0; y < condition.filters.length;y++){
+            if(!this.aParams.filters.split(',').includes(condition.filters[y])){
+              isComplete = 0
+              break;
+            }
+          }
+        }
+        if(isComplete){
+          switch(condition.model){
+            case 'Filters':
+              if(condition.visible){
+                this.visibility.hiddenValues.filters = this.visibility.hiddenValues.filters.filter(e => e != condition.slug)
+              }else{
+                this.visibility.hiddenValues.filters.push(condition.slug)
+              }
+              break;
+            case 'AtagTypes':
+              if(condition.visible){
+                this.visibility.hiddenValues.atagTypes = this.visibility.hiddenValues.atagTypes.filter(e => e != condition.slug)
+              }else{
+                this.visibility.hiddenValues.atagTypes.push(condition.slug)
+              }
+              break;
+            case 'Atags':
+              if(condition.visible){
+                this.visibility.hiddenValues.atags = this.visibility.hiddenValues.atags.filter(e => e != condition.slug)
+              }else{
+                this.visibility.hiddenValues.atags.push(condition.slug)
+              }
+              break;
+          }
+        }
+      }
+      this.$forceUpdate()
     }
   }
 }

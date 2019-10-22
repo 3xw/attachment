@@ -76,6 +76,7 @@ class AttachmentHelper extends Helper
       'languages' => Configure::read('I18n.languages'),
       'defaultLocale' => Configure::read('App.defaultLocale')
     ];
+    $settings['options'] = Configure::read('Attachment.options');
     return $settings;
   }
 
@@ -86,6 +87,7 @@ class AttachmentHelper extends Helper
 
     $settings['actions'] = (empty($settings['actions']))? ['add','edit','delete','view'] : $settings['actions'];
     $settings['attachments'] = [];
+    $settings['browse'] = Configure::read('Attachment.browse');
     $profiles = Configure::read('Attachment.profiles');
     $settings['baseUrls'] = [];
     foreach($profiles as $key => $value) $settings['baseUrls'][$key] = $value['baseUrl'];

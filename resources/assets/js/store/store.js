@@ -17,7 +17,7 @@ export default
         uuid: '',
         atags: '',
         filters: '',
-        type: 'image',
+        type: 'image/*',
         sort: 'created_desc',
         search: '',
         page: 1,

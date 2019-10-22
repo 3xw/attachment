@@ -16,7 +16,7 @@
                 <div class="row">
                   <div class="col-12 col-md-3">
                     <label>Tags</label>
-                    <attachment-atags :aid="aid" :upload="true"></attachment-atags>
+                    <attachment-atags :aid="aid" :upload="true" :filters="settings.browse.filters" :options="settings.options"></attachment-atags>
                   </div>
                   <div class="col-12 col-md-9">
                     <attachment-upload :aid="aid"></attachment-upload>
@@ -43,7 +43,7 @@
                     <icon-filter></icon-filter>&nbsp;&nbsp;&nbsp;&nbsp;<p class="mb-0">Filtres et tags</p>
                   </div>
                   <div class="utils--spacer-semi"></div>
-                  <attachment-atags :aid="aid" :upload="false"></attachment-atags>
+                  <attachment-atags :aid="aid" :upload="false" :filters="settings.browse.filters" :options="settings.options"></attachment-atags>
                 </div>
               </div>
             </div>

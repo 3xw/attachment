@@ -7,8 +7,8 @@
         <ul class="list-unstyled">
           <li>
             <ul class="list-unstyled list-inline" ><!-- v-if="types.isActive" -->
-              <li class="text--upper list-inline-item pointer" v-for="(option, i2) in types.options" :key="i2" @click="types.current = option.slug;$forceUpdate();filterType(option.slug);"  :class="{active: types.current == option.slug}">
-                <strong>{{option.name}}</strong>
+              <li class="text--upper list-inline-item pointer" v-for="(option, i2) in settings.browse.types" :key="i2" @click="types.current = option.mime.join(',');$forceUpdate();filterType();"  :class="{active: types.current == option.mime.join(',')}">
+                <strong>{{option.label}}</strong>
               </li>
             </ul>
           </li>
@@ -37,7 +37,7 @@
         </div>
         <div class="section__filter d-flex flex-row">
           <button type="button" @click="mode = 'thumb'" name="button" class="btn btn--white mb-0" :class="{active: mode == 'thumb'}"><icon-grid></icon-grid></button>
-          <button v-if="types.current == 'image'" type="button" @click="mode = 'mosaic'" name="button" class="btn btn--white mb-0" :class="{active: mode == 'mosaic'}"><icon-mosaic></icon-mosaic></button>
+          <button v-if="types.current == 'image/*'" type="button" @click="mode = 'mosaic'" name="button" class="btn btn--white mb-0" :class="{active: mode == 'mosaic'}"><icon-mosaic></icon-mosaic></button>
           <button type="button" @click="mode = 'thumbInfo'" name="button" class="btn btn--white mb-0" :class="{active: mode == 'thumbInfo'}"><icon-list></icon-list></button>
         </div>
       </div>
@@ -110,25 +110,7 @@ export default
         name: 'Types',
         slug: 'type',
         isActive: false,
-        current: 'image',
-        options: [
-          {
-            name: 'Images',
-            slug: 'image',
-          },
-          {
-            name: 'Vidéos',
-            slug: 'video',
-          },
-          {
-            name: 'PDFS',
-            slug: 'pdf',
-          },
-          {
-            name: 'Autres',
-            slug: 'application',
-          }
-        ]
+        current: 'image/*',
       }
     }
   },
@@ -160,7 +142,6 @@ export default
     {
       return this.$store.get(this.aid + '/selection.files')
     },
-
   },
   watch: {
     mode: function(){
@@ -191,7 +172,7 @@ export default
     filterType()
     {
       if(!this.upload){
-        if(this.types.current != 'image'){
+        if(!this.types.current.match(/image/g)){
           this.mode = 'thumb'
         }
         this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ type: this.types.current, filters: '', atags: '', page: 1 }))
