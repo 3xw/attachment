@@ -57,6 +57,9 @@ class AttachmentsController extends AppController
         ],
         'delete' => [
           'className' => 'Attachment\Crud\Action\DeleteAction',
+        ],
+        'deleteAll' => [
+          'className' => 'Attachment\Crud\Action\Bulk\DeleteAction',
         ]
       ],
       'listeners' => [
