@@ -57,6 +57,9 @@ class AttachmentsController extends AppController
         ],
         'delete' => [
           'className' => 'Attachment\Crud\Action\DeleteAction',
+        ],
+        'deleteAll' => [
+          'className' => 'Attachment\Crud\Action\Bulk\DeleteAction',
         ]
       ],
       'listeners' => [
@@ -74,7 +77,7 @@ class AttachmentsController extends AppController
 
   public function index()
   {
-    // security first !!
+    // security first !! be sure to restrict index with coresonding session settings!
     if(empty($this->request->getQuery('uuid'))) throw new UnauthorizedException(__d('Attachment','Missing uuid'));
 
     return $this->Crud->execute();

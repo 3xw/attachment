@@ -80,18 +80,13 @@ class AttachmentsTable extends Table
       'callback' => function ($query, $args, $filter)
       {
         $conditions = [];
-        $types = explode(',', $args['type']);
-        foreach($types as $type){
-          $field = (preg_match("/\*/", $type))? 'type' : 'subtype';
-          if(preg_match("/\!/", $type)){
-            $exp = explode('/', $type);
-            $value = ($field == 'type')? substr($exp[0], 1) : $exp[1];
-            $query->andWhere([$field.' !=' => $value]);
-          }else{
-            $exp = explode('/', $type);
-            $value = ($field == 'type')? $exp[0] : $exp[1];
-            $query->where([$field => $value]);
-          }
+        $mimes = explode(',', $args['type']);
+        foreach($mimes as $mime)
+        {
+          $mime = explode('/', $mime);
+          $logic = preg_match("/\!/", $mime[0])? ' !=': '';
+          $query->where(['type'.$logic => preg_match("/\!/", $mime[0])? substr($mime[0], 1): $mime[0]]);
+          if(!empty($mime[1]) && $mime[1] != '*') $query->where(['subtype'.$logic => $mime[1]]);
         }
         return true;
       }
