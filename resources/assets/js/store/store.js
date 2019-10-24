@@ -58,7 +58,6 @@ export default
     'upload': (state, payload) => {
       state.upload = payload
     },
-
     // browse
     'aParams': (state, payload) => {
       state.aParams = payload
@@ -66,7 +65,6 @@ export default
     'pagination': (state, payload) => {
       state.pagination = payload
     },
-
     // settings
     'settings': (state, payload) => {
       state.settings = payload

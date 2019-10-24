@@ -31,7 +31,6 @@
 </template>
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
-
 export default
 {
   name:'attachment-atags',
@@ -83,6 +82,7 @@ export default
     {
       handler(){
         this.checkForHiddenOptions()
+        this.removeTagsActived()
       },
       deep: true
     }
@@ -136,6 +136,29 @@ export default
       this.filters[index1].options[index2].isActive = (this.aParams.filters.indexOf(filter) !== -1)
       return this.aParams.filters.indexOf(filter) !== -1
     },
+    removeTagsActived(){
+      let hasChange = false
+      if(this.visibility.hiddenValues.atagTypes.length > 0){
+        hasChange = true
+        for(let i = 0;i < this.visibility.hiddenValues.atagTypes.length;i++){
+          let hiddenTagType = this.visibility.hiddenValues.atagTypes[i];
+          let atagType = this.atagTypes.find( ({ slug }) => slug === hiddenTagType);
+          if(atagType){
+            for(let y = 0;y < atagType.atags.length;y++){
+              atagType.atags[y].isActive = false
+            }
+          }
+        }
+      }
+      if(hasChange){
+        let atags = []
+        let comp = this
+        setTimeout(function(){
+          for(let i1 in comp.atagTypes)for(let i2 in comp.atagTypes[i1].atags) if(comp.atagTypes[i1].atags[i2].isActive) atags.push(comp.atagTypes[i1].atags[i2].name)
+          comp.$store.set(comp.aid + '/aParams', Object.assign(comp.$store.get(comp.aid + '/aParams'),{ atags: atags.join(','), page: 1 }))
+        }, 0)
+      }
+    },
     checkForHiddenOptions(){
       let hiddenValues = this.visibility.hiddenValues
       for(var i = 0;i < this.visibilityParams.length;i++){
@@ -168,7 +191,9 @@ export default
         if(isComplete){
           switch(condition.model){
             case '*':
-              hiddenValues.filters = hiddenValues.atagTypes = hiddenValues.atags = []
+              hiddenValues.filters = []
+              hiddenValues.atagTypes = []
+              hiddenValues.atags = []
               break;
             case 'Filters':
               if(condition.visible){
