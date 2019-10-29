@@ -16,6 +16,12 @@
   "require-dev": {
     "phpunit/phpunit": "*"
   },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/3xw/crud"
+    }
+  ],
   "autoload": {
     "psr-4": {
       "Attachment\\": "src"
