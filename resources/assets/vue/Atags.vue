@@ -129,8 +129,8 @@ export default
       }
     },
     checkActive(index1, index2, atag){
-      this.atagTypes[index1].atags[index2].isActive = (this.aParams.atags.indexOf(atag) !== -1)
-      return this.aParams.atags.indexOf(atag) !== -1
+      this.atagTypes[index1].atags[index2].isActive = (this.aParams.atags.split(',').includes(atag) == true)
+      return (this.aParams.atags.split(',').includes(atag) == true)
     },
     checkFilterActive(index1, index2, filter){
       this.filters[index1].options[index2].isActive = (this.aParams.filters.indexOf(filter) !== -1)

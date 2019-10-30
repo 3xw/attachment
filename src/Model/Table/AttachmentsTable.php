@@ -100,7 +100,7 @@ class AttachmentsTable extends Table
           ->where([
             'OR' => [
               'Atags.name IN' => explode(',', $args['atags']),
-              'Atags.slug IN' =>explode(',', $args['atags'])
+              'Atags.slug IN' => explode(',', $args['atags'])
             ]
           ]);
         });
