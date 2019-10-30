@@ -30,9 +30,7 @@
         <!-- browse mode -->
         <section v-if="mode == 'browse'" class="section-attachment--browse">
           <div class="row no-gutters">
-            <div class="col-12">
-
-            </div>
+            <div class="w-100"></div>
             <div class="col-md-3 col-xl-2">
               <div class="section__side">
                 <div class="section__add section--blue-light color--blue-dark action pointer d-flex flex-row align-items-center" @click="mode = 'upload';$forceUpdate();">
