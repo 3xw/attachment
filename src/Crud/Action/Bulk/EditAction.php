@@ -25,19 +25,19 @@ class EditAction extends BaseAction
 
   protected function _bulk(?Query $query = null): bool
   {
+    // retrieve
+    $associated = $this->getConfig('relatedModels')?? [];
+    $query->contain($associated);
+    $list = $query->toArray();
 
-    debug($query);
+    // patch
+    $patched = $this->_table()->patchEntities(
+      $list,
+      $this->_controller()->getRequest()->getData(),
+      ['associated' => $associated ]
+    );
 
-    return true;
-
-    /*
-    $field = $this->getConfig('field');
-    $value = $this->getConfig('value');
-    $query->update()->set([$field => $value]);
-    $statement = $query->execute();
-    $statement->closeCursor();
-
-    return (bool)$statement->rowCount();
-    */
+    // save
+    return $this->_table()->saveMany($patched, ['associated' => $associated ]);
   }
 }
