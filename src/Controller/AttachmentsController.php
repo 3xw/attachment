@@ -55,6 +55,10 @@ class AttachmentsController extends AppController
           'className' => 'Crud.Edit',
           'relatedModels' => ['Atags']
         ],
+        'editAll' => [
+          'className' => 'Attachment\Crud\Action\Bulk\EditAction',
+          'relatedModels' => ['Atags']
+        ],
         'delete' => [
           'className' => 'Attachment\Crud\Action\DeleteAction',
         ],
