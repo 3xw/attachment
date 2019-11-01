@@ -5,6 +5,7 @@ namespace Attachment\Crud\Action\Bulk;
 
 use Cake\Controller\Controller;
 use Cake\ORM\Query;
+use Crud\Action\Bulk\BaseAction;
 
 class DeleteAction extends BaseAction
 {
