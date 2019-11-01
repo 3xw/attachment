@@ -15,7 +15,11 @@
         </ul>
         <div class="d-flex flex-row align-items-center">
           {{selectedFiles.length}} fichier(s) selectionné(s)&nbsp;&nbsp;
-          <button type="button" v-if="selectedFiles.length > 0" @click="dowloadSelection" name="button" class="btn btn--blue-light mb-0 color--white">TÉLÉCHARGER</button>
+          <div class="btn-group">
+            <button type="button" v-if="selectedFiles.length > 0" @click="dowloadSelection" name="button" class="btn btn--blue-light mb-0 color--white">TÉLÉCHARGER</button>
+            <button type="button" v-if="selectedFiles.length > 0" @click="editSelection" name="button" class="btn btn--orange mb-0 color--white">EDITER</button>
+            <button type="button" v-if="selectedFiles.length > 0" @click="deleteSelection" name="button" class="btn btn--red mb-0 color--white">SUPPRIMER</button>
+          </div>
         </div>
       </div>
       <div class="utils--spacer-semi"></div>
@@ -198,6 +202,14 @@ export default
       let token = this.$store.get(this.aid+'/selection.token')
       let url = this.$store.get(this.aid + '/settings.url')+'attachment/download/files/'+token
       window.open(url)
+    },
+    editSelection()
+    {
+      console.log('edit')
+    },
+    deleteSelection()
+    {
+      console.log('delete')
     }
   },
   mounted()
