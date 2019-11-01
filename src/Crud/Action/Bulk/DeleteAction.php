@@ -32,8 +32,7 @@ class DeleteAction extends BaseAction
     {
       return false;
     }
-
-    $statement = $query->execute();
+    
     $statement->closeCursor();
     return (bool)$statement->rowCount();
   }
