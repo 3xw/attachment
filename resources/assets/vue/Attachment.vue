@@ -53,6 +53,8 @@
             <p class="card-text small">
               <span v-if="attachment.title">{{attachment.title}}<br/></span>
               {{attachment.name}}<br/>
+              {{settings.baseUrls[settings.profile]}}
+              {{settings.baseUrls[settings.profile]+'thumbnails/'+attachment.profile+'/w678c4-3q90/'+attachment.path+'?'+attachment.thumb_params}}
               <!--{{attachment.size | bytesToMegaBytes | decimal(2) }} MB<br/>-->
             </p>
           <!-- data -->
@@ -79,6 +81,9 @@
         {{attachment.size | bytesToMegaBytes | decimal(2) }} MB
       </td>
       <td class="text-right">
+        <div class="btn-group">
+          <a :href="attachment.url"><span class="glyphicon glyphicon-"></span></a>
+        </div>
         <div @click="toggleFile(attachment.id)" class="btn color--white " :class="isSelected(attachment.id )? 'btn--blue' : 'btn--blue-light'">
           <span v-if="!isSelected(attachment.id)">Ajouter à la sélection</span>
           <span v-else><icon-check></icon-check>  selectionné</span>

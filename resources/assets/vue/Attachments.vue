@@ -87,6 +87,8 @@
   </section>
 </template>
 <script>
+import { client } from '../js/client.js'
+
 import { packeryEvents } from 'vue-packery-plugin'
 import Attachment from './Attachment.vue'
 import Pagination from './Pagination.vue'
@@ -209,7 +211,18 @@ export default
     },
     deleteSelection()
     {
-      console.log('delete')
+      if(confirm('Etes-vous sûr de vouloir supprimer les fichiers séléctionnées?')){
+        let params = {
+          headers: {'Accept': 'application/json', 'Content-Type': 'multipart/form-data'},
+          progress: this.progressHandler
+        }
+        let ids = []
+        for(let i = 0;i < this.selectedFiles.length;i++) ids.push(this.selectedFiles[i].id)
+        client.post(this.settings.url+'attachment/attachments/deleteAll.json', ids, params)
+        .then(this.selectedFiles = [], alert('Une erreur est survenue veuillez réessayer'))
+        console.log('delete')
+      }
+
     }
   },
   mounted()
