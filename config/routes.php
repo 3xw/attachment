@@ -18,7 +18,7 @@ Router::plugin(
     function (RouteBuilder $routes)
     {
       // protect from direct access
-      $routes->redirect('/resize/*', '/');
+      //$routes->redirect('/resize/*', '/');
 
       $routes->setExtensions(['json']);
       $routes->fallbacks('DashedRoute');

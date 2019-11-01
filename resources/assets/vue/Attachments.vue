@@ -211,18 +211,23 @@ export default
     },
     deleteSelection()
     {
-      if(confirm('Etes-vous sûr de vouloir supprimer les fichiers séléctionnées?')){
+      if(confirm('Etes-vous sûr de vouloir supprimer les fichiers séléctionnés?')){
         let params = {
           headers: {'Accept': 'application/json', 'Content-Type': 'multipart/form-data'},
-          progress: this.progressHandler
         }
-        let ids = []
-        for(let i = 0;i < this.selectedFiles.length;i++) ids.push(this.selectedFiles[i].id)
-        client.post(this.settings.url+'attachment/attachments/deleteAll.json', ids, params)
-        .then(this.selectedFiles = [], alert('Une erreur est survenue veuillez réessayer'))
-        console.log('delete')
+        let formData = new FormData()
+        for(let i = 0;i < this.selectedFiles.length;i++) formData.append('id['+i+']', this.selectedFiles[i])
+        client.post(this.settings.url+'attachment/attachments/deleteAll.json', formData, params)
+        .then(this.deleteSuccess, this.deleteError)
       }
-
+    },
+    deleteSuccess(){
+      this.selectedFiles = []
+      let d = new Date();
+      this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ refresh: d.getTime() }))
+    },
+    deleteError(){
+      alert('Une erreur est survenue veuillez réessayer.')
     }
   },
   mounted()

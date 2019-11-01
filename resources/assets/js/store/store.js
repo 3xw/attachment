@@ -20,6 +20,7 @@ export default
         type: 'image/*',
         sort: 'created_desc',
         search: '',
+        refresh: '',
         page: 1,
       },
       tParams:{

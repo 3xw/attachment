@@ -53,7 +53,6 @@
             <p class="card-text small">
               <span v-if="attachment.title">{{attachment.title}}<br/></span>
               {{attachment.name}}<br/>
-              {{settings.baseUrls[settings.profile]}}
               {{settings.baseUrls[settings.profile]+'thumbnails/'+attachment.profile+'/w678c4-3q90/'+attachment.path+'?'+attachment.thumb_params}}
               <!--{{attachment.size | bytesToMegaBytes | decimal(2) }} MB<br/>-->
             </p>
@@ -78,7 +77,8 @@
         <span v-if="attachment.title">{{attachment.title}} | </span>
         {{attachment.name}}<br>
         {{attachment.date}}<br>
-        {{attachment.size | bytesToMegaBytes | decimal(2) }} MB
+        {{attachment.size | bytesToMegaBytes | decimal(2) }} MB<br>
+        {{settings.baseUrls[settings.profile]+'thumbnails/'+attachment.profile+'/w60c1-1q75/'+attachment.path+'?'+attachment.thumb_params}}
       </td>
       <td class="text-right">
         <div class="btn-group">
