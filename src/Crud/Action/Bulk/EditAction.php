@@ -7,7 +7,7 @@ use Cake\Controller\Controller;
 use Cake\ORM\Query;
 use Crud\Action\Bulk\BaseAction;
 
-class DeleteAction extends BaseAction
+class EditAction extends BaseAction
 {
   public function __construct(Controller $Controller, array $config = [])
   {
