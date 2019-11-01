@@ -25,9 +25,15 @@ class DeleteAction extends BaseAction
   protected function _bulk(?Query $query = null): bool
   {
     $query = $query->delete();
+    try {
+      $statement = $query->execute();
+    } catch (\PDOException $e)
+    {
+      return false;
+    }
+
     $statement = $query->execute();
     $statement->closeCursor();
-
     return (bool)$statement->rowCount();
   }
 }
