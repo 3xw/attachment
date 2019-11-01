@@ -50,6 +50,30 @@
             </div>
           </div>
         </section>
+
+        <!-- edit mode -->
+        <section v-if="mode == 'edit'" class="section-attachment--upload">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="section__nav">
+                <div class="d-flex flex-row justify-content-between align-items-center">
+                  <h1>Editer des fichiers</h1>
+                  <button @click="mode = 'browse';" type="button" name="button" class="btn btn-danger">ANNULER</button>
+                </div>
+                <div class="utils--spacer-semi"></div>
+                <div class="row">
+                  <div class="col-12 col-md-3">
+                    <label>Tags</label>
+                    <attachment-atags :aid="aid" :upload="true" :filters="settings.browse.filters" :options="settings.options"></attachment-atags>
+                  </div>
+                  <div class="col-12 col-md-9">
+                    <attachment-edit :aid="aid" :settings="settings"></attachment-edit>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </transition>
     </div>
   </main>
@@ -70,6 +94,7 @@ import iconAdd from './icons/add.vue'
 import Atags from './Atags.vue'
 import Attachments from './Attachments.vue'
 import Upload from './Upload.vue'
+import Edit from './Edit.vue'
 
 
 
@@ -80,6 +105,7 @@ export default
   {
     'attachment-atags': Atags,
     'attachment-upload': Upload,
+    'attachment-edit': Edit,
     'attachments': Attachments,
     'icon-add': iconAdd,
     'icon-filter': iconFilter

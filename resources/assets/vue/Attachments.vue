@@ -207,6 +207,7 @@ export default
     },
     editSelection()
     {
+      this.$parent.mode = 'edit'
       console.log('edit')
     },
     deleteSelection()
@@ -216,15 +217,14 @@ export default
           headers: {'Accept': 'application/json', 'Content-Type': 'multipart/form-data'},
         }
         let formData = new FormData()
-        for(let i = 0;i < this.selectedFiles.length;i++) formData.append('id['+i+']', this.selectedFiles[i])
+        for(let i = 0;i < this.selectedFiles.length;i++) formData.append('id['+i+']', this.selectedFiles[i].id)
         client.post(this.settings.url+'attachment/attachments/deleteAll.json', formData, params)
         .then(this.deleteSuccess, this.deleteError)
       }
     },
     deleteSuccess(){
-      this.selectedFiles = []
-      let d = new Date();
-      this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ refresh: d.getTime() }))
+      this.$store.commit(this.aid+'/flushSelection')
+      this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ refresh: new Date().getTime() }))
     },
     deleteError(){
       alert('Une erreur est survenue veuillez réessayer.')

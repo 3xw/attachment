@@ -146,9 +146,8 @@ export default
         return this.uploadFile(this.files.shift())
       }else{
         if(this.errors.length == 0){
-          let d = new Date();
           this.$parent.mode = 'browse'
-          this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ refresh: d.getTime() }))
+          this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ refresh: new Date().getTime() }))
         }
       }
     },
