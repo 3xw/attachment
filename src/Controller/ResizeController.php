@@ -5,6 +5,7 @@ use Attachment\Controller\AppController;
 use Cake\Core\Configure;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Exception\ForbiddenException;
+use Cake\Http\Exception\BadRequestException;
 use Attachment\Filesystem\FilesystemRegistry;
 use Cake\Filesystem\Folder;
 use Cake\Core\App;
@@ -13,18 +14,19 @@ use Attachment\Filesystem\ProfileRegistry;
 
 class ResizeController extends AppController
 {
-  private function _filesystem($profile)
+  protected function getProfile($profile)
   {
-    return ProfileRegistry::retrieve($profile)->filesystem();
+    return ProfileRegistry::retrieve($profile);
   }
 
   public function proceed($profile, $dim, ...$image )
   {
     // test profile
-    if(!Configure::check('Attachment.profiles.'.$profile) || $profile == 'thumbnails' ){ throw new NotFoundException(); }
+    if(!Configure::check('Attachment.profiles.'.$profile)){ throw new NotFoundException('This profile dosen\'t exists!'); }
+    if(!$this->getProfile($profile)->thumbProfile()->name){ throw new BadRequestException('You are not allowed to thmub a thumb profile...'); }
 
     // protection
-    if (!ProfileRegistry::retrieve($profile)->thumbProfile()->verify($this->request))  throw new ForbiddenException();
+    if (!$this->getProfile($profile)->thumbProfile()->verify($this->request))  throw new ForbiddenException();
 
     // test $dim
     preg_match_all('/([a-z])([0-9]*-[0-9]*|[0-9]*)/', $dim, $dims, PREG_SET_ORDER);
@@ -47,7 +49,7 @@ class ResizeController extends AppController
       foreach($extsToTest as $ext)
       {
         $image = $webp[0][1].$ext;
-        if($this->_filesystem($profile)->has($image))
+        if($this->getProfile($profile)->has($image))
         {
           $fileFound = true;
           break;
@@ -60,7 +62,7 @@ class ResizeController extends AppController
     }else
     {
       // look for image
-      if(!$this->_filesystem($profile)->has($image))
+      if(!$this->getProfile($profile)->has($image))
       {
         throw new NotFoundException();
       }
@@ -73,7 +75,7 @@ class ResizeController extends AppController
       $url = str_replace(':/','://',$image);
       $mimetype = get_headers($url, 1)["Content-Type"];
     }else{
-      $mimetype = $this->_filesystem($profile)->getMimetype($image);
+      $mimetype = $this->getProfile($profile)->getMimetype($image);
     }
     if(!in_array($mimetype, $mimetypes))
     {
@@ -101,7 +103,7 @@ class ResizeController extends AppController
     }
 
     // retrieve image
-    $contents = $this->_filesystem($profile)->read($image);
+    $contents = $this->getProfile($profile)->read($image);
     Image::configure(['driver' => Configure::read('Attachment.thumbnails.driver')]);
     $img = Image::make($contents);
 
@@ -156,7 +158,7 @@ class ResizeController extends AppController
 
     // create folders
     $folder = $profile.DS.$dim.DS.substr($image, 0, strrpos($image, '/') );
-    $folder = $this->_filesystem('thumbnails')->getAdapter()->applyPathPrefix($folder);
+    $folder = $this->getProfile($profile)->thumbProfile()->getFullPath($folder);
     $folder = new Folder($folder, true, 0777);
 
     // quality
@@ -177,9 +179,9 @@ class ResizeController extends AppController
         $image = substr($image, 0, $pos + 1).uniqid('tmp_').'_'.substr($image, $pos + 1);
       }
     }
-    $path = $profile.DS.$dim.DS.$image;
-    $this->_filesystem('thumbnails')->put($profile.DS.$dim.DS.$image, $img);
-    $path = $this->_filesystem('thumbnails')->getAdapter()->applyPathPrefix($path);
+    $thumbRelativePath = $path = $profile.DS.$dim.DS.$image;
+    $this->getProfile($profile)->thumbProfile()->put($profile.DS.$dim.DS.$image, $img);
+    $path = $this->getProfile($profile)->thumbProfile()->getFullPath($path);
 
 
     // jpegoptim
@@ -199,8 +201,8 @@ class ResizeController extends AppController
     if(!empty($webp) && Configure::read('Attachment.thumbnails.compression.cwebp') && Configure::read('Attachment.thumbnails.compression.convert') && ($mimetype == 'image/jpeg' || $mimetype == 'image/jpeg' || $mimetype == 'image/png') )
     {
 
-      $output = $profile.DS.$dim.DS.$webp[0][0];
-      $output = $this->_filesystem('thumbnails')->getAdapter()->applyPathPrefix($output);
+      $thumbRelativePath = $output = $profile.DS.$dim.DS.$webp[0][0];
+      $output = $this->getProfile($profile)->thumbProfile()->getFullPath($output);
 
       // CMYK to RGB
       if(($mimetype == 'image/jpeg' || $mimetype == 'image/jpeg'))
@@ -225,7 +227,11 @@ class ResizeController extends AppController
     }
 
     // delete file when over
-    if(Configure::read('Attachment.profiles.thumbnails.cdn')) register_shutdown_function(function() use($path) { unlink($path); });
+    if(!$this->getProfile($profile)->thumbProfile()->getConfig('keep'))
+    {
+      $thumbProfile = $this->getProfile($profile)->thumbProfile();
+      register_shutdown_function(function() use($thumbProfile, $thumbRelativePath) { $thumbProfile->delete($thumbRelativePath, true); });
+    }
 
     // send file
     $response = $this->response;

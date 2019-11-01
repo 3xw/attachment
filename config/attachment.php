@@ -23,7 +23,8 @@ return [
     	],
       'thumbnails' => [
     		'client' => new League\Flysystem\Adapter\Local(WWW_ROOT.'thumbnails'),
-        'baseUrl' =>  '/thumbnails/'
+        'baseUrl' =>  '/thumbnails/',
+        'thumbnails' => false
     	],
       'sys_temp' => [
     		'client' => new League\Flysystem\Adapter\Local(sys_get_temp_dir()),

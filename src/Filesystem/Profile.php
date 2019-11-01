@@ -23,7 +23,8 @@ class Profile
     'afterReplace' => null, // null | callback fct($entity)
     'thumbProtection' => null,
     'protection' => null,
-    'thumbnails' => 'thumbnails'
+    'thumbnails' => 'thumbnails',
+    'keep' => true
   ];
 
   function __construct(string $alias, array $config = [])
