@@ -82,13 +82,21 @@ class AttachmentsTable extends Table
       {
         $conditions = [];
         $mimes = explode(',', $args['type']);
+        $condition = '(';
+
         foreach($mimes as $mime)
         {
           $mime = explode('/', $mime);
-          $logic = preg_match("/\!/", $mime[0])? ' !=': '';
-          $query->where(['type'.$logic => preg_match("/\!/", $mime[0])? substr($mime[0], 1): $mime[0]]);
-          if(!empty($mime[1]) && $mime[1] != '*') $query->where(['subtype'.$logic => $mime[1]]);
+          $logic = preg_match("/\!/", $mime[0])? ' != ': ' = ';
+
+          $condition .= '(Attachments.type '.$logic.' "'.$mime[0].'"';
+          if(!empty($mime[1]) && $mime[1] != '*')   $condition .= ' AND Attachments.subtype '.$logic.' "'.$mime[1].'"';
+          $condition .= ') OR ';
         }
+
+        $condition = substr($condition,0, -4).')';
+        $query->andWhere([$condition]);
+
         return true;
       }
     ])
