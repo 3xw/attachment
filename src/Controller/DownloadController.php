@@ -21,8 +21,12 @@ class DownloadController extends AppController
   }
 
   // (new Token)->encode(['files' => [$attachment1->id, $attachment2->id]])
-  public function files($token)
+  public function files()
   {
+    //check
+    if (!$this->getRequest()->is('post')) throw new BadRequestException('Post Needed');
+    if(!$token = $this->getRequest->getData('token')) throw new BadRequestException('Url Form: pair token filed/value needed');
+
     // get Attachment
     $attachments = $this->loadModel('Attachment.Attachments')->find()
     ->where(['id IN' => (new Token)->decode($token)->files])
