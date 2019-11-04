@@ -19,14 +19,15 @@ class EditAction extends BaseJsonRestAction
     $patched = [];
     foreach($indexedList as $pk => $entity)
     {
-      $patched[] = $this->_table()->patchEntities(
+      //debug($this->subject->data[$pk]);
+      $patched[] = $this->_table()->patchEntity(
         $entity,
         $this->subject->data[$pk],
         ['associated' => $associated ]
       );
     }
-    
+
     // save
-    return $this->_table()->saveMany($patched, ['associated' => $associated ]);
+    return (bool) $this->_table()->saveMany($patched, ['associated' => $associated ]);
   }
 }
