@@ -5,6 +5,7 @@ namespace Attachment\Crud\Action\Bulk;
 
 use Cake\Controller\Controller;
 use Cake\ORM\Query;
+use Cake\I18n\Time;
 
 class EditAction extends BaseJsonRestAction
 {
@@ -19,14 +20,16 @@ class EditAction extends BaseJsonRestAction
     $patched = [];
     foreach($indexedList as $pk => $entity)
     {
-      //debug($this->subject->data[$pk]);
+      if($this->subject->data[$pk]['date']){
+        $date = new Time($this->subject->data[$pk]['date']);
+        $this->subject->data[$pk]['date'] = $date->format('Y-m-d H:i:s');
+      }
       $patched[] = $this->_table()->patchEntity(
         $entity,
         $this->subject->data[$pk],
         ['associated' => $associated ]
       );
     }
-
     // save
     return (bool) $this->_table()->saveMany($patched, ['associated' => $associated ]);
   }
