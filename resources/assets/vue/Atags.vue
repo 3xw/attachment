@@ -171,6 +171,7 @@ export default
       let hiddenValues = this.visibility.hiddenValues
       for(var i = 0;i < this.visibilityParams.length;i++){
         let condition = this.visibilityParams[i]
+        console.log(condition);
         let isComplete = 1
         if(condition.atags != '*'){
           for(let y = 0; y < condition.atags.length;y++){
@@ -181,8 +182,10 @@ export default
           }
         }
         if(condition.types != '*' && isComplete){
+          console.log(condition.types);
           for(let y = 0; y < condition.types.length;y++){
             if(!this.aParams.type.split(',').includes(condition.types[y])){
+              console.log('NOPE');
               isComplete = 0
               break;
             }
@@ -196,6 +199,7 @@ export default
             }
           }
         }
+        console.log(isComplete);
         if(isComplete){
           switch(condition.model){
             case '*':
@@ -221,7 +225,10 @@ export default
               if(condition.visible){
                 hiddenValues.atags = hiddenValues.atags.filter(e => e != condition.slug)
               }else{
+                console.log('nope');
+                console.log(hiddenValues.atags.indexOf(condition.slug));
                 if(hiddenValues.atags.indexOf(condition.slug) == -1) hiddenValues.atags.push(condition.slug)
+                console.log(hiddenValues.atags);
               }
               break;
           }

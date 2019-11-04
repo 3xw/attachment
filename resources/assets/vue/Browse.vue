@@ -151,7 +151,7 @@ export default
     mode: function(){
       this.$forceUpdate()
       if(this.mode == 'browse'){
-        this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ upload: 0 }))
+        this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ upload: 0, refresh: new Date().getTime() }))
       }else{
         this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ upload: 1 }))
       }

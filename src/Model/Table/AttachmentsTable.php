@@ -103,7 +103,8 @@ class AttachmentsTable extends Table
               'Atags.slug IN' => explode(',', $args['atags'])
             ]
           ]);
-        });
+        })
+        ->group('Attachments.id');
         return true;
       }
     ])
