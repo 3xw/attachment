@@ -7,6 +7,7 @@ use Cake\Controller\Controller;
 use Cake\ORM\Query;
 use Crud\Action\Bulk\BaseAction;
 use Crud\Event\Subject;
+use Cake\Http\Response;
 
 abstract class BaseJsonRestAction extends BaseAction
 {
@@ -15,11 +16,11 @@ abstract class BaseJsonRestAction extends BaseAction
   protected function _handle(): Response
   {
     // retrieve data
-    $arrayOfData = $this->_controller()->getRequest()->input('json_decode');
+    $arrayOfData = $this->_controller()->getRequest()->input('json_decode', true);
     $ids = [];
     $data = [];
     $pk = $this->_table()->getPrimaryKey();
-    foreach ($arrayOfData as $jsonDecodedEntity)
+    foreach ((array) $arrayOfData as $jsonDecodedEntity)
     {
       $ids[] = $key = $jsonDecodedEntity[$pk];
       $data[$key] = $jsonDecodedEntity;
@@ -33,11 +34,11 @@ abstract class BaseJsonRestAction extends BaseAction
     $this->subject->query->mapReduce(
       function($entity, $key, $mp) use($pk)
       {
-        $mapReduce->emitIntermediate($entity, $entity->{$pk});
+        $mp->emitIntermediate($entity, $entity->{$pk});
       },
       function($entities, $key, $mp)
       {
-        $mapReduce->emit($entities[0], $key);
+        $mp->emit($entities[0], $key);
       }
     );
 
@@ -51,6 +52,4 @@ abstract class BaseJsonRestAction extends BaseAction
 
     return $this->_redirect($this->subject, ['action' => 'index']);
   }
-
-  abstract protected function _bulk(?Query $query = null): bool;
 }
