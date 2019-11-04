@@ -25,7 +25,7 @@ class DownloadController extends AppController
   {
     //check
     if (!$this->getRequest()->is('post')) throw new BadRequestException('Post Needed');
-    if(!$token = $this->getRequest->getData('token')) throw new BadRequestException('Url Form: pair token filed/value needed');
+    if(!$token = $this->getRequest()->getData('token')) throw new BadRequestException('Url Form: pair token filed/value needed');
 
     // get Attachment
     $attachments = $this->loadModel('Attachment.Attachments')->find()
