@@ -146,7 +146,11 @@ export default
     },
     selectedFiles(value)
     {
-      this.createSelectedFilesToken({data: {files: value}})
+      let ids = []
+      for(let i = 0;i < value.length;i++){
+        ids.push(value[i].id)
+      }
+      this.createSelectedFilesToken({data: {files: ids}})
     },
     mode: function(){
       this.$forceUpdate()
