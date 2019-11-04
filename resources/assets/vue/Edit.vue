@@ -11,7 +11,7 @@
     </div>
     <!-- inputs -->
     <attachment-inputs :aid="aid" mode="edit"></attachment-inputs>
-    <button @click="edit" class="btn btn--success">Editer</button>
+    <button type="button" name="button" class="btn btn-success" @click="edit">Editer</button>
   </section>
 </template>
 <script>
@@ -176,19 +176,18 @@ export default {
           }
         }
       }
-      console.log(this.selectedFiles);
       let params = {
         headers: {'Accept': 'application/json', 'Content-Type': 'multipart/form-data'},
       }
       client.post(this.settings.url+'attachment/attachments/edit-all.json', this.selectedFiles, params)
       .then(this.editSuccess, this.editError)
     },
-    deleteSuccess(){
+    editSuccess(){
       this.$store.commit(this.aid+'/flushSelection')
-      this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ refresh: new Date().getTime() }))
+      this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{atags: '', refresh: new Date().getTime() }))
       this.$parent.mode = 'browse'
     },
-    deleteError(){
+    editError(){
       alert('Une erreur est survenue veuillez réessayer.')
     }
   }
