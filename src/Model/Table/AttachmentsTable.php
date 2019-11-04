@@ -11,6 +11,7 @@ use Cake\Validation\Validator;
 use Search\Manager;
 use Cake\Core\Configure;
 use Attachment\Http\Exception\UploadException;
+use Cake\Utility\Inflector;
 
 class AttachmentsTable extends Table
 {
@@ -94,17 +95,30 @@ class AttachmentsTable extends Table
     ->add('atags', 'Search.Callback',[
       'callback' => function ($query, $args, $filter)
       {
-        $query
-        ->matching('Atags', function (Query $q) use ($args) {
-          return $q
-          ->where([
-            'OR' => [
-              'Atags.name IN' => explode(',', $args['atags']),
-              'Atags.slug IN' => explode(',', $args['atags'])
+        foreach(explode(',', $args['atags']) as $key => $atag)
+        {
+          $t = Inflector::camelize("M$key");
+          $at = 'A'.$t;
+          $query->join([
+            $at => [
+              'table' => 'attachments_atags',
+              'type' => 'INNER',
+              'conditions' => $at.'.attachment_id = Attachments.id',
+            ],
+            $t => [
+              'table' => 'atags',
+              'type' => 'INNER',
+              'conditions' => [
+                $t.'.id = '.$at.'.atag_id',
+                'OR' => [
+                  $t.'.name' => $atag,
+                  $t.'.slug' => $atag
+                ]
+              ],
             ]
           ]);
-        })
-        ->group('Attachments.id');
+        }
+
         return true;
       }
     ])
