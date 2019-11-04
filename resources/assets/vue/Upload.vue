@@ -159,7 +159,6 @@ export default
       //DATE FOR UPLOAD
       if(this.inputs.date.length > 0){
         this.inputs.date = (this.inputs.date.indexOf('T') != -1)? this.inputs.date.replace('T', ' ')+':00' : this.inputs.date
-        console.log(this.inputs.date);
       }
 
       let formData = new FormData()
