@@ -29,7 +29,7 @@
       </div>
 
       <!-- inputs -->
-      <attachment-inputs :aid="aid"></attachment-inputs>
+      <attachment-inputs :aid="aid" mode="upload"></attachment-inputs>
 
       <!-- file input -->
       <div class="input">
@@ -157,6 +157,7 @@ export default
       this.fileName = file.name
 
       //DATE FOR UPLOAD
+      console.log(this.inputs);
       if(this.inputs.date.length > 0){
         this.inputs.date = this.inputs.date.replace('T', ' ')+':00'
       }

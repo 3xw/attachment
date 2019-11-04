@@ -208,7 +208,6 @@ export default
     editSelection()
     {
       this.$parent.mode = 'edit'
-      console.log('edit')
     },
     deleteSelection()
     {

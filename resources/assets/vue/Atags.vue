@@ -83,6 +83,7 @@ export default
       handler(){
         this.checkForHiddenOptions()
         this.removeTagsActived()
+        this.checkAllActived()
       },
       deep: true
     }
@@ -131,6 +132,13 @@ export default
     checkActive(index1, index2, atag){
       this.atagTypes[index1].atags[index2].isActive = (this.aParams.atags.split(',').includes(atag) == true)
       return (this.aParams.atags.split(',').includes(atag) == true)
+    },
+    checkAllActived(){
+      for(let index1 = 0;index1 < this.atagTypes.length;index1++){
+        for(let index2 = 0;index2 < this.atagTypes[index1].atags.length;index2++){
+          this.atagTypes[index1].atags[index2].isActive = (this.aParams.atags.split(',').includes(this.atagTypes[index1].atags[index2].name) == true)
+        }
+      }
     },
     checkFilterActive(index1, index2, filter){
       this.filters[index1].options[index2].isActive = (this.aParams.filters.indexOf(filter) !== -1)

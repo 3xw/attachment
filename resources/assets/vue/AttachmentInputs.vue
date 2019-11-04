@@ -78,7 +78,7 @@
 export default
 {
   name:'attachment-inputs',
-  props: { aid: String, attachment: Object },
+  props: { aid: String, attachment: Object, mode: String },
   data()
   {
     return {
@@ -100,7 +100,15 @@ export default
   created()
   {
     // init simple object
-    Object.assign(this.file, this.inputs)
+    if(this.mode == 'upload'){
+      Object.assign(this.file, this.inputs)
+    }else{
+      for(let i = 0;i < this.$parent.attachmentInputs.fields.length;i++){
+        let input = this.$parent.attachmentInputs.fields[i]
+        let key = input.key
+        this.file[key] = input.value
+      }
+    }
 
     // init a i18n object
     if(this.settings.i18n.enable)
@@ -116,10 +124,18 @@ export default
   },
   methods:
   {
-    update()
+    update(event)
     {
-      if(!this.attachment) this.$store.set(this.aid + '/upload', Object.assign(this.$store.get(this.aid + '/upload'),{ inputs: this.file }))
-    }
+      if(this.mode == 'edit'){
+        if(event !== undefined){
+          let input = this.$parent.attachmentInputs.fields.find(field => field.key == event.target.name)
+          input.value = event.target.value
+          input.hasChange = true
+        }
+      }else{
+        if(!this.attachment) this.$store.set(this.aid + '/upload', Object.assign(this.$store.get(this.aid + '/upload'),{ inputs: this.file }))
+      }
+    },
   }
 }
 </script>
