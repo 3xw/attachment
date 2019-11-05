@@ -19,8 +19,8 @@ class AttachmentsController extends AppController
 
   public $paginate = [
     'page' => 1,
-    'limit' => 60,
-    'maxLimit' => 200,
+    'limit' => 20,
+    'maxLimit' => 500,
     'order' => [
       'Attachments.created' => 'DESC'
     ],
