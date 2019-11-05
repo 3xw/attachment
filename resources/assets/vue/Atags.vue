@@ -168,64 +168,66 @@ export default
       }
     },
     checkForHiddenOptions(){
-      let hiddenValues = this.visibility.hiddenValues
-      for(var i = 0;i < this.visibilityParams.length;i++){
-        let condition = this.visibilityParams[i]
-        let isComplete = 1
-        if(condition.atags != '*'){
-          for(let y = 0; y < condition.atags.length;y++){
-            if(!this.aParams.atags.split(',').includes(condition.atags[y])){
-              isComplete = 0
-              break;
-            }
-          }
-        }
-        if(condition.types != '*' && isComplete){
-          for(let y = 0; y < condition.types.length;y++){
-            if(!this.aParams.type.split(',').includes(condition.types[y])){
-              isComplete = 0
-              break;
-            }
-          }
-        }
-        if(condition.filters != '*' && isComplete){
-          for(let y = 0; y < condition.filters.length;y++){
-            if(!this.aParams.filters.split(',').includes(condition.filters[y])){
-              isComplete = 0
-              break;
-            }
-          }
-        }
-        if(isComplete){
-          switch(condition.model){
-            case '*':
-              hiddenValues.filters = []
-              hiddenValues.atagTypes = []
-              hiddenValues.atags = []
-              break;
-            case 'Filters':
-              if(condition.visible){
-                hiddenValues.filters = hiddenValues.filters.filter(e => e != condition.slug)
-              }else{
-                if(hiddenValues.filters.indexOf(condition.slug) == -1) hiddenValues.filters.push(condition.slug)
+      if(this.$parent.mode == 'browse'){
+        let hiddenValues = this.visibility.hiddenValues
+        for(var i = 0;i < this.visibilityParams.length;i++){
+          let condition = this.visibilityParams[i]
+          let isComplete = 1
+          if(condition.atags != '*'){
+            for(let y = 0; y < condition.atags.length;y++){
+              if(!this.aParams.atags.split(',').includes(condition.atags[y])){
+                isComplete = 0
+                break;
               }
-              break;
-            case 'AtagTypes':
-              if(condition.visible){
-                hiddenValues.atagTypes = hiddenValues.atagTypes.filter(e => e != condition.slug)
-              }else{
-                if(hiddenValues.atagTypes.indexOf(condition.slug) == -1) hiddenValues.atagTypes.push(condition.slug)
+            }
+          }
+          if(condition.types != '*' && isComplete){
+            for(let y = 0; y < condition.types.length;y++){
+              if(!this.aParams.type.split(',').includes(condition.types[y])){
+                isComplete = 0
+                break;
               }
-              break;
-            case 'Atags':
-              if(condition.visible){
-                hiddenValues.atags = hiddenValues.atags.filter(e => e != condition.slug)
-              }else{
-                for(let i = 0;i < condition.slug.length;i++){
-                  if(hiddenValues.atags.indexOf(condition.slug[i]) == -1) hiddenValues.atags.push(condition.slug[i])
+            }
+          }
+          if(condition.filters != '*' && isComplete){
+            for(let y = 0; y < condition.filters.length;y++){
+              if(!this.aParams.filters.split(',').includes(condition.filters[y])){
+                isComplete = 0
+                break;
+              }
+            }
+          }
+          if(isComplete){
+            switch(condition.model){
+              case '*':
+                hiddenValues.filters = []
+                hiddenValues.atagTypes = []
+                hiddenValues.atags = []
+                break;
+              case 'Filters':
+                if(condition.visible){
+                  hiddenValues.filters = hiddenValues.filters.filter(e => e != condition.slug)
+                }else{
+                  if(hiddenValues.filters.indexOf(condition.slug) == -1) hiddenValues.filters.push(condition.slug)
                 }
-              }
-              break;
+                break;
+              case 'AtagTypes':
+                if(condition.visible){
+                  hiddenValues.atagTypes = hiddenValues.atagTypes.filter(e => e != condition.slug)
+                }else{
+                  if(hiddenValues.atagTypes.indexOf(condition.slug) == -1) hiddenValues.atagTypes.push(condition.slug)
+                }
+                break;
+              case 'Atags':
+                if(condition.visible){
+                  hiddenValues.atags = hiddenValues.atags.filter(e => e != condition.slug)
+                }else{
+                  for(let i = 0;i < condition.slug.length;i++){
+                    if(hiddenValues.atags.indexOf(condition.slug[i]) == -1) hiddenValues.atags.push(condition.slug[i])
+                  }
+                }
+                break;
+            }
           }
         }
       }
