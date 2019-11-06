@@ -88,10 +88,12 @@ class AttachmentsTable extends Table
         {
           $mime = explode('/', $mime);
           $logic = preg_match("/\!/", $mime[0])? ' != ': ' = ';
+          $assoc = preg_match("/\!/", $mime[0])? 'AND': 'OR';
+          $mime[0] = preg_match("/\!/", $mime[0])? substr($mime[0], 1): $mime[0];
 
           $condition .= '(Attachments.type '.$logic.' "'.$mime[0].'"';
           if(!empty($mime[1]) && $mime[1] != '*')   $condition .= ' AND Attachments.subtype '.$logic.' "'.$mime[1].'"';
-          $condition .= ') OR ';
+          $condition .= ") $assoc ";
         }
 
         $condition = substr($condition,0, -4).')';
