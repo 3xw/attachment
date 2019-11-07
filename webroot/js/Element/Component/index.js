@@ -127,9 +127,9 @@ Vue.component('attachment-index',{
       if(this.tag){
         params.tag = this.tag;
       }
-      if(this.sort.term){
-        params.sort = this.sort.query.sort;
-        params.direction = this.sort.query.direction;
+      if(this.settings.sort){
+        params.sort = this.settings.sort;
+        params.direction = this.settings.direction;
       }
 
       if(!this.tag && !this.search){

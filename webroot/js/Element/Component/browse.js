@@ -1,3 +1,8 @@
+/*
+ *
+ * 💀💀
+ *
+ ********/
 Vue.component('attachment-browse', {
   template: '#attachment-browse',
   data: function(){

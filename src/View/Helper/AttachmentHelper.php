@@ -52,7 +52,11 @@ class AttachmentHelper extends Helper
       foreach($composer['packages'] as $package)
       {
         if($package['name'] == '3xw/attachment'){
-          $this->_version = '?version='.$package['version'];
+          if($package['version'] == 'dev-master'){
+            $this->_version = '?version='.time();
+          }else{
+            $this->_version = '?version='.$package['version'];
+          }
           break;
         }
       }
@@ -186,7 +190,7 @@ class AttachmentHelper extends Helper
   {
     $this->_setupInputComponent();
     $settings = $this->_getSettings($field,$settings);
-    
+
     $settings['field'] = $field;
     $settings['relation'] = 'belongsTo';
     $settings['attachments'] = [];

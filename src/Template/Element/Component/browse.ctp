@@ -1,4 +1,9 @@
 <!-- browse -->
+<!-- *
+     *
+     * 💀💀
+     *
+     ********-->
 <script type="text/x-template" id="attachment-browse">
   <div id="attachment-browse" class="modal-mask" v-if="show" transition="modal">
     <div class="modal-wrapper">
