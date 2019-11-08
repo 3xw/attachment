@@ -48,6 +48,10 @@
               </div>
             </div>
           </div>
+          <div class="attachment-thumb__actions">
+            <a v-on:click.prevent="downloadFile(attachment)"><i class="material-icons">arrow_downward</i> Télécharger</a>
+
+          </div>
         </div>
         <div class="card-body">
             <p class="card-text small">
@@ -91,6 +95,8 @@
   </div>
 </template>
 <script>
+import { client } from '../js/client.js'
+
 import iconCheck from './icons/check.vue'
 
 export default
@@ -130,6 +136,24 @@ export default
     isSelected(id)
     {
       return (this.selectedFiles.findIndex(f => f.id === id) !== -1)
+    },
+    forceFileDownload(response, attachment){
+      const url = window.URL.createObjectURL(new Blob([response.data]))
+      const link = document.createElement('a')
+      link.href = url
+      link.setAttribute('download', attachment.name) //or any other extension
+      document.body.appendChild(link)
+      link.click()
+    },
+    downloadFile(attachment){
+      let params = {
+        headers: {'responseType': 'arraybuffer'},
+      }
+      client.get(attachment.url, params)
+      .then(response => {
+        this.forceFileDownload(response, attachment)
+      })
+      .catch(() => console.log('error occured'))
     }
   }
 }
