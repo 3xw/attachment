@@ -48,10 +48,7 @@
               </div>
             </div>
           </div>
-          <div class="attachment-thumb__actions">
-            <a v-on:click.prevent="downloadFile(attachment)"><i class="material-icons">arrow_downward</i> Télécharger</a>
 
-          </div>
         </div>
         <div class="card-body">
             <p class="card-text small">
@@ -59,6 +56,8 @@
               {{attachment.name}}<br/>
               <!--{{attachment.size | bytesToMegaBytes | decimal(2) }} MB<br/>-->
             </p>
+              <a v-on:click.prevent="downloadFile(attachment)"><i class="material-icons">arrow_downward</i> Télécharger</a>
+
           <!-- data -->
           <!--<input v-if="settings.relation == 'belongsToMany'" type="hidden" :name="'attachments['+index+'][id]'" :value="attachment.id">
           <input v-if="settings.relation == 'belongsToMany'" type="hidden" :name="'attachments['+index+'][_joinData][order]'" :value="index">
