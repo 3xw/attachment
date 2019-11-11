@@ -69,7 +69,7 @@
         <div v-else-if="mode == 'thumb'">
           <div>
             <div class="row">
-              <div v-for="(attachment, i ) in attachments" :key="i" class="col-sm-6 col-md-4 col-xl-2">
+              <div v-for="(attachment, i ) in attachments" :key="i" class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
                 <attachment :index="i" :aid="aid" :mode="mode" :attachment="attachment" :settings="settings"></attachment>
               </div>
             </div>
@@ -87,6 +87,7 @@
         <attachment-pagination :aid="aid" :pagination="pagination" :settings="settings"></attachment-pagination>
       </div>
     </div>
+    <attachment-preview :aid="aid" :open="false"></attachment-preview>
   </section>
 </template>
 <script>
@@ -95,6 +96,7 @@ import { client } from '../js/client.js'
 import { packeryEvents } from 'vue-packery-plugin'
 import Attachment from './Attachment.vue'
 import Pagination from './Pagination.vue'
+import Preview from './Preview.vue'
 
 import iconGrid from './icons/viewGrid.vue'
 import iconMosaic from './icons/viewMosaic.vue'
@@ -128,6 +130,7 @@ export default
     'attachment': Attachment,
     'attachment-pagination': Pagination,
     'attachment-search-bar': SearchBar,
+    'attachment-preview': Preview,
 
     'icon-grid': iconGrid,
     'icon-mosaic': iconMosaic,

@@ -27,7 +27,8 @@ export default
         uuid: '',
       },
       pagination: {},
-      settings: {}
+      settings: {},
+      preview: {}
     }
   },
   mutations:
@@ -69,6 +70,10 @@ export default
     // settings
     'settings': (state, payload) => {
       state.settings = payload
+    },
+    //Preview
+    'preview': (state, payload) => {
+      state.preview = payload
     }
   },
 }

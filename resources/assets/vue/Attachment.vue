@@ -1,54 +1,50 @@
 <template>
   <div :is="(mode == 'thumbInfo')? 'tbody' : 'div'" @mouseover="hover = true" @mouseleave="hover = false">
     <div v-if="mode == 'mosaic' && $options.filters.isThumbable(attachment)" class="attachment-thumb">
-      <img @click="toggleFile(attachment)" v-if="$options.filters.isThumbable(attachment)" v-bind:src="settings.baseUrls[settings.profile]+'thumbnails/'+attachment.profile+'/w678q90/'+attachment.path+'?'+attachment.thumb_params" class="img-fluid"  />
-      <!--<button type="button" name="button" @click="toggleFile(attachment.id)">{{isSelected(attachment.id)? '-' : '+'}}</button>-->
+      <img v-if="$options.filters.isThumbable(attachment)" v-bind:src="settings.baseUrls[settings.profile]+'thumbnails/'+attachment.profile+'/w678q90/'+attachment.path+'?'+attachment.thumb_params" class="img-fluid"  />
       <div class="attachment-thumb__hover">
-        <div v-if="hover && !isSelected(attachment.id)" class="d-flex flex-column justify-content-center align-items-center" >
-          ajouter à la sélection
-        </div>
-        <div v-else-if="hover && isSelected(attachment.id)" class="d-flex flex-column justify-content-center align-items-center">
-          <div class="badge">
-            supprimer de la sélection
-          </div>
-          <div class="utils--spacer-mini"></div>
-          <s>fichier selectionné</s>
-        </div>
-        <div v-else-if="!hover && isSelected(attachment.id)" class="d-flex flex-column justify-content-center align-items-center">
+        <div v-if="isSelected(attachment.id)" class="d-flex flex-column justify-content-center align-items-center">
           <icon-check></icon-check>
           <div class="utils--spacer-mini"></div>
           fichier selectionné
         </div>
+        <div v-if="hover" class="attachment-thumb__actions d-flex flex-column justify-content-end align-items-end">
+          <div class="btn-group">
+            <div title="Aperçu" alt="Aperçu" class="btn btn--green color--white" @click="preview(attachment)"><i class="material-icons"> remove_red_eye </i></div>
+            <div title="Télécharger" alt="Télécharger" class="btn btn--blue color--white" @click="downloadFile(attachment)"><i class="material-icons"> cloud_download </i></div>
+            <div title="Ajouter à la séléction" alt="Ajouter à la séléction" class="btn btn--blue-dark color--white" @click="toggleFile(attachment)">
+              <i v-if="!isSelected(attachment.id)" class="material-icons"> add_circle </i>
+              <i v-else class="material-icons"> remove_circle </i>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <div v-else-if="mode == 'thumb'">
-      <div @click="toggleFile(attachment)" class="card attachment-thumb">
-
-        <!-- thumb -->
+      <div class="card attachment-thumb">
         <div class="attachment-thumb__icon-container" >
           <div>
             <img v-if="$options.filters.isThumbable(attachment)" v-bind:src="settings.baseUrls[settings.profile]+'thumbnails/'+attachment.profile+'/w678c4-3q90/'+attachment.path+'?'+attachment.thumb_params" class="card-img-top" />
             <span v-html="$options.filters.icon(attachment.type+'/'+attachment.subtype)"></span>
             <!-- overlay -->
             <div class="attachment-thumb__hover">
-              <div v-if="hover && !isSelected(attachment.id)" class="d-flex flex-column justify-content-center align-items-center" >
-                ajouter à la sélection
-              </div>
-              <div v-else-if="hover && isSelected(attachment.id)" class="d-flex flex-column justify-content-center align-items-center">
-                <div class="badge">
-                  supprimer de la sélection
-                </div>
-                <div class="utils--spacer-mini"></div>
-                <s>fichier selectionné</s>
-              </div>
-              <div v-else-if="!hover && isSelected(attachment.id)" class="d-flex flex-column justify-content-center align-items-center">
+              <div v-if="isSelected(attachment.id)" class="d-flex flex-column justify-content-center align-items-center">
                 <icon-check></icon-check>
                 <div class="utils--spacer-mini"></div>
                 fichier selectionné
               </div>
+              <div v-if="hover" class="attachment-thumb__actions d-flex flex-column justify-content-end align-items-end">
+                <div class="btn-group">
+                  <div title="Aperçu" alt="Aperçu" class="btn btn--green color--white" @click="preview(attachment)"><i class="material-icons"> remove_red_eye </i></div>
+                  <div title="Télécharger" alt="Télécharger" class="btn btn--blue color--white" @click="downloadFile(attachment)"><i class="material-icons"> cloud_download </i></div>
+                  <div title="Ajouter à la sélection" alt="Ajouter à la sélection" class="btn btn--blue-dark color--white" @click="toggleFile(attachment)">
+                    <i v-if="!isSelected(attachment.id)" class="material-icons"> add_circle </i>
+                    <i v-else class="material-icons"> remove_circle </i>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-
         </div>
         <div class="card-body">
             <p class="card-text small">
@@ -56,8 +52,6 @@
               {{attachment.name}}<br/>
               <!--{{attachment.size | bytesToMegaBytes | decimal(2) }} MB<br/>-->
             </p>
-              <a v-on:click.prevent="downloadFile(attachment)"><i class="material-icons">arrow_downward</i> Télécharger</a>
-
           <!-- data -->
           <!--<input v-if="settings.relation == 'belongsToMany'" type="hidden" :name="'attachments['+index+'][id]'" :value="attachment.id">
           <input v-if="settings.relation == 'belongsToMany'" type="hidden" :name="'attachments['+index+'][_joinData][order]'" :value="index">
@@ -82,12 +76,13 @@
         {{attachment.size | bytesToMegaBytes | decimal(2) }} MB
       </td>
       <td class="text-right">
-        <div class="btn-group">
-          <a :href="attachment.url"><span class="glyphicon glyphicon-"></span></a>
-        </div>
-        <div @click="toggleFile(attachment)" class="btn color--white " :class="isSelected(attachment.id )? 'btn--blue' : 'btn--blue-light'">
-          <span v-if="!isSelected(attachment.id)">Ajouter à la sélection</span>
-          <span v-else><icon-check></icon-check>  selectionné</span>
+        <div class="btn-group attachment__actions">
+          <div title="Aperçu" alt="Aperçu" class="btn btn--green color--white" @click="preview(attachment)"><i class="material-icons"> remove_red_eye </i></div>
+          <div title="Télécharger" alt="Télécharger" class="btn btn--blue color--white" @click="downloadFile(attachment)"><i class="material-icons"> cloud_download </i></div>
+          <div title="Ajouter à la sélection" alt="Ajouter à la sélection" class="btn btn--blue-dark color--white" @click="toggleFile(attachment)">
+            <i v-if="!isSelected(attachment.id)" class="material-icons"> add_circle </i>
+            <i v-else class="material-icons"> remove_circle </i>
+          </div>
         </div>
       </td>
     </tr>
@@ -98,11 +93,12 @@ import { client } from '../js/client.js'
 
 import iconCheck from './icons/check.vue'
 
+
 export default
 {
   name:'attachment',
   components: {
-    'icon-check': iconCheck
+    'icon-check': iconCheck,
   },
   props:{attachment: Object, settings: Object, index: Number, aid: String, mode: String},
   data()
@@ -121,11 +117,11 @@ export default
     {
       return this.$store.get(this.aid + '/selection.files')
     }
-
   },
   methods: {
     toggleFile(attachment)
     {
+      console.log('toggle');
       if(this.selectedFiles.findIndex(f => f.id === attachment.id) == -1){
         this.$store.commit(this.aid+'/addFileToSelection', attachment)
       }else{
@@ -137,7 +133,7 @@ export default
       return (this.selectedFiles.findIndex(f => f.id === id) !== -1)
     },
     forceFileDownload(response, attachment){
-      const url = window.URL.createObjectURL(new Blob([response.data]))
+      const url = window.URL.createObjectURL(new Blob([response.data], { type: response.headers['content-type'] }))
       const link = document.createElement('a')
       link.href = url
       link.setAttribute('download', attachment.name) //or any other extension
@@ -145,14 +141,33 @@ export default
       link.click()
     },
     downloadFile(attachment){
-      let params = {
-        headers: {'responseType': 'arraybuffer'},
-      }
-      client.get(attachment.url, params)
+      client.get(attachment.url, {responseType: 'arraybuffer'})
       .then(response => {
         this.forceFileDownload(response, attachment)
       })
       .catch(() => console.log('error occured'))
+
+      /*let browser = browser || chrome
+      console.log(browser);
+      console.log(chrome);
+      let downloadUrl = attachment.url;
+      let downloading = browser.downloads.download({
+        url : downloadUrl,
+        filename : attachment.name,
+        conflictAction : 'uniquify'
+      });
+      downloading.then(onStartedDownload, onFailed);
+      */
+    },
+    onStartedDownload(id) {
+      console.log(`Started downloading: ${id}`);
+    },
+    onFailed(error) {
+      console.log(`Download failed: ${error}`);
+    },
+    preview(attachment){
+      this.$store.set(this.aid + '/preview', attachment)
+      this.$forceUpdate()
     }
   }
 }
