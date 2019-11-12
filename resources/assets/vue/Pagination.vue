@@ -38,7 +38,7 @@
       </ul>
     </nav>
     <small>
-      Page{{pagination.current_page}} on {{pagination.page_count}} (total: {{pagination.count}})
+      Page {{pagination.current_page}} on {{pagination.page_count}} (total: {{pagination.count}})
     </small>
   </div>
 </template>

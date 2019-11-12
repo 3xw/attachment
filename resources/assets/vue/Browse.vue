@@ -114,7 +114,8 @@ export default
   data()
   {
     return {
-      mode: 'browse'
+      mode: 'browse',
+      loading: false
     }
   },
   computed:
@@ -179,7 +180,11 @@ export default
       client,
       parseSingle: parseResponse,
       parseList: parseResponseWithPaginate,
+      onFetchListStart: () => {
+        this.loading = true
+      },
       onFetchListSuccess: (o, response) => {
+        this.loading = false
         this.$store.set(this.aid + '/pagination', response.pagination)
       },
     }))
