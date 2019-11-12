@@ -146,24 +146,6 @@ export default
         this.forceFileDownload(response, attachment)
       })
       .catch(() => console.log('error occured'))
-
-      /*let browser = browser || chrome
-      console.log(browser);
-      console.log(chrome);
-      let downloadUrl = attachment.url;
-      let downloading = browser.downloads.download({
-        url : downloadUrl,
-        filename : attachment.name,
-        conflictAction : 'uniquify'
-      });
-      downloading.then(onStartedDownload, onFailed);
-      */
-    },
-    onStartedDownload(id) {
-      console.log(`Started downloading: ${id}`);
-    },
-    onFailed(error) {
-      console.log(`Download failed: ${error}`);
     },
     preview(attachment){
       this.$store.set(this.aid + '/preview', attachment)

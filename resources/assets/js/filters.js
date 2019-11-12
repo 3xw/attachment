@@ -102,6 +102,13 @@ Vue.filter('isThumbable', function (file) {
     case 'image/jpeg':
     case 'image/png':
     case 'image/gif':
+    case 'video/mp4':
+    case 'video/webm':
+    case 'video/mov':
+    case 'video/avi':
+    case 'video/ogg':
+    case 'video/mkv':
+    case 'application/pdf':
     return true;
     break;
     case 'embed/youtube':
