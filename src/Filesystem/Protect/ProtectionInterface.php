@@ -7,5 +7,5 @@ interface ProtectionInterface
 {
   public function verify(ServerRequest $request): bool;
 
-  public function getSignedUrl(string $url): string;
+  public function getSignedUrl(string $path, string $baseUrl): string;
 }

@@ -36,8 +36,9 @@ class AwsSignedUrlsProtection extends BaseProtection
     return $payload->file == $file;
   }
 
-  public function getSignedUrl(string $url): string
+  public function getSignedUrl(string $path, string $baseUrl): string
   {
+    $url = $baseUrl.$path;
     $url = $this->getUrlSigner()->getSignedUrl(
       $this->getReturnUrl($url),
       $this->getConfig('expires'),

@@ -66,8 +66,9 @@ class Profile
 
   public function getUrl($path)
   {
+    $path = $this->getFullPath($path);
     $url = $this->getBaseUrl().$path;
-    if ($this->hasProtection()) $url = $this->protection()->getSignedUrl($url);
+    if ($this->hasProtection()) $url = $this->protection()->getSignedUrl($path, $this->getBaseUrl());
     return $url;
   }
 

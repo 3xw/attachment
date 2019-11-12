@@ -20,7 +20,7 @@ abstract class BaseProtection implements ProtectionInterface
     return false;
   }
 
-  public function getSignedUrl(string $url): string
+  public function getSignedUrl(string $path, string $baseUrl): string
   {
     return '';
   }
