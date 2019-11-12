@@ -51,7 +51,7 @@
 
     </div>
 
-    <div class="section__index" v-if="attachments">
+    <div class="section__index" v-if="attachments && $parent.loading == false">
       <h3 class="text-right">
         <span v-if="pagination && pagination.count">{{pagination.count}}</span>
         <span v-else>0</span>
@@ -86,6 +86,9 @@
       <div v-if="pagination">
         <attachment-pagination :aid="aid" :pagination="pagination" :settings="settings"></attachment-pagination>
       </div>
+    </div>
+    <div v-if="$parent.loading == true" class=" text-center">
+      <img src="https://static.wgr.ch/attachment/loading.gif" alt="">
     </div>
     <attachment-preview :aid="aid" :open="false"></attachment-preview>
   </section>
