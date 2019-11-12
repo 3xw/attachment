@@ -33,7 +33,7 @@
             <div class="w-100"></div>
             <div class="col-md-3 col-xl-2">
               <div class="section__side">
-                <div class="section__add section--blue-light color--blue-dark action pointer d-flex flex-row align-items-center" @click="mode = 'upload';$forceUpdate();">
+                <div v-if="settings.role == 'superuser' || settings.role == 'admin'" class="section__add section--blue-light color--blue-dark action pointer d-flex flex-row align-items-center" @click="mode = 'upload';$forceUpdate();">
                     <icon-add></icon-add>&nbsp;&nbsp;&nbsp;&nbsp;<p class="mb-0">Ajouter des fichiers</p>
                 </div>
                 <div class="section__nav">
@@ -163,6 +163,9 @@ export default
   },
   created()
   {
+    //Check role
+    if(!this.settings.role) this.settings.role = 'user'
+
     // create new module and store settings
     this.$store.registerModule(this.aid, Object.assign({}, attachment))
     this.$store.set(this.aid + '/settings', this.settings)
