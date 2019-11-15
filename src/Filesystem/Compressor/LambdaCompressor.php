@@ -8,6 +8,15 @@ use Cake\Http\Exception\BadRequestException;
 
 class LambdaCompressor extends BaseCompressor
 {
+  protected $_defaultConfig = [
+    'clientSettings' => [],
+    'TopicArn' => 'arn:aws:sns:eu-central-1::myTopic',
+    'data' => [],
+    'maxInputSize' => 1000, // IN MB
+    'maxFiles' => 40,
+    'allowedTypes' => ['image/*','application/pdf'] // OR array ['image/*','application/pdf']
+  ];
+
   public function afterSave(Event $event): void
   {
     if(!$event->getSubject()->success) return;

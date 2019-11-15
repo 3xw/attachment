@@ -12,7 +12,10 @@ use Cake\Http\Exception\BadRequestException;
 class ZipCompressor extends BaseCompressor
 {
   protected $_defaultConfig = [
-    'profile' => 'default'
+    'profile' => 'default',
+    'maxInputSize' => 1000, // IN MB
+    'maxFiles' => 40,
+    'allowedTypes' => '*/*' // OR array ['image/*','application/pdf']
   ];
 
   public $path;
