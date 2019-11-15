@@ -10,14 +10,14 @@ use Cake\ORM\Entity;
  *
  * @property int $id
  * @property string $state
- * @property string $profile
  * @property \Cake\I18n\FrozenTime $created
  * @property \Cake\I18n\FrozenTime $modified
- * @property int $size
- * @property string $md5
+ * @property string $aids
  * @property string|null $user_id
+ * @property string|null $attachment_id
  *
  * @property \Attachment\Model\Entity\User $user
+ * @property \Attachment\Model\Entity\Attachment $attachment
  */
 class Aarchive extends Entity
 {

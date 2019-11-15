@@ -24,8 +24,7 @@ class Profile
     'thumbProtection' => null,
     'protection' => null,
     'thumbnails' => 'thumbnails',
-    'keep' => true,
-    'project' => 'myApp'
+    'keep' => true
   ];
 
   function __construct(string $alias, array $config = [])

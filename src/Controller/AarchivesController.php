@@ -6,6 +6,7 @@ namespace Attachment\Controller;
 use Attachment\Controller\AppController;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Event\Event;
+use Cake\Core\Configure;
 
 class AarchivesController extends AppController
 {
@@ -65,19 +66,16 @@ class AarchivesController extends AppController
 
   public function add()
   {
-    $ids = $this->getRequest()->getData('ids');
-    if(!$this->getRequest()->is('POST') || empty($ids) || !is_array($ids)) throw new BadRequestException('Need POST request with an ids array!');
+    // checks
+    $ids = $this->getRequest()->getData('aids');
+    if(!$this->getRequest()->is('POST') || empty($ids) || !is_array($ids)) throw new BadRequestException('Need POST request with an aids array!');
 
+    // compressor
+    $compressor = Configure::read('Attachment.archives');
+    $this->Crud->on('beforeSave', [$compressor, 'beforeSave']);
+    $this->Crud->on('afterSave', [$compressor, 'afterSave']);
 
-    // SNS
-    $this->Crud->on('afterSave', function($event)
-    {
-      if ($event->getSubject()->success)
-      {
-        $this->log("The entity was saved successfully");
-      }
-    });
-
+    // crud
     return $this->Crud->execute();
   }
 }

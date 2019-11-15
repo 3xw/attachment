@@ -13,11 +13,6 @@ return [
     		'client' => new League\Flysystem\Adapter\Local(WWW_ROOT.'files'),
         'baseUrl' =>  '/files/'
     	],
-      'zip' => [
-        'project' => 'myApp',
-        'client' => new League\Flysystem\Adapter\Local(WWW_ROOT.'files'),
-        'baseUrl' =>  '/files/zip/'
-      ],
       'img' => [
     		'client' => new League\Flysystem\Adapter\Local(WWW_ROOT.'img'),
         'baseUrl' =>  '/img/'
@@ -36,6 +31,10 @@ return [
         'baseUrl' =>  null,
     	],
     ],
+
+    'archives' => new Attachment\Filesystem\Compressor\ZipCompressor([
+      'profile' => 'default'
+    ]),
 
     // unique
     'md5Unique' => true,

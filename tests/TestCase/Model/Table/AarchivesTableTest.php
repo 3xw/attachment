@@ -27,6 +27,7 @@ class AarchivesTableTest extends TestCase
     public $fixtures = [
         'plugin.Attachment.Aarchives',
         'plugin.Attachment.Users',
+        'plugin.Attachment.Attachments',
     ];
 
     /**
