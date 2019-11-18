@@ -46,14 +46,23 @@ abstract class BaseCompressor
       $types = explode('/', $mime);
       if(count($types) != 2) throw new BadRequestException('Allowed types should be in MIME syntax xx/xx or xx/* or */*');
 
-      if(!$typeChecked && ( $types[0] == '*' || $types[0] == $type)) $typeChecked = true;
-      if(!$subtypeChecked && ( $types[1] == '*' || $types[1] == $subtype)) $subtypeChecked = true;
+
+      if(!$typeChecked)
+      {
+        if($types[0] == '*') $typeChecked = true;
+        if($type == $types[0]) $typeChecked = true;
+      }
+      if(!$subtypeChecked)
+      {
+        if($types[1] == '*') $subtypeChecked = true;
+        if($subtype == $types[1]) $subtypeChecked = true;
+      }
 
       // if allready good...
-      if($typeChecked && $typechecked) break;
+      if($typeChecked && $subtypeChecked) break;
     }
 
-    return $typeChecked && $typechecked;
+    return $typeChecked && $subtypeChecked;
   }
 
   protected function verify()
