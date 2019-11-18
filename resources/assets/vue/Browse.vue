@@ -184,6 +184,8 @@ export default
         this.loading = true
       },
       onFetchListSuccess: (o, response) => {
+        console.log(o);
+        console.log(response);
         this.loading = false
         this.$store.set(this.aid + '/pagination', response.pagination)
       },
