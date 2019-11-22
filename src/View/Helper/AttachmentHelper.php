@@ -162,7 +162,8 @@ class AttachmentHelper extends Helper
     $uuid = Text::uuid();
     $this->request->session()->write('Attachment.'.$uuid, $settings);
     $settings['uuid'] = $uuid;
-    $settings['url'] = $this->Url->build('/');
+    $settings['url'] = empty($settings['url'])? $this->Url->build('/') : $settings['url'];
+    $settings['thumbBaseUrl'] = empty($settings['thumbBaseUrl'])? $this->Url->build('/') : $settings['thumbBaseUrl'];
     $settings['label'] = empty($settings['label'])? Inflector::humanize($field) : $settings['label'];
     $settings['translate'] = Configure::read('Attachment.translate');
     $settings['i18n'] = [
