@@ -70,7 +70,7 @@ javascript:
 jquery >= 1.x
 vuejs = 2.x
 vue-resource = 1.x
-```	
+```
 
 css:
 
@@ -157,7 +157,7 @@ return [
 		'baseUrl' =>  's3.example.com'
       ],
     ],
-    
+
     // lsiteners
     lsiteners => [],
 
@@ -290,10 +290,10 @@ class ExtranetMoveFileListener extends BaseListener
 {
   // $event->getSubject() returns an object with minimum a request variable
   // all model events are wrapped on top of:
-  // https://crud.readthedocs.io/en/latest/events.html#crud-beforesave 
+  // https://crud.readthedocs.io/en/latest/events.html#crud-beforesave
   public function respond(Event $event)  
   {
-    
+
   }
 }
 ```
@@ -421,7 +421,7 @@ In edit.ctp
   ]
 ]) ?>
 ```
-    
+
 ##### TinyMCE Plugin
 Attachment comes with a TinyMCE plugin. Working with package [cakephp-tinymce](https://github.com/3xw/cakephp-tinymce)
 
@@ -447,6 +447,7 @@ echo $this->element('Trois/Tinymce.tinymce',[
         'embed/youtube',
         'embed/vimeo'
       ],
+			'thumbBaseUrl' => '', //IF NOT $this->Url->build('/')
       'atags' => [],
       'restrictions' => [
         Attachment\View\Helper\AttachmentHelper::TAG_OR_RESTRICTED,
