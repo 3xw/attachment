@@ -19,6 +19,7 @@
             <form ref="dform" :action="$store.get(this.aid + '/settings.url')+'attachment/download/files'" method="POST">
               <input type="hidden" name="token" v-model="downloadToken">
             </form>
+            <button type="button" v-if="selectedFiles.length > 0 && (settings.role == 'superuser' || settings.role == 'admin')" @click="requestArchive" name="button" class="btn btn--blue mb-0 color--white">TÉLÉCHARGER</button>
             <button type="button" v-if="selectedFiles.length > 0 && (settings.role == 'superuser' || settings.role == 'admin')" @click="editSelection" name="button" class="btn btn--orange mb-0 color--white">EDITER</button>
             <button type="button" v-if="selectedFiles.length > 0 && (settings.role == 'superuser' || settings.role == 'admin')" @click="deleteSelection" name="button" class="btn btn--red mb-0 color--white">SUPPRIMER</button>
           </div>
@@ -90,6 +91,8 @@
       <img src="https://static.wgr.ch/attachment/loading.gif" alt="">
     </div>
     <attachment-preview :aid="aid" :open="false"></attachment-preview>
+    <attachment-archive :aid="aid" :settings="settings"></attachment-archive >
+
   </section>
 </template>
 <script>
@@ -99,6 +102,8 @@ import { packeryEvents } from 'vue-packery-plugin'
 import Attachment from './Attachment.vue'
 import Pagination from './Pagination.vue'
 import Preview from './Preview.vue'
+
+import Archive from './Archives.vue'
 
 import iconGrid from './icons/viewGrid.vue'
 import iconMosaic from './icons/viewMosaic.vue'
@@ -133,6 +138,7 @@ export default
     'attachment-pagination': Pagination,
     'attachment-search-bar': SearchBar,
     'attachment-preview': Preview,
+    'attachment-archive': Archive,
 
     'icon-grid': iconGrid,
     'icon-mosaic': iconMosaic,
@@ -234,12 +240,18 @@ export default
         .then(this.deleteSuccess, this.deleteError)
       }
     },
-    deleteSuccess(){
+    deleteSuccess()
+    {
       this.$store.commit(this.aid+'/flushSelection')
       this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ refresh: new Date().getTime() }))
     },
-    deleteError(){
+    deleteError()
+    {
       alert('Une erreur est survenue veuillez réessayer.')
+    },
+    requestArchive()
+    {
+      console.log('requestArchive');
     }
   },
   mounted()

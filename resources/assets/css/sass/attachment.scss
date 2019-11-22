@@ -241,6 +241,26 @@ $colors: (
       div, iframe{width: 100%;height: 100%;}
     }
   }
+
+  &--archive{
+
+    &-box{
+      position: fixed;z-index: 3000;right: $margin--default;bottom: -100%;width: 300px;background: white;box-shadow: 0 0 10px rgba(0,0,0,0.4);transition: all .5s ease;
+      &.active{bottom: 0%;}
+      #{$this}__header{
+        display: flex;flex-direction: row;justify-content: space-between;align-items: center;padding: $margin--mini;border-bottom: 2px solid map-get($colors, 'blue');background: map-get($colors, 'blue-light');font-weight: 800;
+      }
+      #{$this}__content{
+        ul{
+          margin: 0;
+          li{
+            display: flex;flex-direction: row;justify-content: space-between;align-items: center;padding: $margin--mini;border: 1px solid map-get($colors, 'grey-light');
+            img{width: 1.6rem;}
+          }
+        }
+      }
+    }
+  }
 }
 
 /* loading

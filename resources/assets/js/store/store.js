@@ -28,7 +28,8 @@ export default
       },
       pagination: {},
       settings: {},
-      preview: {}
+      preview: {},
+      archives: []
     }
   },
   mutations:
@@ -74,6 +75,16 @@ export default
     //Preview
     'preview': (state, payload) => {
       state.preview = payload
+    },
+    //Preview
+    'archives': (state, payload) => {
+      state.archives = payload
+    },
+    'addArchives': (state, payload) => {
+      state.archives.push(payload)
+    },
+    'flushArchives': (state, payload) => {
+      state.archives = []
     }
   },
 }
