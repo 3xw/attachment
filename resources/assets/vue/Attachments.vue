@@ -103,7 +103,7 @@ import Attachment from './Attachment.vue'
 import Pagination from './Pagination.vue'
 import Preview from './Preview.vue'
 
-import Archive from './Archives.vue'
+//import Archive from './Archives.vue'
 
 import iconGrid from './icons/viewGrid.vue'
 import iconMosaic from './icons/viewMosaic.vue'
@@ -138,7 +138,7 @@ export default
     'attachment-pagination': Pagination,
     'attachment-search-bar': SearchBar,
     'attachment-preview': Preview,
-    'attachment-archive': Archive,
+    //'attachment-archive': Archive,
 
     'icon-grid': iconGrid,
     'icon-mosaic': iconMosaic,
@@ -249,9 +249,9 @@ export default
     {
       alert('Une erreur est survenue veuillez réessayer.')
     },
-    requestArchive()
+    /*requestArchive()
     {
-    }
+    }*/
   },
   mounted()
   {

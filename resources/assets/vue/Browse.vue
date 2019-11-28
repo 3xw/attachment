@@ -137,7 +137,11 @@ export default
   {
     aParams:
     {
-      handler(){ this.fetchAttachments({config:{ params: this.aParams}}) },
+      handler(){
+        if(this.mode == 'browse'){
+          this.fetchAttachments({config:{ params: this.aParams}})
+        }
+      },
       deep: true
     },
     tParams:
@@ -151,7 +155,7 @@ export default
       for(let i = 0;i < value.length;i++){
         ids.push(value[i].id)
       }
-      this.createSelectedFilesToken({data: {files: ids}})
+      //this.createSelectedFilesToken({data: {files: ids}})
     },
     mode: function(){
       this.$forceUpdate()
