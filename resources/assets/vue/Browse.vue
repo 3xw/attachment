@@ -195,6 +195,16 @@ export default
       parseSingle: parseResponse,
       parseList: parseTags
     }))
+    this.$store.registerModule(this.aid+'/aarchives', createCrudModule({
+      resource: 'aarchives',
+      urlRoot: this.settings.url+'attachment/aarchives',
+      client,
+      parseSingle: parseResponse,
+      parseList: parseTags,
+      onFetchListSuccess: (o, response) => {
+        this.$store.set(this.aid + '/aarchives', response.data)
+      },
+    }))
     this.$store.registerModule(this.aid+'/token', createCrudModule({
       resource: 'token',
       only: ['CREATE'],
@@ -205,6 +215,8 @@ export default
         this.$store.set(this.aid + '/selection.token', response.data.token)
       },
     }))
+
+    //this.fetchAarchives();
 
     // set uuid & fetch data ( all in one because of deep watching )
     this.aParams.uuid = this.tParams.uuid = this.aid
@@ -219,6 +231,10 @@ export default
       fetchTags(dispatch, payload)
       {
         return dispatch(this.aid + '/atags/fetchList', payload)
+      },
+      fetchAarchives(dispatch, payload)
+      {
+        return dispatch(this.aid + '/aarchives/fetchList', payload)
       },
       createSelectedFilesToken(dispatch, payload)
       {

@@ -29,7 +29,7 @@ export default
       pagination: {},
       settings: {},
       preview: {},
-      archives: []
+      aarchives: []
     }
   },
   mutations:
@@ -77,14 +77,14 @@ export default
       state.preview = payload
     },
     //Preview
-    'archives': (state, payload) => {
-      state.archives = payload
+    'aarchives': (state, payload) => {
+      state.aarchives = payload
     },
-    'addArchives': (state, payload) => {
-      state.archives.push(payload)
+    'addAarchives': (state, payload) => {
+      state.aarchives.push(payload)
     },
-    'flushArchives': (state, payload) => {
-      state.archives = []
+    'flushAarchives': (state, payload) => {
+      state.aarchives = []
     }
   },
 }

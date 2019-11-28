@@ -76,7 +76,7 @@ abstract class BaseCompressor
       if(!$this->checkType($a->type, $a->subtype)) throw new BadRequestException('The mime type: '.$mime.' is not allowed to be archived.');
     }
 
-    if($inputSize > $this->getConfig('maxInputSize') * 1000 ) throw new BadRequestException('Max input size reached! maximum allowed is: '.$this->getConfig('maxInputSize').'MB');
+    //if($inputSize > $this->getConfig('maxInputSize') * 1000 ) throw new BadRequestException('Max input size reached! maximum allowed is: '.$this->getConfig('maxInputSize').'MB');
   }
 
   protected function gatherAttachments(Aarchive $entity):bool

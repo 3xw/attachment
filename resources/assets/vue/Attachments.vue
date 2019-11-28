@@ -19,7 +19,7 @@
             <form ref="dform" :action="$store.get(this.aid + '/settings.url')+'attachment/download/files'" method="POST">
               <input type="hidden" name="token" v-model="downloadToken">
             </form>
-            <button type="button" v-if="selectedFiles.length > 0 && (settings.role == 'superuser' || settings.role == 'admin')" @click="requestArchive" name="button" class="btn btn--blue mb-0 color--white">TÉLÉCHARGER</button>
+            <!--<button type="button" v-if="selectedFiles.length > 0 && (settings.role == 'superuser' || settings.role == 'admin')" @click="requestArchive" name="button" class="btn btn--blue mb-0 color--white">TÉLÉCHARGER</button>-->
             <button type="button" v-if="selectedFiles.length > 0 && (settings.role == 'superuser' || settings.role == 'admin')" @click="editSelection" name="button" class="btn btn--orange mb-0 color--white">EDITER</button>
             <button type="button" v-if="selectedFiles.length > 0 && (settings.role == 'superuser' || settings.role == 'admin')" @click="deleteSelection" name="button" class="btn btn--red mb-0 color--white">SUPPRIMER</button>
           </div>
@@ -91,7 +91,7 @@
       <img src="https://static.wgr.ch/attachment/loading.gif" alt="">
     </div>
     <attachment-preview :aid="aid" :open="false"></attachment-preview>
-    <attachment-archive :aid="aid" :settings="settings"></attachment-archive >
+    <!--<attachment-archive :aid="aid" :settings="settings"></attachment-archive >-->
 
   </section>
 </template>
@@ -251,7 +251,6 @@ export default
     },
     requestArchive()
     {
-      console.log('requestArchive');
     }
   },
   mounted()

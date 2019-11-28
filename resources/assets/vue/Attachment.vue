@@ -121,7 +121,6 @@ export default
   methods: {
     toggleFile(attachment)
     {
-      console.log('toggle');
       if(this.selectedFiles.findIndex(f => f.id === attachment.id) == -1){
         this.$store.commit(this.aid+'/addFileToSelection', attachment)
       }else{

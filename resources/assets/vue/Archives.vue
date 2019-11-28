@@ -5,13 +5,16 @@
         Téléchargements <i class="material-icons pointer" @click="open = false">clear</i>
       </div>
       <div class="block-attachment__content">
-        <ul class="list-unstyled">
+        <!--<ul class="list-unstyled">
           <li><span><i class="material-icons">folder_open</i>&nbsp; archive-dg3h4f.zip</span> <img src="https://static.wgr.ch/attachment/loading.gif" alt=""></li>
           <li><span><i class="material-icons">folder_open</i>&nbsp; archive-wf842e.zip</span> <i class="material-icons"> cloud_download </i></li>
-        </ul>
-        <!--<ul>
-          <li v-for="archive in archives">{{archive.attachment.name}} {{archive.status}}</li>
         </ul>-->
+        <ul v-for="archive in archives">
+          <span><i class="material-icons">folder_open</i>&nbsp; {{archive.name}}</span> {{archive.status}}</li>
+        </ul>
+        <div v-if="selectedFiles" @click="requestArchive">
+          REQUEST ARCHIVE
+        </div>
       </div>
     </div>
   </div>
@@ -27,7 +30,7 @@ export default {
   data()
   {
     return {
-      open: false
+      open: true
     }
   },
   computed:
@@ -38,17 +41,16 @@ export default {
     },
     archives()
     {
-      return this.$store.get(this.aid + '/archives')
+      return this.$store.get(this.aid + '/aarchives')
     }
   },
   created(){
-    console.log('ARCHIVE REQUEST CREATED');
-    console.log(this.selectedFiles);
   },
   watch:
   {
     selectedFiles: function(){
-      console.log('SELECTED FILES CHANGES');
+    },
+    aarchives: function(){
     }
   },
   methods: {
@@ -63,12 +65,10 @@ export default {
       .then(this.archiveSuccess, this.archiveError)
     },
     archiveSuccess(response){
-      console.log('SUCCESS')
-      console.log(response)
+
     },
     archiveError(response){
-      console.log('ERROR')
-      console.log(response)
+
     }
   }
 }
