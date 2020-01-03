@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Attachment\Test\TestCase\Model\Table;
 
 use Attachment\Model\Table\AttachmentsTable;
@@ -10,7 +12,6 @@ use Cake\TestSuite\TestCase;
  */
 class AttachmentsTableTest extends TestCase
 {
-
     /**
      * Test subject
      *
@@ -24,15 +25,9 @@ class AttachmentsTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'plugin.attachment.attachments',
-        'plugin.attachment.atags',
-        'plugin.attachment.attachments_atags',
-        'plugin.attachment.highlights',
-        'plugin.attachment.attachments_highlights',
-        'plugin.attachment.paths',
-        'plugin.attachment.attachments_paths',
-        'plugin.attachment.visits',
-        'plugin.attachment.attachments_visits'
+        'plugin.Attachment.Attachments',
+        'plugin.Attachment.Users',
+        'plugin.Attachment.Atags',
     ];
 
     /**
@@ -43,8 +38,8 @@ class AttachmentsTableTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $config = TableRegistry::exists('Attachments') ? [] : ['className' => 'Attachment\Model\Table\AttachmentsTable'];
-        $this->Attachments = TableRegistry::get('Attachments', $config);
+        $config = TableRegistry::getTableLocator()->exists('Attachments') ? [] : ['className' => AttachmentsTable::class];
+        $this->Attachments = TableRegistry::getTableLocator()->get('Attachments', $config);
     }
 
     /**

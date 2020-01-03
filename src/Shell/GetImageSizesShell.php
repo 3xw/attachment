@@ -3,7 +3,7 @@ namespace Attachment\Shell;
 
 use Cake\Core\Configure;
 use Cake\Console\Shell;
-use Attachment\Fly\FilesystemRegistry;
+use Attachment\Filesystem\FilesystemRegistry;
 
 class GetImageSizesShell extends Shell
 {

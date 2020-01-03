@@ -2,7 +2,7 @@
 namespace Attachment\Model\Filter\Restriction;
 
 use Cake\ORM\Query;
-use Cake\Utility\Inflector;
+use Cake\Utility\Text;
 
 class TagOrRestricted extends BaseRestriction
 {
@@ -24,7 +24,7 @@ class TagOrRestricted extends BaseRestriction
         array_push($where['OR'],[
           'OR' => [
             'Atags.name' => $tag,
-            'Atags.slug' => Inflector::slug($tag,'-')
+            'Atags.slug' => Text::slug($tag,'-')
           ]
         ]);
       }

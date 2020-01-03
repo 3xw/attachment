@@ -4,12 +4,13 @@ namespace Attachment\Shell;
 use Cake\Core\Configure;
 use Cake\Utility\Inflector;
 use Cake\Console\Shell;
+use Cake\Console\ConsoleOptionParser;
 
 class CdnShell extends Shell
 {
   public $tasks = ['Attachment.Clear'];
 
-  public function getOptionParser()
+  public function getOptionParser():ConsoleOptionParser
   {
     $parser = parent::getOptionParser()
     ->addSubcommand('clear', [

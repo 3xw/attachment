@@ -8,49 +8,59 @@ return [
     // set profiles
     'profiles' => [
 
-      // every other profile will herit from 'parent' settings
-      'parent' => [
-        'adapter' => null,
-    		'client' => null,
-        'baseUrl' =>  null,
-        'delete' => true,
-        'replace' => false,
-        'afterReplace' => null // null | callback fct($entity)
-      ],
-
-      // child profiles
+      // packed profiles
       'default' => [
-    		'adapter' => 'League\Flysystem\Adapter\Local',
     		'client' => new League\Flysystem\Adapter\Local(WWW_ROOT.'files'),
         'baseUrl' =>  '/files/'
     	],
       'img' => [
-    		'adapter' => 'League\Flysystem\Adapter\Local',
     		'client' => new League\Flysystem\Adapter\Local(WWW_ROOT.'img'),
         'baseUrl' =>  '/img/'
     	],
       'external' => [
-    		'adapter' => 'Attachment\Fly\ExternalAdapter',
-    		'client' => new Attachment\Fly\ExternalAdapter(),
-        'baseUrl' =>  ''
+    		'client' => new Attachment\Filesystem\Adapter\External(),
+        'baseUrl' =>  null,
     	],
       'thumbnails' => [
-    		'adapter' => 'League\Flysystem\Adapter\Local',
     		'client' => new League\Flysystem\Adapter\Local(WWW_ROOT.'thumbnails'),
-        'baseUrl' =>  '/thumbnails/'
+        'baseUrl' =>  '/thumbnails/',
+        'thumbnails' => false
     	],
       'sys_temp' => [
-    		'adapter' => 'League\Flysystem\Adapter\Local',
     		'client' => new League\Flysystem\Adapter\Local(sys_get_temp_dir()),
-        'baseUrl' =>  null
+        'baseUrl' =>  null,
     	],
     ],
+
+    'archives' => new Attachment\Filesystem\Compressor\ZipCompressor([
+      'profile' => 'default'
+    ]),
 
     // unique
     'md5Unique' => true,
 
     // translate
     'translate' => false,
+
+    'options' => [
+      'visibility' => [
+        [
+          'visible' => false, // Caché ou pas
+          'model' => 'Filters', // QUI est caché ??? Atags | AtagTypes | Filters
+          'slug' => 'orientation', //SLUG | SLUGS ['']
+          // searchManager params du model PHP
+          'atags' => '*',
+          'types' => '*',
+          'filters' => '*'
+        ],
+        [
+          'visible' => true,
+          'model' => 'Filters',
+          'slug' => 'orientation',
+          'types' => ['image/*'],
+        ]
+      ]
+    ],
 
     // upload settings
     'upload' => [
@@ -71,6 +81,38 @@ return [
         'start' => true,
         'end' => true,
       ],
+    ],
+
+    'browse' => [
+      'types' => [
+        'image' => [
+          'label' => __('Images'),
+          'mime' => ['image/*']
+        ],
+        'video' => [
+          'label' => __('Vidéos'),
+          'mime' => ['video/*', 'embed/youtube', 'embed/vimeo']
+        ],
+        'pdf' => [
+          'label' => __('PDF'),
+          'mime' => ['application/pdf']
+        ],
+        'other' => [
+          'label' => __('Autres'),
+          'mime' => ['!image/*', '!video/*', '!embed/youtube', '!embed/vimeo', '!application/pdf']
+        ]
+      ],
+      'filters' => [
+        [
+          'label' => __('Orientation'),
+          'slug' => 'orientation',
+          'options' => [
+            ['label' => __('Vertical'), 'slug' => 'vertical'],
+            ['label' => __('Horizontal'), 'slug' => 'horizontal'],
+            ['label' => __('Carré'), 'slug' => 'square']
+          ]
+        ]
+      ]
     ],
 
     // thumbnails settings

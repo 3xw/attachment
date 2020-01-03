@@ -5,6 +5,7 @@ use Attachment\Controller\AppController;
 use Cake\Event\Event;
 use Crud\Event\Subject;
 use Cake\Core\Configure;
+use Cake\Http\Exception\UnauthorizedException;
 
 /**
 * Attachments Controller
@@ -18,27 +19,33 @@ class AttachmentsController extends AppController
 
   public $paginate = [
     'page' => 1,
-    'limit' => 18,
-    'maxLimit' => 200,
+    'limit' => 60,
+    'maxLimit' => 50000,
+    'order' => [
+      'Attachments.created' => 'DESC'
+    ],
     'sortWhitelist' => [
       'name', 'created', 'type', 'subtype', 'date'
     ]
   ];
 
-  public function initialize(){
+  public function initialize():void
+  {
     parent::initialize();
 
     $this->loadComponent('Crud.Crud', [
       'actions' => [
         'index' => [
-          'className' => 'Crud.Index'
+          'className' => 'Crud.Index',
+          'relatedModels' => ['Atags']
         ],
         'view' => [
           'className' => 'Crud.View',
+          'relatedModels' => ['Atags']
         ],
         'add' =>[
           'className' => 'Crud.Add',
-          'api.success.data.entity' => ['id','profile','path','type','subtype','name','size','fullpath'],
+          'api.success.data.entity' => ['id','profile','path','type','subtype','name','size','fullpath', 'date'],
           'api.error.exception' => [
             'type' => 'validate',
             'class' => 'Attachment\Crud\Error\Exception\ValidationException'
@@ -46,14 +53,23 @@ class AttachmentsController extends AppController
         ],
         'edit' => [
           'className' => 'Crud.Edit',
+          'relatedModels' => ['Atags']
+        ],
+        'editAll' => [
+          'className' => 'Attachment\Crud\Action\Bulk\EditAction',
+          'relatedModels' => ['Atags']
         ],
         'delete' => [
           'className' => 'Attachment\Crud\Action\DeleteAction',
+        ],
+        'deleteAll' => [
+          'className' => 'Attachment\Crud\Action\Bulk\DeleteAction',
         ]
       ],
       'listeners' => [
         //'CrudCache',
         'Crud.Api',
+        'Crud.RelatedModels',
         'Crud.ApiPagination',
         'Crud.ApiQueryLog',
         'Crud.Search'
@@ -63,59 +79,11 @@ class AttachmentsController extends AppController
     $this->loadComponent('Attachment.EventDispatcher');
   }
 
-  public function add()
-  {
-    return $this->Crud->execute();
-  }
-
   public function index()
   {
-    $this->Crud->on('beforePaginate', function(Event $event)
-    {
-      $event->subject->query->contain(['Atags']);
-      if(Configure::read('Attachment.translate'))
-      {
-        $event->subject->query->find('translations');
-      }
-    });
+    // security first !! be sure to restrict index with coresonding session settings!
+    if(empty($this->request->getQuery('uuid'))) throw new UnauthorizedException(__d('Attachment','Missing uuid'));
 
-    $this->Crud->on('afterPaginate', function(Event $event)
-    {
-      foreach ($event->getSubject()->entities as $entity)
-      {
-        $entity->set('fullpath', $entity->get('fullpath'));
-      }
-    });
-
-    return $this->Crud->execute();
-  }
-
-  public function view($id = null)
-  {
-    $this->Crud->on('beforeFind', function(Event $event) {
-      $event->subject->query->contain(['Atags']);
-      if(Configure::read('Attachment.translate'))
-      {
-        $event->subject->query->find('translations');
-      }
-    });
-    return $this->Crud->execute();
-  }
-
-  public function edit($id = null)
-  {
-    $this->Crud->on('beforeFind', function(Event $event) {
-      $event->subject->query->contain(['Atags']);
-      if(Configure::read('Attachment.translate'))
-      {
-        $event->subject->query->find('translations');
-      }
-    });
-    return $this->Crud->execute();
-  }
-
-  public function delete($id)
-  {
     return $this->Crud->execute();
   }
 

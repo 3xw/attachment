@@ -1,32 +1,29 @@
 <?php
 namespace Attachment\Model\Entity;
-
 use Cake\ORM\Entity;
-use Cake\Core\Configure;
-use Cake\Routing\Router;
-
+use Attachment\Filesystem\ProfileRegistry;
 class Attachment extends Entity
 {
-
   protected $_accessible = [
     '*' => true,
     'id' => false,
   ];
-
-  protected $_virtual = ['fullpath','mime'];
-
+  protected $_virtual = ['mime','url','thumb_params'];
+  protected function _getUrl()
+  {
+    return ProfileRegistry::retrieve($this->profile)->getUrl($this->path);
+  }
+  protected function _getThumbParams()
+  {
+    $url = ProfileRegistry::retrieve($this->profile)->thumbProfile()->getUrl($this->path);
+    return strrpos($url, '?') === false ? null: substr($url, strrpos($url, '?') + 1 );
+  }
   protected function _getFullpath()
   {
-    $baseUrl = Configure::read('Attachment.profiles.'.$this->profile.'.baseUrl');
-    $start = substr($baseUrl,0 , 4);
-    $baseUrl = ( $start == 'http' )? $baseUrl : Router::url($baseUrl, true);
-    return $baseUrl.$this->path;
+    return ProfileRegistry::retrieve($this->profile)->getFullPath($this->path);
   }
-
   protected function _getMime()
   {
     return $this->_properties['type'].'/'.$this->_properties['subtype'];
   }
-
-
 }

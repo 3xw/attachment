@@ -1,15 +1,22 @@
 <?php
+declare(strict_types=1);
+
 namespace Attachment\Model\Entity;
 
 use Cake\ORM\Entity;
 
 /**
- * Atag Entity.
+ * Atag Entity
  *
  * @property int $id
  * @property string $name
  * @property string $slug
- * @property \App\Model\Entity\Attachment[] $attachments
+ * @property int|null $atag_type_id
+ * @property string|null $user_id
+ *
+ * @property \Attachment\Model\Entity\AtagType $atag_type
+ * @property \Attachment\Model\Entity\User $user
+ * @property \Attachment\Model\Entity\Attachment[] $attachments
  */
 class Atag extends Entity
 {
@@ -23,8 +30,8 @@ class Atag extends Entity
      *
      * @var array
      */
-    protected $_accessible = [
-        '*' => true,
-        'id' => false,
-    ];
+     protected $_accessible = [
+       '*' => true,         
+      'id' => false,
+            ];
 }

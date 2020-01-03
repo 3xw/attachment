@@ -2,12 +2,9 @@
 namespace Attachment\Controller;
 
 use Attachment\Controller\AppController;
+use Cake\Event\Event;
+use Cake\Core\Configure;
 
-/**
- * Atags Controller
- *
- * @property \Attachment\Model\Table\AtagsTable $Atags
- */
 class AtagsController extends AppController
 {
   use \Crud\Controller\ControllerTrait;
@@ -19,21 +16,12 @@ class AtagsController extends AppController
         ]
     ];
 
-  public function initialize(){
+  public function initialize(): void
+  {
     parent::initialize();
 
     $this->loadComponent('Crud.Crud', [
-      'actions' => [
-        'Crud.Index',
-        /*
-        'Crud.View',
-        'add' =>[
-          'className' => 'Crud.Add',
-          'api.success.data.entity' => ['id','path','type','subtype','name','size']
-        ],
-        'Crud.Edit',
-        'Crud.Delete'*/
-      ],
+      'actions' => ['Crud.Index'],
       'listeners' => [
         //'CrudCache',
         'Crud.Api',
@@ -42,5 +30,22 @@ class AtagsController extends AppController
         //'Crud.Search'
       ]
     ]);
+  }
+
+  public function index()
+  {
+    // security first !!
+    if(empty($this->request->getQuery('uuid'))) throw new UnauthorizedException(__d('Attachment','Missing uuid'));
+
+    $this->Crud->on('beforePaginate', function(Event $event)
+    {
+      $event->getSubject()->query->contain(['AtagTypes']);
+      if(Configure::read('Attachment.translate'))
+      {
+        $event->getSubject()->query->find('translations');
+      }
+    });
+
+    return $this->Crud->execute();
   }
 }

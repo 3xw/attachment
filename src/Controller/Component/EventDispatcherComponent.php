@@ -39,7 +39,7 @@ class EventDispatcherComponent extends Component
     $this->_setEventListeners();
   }
 
-  public function initialize(array $config)
+  public function initialize(array $config):void
   {
     // setup
     parent::initialize($config);
