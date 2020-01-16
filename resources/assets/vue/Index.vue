@@ -1,269 +1,250 @@
-<template lang="html">
-  <div class="attachment-index">
+<template>
+  <main class="section-attachment--container">
+    <div class="">
+      <transition name="fade">
 
-    <!-- filters -->
-    <attachment-filters :types="types" :tags="tags" :callback="getFiles" ></attachment-filters>
+        <!--- upload -->
+        <section v-if="mode == 'upload'" class="section-attachment--upload">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="section__nav">
+                <div class="d-flex flex-row justify-content-between align-items-center">
+                  <h1>Ajouter des fichiers</h1>
+                  <button @click="mode = 'browse';" type="button" name="button" class="btn btn-danger">ANNULER</button>
+                </div>
+                <div class="utils--spacer-semi"></div>
+                <div class="row">
+                  <div class="col-12 col-md-3">
+                    <label>Tags</label>
+                    <attachment-atags :aid="aid" :upload="true" :filters="settings.browse.filters" :options="settings.options"></attachment-atags>
+                  </div>
+                  <div class="col-12 col-md-9">
+                    <attachment-upload :aid="aid"></attachment-upload>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
 
-    <!-- WARNINGS -->
-    <div v-for="(error, index) in errors" track-by="$index" class="alert alert-warning alert-dismissible" role="alert">
-      <button type="button" class="close"  aria-label="Close" @click="errors = []" ><span aria-hidden="true">&times;</span></button>
-      <strong>Watch out!</strong> {{error}}
+        <!-- browse mode -->
+        <section v-if="mode == 'browse'" class="section-attachment--browse">
+          <div class="row no-gutters">
+            <div class="w-100"></div>
+            <div class="col-md-3 col-xl-2">
+              <div class="section__side">
+                <div v-if="settings.role == 'superuser' || settings.role == 'admin'" class="section__add section--blue-light color--blue-dark action pointer d-flex flex-row align-items-center" @click="mode = 'upload';$forceUpdate();">
+                    <icon-add></icon-add>&nbsp;&nbsp;&nbsp;&nbsp;<p class="mb-0">Ajouter des fichiers</p>
+                </div>
+                <div class="section__nav">
+                  <div class="d-flex flex-row align-items-center">
+                    <icon-filter></icon-filter>&nbsp;&nbsp;&nbsp;&nbsp;<p class="mb-0">Filtres et tags</p>
+                  </div>
+                  <div class="utils--spacer-semi"></div>
+                  <attachment-atags :aid="aid" :upload="false" :filters="settings.browse.filters" :options="settings.options"></attachment-atags>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-9 col-xl-10">
+              <attachments :aid="aid" :settings="settings"></attachments>
+            </div>
+          </div>
+        </section>
+
+        <!-- edit mode -->
+        <section v-if="mode == 'edit'" class="section-attachment--upload">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="section__nav">
+                <div class="d-flex flex-row justify-content-between align-items-center">
+                  <h1>Editer des fichiers</h1>
+                  <button @click="mode = 'browse';" type="button" name="button" class="btn btn-danger">ANNULER</button>
+                </div>
+                <div class="utils--spacer-semi"></div>
+                <div class="row">
+                  <div class="col-12 col-md-3">
+                    <label>Tags</label>
+                    <attachment-atags :aid="aid" :upload="true" :filters="settings.browse.filters" :options="settings.options"></attachment-atags>
+                  </div>
+                  <div class="col-12 col-md-9">
+                    <attachment-edit :aid="aid" :settings="settings"></attachment-edit>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </transition>
     </div>
-
-    <!-- SUCCESS -->
-    <div v-for="(success, index) in successes" track-by="$index" class="alert alert-success alert-dismissible" role="alert">
-      <button type="button" class="close"  aria-label="Close" @click="successes = []" ><span aria-hidden="true">&times;</span></button>
-      <strong>Ok!</strong> {{success}}
-    </div>
-
-    <!-- loading -->
-    <div v-if="loading" class="attachment-loading-container">
-      <img v-bind:src="this.settings.url+'attachment/img/loading.gif'" class="img-responsive" />
-    </div>
-
-    <!-- files index -->
-    <attachment-files-index :aid="aid" :settings="settings" :files="files" :list-style="listStyle"></attachment-files-index>
-
-    <!-- pagination -->
-    <attachment-pagination :pagination="pagination" :callback="getFiles" :settings="settings"></attachment-pagination>
-
-    <!-- view -->
-    <attachment-view :aid="aid" :settings="settings" ></attachment-view>
-
-    <!-- edit -->
-    <attachment-edit :aid="aid" :settings="settings" ></attachment-edit>
-
-    <!-- upload -->
-    <attachment-upload :aid="aid" :settings="settings" ></attachment-upload>
-
-    <!-- embed -->
-    <attachment-embed :aid="aid" :settings="settings" ></attachment-embed>
-
-    <!-- add btn -->
-    <p>
-      <div v-if="settings.actions.indexOf('add') != -1" class="btn-group" data-intro="Ajouter des médias à l'aide de ces boutons" data-position="right">
-        <button type="button" class="btn btn-fill btn-xs btn-info" @click="dispatch('show-upload',aid)">
-          <i class="fa fa-cloud-upload" aria-hidden="true"></i>
-          Upload
-        </button>
-        <button v-if="dispalyEmbed()" type="button" class="btn btn-fill btn-xs btn-info" @click="dispatch('show-embed',aid)">
-          <i class="fa fa-code" aria-hidden="true"></i>
-        Add an embed code
-        </button>
-      </div>
-    </p>
-
-  </div>
+  </main>
 </template>
-
 <script>
+// npm libs
+import { mapState, mapGetters, mapActions } from 'vuex'
+import createCrudModule from 'vuex-crud';
 
-import filters from './Filters.vue'
-import filesIndex from './FilesIndex.vue'
-import pagination from './Pagination.vue'
-import view from './View.vue'
-import edit from './Edit.vue'
-import upload from './Upload.vue'
-import embed from './Embed.vue'
+// js scripts
+import { client, parseResponse, parseResponseWithPaginate, parseTags} from '../js/client.js'
+import attachment from '../js/store/store.js'
+
+import iconFilter from './icons/filter.vue'
+import iconAdd from './icons/add.vue'
+
+// vue components
+import Atags from './Atags.vue'
+import Attachments from './Attachments.vue'
+import Upload from './Upload.vue'
+import Edit from './Edit.vue'
+
+
 
 export default
 {
   name: 'attachment-index',
-  props: {
-    settings: Object,
-    aid:String,
-    //files: Array,
-  },
   components:
   {
-    'attachment-filters': filters,
-    'attachment-files-index': filesIndex,
-    'attachment-pagination': pagination,
-    'attachment-view': view,
-    'attachment-edit': edit,
-    'attachment-upload': upload,
-    'attachment-embed': embed,
+    'attachment-atags': Atags,
+    'attachment-upload': Upload,
+    'attachment-edit': Edit,
+    'attachments': Attachments,
+    'icon-add': iconAdd,
+    'icon-filter': iconFilter
   },
-  data:function(){
+  props: { aid: String, settings: Object },
+  data()
+  {
     return {
-      tags: [],
-      types: [],
-      search: '',
-      tag: '',
-      sort: { query: '', term: ''},
-      successes: [],
-      errors: [],
-      files: [],
-      fileToDeleteName: '',
-      ids: [],
-      loading: true,
-      listStyle: false,
-      pagination: {
-        "page_count": 1,
-        "current_page": 1,
-        "has_next_page": false,
-        "has_prev_page": false,
-        "count": 0,
-        "limit": 100
+      mode: 'browse',
+      loading: false
+    }
+  },
+  computed:
+  {
+    aParams()
+    {
+      return this.$store.get(this.aid + '/aParams')
+    },
+    tParams()
+    {
+      return this.$store.get(this.aid + '/tParams')
+    },
+    selectedFiles()
+    {
+      return this.$store.get(this.aid + '/selection.files')
+    }
+  },
+  watch:
+  {
+    aParams:
+    {
+      handler(){
+        if(this.mode == 'browse'){
+          this.fetchAttachments({config:{ params: this.aParams}})
+        }
+      },
+      deep: true
+    },
+    tParams:
+    {
+      handler(){ this.fetchTags({config:{ params: this.tParams}}) },
+      deep: true
+    },
+    selectedFiles(value)
+    {
+      let ids = []
+      for(let i = 0;i < value.length;i++){
+        ids.push(value[i].id)
       }
-    };
-  },
-  mounted: function(){
-
-    this.types = this.settings.types;
-    this.getTags();
-    this.getFiles();
-  },
-  watch: {
-    'loading' : function(val, oldVal){
-      if(val === true){
-        this.files = [];
+      //this.createSelectedFilesToken({data: {files: ids}})
+    },
+    mode: function(){
+      this.$forceUpdate()
+      if(this.mode == 'browse'){
+        this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ atags: '', upload: 0, refresh: new Date().getTime(), page: 1 }))
+      }else{
+        this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ upload: 1 }))
       }
     }
   },
-  created: function(){
+  created()
+  {
+    //Check role
+    if(!this.settings.role) this.settings.role = 'user'
 
-    if(window.aEventHub[this.aid] == undefined){
-      window.aEventHub[this.aid] = new Vue();
-    }
-    window.aEventHub[this.aid].$on('show-edit-file', this.showEditFile);
-    window.aEventHub[this.aid].$on('show-view-file', this.showViewFile);
-    window.aEventHub[this.aid].$on('edit-progress', this.editProgress);
-    window.aEventHub[this.aid].$on('edit-success', this.editSuccess);
-    window.aEventHub[this.aid].$on('edit-error', this.editError);
-    window.aEventHub[this.aid].$on('upload-finished', this.getFiles);
-    window.aEventHub[this.aid].$on('embed-finished', this.getFiles);
-    window.aEventHub[this.aid].$on('delete-file', this.deleteFile);
-    if(this.settings.listStyle !== undefined){
-      this.listStyle = this.settings.listStyle
-    }
+    // create new module and store settings
+    this.$store.registerModule(this.aid, Object.assign({}, attachment))
+    this.$store.set(this.aid + '/settings', this.settings)
+
+    // CRUD
+    client.baseURL = this.settings.url
+
+    this.$store.registerModule(this.aid+'/attachments', createCrudModule({
+      resource: 'attachments',
+      urlRoot: this.settings.url+'attachment/attachments',
+      client,
+      parseSingle: parseResponse,
+      parseList: parseResponseWithPaginate,
+      onFetchListStart: () => {
+        this.loading = true
+      },
+      onFetchListSuccess: (o, response) => {
+        this.loading = false
+        this.$store.set(this.aid + '/pagination', response.pagination)
+      },
+    }))
+    this.$store.registerModule(this.aid+'/atags', createCrudModule({
+      resource: 'atags',
+      urlRoot: this.settings.url+'attachment/atags',
+      client,
+      parseSingle: parseResponse,
+      parseList: parseTags
+    }))
+    this.$store.registerModule(this.aid+'/aarchives', createCrudModule({
+      resource: 'aarchives',
+      urlRoot: this.settings.url+'attachment/aarchives',
+      client,
+      parseSingle: parseResponse,
+      parseList: parseTags,
+      onFetchListSuccess: (o, response) => {
+        this.$store.set(this.aid + '/aarchives', response.data)
+      },
+    }))
+    this.$store.registerModule(this.aid+'/token', createCrudModule({
+      resource: 'token',
+      only: ['CREATE'],
+      urlRoot: this.settings.url+'attachment/download/get-zip-token',
+      client,
+      idAttribute: 'token',
+      onCreateSuccess: (o, response) => {
+        this.$store.set(this.aid + '/selection.token', response.data.token)
+      },
+    }))
+
+    //this.fetchAarchives();
+
+    // set uuid & fetch data ( all in one because of deep watching )
+    this.aParams.uuid = this.tParams.uuid = this.aid
   },
-  methods: {
-    showEditFile:function(index) {
-      window.aEventHub[this.aid].$emit('edit-file',this.files[index]);
-    },
-    showViewFile:function(index) {
-      window.aEventHub[this.aid].$emit('view-file',this.files[index]);
-    },
-    editProgress: function(){
-      this.loading = true;
-    },
-    editSuccess: function(data){
-      this.loading = false;
-      this.successes.push('file: '+data.file.name+' successfully edited!');
-      this.getTags();
-      this.getFiles();
-    },
-    editError: function(data){
-      this.loading = false;
-      var message = ( data.response.data && data.response.data.data && data.response.data.data.message )? 'file: '+data.file.name+' '+data.response.data.data.message : 'Your session is lost, please login again!';
-      if( data.response.data && data.response.data.message ){
-        message = 'file: '+data.file.name+' '+data.response.data.message;
-      }
-      this.errors.push(message);
-      this.getFiles();
-    },
-    deleteFile: function(index){
-      var file = this.files[index];
-      this.fileToDeleteName = file.name;
-      if(!confirm('Delete file: '+this.fileToDeleteName+'?')){
-        return false;
-      }
-      var options = {
-        headers:{
-          "Accept":"application/json",
-          "Content-Type":"application/json"
-        }
-      };
-      file.uuid = this.settings.uuid;
-      this.loading = true;
-      this.$http.delete(this.settings.url+'attachment/attachments/delete/'+file.id+'.json', file,options)
-      .then(this.deleteSuccessCallback, this.errorDeleteCallback);
-    },
-    dispatch:function(evt,aid,data){
-      window.aEventHub[aid].$emit(evt, data);
-    },
-    getFileByIndex: function(index){
-      return this.files[index];
-    },
-    dispalyEmbed : function(){
-      for( var type in this.settings.types ){
-        if(this.settings.types[type].indexOf('embed') != -1)
-        {
-          return true;
-        }
-      }
-      return false;
-    },
-    getFiles: function(){
-      this.loading = true;
-      var params = {page: this.pagination.current_page};
-
-      // add uuid for restrictions
-      params.uuid = this.settings.uuid;
-
-      if(this.search){
-        params.search = this.search;
-      }
-      if(this.tag){
-        params.tag = this.tag;
-      }
-      if(this.settings.sort){
-        params.sort = this.settings.sort;
-        params.direction = this.settings.direction;
-      }
-
-      if(!this.tag && !this.search){
-        params.index = 'filter';
-      }
-
-      var options = {
-        params: params,
-        headers:{
-          "Accept":"application/json",
-          "Content-Type":"application/json"
-        }
-      };
-      this.$http.get(this.settings.url+'attachment/attachments.json', options)
-      .then(this.filesSuccessCallback, this.errorCallback);
-    },
-    filesSuccessCallback: function(response){
-      this.loading = false;
-      this.files = response.data.data;
-      this.pagination = response.data.pagination;
-    },
-    getTags: function(){
-      var options = {
-        params: {index:'filter'},
-        headers:{
-          "Accept":"application/json",
-          "Content-Type":"application/json"
-        }
-      };
-      this.$http.get(this.settings.url+'attachment/atags.json', options)
-      .then(this.tagsSuccessCallback, this.errorCallback);
-      return this;
-    },
-    tagsSuccessCallback: function(response){
-      this.tags = response.data.data;
-      //this.settings.atags = response.data.data;
-    },
-    deleteSuccessCallback: function(response){
-      this.loading = false;
-      this.successes.push('file: '+this.fileToDeleteName+' was successfully deleted!');
-      this.getFiles();
-    },
-    errorCallback: function(response){
-      this.loading = false;
-      var message = ( response.data )? response.data.data.message : 'Your session is lost, please login again!';
-      this.errors.push(message);
-    },
-    errorDeleteCallback: function(response){
-      this.loading = false;
-      var message = ( response.data )? response.data.data.message : 'Your session is lost, please login again!';
-      this.errors.push(message);
-      this.getFiles();
-    },
+  methods:
+  {
+    ...mapActions({
+      fetchAttachments(dispatch, payload)
+      {
+        return dispatch(this.aid + '/attachments/fetchList', payload)
+      },
+      fetchTags(dispatch, payload)
+      {
+        return dispatch(this.aid + '/atags/fetchList', payload)
+      },
+      fetchAarchives(dispatch, payload)
+      {
+        return dispatch(this.aid + '/aarchives/fetchList', payload)
+      },
+      createSelectedFilesToken(dispatch, payload)
+      {
+        return dispatch(this.aid + '/token/create', payload)
+      },
+    })
   }
 }
 </script>

@@ -71,7 +71,7 @@ class AttachmentHelper extends Helper
     $profiles = Configure::read('Attachment.profiles');
     $settings['baseUrls'] = [];
     foreach($profiles as $key => $value) $settings['baseUrls'][$key] = $value['baseUrl'];
-    return $this->component('attachment-browse',[
+    return $this->component('attachment-index',[
       'aid' => $settings['uuid'],
       ':settings' => $settings
     ]);
@@ -92,9 +92,10 @@ class AttachmentHelper extends Helper
     $conf['relation'] = ($field == 'Attachments')? 'belongsToMany' : 'belongsTo';
     $conf['field'] = ($field == 'Attachments')? '' : $field;
     $settings = $this->_getSettings($field, array_merge($conf,$settings));
+    $settings['browse'] = Configure::read('Attachment.browse');
     return $this->component('attachment-input',[
       'aid' => $settings['uuid'],
-      ':settings' => $settings['uuid']
+      ':settings' => $settings
     ]);
   }
   public function filesystem($profile)
