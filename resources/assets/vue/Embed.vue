@@ -1,245 +1,142 @@
-<template lang="html">
-  <div id="attachment-embed" class="modal-mask" v-if="show" transition="modal">
-    <div class="modal-wrapper">
-      <div class="modal-container container">
-        <div class="custom-modal-header">
-          Add an embed code
-        </div>
-        <div class="custom-modal-body">
+<template>
+  <section class="">
 
-          <!-- WARNINGS -->
-          <div v-for="(error, index) in errors" track-by="$index" class="alert alert-warning alert-dismissible" role="alert">
-            <button type="button" class="close"  aria-label="Close" @click="errors = []" ><span aria-hidden="true">&times;</span></button>
-            <strong>Watch out</strong> {{error}}
-          </div>
-
-          <!-- TAGS -->
-          <attachment-atags :aid="aid" :settings="settings"></attachment-atags>
-
-          <!-- INPUTS -->
-          <div v-if="show">
-
-            <!-- OPTIONS -->
-            <div  id="attachment-options">
-              <div class="row optional-fields">
-
-                <!-- _translations[en_GB][name] -->
-                <div v-if="settings.i18n.enable" class="col-md-6 attachment-locale-area">
-                  <ul class="nav nav-tabs" role="tablist">
-                    <li v-for="(language, index) in settings.i18n.languages" v-bind:class="{ 'active': language ==  settings.i18n.defaultLocale}" role="presentation">
-                      <a :href="'#a-'+language" :aria-controls="'a-'+language" role="tab" data-toggle="tab" >
-                        {{language}}
-                      </a>
-                    </li>
-                  </ul>
-                  <div class="tab-content">
-
-                    <!-- defaultLocale -->
-                    <div role="tabpanel" class="tab-pane active" :id="'a-'+settings.i18n.defaultLocale">
-                      <div class="input text">
-                        <label for="title">Title</label>
-                        <input type="text" name="title" class="form-control" id="title">
-                      </div>
-                      <div class="input text">
-                        <label for="title">Description</label>
-                        <textarea name="description" class="form-control" id="description" rows="5"></textarea>
-                      </div>
-                    </div>
-
-                    <!-- other locales -->
-                    <div v-for="(language, index) in settings.i18n.languages"  v-if="language != settings.i18n.defaultLocale" role="tabpanel" class="tab-pane active" :id="'a-'+language">
-                      <div class="input text">
-                        <label for="title">Title{{language}}</label>
-                        <input type="text" :name="'_translations['+language+'][title]'" class="form-control" :id="'a-'+language+'-title'">
-                      </div>
-                      <div class="input text">
-                        <label for="title">Description {{language}}</label>
-                        <textarea :name="'_translations['+language+'][description]'" class="form-control" :id="'a-'+language+'-description'" rows="5"></textarea>
-                      </div>
-                    </div>
-
-                  </div>
-                </div>
-
-                <!-- no translate -->
-                <div v-if="!settings.i18n.enable" class="col-md-6">
-                  <div class="input text">
-                    <label for="title">Title</label>
-                    <input type="text" name="title" class="form-control" id="title">
-                  </div>
-                  <div class="input text">
-                    <label for="description">Description</label>
-                    <textarea name="description" class="form-control" id="description" rows="5"></textarea>
-                  </div>
-                </div>
-
-
-                <div class="col-md-6">
-                  <div class="input text">
-                    <label for="author">Author</label>
-                    <input type="text" name="author" class="form-control" id="author">
-                  </div>
-                  <div class="input text">
-                    <label for="copyright">Copyright</label>
-                    <input type="text" name="copyright" class="form-control" id="copyright">
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Name HERE -->
-            <div class="input text required">
-              <label for="name">Name</label>
-              <input type="text" name="name" class="form-control attachment-embed__name" id="name" />
-            </div>
-
-            <!-- EMBED CODE HERE -->
-            <div class="input text required">
-              <label for="embed">Embed code</label>
-              <textarea name="embed" class="form-control attachment-embed__embed" id="embed" rows="5"></textarea>
-            </div>
-
-          </div>
-          <p></p>
-          <div class="custom-modal-footer">
-            <div class="btn-group">
-              <button type="button" class="modal-default-button btn btn-success" @click="upload">
-                Upload
-              </button>
-              <button type="button" class="modal-default-button btn btn-warning" @click="close()">
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
+    <!-- progress -->
+    <div v-if="uploading" class="progress__info">
+      <label>Uploading...</label>
+      <div class="progress">
+        <div class="progress-bar" role="progressbar" :style="{ width: percent + '%' }" >{{percent}}</div>
       </div>
     </div>
-  </div>
+
+    <!-- selection -->
+    <div class="">
+
+      <!-- alerts -->
+      <div v-for="(error, i) in errors" class="alert alert-warning" role="alert">
+        An error occured: {{error}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <!-- inputs -->
+      <attachment-inputs :aid="aid" mode="upload"></attachment-inputs>
+
+      <!-- Name HERE -->
+      <div class="input text required">
+        <label for="name">Name</label>
+        <input v-model="name"  type="text" name="name" class="form-control" id="name" />
+      </div>
+
+      <!-- EMBED CODE HERE -->
+      <div class="input text required">
+        <label for="embed">Embed code</label>
+        <textarea v-model="embed" name="embed" class="form-control" id="embed" rows="5"></textarea>
+      </div>
+
+      <!-- submit -->
+      <div class="input">
+        <button type="button" name="button" class="btn btn-success" @click="upload">Upload</button>
+      </div>
+
+    </div>
+
+  </section>
 </template>
 
 <script>
-import atags from './Atags.vue'
+// js scripts
+import { client } from '../js/client.js'
+
+// vue components
+import AttachmentInputs from './AttachmentInputs.vue'
 
 export default
 {
   name: 'attachment-embed',
-  data: function(){
-    return {
-      atags: [],
-      errors: [],
-      success: [] ,
-      show: false,
-    };
-  },
-  props: {
-    aid:String,
-    settings: Object,
-  },
   components:
   {
-    'attachment-atags': atags,
+    'attachment-inputs':AttachmentInputs
   },
-  created: function(){
-    window.aEventHub[this.aid].$on('show-embed', this.showEmbed);
-    window.aEventHub[this.aid].$on('change-tags',this.changeTags);
+  props: { aid: String },
+  data()
+  {
+    return {
+      progress: 0,
+      uploading: false,
+      errors: [],
+      name: '',
+      embed: ''
+    }
+  },
+  computed:
+  {
+    percent()
+    {
+      return Math.floor(this.progress * 100)
+    },
+    settings()
+    {
+      return this.$store.get(this.aid+'/settings')
+    },
+    atags()
+    {
+      return this.$store.get(this.aid+'/upload.atags')
+    },
+    inputs()
+    {
+      return this.$store.get(this.aid+'/upload.inputs')
+    }
+  },
+  created()
+  {
+    this.$store.commit(this.aid+'/flushUploadedFiles')
   },
   methods: {
-    showEmbed: function(){
-      this.open();
-    },
-    changeTags: function(){
-      this.atags = $('#atagsinput').val();
-    },
-    close: function(){
-      this.show = false;
-      this.errors = [];
-    },
-    open: function(){
-      this.atags = this.settings.atags;
-      this.show = true;
-      setTimeout(this.setupUI, 500);
-    },
-    setupUI: function(){
-      if(this.settings.i18n.enable){
-        $('.attachment-locale-area ul a:last').tab('show');
-        $('.attachment-locale-area ul a:first').tab('show');
-      }
-    },
-    upload: function(){
-
+    upload()
+    {
       // check if name
-      if($('.attachment-embed__name').val() == ''){
-        this.errors.push('Filed name is required!');
-        return;
-      }
+      if(this.name.trim() == '') return this.errors.push('A name is required!')
 
       // check if embed
-      if($('.attachment-embed__embed').val() == ''){
-        this.errors.push('No embed code filed is required!');
-        return;
+      if(this.embed.trim() == '') return this.errors.push('Embed code is required!')
+
+      this.uploading = true
+
+      let formData = new FormData()
+      for( let i in this.inputs ) formData.append(i, this.inputs[i])
+      for( let t in this.atags ) formData.append('atags['+t+'][name]', this.atags-[t])
+      formData.append('name', this.name.trim())
+      formData.append('embed', this.embed.trim())
+      formData.append('uuid', this.settings.uuid)
+
+      let params = {
+        headers: {'Accept': 'application/json', 'Content-Type': 'multipart/form-data'},
+        progress: this.progressHandler
       }
 
-      var self = this;
-      var formData = new FormData();
-      formData.append('name', $('.attachment-embed__name').val().trim());
-      formData.append('embed', $('.attachment-embed__embed').val().trim());
-      formData.append('uuid', this.settings.uuid);
-
-      // retrieve tags
-      var tags = (this.settings.atagsDisplay == 'input')? $('#atagsinput').val(): this.atags;
-      for( var t in tags )
-      {
-        formData.append('atags['+t+'][name]', tags[t].trim());
-      }
-      $('.optional-fields input, .optional-fields textarea, .optional-fields select').each(function(){
-        var $input = $(this);
-        var value = $input.val();
-        formData.append($input.attr('name'), value.trim());
-      });
-
-      $.ajax({
-        type: 'POST',
-        dataType: 'json',
-        url: this.settings.url+'attachment/attachments/add.json',
-        data: formData,
-        cache: false,
-        contentType: false,
-        processData: false,
-        success: function(response){
-          if(self.settings.relation != 'belongsToMany'){
-            if(self.settings.attachments.length > 0){
-              self.settings.attachments.pop();
-            }
-          }else{
-            if(self.settings.maxquantity != -1 && (self.settings.attachments.length == self.settings.maxquantity)){
-              self.settings.attachments.shift();
-            }
-          }
-          //self.settings.attachments.push(response.data);
-          window.aEventHub[self.aid].$emit('add-file', response.data);
-          self.close();
-          window.aEventHub[self.aid].$emit('embed-finished');
-        },
-        error: function(response){
-          var message = response.statusText;
-
-          //self.success = '';
-          if(response.responseJSON){
-            var errors = ( response.responseJSON['data'] )? response.responseJSON.data.errors: response.responseJSON.errors;
-            var message = ( response.responseJSON['data'] )? response.responseJSON.data.message: response.responseJSON.message;
-
-            if(errors){
-              if(errors['md5']){
-                if(errors['md5']['unique']){
-                  message = errors['md5'].unique;
-                }
-              }
-            }
-          }
-          self.errors.push(message);
-        }
-      });
-    }
+      client.post(this.settings.url+'attachment/attachments/add.json', formData, params)
+      .then(this.uploadSuccessCb, this.errorUploadCb)
+    },
+    progressHandler: function(e)
+    {
+      if (!e.lengthComputable) return
+      this.progress = e.loaded / e.total
+    },
+    uploadSuccessCb: function(response)
+    {
+      this.uploading = false
+      this.hasUploaded = true
+      this.$store.commit(this.aid+'/addUploadedFile', response.data.data )
+      this.upload()
+    },
+    errorUploadCb: function(response)
+    {
+      this.uploading = false
+      this.errors.push(response)
+      this.upload()
+    },
   }
 }
 </script>

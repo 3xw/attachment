@@ -79,15 +79,12 @@ class AttachmentHelper extends Helper
   public function index($settings = [])
   {
     // actions
-    $settings['actions'] = (empty($settings['actions']))? ['view','download'] : $settings['actions'];
-    $settings['groupActions'] = (empty($settings['groupActions']))? ['archive','edit','add'] : $settings['groupActions'];
-
     $settings = $this->setup('index',array_merge(
       [
         'mode' => 'browse',
         'overlay' => false,
         'actions' => ['view','download'],
-        'groupActions' => ['archive','edit','add']
+        'groupActions' => ['archive','edit','add','delete']
       ],
       $settings
     ));

@@ -2,6 +2,7 @@
 require('./css/sass/attachment.scss')
 
 // utils
+require('./js/utils.js')
 require('./js/filters.js')
 require('./js/directives.js')
 

@@ -19,9 +19,39 @@
             <form ref="dform" :action="$store.get(this.aid + '/settings.url')+'attachment/download/files'" method="POST">
               <input type="hidden" name="token" v-model="downloadToken">
             </form>
-            <!--<button type="button" v-if="selectedFiles.length > 0 && (settings.role == 'superuser' || settings.role == 'admin')" @click="requestArchive" name="button" class="btn btn--blue mb-0 color--white">TÉLÉCHARGER</button>-->
-            <button type="button" v-if="selectedFiles.length > 0 && (settings.role == 'superuser' || settings.role == 'admin')" @click="editSelection" name="button" class="btn btn--orange mb-0 color--white">EDITER</button>
-            <button type="button" v-if="selectedFiles.length > 0 && (settings.role == 'superuser' || settings.role == 'admin')" @click="deleteSelection" name="button" class="btn btn--red mb-0 color--white">SUPPRIMER</button>
+
+            <!-- SELECT -->
+            <button
+            v-if="selectedFiles.length > 0 && settings.groupActions.indexOf('select') != -1"
+            @click="confirmSelection"
+            type="button" name="button" class="btn btn--blue mb-0 color--white">
+              CHOISIR
+            </button>
+
+            <!-- ARCHIVE -->
+            <button
+            v-if="selectedFiles.length > 0 && settings.groupActions.indexOf('archive') != -1"
+            @click="requestArchive"
+            type="button" name="button" class="btn btn--blue mb-0 color--white">
+              TÉLÉCHARGER
+            </button>
+
+            <!-- EDIT -->
+            <button
+            v-if="selectedFiles.length > 0 && settings.groupActions.indexOf('edit') != -1"
+            @click="editSelection"
+            type="button"  name="button" class="btn btn--orange mb-0 color--white">
+              EDITER
+            </button>
+
+            <!-- DELETE -->
+            <button
+            v-if="selectedFiles.length > 0 && settings.groupActions.indexOf('delete') != -1"
+            @click="deleteSelection"
+            type="button" name="button" class="btn btn--red mb-0 color--white">
+              SUPPRIMER
+            </button>
+
           </div>
         </div>
       </div>
@@ -249,9 +279,12 @@ export default
     {
       alert('Une erreur est survenue veuillez réessayer.')
     },
-    /*requestArchive()
+    requestArchive()
     {
-    }*/
+    },
+    confirmSelection()
+    {
+    }
   },
   mounted()
   {
