@@ -18,39 +18,40 @@ class AttachmentHelper extends Helper
   private $_filesystems = [];
   private $_inputComponentCount = 0;
   private $_version = false;
-  public function component($name, $props = [])
+
+  private function _initComponentAndSession()
   {
-    return $this->_View->Html->tag('attachment-loader', '', ['name' => $name, 'props' => json_encode($props)]);
-  }
-  private function _setupComponent()
-  {
+    // only once : )
     $this->_inputComponentCount++;
-    if($this->_inputComponentCount == 1)
-    {
-      // session clear
-      $this->_View->getRequest()->getSession()->write('Attachment', '');
-      // add css
-      $this->Html->css([
-        'plugins/attachment/attachment.min.css'
-      ],['block' => true]);
-      // add script
-      $this->Html->script([
-        'plugins/attachment/attachment.vendor.min.js',
-        'plugins/attachment/attachment.min.js'
-      ],['block' => true]);
-    }
+    if($this->_inputComponentCount > 1) return;
+
+    // init
+    $this->_View->getRequest()->getSession()->write('Attachment', 'oui');
+    $this->Html->css(['plugins/attachment/attachment.min.css'],['block' => true]);
+    $this->Html->script(['plugins/attachment/attachment.vendor.min.js','plugins/attachment/attachment.min.js'],['block' => true]);
   }
-  private function _getSettings($field,$settings)
+
+  public function setup($field,$settings)
   {
+    // compo and Session
+    $this->_initComponentAndSession();
+
     // merge global with settings
-    $settings = array_merge(Configure::read('Attachment.upload'),$settings);
-    // keys
+    $settings = array_merge(Configure::read('Attachment.upload'), $settings);
+
+    // attahment(s) selection
+    if(empty($settings['attachments'])) $settings['attachments'] = [];
+
+    // keys & session
     $uuid = Text::uuid();
-    // set session
     $this->_View->getRequest()->getSession()->write('Attachment.'.$uuid, $settings);
+
     // front side settings
+    $settings['options'] = Configure::read('Attachment.options');
     $settings['uuid'] = $uuid;
     $settings['url'] = $this->Url->build('/');
+    $settings['relation'] = ($field == 'Attachments')? 'belongsToMany' : 'belongsTo';
+    $settings['field'] = ($field == 'Attachments')? '' : $field;
     $settings['label'] = empty($settings['label'])? Inflector::humanize($field) : $settings['label'];
     $settings['translate'] = Configure::read('Attachment.translate');
     $settings['i18n'] = [
@@ -58,45 +59,52 @@ class AttachmentHelper extends Helper
       'languages' => Configure::read('I18n.languages'),
       'defaultLocale' => Configure::read('App.defaultLocale')
     ];
-    $settings['options'] = Configure::read('Attachment.options');
-    return $settings;
-  }
-  public function buildIndex($settings = [])
-  {
-    $this->_setupComponent();
-    $settings = $this->_getSettings('Index',$settings);
-    $settings['actions'] = (empty($settings['actions']))? ['add','edit','delete','view'] : $settings['actions'];
-    $settings['attachments'] = [];
+
+    // browse settings
     $settings['browse'] = Configure::read('Attachment.browse');
+
+    // urls
     $profiles = Configure::read('Attachment.profiles');
     $settings['baseUrls'] = [];
     foreach($profiles as $key => $value) $settings['baseUrls'][$key] = $value['baseUrl'];
-    return $this->component('attachment-index',[
-      'aid' => $settings['uuid'],
-      ':settings' => $settings
-    ]);
-  }
-  public function jsSetup($field,$settings = [])
-  {
-    $this->_setupComponent();
-    $settings = $this->_getSettings($field,$settings);
-    $settings['field'] = $field;
-    $settings['relation'] = 'belongsTo';
-    $settings['attachments'] = [];
-    $settings['baseUrl'] = Configure::read('Attachment.profiles.'.$settings['profile'].'.baseUrl');
+
     return $settings;
+  }
+
+  public function component($name, $props = [])
+  {
+    return $this->_View->Html->tag('attachment-loader', '', ['name' => $name, 'props' => json_encode($props)]);
+  }
+
+  public function index($settings = [])
+  {
+    // actions
+    $settings['actions'] = (empty($settings['actions']))? ['view','download'] : $settings['actions'];
+    $settings['groupActions'] = (empty($settings['groupActions']))? ['archive','edit','add'] : $settings['groupActions'];
+
+    $settings = $this->setup('index',array_merge(
+      [
+        'mode' => 'browse',
+        'overlay' => false,
+        'actions' => ['view','download'],
+        'groupActions' => ['archive','edit','add']
+      ],
+      $settings
+    ));
+    return $this->component('attachment-browse',['aid' => $settings['uuid'],':settings' => $settings]);
   }
   public function input($field, $settings = [])
   {
-    $this->_setupComponent();
-    $conf['relation'] = ($field == 'Attachments')? 'belongsToMany' : 'belongsTo';
-    $conf['field'] = ($field == 'Attachments')? '' : $field;
-    $settings = $this->_getSettings($field, array_merge($conf,$settings));
-    $settings['browse'] = Configure::read('Attachment.browse');
-    return $this->component('attachment-input',[
-      'aid' => $settings['uuid'],
-      ':settings' => $settings
-    ]);
+    $settings = $this->setup($field, array_merge(
+      [
+        'mode' => 'input',
+        'overlay' => true,
+        'actions' => ['view','download'],
+        'groupActions' => ['select','add']
+      ],
+      $settings
+    ));
+    return $this->component('attachment-browse',['aid' => $settings['uuid'],':settings' => $settings]);
   }
   public function filesystem($profile)
   {

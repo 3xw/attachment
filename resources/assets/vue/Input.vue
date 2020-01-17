@@ -45,9 +45,8 @@
           <!-- upload -->
           <attachment-upload v-if="mode == 'upload'" :aid="aid"></attachment-upload>
 
-          <!-- browse
-          <attachment-browse :aid="aid" :types="types" :tags="tags" :settings="settings" :from="'input'"></attachment-browse>
-          -->
+          <!-- browse -->
+          <attachment-browse :aid="aid"></attachment-browse>
 
           <!-- embed
           <attachment-embed :aid="aid" :settings="settings" ></attachment-embed>
@@ -86,7 +85,7 @@ export default
   data()
   {
     return {
-      mode: 'input',
+      mode: 'browse',
       loading: false
     }
   },
@@ -140,26 +139,6 @@ export default
       client,
       parseSingle: parseResponse,
       parseList: parseTags
-    }))
-    this.$store.registerModule(this.aid+'/aarchives', createCrudModule({
-      resource: 'aarchives',
-      urlRoot: this.settings.url+'attachment/aarchives',
-      client,
-      parseSingle: parseResponse,
-      parseList: parseTags,
-      onFetchListSuccess: (o, response) => {
-        this.$store.set(this.aid + '/aarchives', response.data)
-      },
-    }))
-    this.$store.registerModule(this.aid+'/token', createCrudModule({
-      resource: 'token',
-      only: ['CREATE'],
-      urlRoot: this.settings.url+'attachment/download/get-zip-token',
-      client,
-      idAttribute: 'token',
-      onCreateSuccess: (o, response) => {
-        this.$store.set(this.aid + '/selection.token', response.data.token)
-      },
     }))
 
     //this.fetchAarchives();

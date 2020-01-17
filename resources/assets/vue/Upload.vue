@@ -102,12 +102,17 @@ export default
   {
     this.$store.commit(this.aid+'/flushUploadedFiles')
   },
-  watch: {
-    files: function () {
-      for(let i in this.files){
-        if (this.files[i].type && this.files[i].type.match('image/*')) {
-           let reader = new FileReader();
-           reader.onload = (event) => {
+  watch:
+  {
+    files()
+    {
+      for(let i in this.files)
+      {
+        if (this.files[i].type && this.files[i].type.match('image/*'))
+        {
+           let reader = new FileReader()
+           reader.onload = (event) =>
+           {
              this.files[i].preview = event.target.result
              this.$forceUpdate()
            }
@@ -129,11 +134,13 @@ export default
         // test size
         let size = file.size / 1024 / 1024 ;
         if(!size) return
-        if ( !(size > 0) || !(size <= this.settings.maxsize)) {
+        if ( !(size > 0) || !(size <= this.settings.maxsize))
+        {
           errors.push(file.name +  ' ce fichier est trop lourd. La taille max est de ' + this.settings.maxsize + 'MB.')
         }
         // test
-        if(this.settings.types.indexOf(file.type) === false || file.type == "" ){
+        if(this.settings.types.indexOf(file.type) === false || file.type == "" )
+        {
           errors.push(file.name +  ' ce type de fichier n\' est pas supporté.')
         }
         this.errors = errors;
@@ -142,10 +149,11 @@ export default
     },
     upload: function()
     {
-      if(this.files.length != 0){
-        return this.uploadFile(this.files.shift())
-      }else{
-        if(this.errors.length == 0){
+      if(this.files.length != 0) return this.uploadFile(this.files.shift())
+      else
+      {
+        if(this.errors.length == 0)
+        {
           this.$parent.mode = 'browse'
           this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ refresh: new Date().getTime() }))
         }

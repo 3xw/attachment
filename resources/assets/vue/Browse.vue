@@ -1,81 +1,110 @@
 <template>
-  <main class="section-attachment--container">
-    <div class="">
-      <transition name="fade">
+  <main >
 
-        <!--- upload -->
-        <section v-if="mode == 'upload'" class="section-attachment--upload">
-          <div class="row">
-            <div class="col-md-12">
+    <!-- INPUT VIEW -->
+    <div v-if="mode == 'input'" class="input form-group">
+      <label>{{settings.label}}</label>
+      <div class="attachment-input">
+
+        <!-- btn -->
+        <div class="btn-group" data-intro="Ajouter des médias à l'aide de ces boutons" data-position="right">
+          <button type="button" class="btn btn-fill btn-xs btn-info" @click="mode = 'browse'">
+            <i class="fa fa-cloud" aria-hidden="true"></i>
+            Browse
+          </button>
+        </div>
+
+        <!-- files
+        <attachment-files :aid="aid" :settings="settings" ></attachment-files>
+        -->
+
+      </div>
+    </div><!-- // END INPUT VIEW -->
+
+    <!-- BROWSE UPLOAD EMBED VIEW -->
+    <div v-if="mode != 'input'" class="section-attachment--container" :class="{ 'attachment-overlay-full': settings.overlay }">
+
+      <!-- dissmiss -->
+      <section v-if="settings.overlay" class="">
+        <div class="text-left">
+          <button @click="mode = 'input'" type="button" name="button" class="btn btn-danger">FERMER</button>
+        </div>
+      </section>
+
+      <!-- browse mode -->
+      <section v-if="mode == 'browse'" class="section-attachment--browse">
+        <div class="row no-gutters">
+          <div class="w-100"></div>
+          <div class="col-md-3 col-xl-2">
+            <div class="section__side">
+              <div v-if="settings.groupActions.indexOf('add') != -1" class="section__add section--blue-light color--blue-dark action pointer d-flex flex-row align-items-center" @click="mode = 'upload';$forceUpdate();">
+                  <icon-add></icon-add>&nbsp;&nbsp;&nbsp;&nbsp;<p class="mb-0">Ajouter des fichiers</p>
+              </div>
               <div class="section__nav">
-                <div class="d-flex flex-row justify-content-between align-items-center">
-                  <h1>Ajouter des fichiers</h1>
-                  <button @click="mode = 'browse';" type="button" name="button" class="btn btn-danger">ANNULER</button>
+                <div class="d-flex flex-row align-items-center">
+                  <icon-filter></icon-filter>&nbsp;&nbsp;&nbsp;&nbsp;<p class="mb-0">Filtres et tags</p>
                 </div>
                 <div class="utils--spacer-semi"></div>
-                <div class="row">
-                  <div class="col-12 col-md-3">
-                    <label>Tags</label>
-                    <attachment-atags :aid="aid" :upload="true" :filters="settings.browse.filters" :options="settings.options"></attachment-atags>
-                  </div>
-                  <div class="col-12 col-md-9">
-                    <attachment-upload :aid="aid"></attachment-upload>
-                  </div>
-                </div>
+                <attachment-atags :aid="aid" :upload="false" :filters="settings.browse.filters" :options="settings.options"></attachment-atags>
               </div>
             </div>
           </div>
-        </section>
+          <div class="col-md-9 col-xl-10">
+            <attachments :aid="aid" :settings="settings"></attachments>
+          </div>
+        </div>
+      </section>
 
-        <!-- browse mode -->
-        <section v-if="mode == 'browse'" class="section-attachment--browse">
-          <div class="row no-gutters">
-            <div class="w-100"></div>
-            <div class="col-md-3 col-xl-2">
-              <div class="section__side">
-                <div v-if="settings.role == 'superuser' || settings.role == 'admin'" class="section__add section--blue-light color--blue-dark action pointer d-flex flex-row align-items-center" @click="mode = 'upload';$forceUpdate();">
-                    <icon-add></icon-add>&nbsp;&nbsp;&nbsp;&nbsp;<p class="mb-0">Ajouter des fichiers</p>
+      <!--- upload -->
+      <section v-if="mode == 'upload'" class="section-attachment--upload">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="section__nav">
+              <div class="d-flex flex-row justify-content-between align-items-center">
+                <h1>Ajouter des fichiers</h1>
+                <button @click="mode = 'browse';" type="button" name="button" class="btn btn-danger">ANNULER</button>
+              </div>
+              <div class="utils--spacer-semi"></div>
+              <div class="row">
+                <div class="col-12 col-md-3">
+                  <label>Tags</label>
+                  <attachment-atags :aid="aid" :upload="true" :filters="settings.browse.filters" :options="settings.options"></attachment-atags>
                 </div>
-                <div class="section__nav">
-                  <div class="d-flex flex-row align-items-center">
-                    <icon-filter></icon-filter>&nbsp;&nbsp;&nbsp;&nbsp;<p class="mb-0">Filtres et tags</p>
-                  </div>
-                  <div class="utils--spacer-semi"></div>
-                  <attachment-atags :aid="aid" :upload="false" :filters="settings.browse.filters" :options="settings.options"></attachment-atags>
+                <div class="col-12 col-md-9">
+                  <attachment-upload :aid="aid"></attachment-upload>
                 </div>
               </div>
             </div>
-            <div class="col-md-9 col-xl-10">
-              <attachments :aid="aid" :settings="settings"></attachments>
-            </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        <!-- edit mode -->
-        <section v-if="mode == 'edit'" class="section-attachment--upload">
-          <div class="row">
-            <div class="col-md-12">
-              <div class="section__nav">
-                <div class="d-flex flex-row justify-content-between align-items-center">
-                  <h1>Editer des fichiers</h1>
-                  <button @click="mode = 'browse';" type="button" name="button" class="btn btn-danger">ANNULER</button>
+      <!-- edit mode -->
+      <section v-if="mode == 'edit'" class="section-attachment--upload">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="section__nav">
+              <div class="d-flex flex-row justify-content-between align-items-center">
+                <h1>Editer des fichiers</h1>
+                <button @click="mode = 'browse';" type="button" name="button" class="btn btn-danger">ANNULER</button>
+              </div>
+              <div class="utils--spacer-semi"></div>
+              <div class="row">
+                <div class="col-12 col-md-3">
+                  <label>Tags</label>
+                  <attachment-atags :aid="aid" :upload="true" :filters="settings.browse.filters" :options="settings.options"></attachment-atags>
                 </div>
-                <div class="utils--spacer-semi"></div>
-                <div class="row">
-                  <div class="col-12 col-md-3">
-                    <label>Tags</label>
-                    <attachment-atags :aid="aid" :upload="true" :filters="settings.browse.filters" :options="settings.options"></attachment-atags>
-                  </div>
-                  <div class="col-12 col-md-9">
-                    <attachment-edit :aid="aid" :settings="settings"></attachment-edit>
-                  </div>
+                <div class="col-12 col-md-9">
+                  <attachment-edit :aid="aid" :settings="settings"></attachment-edit>
                 </div>
               </div>
             </div>
           </div>
-        </section>
-      </transition>
-    </div>
+        </div>
+      </section>
+    </div><!-- // END BROWSE UPLOAD EMBED VIEW -->
+
+
   </main>
 </template>
 <script>
@@ -100,7 +129,7 @@ import Edit from './Edit.vue'
 
 export default
 {
-  name: 'attachment-browse',
+  name: 'attachment-index',
   components:
   {
     'attachment-atags': Atags,
@@ -115,6 +144,7 @@ export default
   {
     return {
       mode: 'browse',
+      overlay: false,
       loading: false
     }
   },
@@ -168,8 +198,9 @@ export default
   },
   created()
   {
-    //Check role
-    if(!this.settings.role) this.settings.role = 'user'
+    // init
+    this.overlay = this.settings.overlay
+    this.mode = this.settings.mode
 
     // create new module and store settings
     this.$store.registerModule(this.aid, Object.assign({}, attachment))

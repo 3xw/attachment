@@ -35,12 +35,32 @@
               </div>
               <div v-if="hover" class="attachment-thumb__actions d-flex flex-column justify-content-end align-items-end">
                 <div class="btn-group">
-                  <div title="Aperçu" alt="Aperçu" class="btn btn--green color--white" @click="preview(attachment)"><i class="material-icons"> remove_red_eye </i></div>
-                  <div title="Télécharger" alt="Télécharger" class="btn btn--blue color--white" @click="downloadFile(attachment)"><i class="material-icons"> cloud_download </i></div>
-                  <div title="Ajouter à la sélection" alt="Ajouter à la sélection" class="btn btn--blue-dark color--white" @click="toggleFile(attachment)">
+
+                  <!-- VIEW -->
+                  <div
+                  v-if="settings.actions.indexOf('view') != -1"
+                  @click="preview(attachment)"
+                  title="Aperçu" alt="Aperçu" class="btn btn--green color--white">
+                    <i class="material-icons"> remove_red_eye </i>
+                  </div>
+
+                  <!-- DOWNLOAD -->
+                  <div
+                  v-if="settings.actions.indexOf('download') != -1"
+                  @click="downloadFile(attachment)"
+                  title="Télécharger" alt="Télécharger" class="btn btn--blue color--white">
+                    <i class="material-icons"> cloud_download </i>
+                  </div>
+
+                  <!-- SELECT -->
+                  <div
+                  v-if="settings.groupActions.length > 0"
+                  @click="toggleFile(attachment)"
+                  title="Ajouter à la sélection" alt="Ajouter à la sélection" class="btn btn--blue-dark color--white" >
                     <i v-if="!isSelected(attachment.id)" class="material-icons"> add_circle </i>
                     <i v-else class="material-icons"> remove_circle </i>
                   </div>
+
                 </div>
               </div>
             </div>
