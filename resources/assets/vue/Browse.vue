@@ -179,7 +179,7 @@ import Edit from './Edit.vue'
 
 export default
 {
-  name: 'attachment-index',
+  name: 'attachment-browse',
   components:
   {
     'attachment-atags': Atags,

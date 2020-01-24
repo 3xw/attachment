@@ -36,6 +36,7 @@ export default
   {
     // selection
     'addFileToSelection': (state, payload) => {
+      if(state.selection.files.length > 0 && state.settings.relation == 'belongsTo') state.selection.files = []
       state.selection.files.push(payload)
     },
     'removeFileFromSelection': (state, payload) => {
