@@ -284,6 +284,7 @@ export default
     },
     confirmSelection()
     {
+      this.$parent.mode = 'input'
     }
   },
   mounted()

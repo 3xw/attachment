@@ -9,14 +9,16 @@
         <!-- btn -->
         <div class="btn-group" data-intro="Ajouter des médias à l'aide de ces boutons" data-position="right">
           <button type="button" class="btn btn-fill btn-xs btn-info" @click="mode = 'browse'">
-            <i class="fa fa-cloud" aria-hidden="true"></i>
-            Browse
+            <i class="fa fa-cloud" aria-hidden="true"></i>Browse
           </button>
         </div>
 
-        <!-- files
-        <attachment-files :aid="aid" :settings="settings" ></attachment-files>
-        -->
+        <!-- files -->
+        <div class="row">
+          <div v-for="(attachment, i ) in selectedFiles" :key="i" class="col-sm-6 col-md-4">
+            <attachment :index="i" :aid="aid" mode="input" :attachment="attachment" :settings="settings"></attachment>
+          </div>
+        </div>
 
       </div>
     </div><!-- // END INPUT VIEW -->
@@ -170,6 +172,7 @@ import iconAdd from './icons/add.vue'
 
 // vue components
 import Atags from './Atags.vue'
+import Attachment from './Attachment.vue'
 import Attachments from './Attachments.vue'
 import Upload from './Upload.vue'
 import Embed from './Embed.vue'
@@ -187,6 +190,7 @@ export default
     'attachment-embed': Embed,
     'attachment-edit': Edit,
     'attachments': Attachments,
+    'attachment': Attachment,
     'icon-add': iconAdd,
     'icon-filter': iconFilter
   },
