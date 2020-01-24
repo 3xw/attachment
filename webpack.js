@@ -171,7 +171,10 @@ const attachmentConfig = env => {
         filename: 'css/plugins/attachment/attachment.min.css',
         chunkFilename: 'css/plugins/attachment/components/attachment.[name].[hash].min.css',
       }),
-      new VueLoaderPlugin()
+      new VueLoaderPlugin(),
+      new webpack.DefinePlugin({
+        '__WEBROOT__': JSON.stringify(conf.parsed.PUBLIC_PATH),
+      })
     ],
     resolve: {
       alias: {

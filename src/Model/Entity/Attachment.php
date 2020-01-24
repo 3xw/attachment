@@ -16,7 +16,7 @@ class Attachment extends Entity
   protected function _getThumbParams()
   {
     $url = ProfileRegistry::retrieve($this->profile)->thumbProfile()->getUrl($this->path);
-    return strrpos($url, '?') === false ? null: substr($url, strrpos($url, '?') + 1 );
+    return strrpos($url, '?') === false ? '': substr($url, strrpos($url, '?'));
   }
   protected function _getFullpath()
   {

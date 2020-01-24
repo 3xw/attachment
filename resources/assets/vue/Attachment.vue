@@ -1,7 +1,7 @@
 <template>
   <div :is="(mode == 'thumbInfo')? 'tbody' : 'div'" @mouseover="hover = true" @mouseleave="hover = false">
     <div v-if="mode == 'mosaic' && $options.filters.isThumbable(attachment)" class="attachment-thumb">
-      <img v-if="$options.filters.isThumbable(attachment)" v-bind:src="settings.baseUrls['cdnThumbnails']+attachment.profile+'/w678q90/'+attachment.path+'?'+attachment.thumb_params" class="img-fluid"  />
+      <img v-if="$options.filters.isThumbable(attachment)" v-bind:src="thumbBaseUrl+attachment.profile+'/w678q90/'+attachment.path+attachment.thumb_params" class="img-fluid"  />
       <div class="attachment-thumb__hover">
         <div v-if="isSelected(attachment.id)" class="d-flex flex-column justify-content-center align-items-center">
           <icon-check></icon-check>
@@ -24,7 +24,7 @@
       <div class="card attachment-thumb">
         <div class="attachment-thumb__icon-container" >
           <div>
-            <img v-if="$options.filters.isThumbable(attachment)" v-bind:src="settings.baseUrls['cdnThumbnails']+attachment.profile+'/w678c4-3q90/'+attachment.path+'?'+attachment.thumb_params" class="card-img-top" />
+            <img v-if="$options.filters.isThumbable(attachment)" v-bind:src="thumbBaseUrl+attachment.profile+'/w678c4-3q90/'+attachment.path+attachment.thumb_params" class="card-img-top" />
             <span v-html="$options.filters.icon(attachment.type+'/'+attachment.subtype)"></span>
             <!-- overlay -->
             <div class="attachment-thumb__hover">
@@ -84,7 +84,7 @@
       <td>
         <div class="attachment-thumb__icon-container table" >
           <div>
-            <img v-if="$options.filters.isThumbable(attachment)" v-bind:src="settings.baseUrls['cdnThumbnails']+attachment.profile+'/w60c1-1q75/'+attachment.path+'?'+attachment.thumb_params" width="60" class="card-img-top" />
+            <img v-if="$options.filters.isThumbable(attachment)" v-bind:src="thumbBaseUrl+attachment.profile+'/w60c1-1q75/'+attachment.path+attachment.thumb_params" width="60" class="card-img-top" />
             <span v-html="$options.filters.icon(attachment.type+'/'+attachment.subtype)"></span>
           </div>
         </div>
@@ -136,6 +136,10 @@ export default
     selectedFiles()
     {
       return this.$store.get(this.aid + '/selection.files')
+    },
+    thumbBaseUrl()
+    {
+      return __WEBROOT__ + this.$store.get(this.aid+'/settings.baseUrls.thumbnails')
     }
   },
   methods: {
