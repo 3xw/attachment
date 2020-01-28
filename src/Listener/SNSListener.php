@@ -16,6 +16,8 @@ class SNSListener extends BaseListener
 
   public function respond(Event $event)
   {
+    if($event->getSubject()->success === false) return;
+
     $subject = $event->getSubject();
     $SnSclient = new SnsClient($this->getConfig('clientSettings'));
     $message = json_encode(array_merge(['subject' => $subject], $this->getConfig('data')));
