@@ -22,7 +22,7 @@
 
       <!-- alerts -->
       <div v-for="(error, i) in errors" class="alert alert-warning" role="alert">
-        An error occured: {{error}}
+        {{error}}
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -195,10 +195,10 @@ export default
       this.$store.commit(this.aid+'/addUploadedFile', response.data.data )
       this.upload()
     },
-    errorUploadCb: function(response)
+    errorUploadCb: function(error)
     {
       this.uploading = false
-      this.errors.push(response)
+      this.errors.push(error.response.data.message? error.response.data.message: error)
       this.upload()
     },
   }
