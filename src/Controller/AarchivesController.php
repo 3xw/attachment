@@ -38,7 +38,7 @@ class AarchivesController extends AppController
       ],
       'listeners' => [
         //'CrudCache',
-        'Crud.Api',
+        'Attachment\Crud\Listener\JsonApiListener',
         'Crud.RelatedModels',
         'Crud.ApiPagination',
         'Crud.ApiQueryLog',

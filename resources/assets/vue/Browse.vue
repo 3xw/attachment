@@ -153,8 +153,14 @@
           </div>
         </div>
       </section>
-    </div><!-- // END BROWSE UPLOAD EMBED VIEW -->
 
+
+      <!-- ARCHIVES -->
+      <section v-if="mode == 'archives'" class="section-attachment--upload">
+        <attachment-archives :aid="aid" :settings="settings"></attachment-archives>
+      </section><!-- // END ARCHIVES -->
+
+    </div><!-- // END BROWSE UPLOAD EMBED VIEW -->
 
   </main>
 </template>
@@ -167,9 +173,6 @@ import createCrudModule from 'vuex-crud';
 import { client, parseResponse, parseResponseWithPaginate, parseTags} from '../js/client.js'
 import attachment from '../js/store/store.js'
 
-import iconFilter from './icons/filter.vue'
-import iconAdd from './icons/add.vue'
-
 // vue components
 import Atags from './Atags.vue'
 import Attachment from './Attachment.vue'
@@ -177,7 +180,9 @@ import Attachments from './Attachments.vue'
 import Upload from './Upload.vue'
 import Embed from './Embed.vue'
 import Edit from './Edit.vue'
-
+import Archives from './Archives.vue'
+import iconFilter from './icons/filter.vue'
+import iconAdd from './icons/add.vue'
 
 
 export default
@@ -185,6 +190,7 @@ export default
   name: 'attachment-browse',
   components:
   {
+    'attachment-archives': Archives,
     'attachment-atags': Atags,
     'attachment-upload': Upload,
     'attachment-embed': Embed,
@@ -242,11 +248,21 @@ export default
       }
       //this.createSelectedFilesToken({data: {files: ids}})
     },
-    mode: function(){
+    mode()
+    {
       this.$forceUpdate()
-      if(this.mode == 'browse'){
+
+      switch(this.mode)
+      {
+        case 'browse':
         this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ atags: '', upload: 0, refresh: new Date().getTime(), page: 1 }))
-      }else{
+        break
+
+        case 'archives':
+        this.fetchAarchives()
+        break
+
+        default:
         this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ upload: 1 }))
       }
     }
@@ -287,11 +303,15 @@ export default
     }))
     this.$store.registerModule(this.aid+'/aarchives', createCrudModule({
       resource: 'aarchives',
+      only: ['FETCH_LIST','CREATE','DESTROY'],
       urlRoot: this.settings.url+'attachment/aarchives',
       client,
-      parseSingle: parseResponse,
-      parseList: parseTags,
+      parseList: parseResponseWithPaginate,
+      onFetchListStart: () => {
+        this.loading = true
+      },
       onFetchListSuccess: (o, response) => {
+        this.loading = false
         this.$store.set(this.aid + '/aarchives', response.data)
       },
     }))

@@ -20,6 +20,8 @@ Router::plugin(
       // protect from direct access
       //$routes->redirect('/resize/*', '/');
 
+			$routes->resources('Aarchives');
+
       $routes->setExtensions(['json']);
       $routes->fallbacks('DashedRoute');
     }
