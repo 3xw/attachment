@@ -82,7 +82,7 @@ class AttachmentHelper extends Helper
   public function index($settings = [])
   {
     // actions
-    $settings = $this->setup('index',array_merge(
+    $settings = $this->setup('Attachments',array_merge(
       [
         'mode' => 'browse',
         'overlay' => false,

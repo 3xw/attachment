@@ -16,6 +16,8 @@
         <div class="d-flex flex-row align-items-center">
           {{selectedFiles.length}} fichier(s) selectionné(s)&nbsp;&nbsp;
           <div class="btn-group">
+
+            <!-- FORM DOWNLOAD -->
             <form ref="dform" :action="$store.get(this.aid + '/settings.url')+'attachment/download/files'" method="POST">
               <input type="hidden" name="token" v-model="downloadToken">
             </form>
@@ -281,6 +283,7 @@ export default
     },
     requestArchive()
     {
+      console.log(this.$store.get(this.aid+'/selection.files'))
     },
     confirmSelection()
     {
