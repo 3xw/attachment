@@ -2,7 +2,7 @@
   <div :is="(mode == 'thumbInfo')? 'tbody' : 'div'" @mouseover="hover = true" @mouseleave="hover = false">
 
     <!-- input -->
-    <div v-else-if="mode == 'input'">
+    <div v-if="mode == 'input'">
       <div class="card attachment-input">
         <div class="attachment-input__icon-container" >
           <div>
@@ -117,7 +117,7 @@
     </tr>
 
     <!-- mosaic -->
-    <div v-if="mode == 'mosaic' && $options.filters.isThumbable(attachment)" class="attachment-thumb">
+    <div v-else-if="mode == 'mosaic'" class="attachment-thumb">
       <img v-if="$options.filters.isThumbable(attachment)" v-bind:src="thumbBaseUrl('w678q90',attachment)" class="img-fluid"  />
       <div class="attachment-thumb__hover">
         <div v-if="isSelected(attachment.id)" class="d-flex flex-column justify-content-center align-items-center">
