@@ -66,7 +66,10 @@ class AttachmentHelper extends Helper
     // urls
     $profiles = Configure::read('Attachment.profiles');
     $settings['baseUrls'] = [];
-    foreach($profiles as $key => $value) $settings['baseUrls'][$key] = $value['baseUrl'];
+    foreach($profiles as $key => $value) $settings['baseUrls'][$key] = [
+      'profile' => Router::url($profiles[$key]['baseUrl'], true),
+      'thumbnails' => !empty($profiles[$key]['thumbnails'])? Router::url($profiles[$profiles[$key]['thumbnails']]['baseUrl'], true): ''
+    ];
 
     return $settings;
   }

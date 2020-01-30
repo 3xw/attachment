@@ -5,7 +5,7 @@
 
     <!-- mosaic -->
     <div v-if="mode == 'mosaic' && $options.filters.isThumbable(attachment)" class="attachment-thumb">
-      <img v-if="$options.filters.isThumbable(attachment)" v-bind:src="thumbBaseUrl+attachment.profile+'/w678q90/'+attachment.path+attachment.thumb_params" class="img-fluid"  />
+      <img v-if="$options.filters.isThumbable(attachment)" v-bind:src="thumbBaseUrl('w678q90',attachment)" class="img-fluid"  />
       <div class="attachment-thumb__hover">
         <div v-if="isSelected(attachment.id)" class="d-flex flex-column justify-content-center align-items-center">
           <icon-check></icon-check>
@@ -30,7 +30,7 @@
       <div class="card attachment-input">
         <div class="attachment-input__icon-container" >
           <div>
-            <img v-if="$options.filters.isThumbable(attachment)" v-bind:src="thumbBaseUrl+attachment.profile+'/w678c4-3q90/'+attachment.path+attachment.thumb_params" class="card-img-top" />
+            <img v-if="$options.filters.isThumbable(attachment)" v-bind:src="thumbBaseUrl('w678c4-3q90', attachment)" class="card-img-top" />
             <span v-html="$options.filters.icon(attachment.type+'/'+attachment.subtype)"></span>
             <!-- overlay -->
             <div class="attachment-thumb__hover">
@@ -46,121 +46,112 @@
                   v-if="settings.groupActions.length > 0"
                   @click="toggleFile(attachment)"
                   title="Ajouter à la sélection" alt="Ajouter à la sélection" class="btn btn--blue-dark color--white" >
-                    <i v-if="!isSelected(attachment.id)" class="material-icons"> add_circle </i>
-                    <i v-else class="material-icons"> remove_circle </i>
-                  </div>
-
+                  <i v-if="!isSelected(attachment.id)" class="material-icons"> add_circle </i>
+                  <i v-else class="material-icons"> remove_circle </i>
                 </div>
+
               </div>
             </div>
           </div>
         </div>
-        <div class="card-body">
-            <p class="card-text small">
-              <span v-if="attachment.title">{{attachment.title}}<br/></span>
-              {{attachment.name}}<br/>
-              <!--{{attachment.size | bytesToMegaBytes | decimal(2) }} MB<br/>-->
-            </p>
-          <!-- data -->
-          <input v-if="settings.relation == 'belongsToMany'" type="hidden" :name="'attachments['+index+'][id]'" :value="attachment.id">
-          <input v-if="settings.relation == 'belongsToMany'" type="hidden" :name="'attachments['+index+'][_joinData][order]'" :value="index">
-          <input v-if="settings.relation != 'belongsToMany'" type="hidden" :name="settings.field" :value="attachment.id">
-        </div>
+      </div>
+      <div class="card-body">
+        <p class="card-text small">
+          <span v-if="attachment.title">{{attachment.title}}<br/></span>
+          {{attachment.name}}<br/>
+          <!--{{attachment.size | bytesToMegaBytes | decimal(2) }} MB<br/>-->
+        </p>
+        <!-- data -->
+        <input v-if="settings.relation == 'belongsToMany'" type="hidden" :name="'attachments['+index+'][id]'" :value="attachment.id">
+        <input v-if="settings.relation == 'belongsToMany'" type="hidden" :name="'attachments['+index+'][_joinData][order]'" :value="index">
+        <input v-if="settings.relation != 'belongsToMany'" type="hidden" :name="settings.field" :value="attachment.id">
       </div>
     </div>
-
-    <!-- thumb -->
-    <div v-else-if="mode == 'thumb'">
-      <div class="card attachment-thumb">
-        <div class="attachment-thumb__icon-container" >
-          <div>
-            <img v-if="$options.filters.isThumbable(attachment)" v-bind:src="thumbBaseUrl+attachment.profile+'/w678c4-3q90/'+attachment.path+attachment.thumb_params" class="card-img-top" />
-            <span v-html="$options.filters.icon(attachment.type+'/'+attachment.subtype)"></span>
-            <!-- overlay -->
-            <div class="attachment-thumb__hover">
-              <div v-if="isSelected(attachment.id)" class="d-flex flex-column justify-content-center align-items-center">
-                <icon-check></icon-check>
-                <div class="utils--spacer-mini"></div>
-                fichier selectionné
-              </div>
-              <div v-if="hover" class="attachment-thumb__actions d-flex flex-column justify-content-end align-items-end">
-                <div class="btn-group">
-
-                  <!-- VIEW -->
-                  <div
-                  v-if="settings.actions.indexOf('view') != -1"
-                  @click="preview(attachment)"
-                  title="Aperçu" alt="Aperçu" class="btn btn--green color--white">
-                    <i class="material-icons"> remove_red_eye </i>
-                  </div>
-
-                  <!-- DOWNLOAD -->
-                  <div
-                  v-if="settings.actions.indexOf('download') != -1"
-                  @click="downloadFile(attachment)"
-                  title="Télécharger" alt="Télécharger" class="btn btn--blue color--white">
-                    <i class="material-icons"> cloud_download </i>
-                  </div>
-
-                  <!-- SELECT -->
-                  <div
-                  v-if="settings.groupActions.length > 0"
-                  @click="toggleFile(attachment)"
-                  title="Ajouter à la sélection" alt="Ajouter à la sélection" class="btn btn--blue-dark color--white" >
-                    <i v-if="!isSelected(attachment.id)" class="material-icons"> add_circle </i>
-                    <i v-else class="material-icons"> remove_circle </i>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="card-body">
-            <p class="card-text small">
-              <span v-if="attachment.title">{{attachment.title}}<br/></span>
-              {{attachment.name}}<br/>
-              <!--{{attachment.size | bytesToMegaBytes | decimal(2) }} MB<br/>-->
-            </p>
-          <!-- data -->
-          <!--<input v-if="settings.relation == 'belongsToMany'" type="hidden" :name="'attachments['+index+'][id]'" :value="attachment.id">
-          <input v-if="settings.relation == 'belongsToMany'" type="hidden" :name="'attachments['+index+'][_joinData][order]'" :value="index">
-          <input v-if="settings.relation != 'belongsToMany'" type="hidden" :name="settings.field" :value="attachment.id">-->
-          <!--<button class="btn btn-fill btn-xs btn-warning" v-on:click.prevent="remove(attachment.id)" >Remove</button>-->
-        </div>
-      </div>
-    </div>
-
-    <!-- thumbInfo -->
-    <tr v-else-if="mode == 'thumbInfo'">
-      <td>
-        <div class="attachment-thumb__icon-container table" >
-          <div>
-            <img v-if="$options.filters.isThumbable(attachment)" v-bind:src="thumbBaseUrl+attachment.profile+'/w60c1-1q75/'+attachment.path+attachment.thumb_params" width="60" class="card-img-top" />
-            <span v-html="$options.filters.icon(attachment.type+'/'+attachment.subtype)"></span>
-          </div>
-        </div>
-      </td>
-      <td>
-        <span v-if="attachment.title">{{attachment.title}} | </span>
-        {{attachment.name}}<br>
-        {{attachment.date}}<br>
-        {{attachment.size | bytesToMegaBytes | decimal(2) }} MB
-      </td>
-      <td class="text-right">
-        <div class="btn-group attachment__actions">
-          <div title="Aperçu" alt="Aperçu" class="btn btn--green color--white" @click="preview(attachment)"><i class="material-icons"> remove_red_eye </i></div>
-          <div title="Télécharger" alt="Télécharger" class="btn btn--blue color--white" @click="downloadFile(attachment)"><i class="material-icons"> cloud_download </i></div>
-          <div title="Ajouter à la sélection" alt="Ajouter à la sélection" class="btn btn--blue-dark color--white" @click="toggleFile(attachment)">
-            <i v-if="!isSelected(attachment.id)" class="material-icons"> add_circle </i>
-            <i v-else class="material-icons"> remove_circle </i>
-          </div>
-        </div>
-      </td>
-    </tr>
-
-
   </div>
+
+  <!-- thumb -->
+  <div v-else-if="mode == 'thumb'">
+    <div class="card attachment-thumb">
+      <div class="attachment-thumb__icon-container" >
+        <div>
+          <img v-if="$options.filters.isThumbable(attachment)" v-bind:src="thumbBaseUrl('w678c4-3q90', attachment)" class="card-img-top" />
+          <span v-html="$options.filters.icon(attachment.type+'/'+attachment.subtype)"></span>
+          <!-- overlay -->
+          <div class="attachment-thumb__hover">
+            <div v-if="isSelected(attachment.id)" class="d-flex flex-column justify-content-center align-items-center">
+              <icon-check></icon-check>
+              <div class="utils--spacer-mini"></div>
+              fichier selectionné
+            </div>
+            <div v-if="hover" class="attachment-thumb__actions d-flex flex-column justify-content-end align-items-end">
+              <div class="btn-group">
+
+                <!-- VIEW -->
+                <div v-if="settings.actions.indexOf('view') != -1" @click="preview(attachment)" title="Aperçu" alt="Aperçu" class="btn btn--green color--white">
+                  <i class="material-icons"> remove_red_eye</i>
+                </div>
+
+                <!-- DOWNLOAD -->
+                <div v-if="settings.actions.indexOf('download') != -1" @click="downloadFile(attachment)" title="Télécharger" alt="Télécharger" class="btn btn--blue color--white">
+                  <i class="material-icons"> cloud_download </i>
+                </div>
+
+                <!-- SELECT -->
+                <div v-if="settings.groupActions.length > 0" @click="toggleFile(attachment)" title="Ajouter à la sélection" alt="Ajouter à la sélection" class="btn btn--blue-dark color--white" >
+                  <i v-if="!isSelected(attachment.id)" class="material-icons"> add_circle </i>
+                  <i v-else class="material-icons"> remove_circle </i>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <p class="card-text small">
+          <span v-if="attachment.title">{{attachment.title}}<br/></span>
+          {{attachment.name}}<br/>
+          <!--{{attachment.size | bytesToMegaBytes | decimal(2) }} MB<br/>-->
+        </p>
+        <!-- data -->
+        <!--<input v-if="settings.relation == 'belongsToMany'" type="hidden" :name="'attachments['+index+'][id]'" :value="attachment.id">
+        <input v-if="settings.relation == 'belongsToMany'" type="hidden" :name="'attachments['+index+'][_joinData][order]'" :value="index">
+        <input v-if="settings.relation != 'belongsToMany'" type="hidden" :name="settings.field" :value="attachment.id">-->
+        <!--<button class="btn btn-fill btn-xs btn-warning" v-on:click.prevent="remove(attachment.id)" >Remove</button>-->
+      </div>
+    </div>
+  </div>
+
+  <!-- thumbInfo -->
+  <tr v-else-if="mode == 'thumbInfo'">
+    <td>
+      <div class="attachment-thumb__icon-container table" >
+        <div>
+          <img v-if="$options.filters.isThumbable(attachment)" v-bind:src="thumbBaseUrl('w60c1-1q75',attachment)" width="60" class="card-img-top" />
+          <span v-html="$options.filters.icon(attachment.type+'/'+attachment.subtype)"></span>
+        </div>
+      </div>
+    </td>
+    <td>
+      <span v-if="attachment.title">{{attachment.title}} | </span>
+      {{attachment.name}}<br>
+      {{attachment.date}}<br>
+      {{attachment.size | bytesToMegaBytes | decimal(2) }} MB
+    </td>
+    <td class="text-right">
+      <div class="btn-group attachment__actions">
+        <div title="Aperçu" alt="Aperçu" class="btn btn--green color--white" @click="preview(attachment)"><i class="material-icons"> remove_red_eye </i></div>
+        <div title="Télécharger" alt="Télécharger" class="btn btn--blue color--white" @click="downloadFile(attachment)"><i class="material-icons"> cloud_download </i></div>
+        <div title="Ajouter à la sélection" alt="Ajouter à la sélection" class="btn btn--blue-dark color--white" @click="toggleFile(attachment)">
+          <i v-if="!isSelected(attachment.id)" class="material-icons"> add_circle </i>
+          <i v-else class="material-icons"> remove_circle </i>
+        </div>
+      </div>
+    </td>
+  </tr>
+
+
+</div>
 </template>
 <script>
 import { client } from '../js/client.js'
@@ -190,13 +181,22 @@ export default
     selectedFiles()
     {
       return this.$store.get(this.aid + '/selection.files')
-    },
-    thumbBaseUrl()
-    {
-      return __WEBROOT__ + this.$store.get(this.aid+'/settings.baseUrls.thumbnails')
     }
   },
   methods: {
+    thumbBaseUrl(modifs, attachment)
+    {
+      let
+      baseUrl = typeof attachment == 'string'?
+      __WEBROOT__ + 'thumbnails/' :
+      this.$store.get(this.aid+'/settings.baseUrls.'+attachment.profile+'.thumbnails'),
+
+      url = typeof attachment == 'string'?
+      'default/'+modifs+'/'+ attachment:
+      attachment.profile+'/'+modifs+'/'+attachment.path+attachment.thumb_params
+
+      return baseUrl + url
+    },
     toggleFile(attachment)
     {
       if(this.selectedFiles.findIndex(f => f.id === attachment.id) == -1){
