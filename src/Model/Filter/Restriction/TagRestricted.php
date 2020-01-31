@@ -12,6 +12,16 @@ class TagRestricted extends BaseRestriction
     if(empty($atags)) return;
     if(!is_array($atags)) $atags = [$atags];
 
+    /*
+    $conditions = [
+      'OR' => [
+        'Atags.name IN' => $atags,
+        'Atags.slug IN' => array_map(function($val) { return Text::slug($val,'-'); }, $atags)
+      ]
+    ];
+    $query->where($conditions);
+    */
+
     $where = [];
     foreach($atags as $tag )
     {

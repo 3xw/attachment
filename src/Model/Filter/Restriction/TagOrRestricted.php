@@ -15,18 +15,12 @@ class TagOrRestricted extends BaseRestriction
     $query->innerJoin(['Atags' => 'atags'],['Atags.id = AAtags.atag_id']);
     $query->group(['Attachments.id']);
 
-    $where = ['OR' => []];
-
-    foreach($atags as $tag )
-    {
-      array_push($where['OR'],[
-        'OR' => [
-          'Atags.name' => $tag,
-          'Atags.slug' => Text::slug($tag,'-')
-        ]
-      ]);
-    }
-
-    $query->where($where);
+    $conditions = [
+      'OR' => [
+        'Atags.name IN' => $atags,
+        'Atags.slug IN' => array_map(function($val) { return Text::slug($val,'-'); }, $atags)
+      ]
+    ];
+    $query->andWhere($conditions);
   }
 }
