@@ -20,28 +20,6 @@ use Cake\ORM\TableRegistry;
 */
 class ATagBehavior extends Behavior
 {
-
-  /**
-  * Default configuration.
-  *
-  * @var array
-  */
-  protected $_defaultConfig = [];
-
-  /**
-  * Build the behaviour
-  *
-  * @param array $config Passed configuration
-  * @return void
-  */
-  public function initialize(array $config):void
-  {
-    // check for a datafield field (there is no default)
-    if (!isset($config['file_field']) || '' === $config['file_field']) {
-      throw new Exception('Must specify a field for FileBehavior');
-    }
-  }
-
   public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options)
   {
 

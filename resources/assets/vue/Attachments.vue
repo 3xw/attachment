@@ -68,9 +68,9 @@
     </div>
     <div class="section__sort d-flex flex-row align-items-center">
       <p class="small color--grey d-inline-block mb-0">Ordre: &nbsp;&nbsp;</p>
-      <select v-model="sort" @change="changeOrder">
-        <option value="created_desc">Plus récent en premier</option>
-        <option value="created_asc">Plus ancien en premier</option>
+      <select v-model="direction" @change="changeOrder">
+        <option value="desc">Plus récent en premier</option>
+        <option value="asc">Plus ancien en premier</option>
       </select>
     </div>
   </div>
@@ -157,7 +157,8 @@ export default
   props: { aid: String, settings: Object },
   data(){
     return {
-      sort: 'created_desc',
+      sort: 'date',
+      direction: 'desc',
       mode: 'thumb',
       types: {
         name: 'Types',
@@ -245,7 +246,7 @@ export default
     },
     changeOrder()
     {
-      this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ sort: this.sort, page: 1 }))
+      this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ sort: this.sort, direction: this.direction, page: 1 }))
     },
     reLayout()
     {

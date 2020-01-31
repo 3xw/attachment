@@ -12,6 +12,7 @@ use Search\Manager;
 use Cake\Core\Configure;
 use Attachment\Http\Exception\UploadException;
 use Cake\Utility\Inflector;
+use App\Model\Filter\AttachmentCollection;
 
 class AttachmentsTable extends Table
 {
@@ -22,24 +23,6 @@ class AttachmentsTable extends Table
     $this->setTable('attachments');
     $this->setDisplayField('name');
     $this->setPrimaryKey('id');
-
-    $this->addBehavior('Timestamp');
-
-    // custom behaviors
-    $this->addBehavior('Attachment\ORM\Behavior\UserIDBehavior');
-    $this->addBehavior('Attachment\ORM\Behavior\ExternalBehavior');
-    $this->addBehavior('Attachment\ORM\Behavior\EmbedBehavior', [
-      'embed_field' => 'embed',
-      'file_field' => 'path'
-    ]);
-    $this->addBehavior('Attachment\ORM\Behavior\FlyBehavior', [
-      'file_field' => 'path'
-    ]);
-    $this->addBehavior('Attachment\ORM\Behavior\ATagBehavior', [
-      'file_field' => 'path'
-    ]);
-    $this->addBehavior('Search.Search');
-    if(Configure::read('Attachment.translate')) $this->addBehavior('Trois\Utils\ORM\Behavior\TranslateBehavior', ['fields' => ['title','description']]);
 
     // assoc
     $this->belongsTo('Users', [
@@ -54,115 +37,19 @@ class AttachmentsTable extends Table
       'className' => 'Attachment.Atags',
     ]);
 
-    // settings
-    $this->searchManager()
-    ->add('uuid', 'Attachment.SessionQuerySettings') // wrapps query with session settings throught uuid
-    ->add('search', 'Search.Callback',[
-      'callback' => function ($query, $args, $filter) {
-        $needle = '%'.$args['search'].'%';
-        $query
-        ->distinct($this->aliasField('id'))
-        ->leftJoin(['AAtags' => 'attachments_atags'],['AAtags.attachment_id = Attachments.id'])
-        ->leftJoin(['Atags' => 'atags'],['Atags.id = AAtags.atag_id'])
-        ->where([
-          'OR' => [
-            'Atags.name LIKE' => $needle,
-            'Atags.slug LIKE' => $needle,
-            'Attachments.title LIKE' => $needle,
-            'Attachments.description LIKE' => $needle,
-            'Attachments.name LIKE' => $needle,
-          ]
-        ]);
+    // native behaviors
+    $this->addBehavior('Timestamp');
 
-        return true;
-      }
-    ])
-    ->add('type', 'Search.Callback', [
-      'callback' => function ($query, $args, $filter)
-      {
-        $conditions = [];
-        $mimes = explode(',', $args['type']);
-        $condition = '(';
+    // custom behaviors
+    $this->addBehavior('Attachment\ORM\Behavior\UserIDBehavior');
+    $this->addBehavior('Attachment\ORM\Behavior\ExternalBehavior');
+    $this->addBehavior('Attachment\ORM\Behavior\EmbedBehavior');
+    $this->addBehavior('Attachment\ORM\Behavior\FlyBehavior');
+    $this->addBehavior('Attachment\ORM\Behavior\ATagBehavior');
+    if(Configure::read('Attachment.translate')) $this->addBehavior('Trois\Utils\ORM\Behavior\TranslateBehavior', ['fields' => ['title','description']]);
 
-        foreach($mimes as $mime)
-        {
-          $mime = explode('/', $mime);
-          $logic = preg_match("/\!/", $mime[0])? ' != ': ' = ';
-          $assoc = preg_match("/\!/", $mime[0])? 'AND': 'OR';
-          $mime[0] = preg_match("/\!/", $mime[0])? substr($mime[0], 1): $mime[0];
-
-          $condition .= '(Attachments.type '.$logic.' "'.$mime[0].'"';
-          if(!empty($mime[1]) && $mime[1] != '*')   $condition .= ' AND Attachments.subtype '.$logic.' "'.$mime[1].'"';
-          $condition .= ") $assoc ";
-        }
-
-        $condition = substr($condition,0, -4).')';
-        $query->andWhere([$condition]);
-
-        return true;
-      }
-    ])
-    ->add('atags', 'Search.Callback',[
-      'callback' => function ($query, $args, $filter)
-      {
-        foreach(explode(',', $args['atags']) as $key => $atag)
-        {
-          $t = Inflector::camelize("M$key");
-          $at = 'A'.$t;
-          $query->join([
-            $at => [
-              'table' => 'attachments_atags',
-              'type' => 'INNER',
-              'conditions' => $at.'.attachment_id = Attachments.id',
-            ],
-            $t => [
-              'table' => 'atags',
-              'type' => 'INNER',
-              'conditions' => [
-                $t.'.id = '.$at.'.atag_id',
-                'OR' => [
-                  $t.'.name' => $atag,
-                  $t.'.slug' => $atag
-                ]
-              ],
-            ]
-          ]);
-        }
-
-        return true;
-      }
-    ])
-    ->add('sort', 'Search.Callback',[
-      'callback' => function ($query, $args, $filter)
-      {
-        $conditions = ($args['sort'] == 'created_desc')? ['Attachments.date' => 'DESC'] : ['Attachments.date' => 'ASC'];
-        $query->order($conditions);
-        return true;
-      }
-    ])
-    ->add('filters', 'Search.Callback',[
-      'callback' => function ($query, $args, $filter)
-      {
-        $conditions = [];
-        $conditions['OR'] = [];
-        foreach($args as $filter){
-          switch($filter){
-            case 'horizontal':
-            array_push($conditions['OR'], ['Attachments.width > Attachments.height']);
-            break;
-            case 'vertical':
-            array_push($conditions['OR'], ['Attachments.width < Attachments.height']);
-            break;
-            case 'square':
-            array_push($conditions['OR'], ['Attachments.width = Attachments.height']);
-            break;
-          }
-        }
-        $query->where($conditions);
-
-        return true;
-      }
-    ]);
+    // third party behaviors
+    $this->addBehavior('Search.Search',['collectionClass' => 'Attachment.Attachment']);
   }
 
   public function find(string $type = 'all', array $options = []): Query

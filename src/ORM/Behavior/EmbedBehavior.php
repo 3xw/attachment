@@ -22,7 +22,10 @@ class EmbedBehavior extends Behavior
   *
   * @var array
   */
-  protected $_defaultConfig = [];
+  protected $_defaultConfig = [
+    'embed_field' => 'embed',
+    'file_field' => 'path'
+  ];
 
   /**
   * Build the behaviour
@@ -32,11 +35,12 @@ class EmbedBehavior extends Behavior
   */
   public function initialize(array $config):void
   {
+    parent::initialize($config);
     // check for a datafield field (there is no default)
-    if (!isset($config['embed_field']) || '' === $config['embed_field']
-    || !isset($config['file_field']) || '' === $config['file_field'] ) {
-      throw new Exception('Must specify a embed_field and a file_field for EmbedBehavior');
-    }
+    if (
+      empty($this->getConfig('embed_field')) ||
+      empty($this->getConfig('file_field'))
+    ) throw new Exception('Must specify a embed_field and a file_field for EmbedBehavior');
   }
 
   public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options)

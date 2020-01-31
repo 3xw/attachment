@@ -2,24 +2,47 @@
 namespace Attachment\Model\Filter\Restriction;
 
 use Cake\ORM\Query;
-use Cake\Utility\Inflector;
 
 class TypesRestricted extends BaseRestriction
 {
-  public $query = null;
-
-  public function process(Query $query, $settings )
+  public static function process(Query $query, $mimes )
   {
-    if(!empty($settings['types']))
+    if(empty($mimes)) return;
+    if(!is_array($mimes)) $mimes = [$mimes];
+
+    $conditions = [
+      'type' => [],
+      'subtype' => []
+    ];
+
+    // loop mimes
+    foreach($mimes as $mime)
     {
-      $condition = '(';
-      foreach($settings['types'] as $type )
-      {
-        $types = explode('/',$type);
-        $condition .= '(Attachments.type = "'.$types[0].'" AND Attachments.subtype ="'.$types[1].'" ) OR ';
-      }
-      $condition = substr($condition,0, -4).')';
-      $query->andWhere([$condition]);
+      // set what to do
+      $mime = explode('/', $mime);
+      $negative = preg_match("/\!/", $mime[0]);
+      $logic = $negative? ' NOT IN ': ' IN ';
+      $field = !empty($mime[1]) && $mime[1] != '*' ? 'subtype': 'type';
+      $value = !empty($mime[1]) && $mime[1] != '*' ? $mime[1]: ($negative? substr($mime[0], 1): $mime[0]);
+
+      // apply
+      if(!array_key_exists($logic, $conditions[$field])) $conditions[$field][$logic] = [];
+      $conditions[$field][$logic][] = $value;
     }
+
+    $condition = '( ';
+
+    // modify qeury
+    foreach($conditions as $field => $c)
+    {
+      if(!empty($c)) foreach($c as $logic => $values)
+      {
+        $condition .= $field.$logic.sprintf("('%s')", implode("','", $values ));
+        $condition .= preg_match("/\NOT/", $logic)? " AND ": " OR ";
+      }
+    }
+
+    $condition = substr($condition,0, -4).')';
+    $query->andWhere([$condition]);
   }
 }
