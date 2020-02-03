@@ -6,13 +6,14 @@ use Cake\Http\Session;
 use Cake\Routing\Router;
 use Cake\Utility\Inflector;
 use Cake\Http\Exception\UnauthorizedException;
+use Cake\Utility\Hash;
 
 class SessionControl extends Base
 {
   protected $_defaultConfig = [
-      'tag_restricted' => 'atags',
-      'tag_or_restricted' => 'atags',
-      'types_restricted' => 'types'
+    'tag_restricted' => 'atags',
+    'tag_or_restricted' => 'atags',
+    'types_restricted' => 'types'
   ];
 
   public function process():bool
@@ -28,7 +29,7 @@ class SessionControl extends Base
       {
         $class = Inflector::camelize($restriction);
         $class = 'Attachment\Model\Filter\Restriction\\' . $class;
-        if (class_exists($class) && !empty($s[$this->getConfig($restriction)])) $class::process($this->getQuery(), $s[$this->getConfig($restriction)]);
+        if (class_exists($class)) $class::process($this->getQuery(), Hash::extract($s, $restriction));
       }
     }
 
