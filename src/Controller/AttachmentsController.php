@@ -37,7 +37,7 @@ class AttachmentsController extends AppController
       'actions' => [
         'index' => [
           'className' => 'Crud.Index',
-          'relatedModels' => ['Atags']
+          'relatedModels' => ['Atags','Aarchives']
         ],
         'view' => [
           'className' => 'Crud.View',

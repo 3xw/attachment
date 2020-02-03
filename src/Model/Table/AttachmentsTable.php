@@ -36,6 +36,11 @@ class AttachmentsTable extends Table
       'joinTable' => 'attachments_atags',
       'className' => 'Attachment.Atags',
     ]);
+    $this->hasOne('Aarchives', [
+      'type' => 'LEFT',
+      'foreignKey' => 'attachment_id',
+      'className' => 'Attachment.Aarchives',
+    ]);
 
     // native behaviors
     $this->addBehavior('Timestamp');
