@@ -4,6 +4,7 @@ namespace Attachment\Model\Filter\Restriction;
 use Cake\ORM\Query;
 use Cake\Utility\Inflector;
 use Cake\Utility\Text;
+use Cake\ORM\TableRegistry;
 
 class TagRestricted extends BaseRestriction
 {
@@ -12,30 +13,28 @@ class TagRestricted extends BaseRestriction
     if(empty($atags)) return;
     if(!is_array($atags)) $atags = [$atags];
 
-    /*
-    $conditions = [
-      'OR' => [
-        'Atags.name IN' => $atags,
-        'Atags.slug IN' => array_map(function($val) { return Text::slug($val,'-'); }, $atags)
-      ]
-    ];
-    $query->where($conditions);
-    */
+    // subquery
+    $subquery = TableRegistry::getTableLocator()
+    ->get('AttachmentsAtags')
+    ->find()
+    ->select(['attachment_id'])
+    ->innerJoin(['Atags' => 'atags'],['Atags.id = AttachmentsAtags.atag_id'])
+    ->group(['attachment_id']);
 
-    $where = [];
     foreach($atags as $tag )
     {
-      $alias = Inflector::classify(str_replace(['-'],[''],Text::slug($tag,'-')));
-      $query->innerJoin([$alias.'AAtags' => 'attachments_atags'],[$alias.'AAtags.attachment_id = Attachments.id']);
-      $query->innerJoin([$alias.'Atags' => 'atags'],[$alias.'Atags.id = '.$alias.'AAtags.atag_id']);
-      array_push($where,[
+      $subquery->having([
         'OR' => [
-          $alias.'Atags.name' => $tag,
-          $alias.'Atags.slug' => Text::slug($tag,'-')
+          "SUM(Atags.name = '$tag')",
+          "SUM(Atags.slug = '".Text::slug($tag,'-')."')"
         ]
       ]);
     }
 
-    $query->where($where);
+    $query->where(function ($exp, $q) use ($subquery){
+      return $exp->in('id', $subquery);
+    });
+
+    return $query;
   }
 }
