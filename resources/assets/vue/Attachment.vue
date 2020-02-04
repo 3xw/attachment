@@ -7,7 +7,7 @@
         <div class="attachment-input__icon-container" >
           <div>
             <img v-if="$options.filters.isThumbable(attachment)" v-bind:src="thumbBaseUrl('w678c4-3q90', attachment)" class="card-img-top" />
-            <span v-html="$options.filters.icon(attachment.type+'/'+attachment.subtype)"></span>
+            <span v-html="$options.filters.icon(attachment)"></span>
             <!-- overlay -->
             <div class="attachment-thumb__hover">
               <div v-if="isSelected(attachment.id)" class="d-flex flex-column justify-content-center align-items-center">
@@ -47,7 +47,7 @@
         <div class="attachment-thumb__icon-container" >
           <div>
             <img v-if="$options.filters.isThumbable(attachment)" v-bind:src="thumbBaseUrl('w678c4-3q90', attachment)" class="card-img-top" />
-            <span v-html="$options.filters.icon(attachment.type+'/'+attachment.subtype)"></span>
+            <span v-html="$options.filters.icon(attachment)"></span>
             <!-- overlay -->
             <div class="attachment-thumb__hover">
               <div v-if="isSelected(attachment.id)" class="d-flex flex-column justify-content-center align-items-center">
@@ -94,7 +94,7 @@
         <div class="attachment-thumb__icon-container table" >
           <div>
             <img v-if="$options.filters.isThumbable(attachment)" v-bind:src="thumbBaseUrl('w60c1-1q75',attachment)" width="60" class="card-img-top" />
-            <span v-html="$options.filters.icon(attachment.type+'/'+attachment.subtype)"></span>
+            <span v-html="$options.filters.icon(attachment)"></span>
           </div>
         </div>
       </td>

@@ -13,6 +13,9 @@ use Cake\Core\Configure;
 use Attachment\Http\Exception\UploadException;
 use Cake\Utility\Inflector;
 use App\Model\Filter\AttachmentCollection;
+use ArrayObject;
+use Cake\Event\Event;
+use Cake\Datasource\EntityInterface;
 
 class AttachmentsTable extends Table
 {
@@ -168,6 +171,17 @@ class AttachmentsTable extends Table
     ->allowEmptyString('meta');
 
     return $validator;
+  }
+
+  public function afterDelete(Event $event, EntityInterface $entity, ArrayObject $options)
+  {
+    if(!property_exists($entity, 'aarchive')) $entity->set('aarchive', $this->Aarchives
+      ->find()
+      ->where(['attachment_id' => $entity->id])
+      ->first()
+    );
+
+    if(!empty($entity->aarchive)) $this->Aarchives->delete($entity->aarchive);
   }
 
   public function externalUrlIsValid($value, array $context)

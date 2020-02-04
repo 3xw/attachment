@@ -29,8 +29,31 @@ Vue.filter('truncate', function(value, length) {
   return value.substring(0, length) + '...';
 });
 
-Vue.filter('icon', function (input) {
-  switch(true){
+Vue.filter('icon', function (attachment)
+{
+
+  if(!attachment.aarchive) input = attachment.type+'/'+attachment.subtype
+  else
+  {
+    switch(attachment.aarchive.state)
+    {
+      case 'COMPLETED':
+      input = 'aarchive/completed'
+      break
+
+      default:
+      input = 'aarchive/progress'
+    }
+  }
+
+  switch(true)
+  {
+    case input == 'aarchive/progress':
+    return '<i class="material-icons">cached</i>'
+    break;
+    case input == 'aarchive/completed':
+    return '<i class="material-icons">cloud_done</i>'
+    break;
     case input == 'image/jpeg':
     case input == 'image/png':
     case input == 'image/gif':
@@ -50,17 +73,6 @@ Vue.filter('icon', function (input) {
     case input == 'audio/ogg':
     return '<i class="material-icons">audiotrack</i>';
     break;
-    /*
-    case input == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
-    return '<i class="fa fa-file-excel-o" aria-hidden="true"></i>';
-    break;
-    case input == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-    return '<i class="fa fa-file-text-o" aria-hidden="true"></i>';
-    break;
-    case input == 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
-    return '<i class="fa fa-file-powerpoint-o" aria-hidden="true"></i>';
-    break;
-    */
     default:
     return '<i class="material-icons">insert_drive_file</i>';
   }
