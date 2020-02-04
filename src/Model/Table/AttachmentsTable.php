@@ -41,7 +41,7 @@ class AttachmentsTable extends Table
     ]);
     $this->hasOne('Aarchives', [
       'type' => 'LEFT',
-      'foreignKey' => 'attachment_id',
+      'foreignKey' => 'id',
       'className' => 'Attachment.Aarchives',
     ]);
 
@@ -104,19 +104,19 @@ class AttachmentsTable extends Table
     {
       $validator
       ->requirePresence('md5', 'create')
-      ->notEmpty('md5')
+      ->notEmptyString('md5')
       ->add('md5', 'unique', ['rule' => 'validateUnique', 'provider' => 'table','message' => 'Attachment already exists']);
     }
     else
     {
       $validator
       ->requirePresence('md5', 'create')
-      ->notEmpty('md5');
+      ->notEmptyString('md5');
     }
 
     // PATH
     $validator
-    ->allowEmpty('path')
+    ->allowEmptyString('path')
     ->add('path', 'externalUrlValid', [
       'rule' => 'externalUrlIsValid',
       'message' => __('You need to provide a valid url'),

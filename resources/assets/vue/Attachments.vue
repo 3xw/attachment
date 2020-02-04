@@ -305,7 +305,7 @@ export default
 
       // flush and redirect
       this.$store.commit(this.aid+'/flushSelection')
-      this.$parent.mode = 'archives'
+      this.$parent.mode = 'browse'
     },
     confirmSelection()
     {

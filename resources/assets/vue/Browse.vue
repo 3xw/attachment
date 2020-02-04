@@ -154,12 +154,6 @@
         </div>
       </section>
 
-
-      <!-- ARCHIVES -->
-      <section v-if="mode == 'archives'" class="section-attachment--upload">
-        <attachment-archives :aid="aid" :settings="settings"></attachment-archives>
-      </section><!-- // END ARCHIVES -->
-
     </div><!-- // END BROWSE UPLOAD EMBED VIEW -->
 
   </main>
@@ -180,7 +174,6 @@ import Attachments from './Attachments.vue'
 import Upload from './Upload.vue'
 import Embed from './Embed.vue'
 import Edit from './Edit.vue'
-import Archives from './Archives.vue'
 import iconFilter from './icons/filter.vue'
 import iconAdd from './icons/add.vue'
 
@@ -190,7 +183,6 @@ export default
   name: 'attachment-browse',
   components:
   {
-    'attachment-archives': Archives,
     'attachment-atags': Atags,
     'attachment-upload': Upload,
     'attachment-embed': Embed,
@@ -258,10 +250,6 @@ export default
         this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ atags: '', upload: 0, refresh: new Date().getTime(), page: 1 }))
         break
 
-        case 'archives':
-        this.fetchAarchives()
-        break
-
         default:
         this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ upload: 1 }))
       }
@@ -301,20 +289,6 @@ export default
       parseSingle: parseResponse,
       parseList: parseTags
     }))
-    this.$store.registerModule(this.aid+'/aarchives', createCrudModule({
-      resource: 'aarchives',
-      only: ['FETCH_LIST','CREATE','DESTROY'],
-      urlRoot: this.settings.url+'attachment/aarchives',
-      client,
-      parseList: parseResponseWithPaginate,
-      onFetchListStart: () => {
-        this.loading = true
-      },
-      onFetchListSuccess: (o, response) => {
-        this.loading = false
-        this.$store.set(this.aid + '/aarchives', response.data)
-      },
-    }))
     this.$store.registerModule(this.aid+'/token', createCrudModule({
       resource: 'token',
       only: ['CREATE'],
@@ -323,6 +297,19 @@ export default
       idAttribute: 'token',
       onCreateSuccess: (o, response) => {
         this.$store.set(this.aid + '/selection.token', response.data.token)
+      },
+    }))
+    this.$store.registerModule(this.aid+'/aarchives', createCrudModule({
+      resource: 'aarchives',
+      only: ['CREATE'],
+      urlRoot: this.settings.url+'attachment/aarchives',
+      client,
+      parseSingle: parseResponse,
+      onCreateStart: () => {
+        this.loading = true
+      },
+      onCreateSuccess: (o, response) => {
+        this.loading = false
       },
     }))
 
@@ -346,10 +333,6 @@ export default
       fetchTags(dispatch, payload)
       {
         return dispatch(this.aid + '/atags/fetchList', payload)
-      },
-      fetchAarchives(dispatch, payload)
-      {
-        return dispatch(this.aid + '/aarchives/fetchList', payload)
       },
       createSelectedFilesToken(dispatch, payload)
       {

@@ -9,6 +9,7 @@ use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use ArrayObject;
 use Cake\Event\Event;
+use Cake\Datasource\EntityInterface;
 
 class AarchivesTable extends Table
 {
@@ -33,20 +34,13 @@ class AarchivesTable extends Table
     ]);
     $this->addBehavior('Timestamp');
 
-    $this->belongsTo('Users', [
-      'type' => 'LEFT',
-      'foreignKey' => 'user_id',
-      'className' => 'Attachment.Users',
-    ]);
     $this->belongsTo('Attachments', [
       'type' => 'LEFT',
-      'foreignKey' => 'attachment_id',
+      'foreignKey' => 'id',
       'className' => 'Attachment.Attachments',
     ]);
 
     // custom behaviors
-    $this->addBehavior('Attachment\ORM\Behavior\UserIDBehavior');
-
   }
 
   public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options)
@@ -54,12 +48,41 @@ class AarchivesTable extends Table
     if(!empty($data['aids']) && is_array($data['aids'])) $data['aids'] = json_encode($data['aids']);
   }
 
+  public function beforeSave(Event $event, EntityInterface $entity, ArrayObject $options)
+  {
+    if(!$entity->isNew()) return;
+
+    $attachment = $this->Attachments->newEntity([
+        'name' => 'PRCOESSING ARCHIVE...',
+        'size' => 0,
+        'profile' => 'default',
+        'type' => 'application',
+        'subtype' => 'zip',
+        'md5' => md5(uniqid((string) rand(), true))
+    ]);
+
+    if($attachment->hasErrors())
+    {
+      $entity->setError('id',['Unable to create a new empty Attachment, validation error!']);
+      $event->stopPropagation();
+      return false;
+    }
+
+    if(!$attachment = $this->Attachments->save($attachment))
+    {
+      $entity->setError('id',['Unable to create a new empty Attachment, saving error!']);
+      $event->stopPropagation();
+      return false;
+    }
+
+    $entity->set('id', $attachment->id);
+  }
 
   public function validationDefault(Validator $validator): Validator
   {
     $validator
-    ->nonNegativeInteger('id')
-    ->allowEmptyString('id', null, 'create');
+    ->uuid('id')
+    ->allowEmptyString('id', 'create');
 
     $validator
     ->scalar('state')
@@ -79,18 +102,9 @@ class AarchivesTable extends Table
     return $validator;
   }
 
-  /**
-  * Returns a rules checker object that will be used for validating
-  * application integrity.
-  *
-  * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
-  * @return \Cake\ORM\RulesChecker
-  */
   public function buildRules(RulesChecker $rules): RulesChecker
   {
-    $rules->add($rules->existsIn(['user_id'], 'Users'));
-    $rules->add($rules->existsIn(['attachment_id'], 'Attachments'));
-
+    $rules->add($rules->existsIn(['id'], 'Attachments'));
     return $rules;
   }
 }
