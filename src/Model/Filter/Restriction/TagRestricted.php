@@ -32,7 +32,7 @@ class TagRestricted extends BaseRestriction
     }
 
     $query->where(function ($exp, $q) use ($subquery){
-      return $exp->in('id', $subquery);
+      return $exp->in('Attachments.id', $subquery);
     });
   }
 }
