@@ -21,6 +21,7 @@ export default
         sort: 'date',
         direction: 'desc',
         search: '',
+        date: '',
         refresh: '',
         page: 1,
       },

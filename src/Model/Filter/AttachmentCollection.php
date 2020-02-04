@@ -12,6 +12,7 @@ class AttachmentCollection extends FilterCollection
     ->add('type', 'Attachment.Restriction', ['restrictions' => ['types_restricted']])
     ->add('atags', 'Attachment.Restriction', ['restrictions' => ['tag_restricted']])
     ->add('search', 'Attachment.Search')
+    ->add('date', 'Attachment.Date')
     ->add('filters', 'Attachment.Filters');
   }
 }

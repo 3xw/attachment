@@ -2,10 +2,6 @@
 namespace Attachment\Model\Filter;
 
 use Search\Model\Filter\Base;
-use Cake\Core\Configure;
-use Cake\Http\Session;
-use Cake\Routing\Router;
-use Cake\Utility\Inflector;
 
 class Search extends Base
 {

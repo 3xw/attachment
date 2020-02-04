@@ -84,6 +84,9 @@ return [
     ],
 
     'browse' => [
+      'search' => [
+        'dateField' => 'Attachments.created' 
+      ],
       'types' => [
         'image' => [
           'label' => __('Images'),

@@ -27,8 +27,8 @@
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
-
 import iconSearch from './icons/search.vue'
+import moment from 'moment';
 
 export default
 {
@@ -47,7 +47,12 @@ export default
   watch:{
     daterange(value)
     {
-      console.log(value);
+      if(!Array.isArray(value)) this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ date: '', page: 1 }))
+      else
+      {
+        for(let i in value) value[i] = moment(value[i]).format('YYYY-MM-DD')
+        this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{ date: value.join(','), page: 1 }))
+      }
     }
   },
   methods:
