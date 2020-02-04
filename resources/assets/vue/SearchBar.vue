@@ -8,6 +8,18 @@
             <icon-search></icon-search>
           </div>
         </div>
+
+        <div class="">
+          <el-date-picker
+            v-model="daterange"
+            type="daterange"
+            align="right"
+            start-placeholder="Start Date"
+            end-placeholder="End Date"
+            default-value="2010-10-01">
+          </el-date-picker>
+        </div>
+
       </div>
     </div>
   </div>
@@ -28,7 +40,14 @@ export default
   data()
   {
     return {
-      needle: ''
+      needle: '',
+      daterange: ''
+    }
+  },
+  watch:{
+    daterange(value)
+    {
+      console.log(value);
     }
   },
   methods:

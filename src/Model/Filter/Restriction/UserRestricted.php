@@ -5,7 +5,7 @@ use Cake\ORM\Query;
 use Cake\Utility\Text;
 use Cake\Routing\Router;
 
-class UserOrNoOneRestricted extends BaseRestriction
+class UserRestricted extends BaseRestriction
 {
   public static function process(Query $query, $noArgs )
   {
@@ -13,7 +13,7 @@ class UserOrNoOneRestricted extends BaseRestriction
     $userId = $identity? $identity->getIdentifier(): '';
 
     $query->where([
-      'Attachments.user_id IN' => [$userId,'']
+      'Attachments.user_id' => $userId
     ]);
   }
 }
