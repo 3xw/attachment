@@ -41,7 +41,6 @@ class AttachmentsController extends AppController
         ],
         'view' => [
           'className' => 'Crud.View',
-          'relatedModels' => ['Atags']
         ],
         'add' =>[
           'className' => 'Crud.Add',
@@ -85,5 +84,13 @@ class AttachmentsController extends AppController
     if(empty($this->request->getQuery('uuid'))) throw new UnauthorizedException(__d('Attachment','Missing uuid'));
 
     return $this->Crud->execute();
+  }
+
+  public function view($id)
+  {
+      $this->Crud->on('beforeFind', function(\Cake\Event\Event $event) {
+          $event->getSubject()->query->contain(['Aarchives']);
+      });
+      return $this->Crud->execute();
   }
 }

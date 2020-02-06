@@ -139,7 +139,7 @@ $colors: (
 .attachment-thumb__icon-container.table::before { content:''; display:block; padding-bottom: 100%; }
 .attachment-thumb__icon-container img { position: absolute; left: 0; top: 0;}
 .attachment-thumb__icon-container>div { position: absolute; top: 0; left: 0; bottom: 0; right: 0; background: #FB404B; display: flex; align-items: center; justify-content: center; }
-.attachment-thumb__icon-container i { z-index: 2; color: white; font-size: 24px; background: rgba(0, 0, 0, 0.36); }
+.attachment-thumb__icon-container i { z-index: 2; color: white; font-size: 24px; }
 .attachment-thumb .card-body{
   padding: $margin--mini 0;
   *{ color: #A9A9A9; }
@@ -318,4 +318,18 @@ $colors: (
     text-decoration: none;
     outline: 0;
     background-color: #428bca;
+}
+
+
+@keyframes rotatings {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+
+    transform: rotate(-360deg);
+  }
+}
+.rotating {
+  animation: rotatings 1.5s linear infinite;
 }

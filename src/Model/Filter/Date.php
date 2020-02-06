@@ -25,8 +25,8 @@ class Date extends Base
     }
 
     $this->getQuery()
-    ->where(function ($exp, $q) {
-      return $exp->between(Configure::read('Attachment.browse.search.dateField'), 999, 5000000);
+    ->where(function ($exp, $q) use ($from, $to) {
+      return $exp->between(Configure::read('Attachment.browse.search.dateField'), $from, $to);
     });
 
     return true;

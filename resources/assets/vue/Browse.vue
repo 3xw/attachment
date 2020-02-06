@@ -40,7 +40,7 @@
           <div class="col-md-3 col-xl-2">
             <div class="section__side">
               <div v-if="settings.groupActions.indexOf('add') != -1" class="section__add section--blue-light color--blue-dark action pointer d-flex flex-row align-items-center" @click="mode = 'upload';$forceUpdate();">
-                  <icon-add></icon-add>&nbsp;&nbsp;&nbsp;&nbsp;<p class="mb-0">Ajouter des fichiers</p>
+                <icon-add></icon-add>&nbsp;&nbsp;&nbsp;&nbsp;<p class="mb-0">Ajouter des fichiers</p>
               </div>
               <div class="section__nav">
                 <div class="d-flex flex-row align-items-center">
@@ -71,92 +71,92 @@
                   <button
                   v-if="reIndexOf(settings.types, /embed/gm) != -1"
                   @click="mode = 'embed'"
-                  type="button"  name="button" class="btn btn--blue mb-0 color--white">
-                    AJOUTER UN CODE EMBED
-                  </button>
+                  type="button"  name="button" class="btn btn--blue color--white">
+                  AJOUTER UN CODE EMBED
+                </button>
 
-                  <button @click="mode = 'browse'" type="button" name="button" class="btn btn-danger">ANNULER</button>
-                </div>
-
+                <button @click="mode = 'browse'" type="button" name="button" class="btn btn-danger">ANNULER</button>
               </div>
-              <div class="utils--spacer-semi"></div>
-              <div class="row">
-                <div class="col-12 col-md-3">
-                  <label>Tags</label>
-                  <attachment-atags :aid="aid" :upload="true" :filters="settings.browse.filters" :options="settings.options"></attachment-atags>
-                </div>
-                <div class="col-12 col-md-9">
-                  <attachment-upload :aid="aid"></attachment-upload>
-                </div>
+
+            </div>
+            <div class="utils--spacer-semi"></div>
+            <div class="row">
+              <div class="col-12 col-md-3">
+                <label>Tags</label>
+                <attachment-atags :aid="aid" :upload="true" :filters="settings.browse.filters" :options="settings.options"></attachment-atags>
+              </div>
+              <div class="col-12 col-md-9">
+                <attachment-upload :aid="aid"></attachment-upload>
               </div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <!--- embed -->
-      <section v-if="mode == 'embed'" class="section-attachment--embed">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="section__nav">
-              <div class="d-flex flex-row justify-content-between align-items-center">
-                <h1>Ajouter un code embed</h1>
+    <!--- embed -->
+    <section v-if="mode == 'embed'" class="section-attachment--embed">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="section__nav">
+            <div class="d-flex flex-row justify-content-between align-items-center">
+              <h1>Ajouter un code embed</h1>
 
-                <div class="btn-group">
+              <div class="btn-group">
 
-                  <!-- UPLOAD -->
-                  <button
-                  @click="mode = 'upload'"
-                  type="button"  name="button" class="btn btn--blue mb-0 color--white">
-                    UPLOADER UN FICHIER
-                  </button>
+                <!-- UPLOAD -->
+                <button
+                @click="mode = 'upload'"
+                type="button"  name="button" class="btn btn--blue color--white">
+                UPLOADER UN FICHIER
+              </button>
 
-                  <button @click="mode = 'browse'" type="button" name="button" class="btn btn-danger">ANNULER</button>
-                </div>
+              <button @click="mode = 'browse'" type="button" name="button" class="btn btn-danger">ANNULER</button>
+            </div>
 
-              </div>
-              <div class="utils--spacer-semi"></div>
-              <div class="row">
-                <div class="col-12 col-md-3">
-                  <label>Tags</label>
-                  <attachment-atags :aid="aid" :upload="true" :filters="settings.browse.filters" :options="settings.options"></attachment-atags>
-                </div>
-                <div class="col-12 col-md-9">
-                  <attachment-embed :aid="aid"></attachment-embed>
-                </div>
-              </div>
+          </div>
+          <div class="utils--spacer-semi"></div>
+          <div class="row">
+            <div class="col-12 col-md-3">
+              <label>Tags</label>
+              <attachment-atags :aid="aid" :upload="true" :filters="settings.browse.filters" :options="settings.options"></attachment-atags>
+            </div>
+            <div class="col-12 col-md-9">
+              <attachment-embed :aid="aid"></attachment-embed>
             </div>
           </div>
         </div>
-      </section>
+      </div>
+    </div>
+  </section>
 
-      <!-- edit mode -->
-      <section v-if="mode == 'edit'" class="section-attachment--upload">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="section__nav">
-              <div class="d-flex flex-row justify-content-between align-items-center">
-                <h1>Editer des fichiers</h1>
-                <button @click="mode = 'browse';" type="button" name="button" class="btn btn-danger">ANNULER</button>
-              </div>
-              <div class="utils--spacer-semi"></div>
-              <div class="row">
-                <div class="col-12 col-md-3">
-                  <label>Tags</label>
-                  <attachment-atags :aid="aid" :upload="true" :filters="settings.browse.filters" :options="settings.options"></attachment-atags>
-                </div>
-                <div class="col-12 col-md-9">
-                  <attachment-edit :aid="aid" :settings="settings"></attachment-edit>
-                </div>
-              </div>
+  <!-- edit mode -->
+  <section v-if="mode == 'edit'" class="section-attachment--upload">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="section__nav">
+          <div class="d-flex flex-row justify-content-between align-items-center">
+            <h1>Editer des fichiers</h1>
+            <button @click="mode = 'browse';" type="button" name="button" class="btn btn-danger">ANNULER</button>
+          </div>
+          <div class="utils--spacer-semi"></div>
+          <div class="row">
+            <div class="col-12 col-md-3">
+              <label>Tags</label>
+              <attachment-atags :aid="aid" :upload="true" :filters="settings.browse.filters" :options="settings.options"></attachment-atags>
+            </div>
+            <div class="col-12 col-md-9">
+              <attachment-edit :aid="aid" :settings="settings"></attachment-edit>
             </div>
           </div>
         </div>
-      </section>
+      </div>
+    </div>
+  </section>
 
-    </div><!-- // END BROWSE UPLOAD EMBED VIEW -->
+</div><!-- // END BROWSE UPLOAD EMBED VIEW -->
 
-  </main>
+</main>
 </template>
 <script>
 // npm libs
@@ -305,12 +305,6 @@ export default
       urlRoot: this.settings.url+'attachment/aarchives',
       client,
       parseSingle: parseResponse,
-      onCreateStart: () => {
-        this.loading = true
-      },
-      onCreateSuccess: (o, response) => {
-        this.loading = false
-      },
     }))
 
     //this.fetchAarchives();

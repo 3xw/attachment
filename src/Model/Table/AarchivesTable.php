@@ -53,7 +53,7 @@ class AarchivesTable extends Table
     if(!$entity->isNew()) return;
 
     $attachment = $this->Attachments->newEntity([
-        'name' => 'PRCOESSING ARCHIVE...',
+        'name' => 'PROCESSING ARCHIVE...',
         'size' => 0,
         'profile' => 'default',
         'type' => 'application',

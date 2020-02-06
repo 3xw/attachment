@@ -59,7 +59,7 @@
                 <div class="btn-group">
 
                   <!-- VIEW -->
-                  <div v-if="settings.actions.indexOf('view') != -1" @click="preview(attachment)" title="Aperçu" alt="Aperçu" class="btn btn--green color--white">
+                  <div v-if="settings.actions.indexOf('view') != -1 && attachment.type != 'application' || (attachment.type == 'application' && attachment.subtype == 'pdf')" @click="preview(attachment)" title="Aperçu" alt="Aperçu" class="btn btn--green color--white">
                     <i class="material-icons"> remove_red_eye</i>
                   </div>
 
@@ -69,7 +69,7 @@
                   </div>
 
                   <!-- SELECT -->
-                  <div v-if="settings.groupActions.length > 0" @click="toggleFile(attachment)" title="Ajouter à la sélection" alt="Ajouter à la sélection" class="btn btn--blue-dark color--white" >
+                  <div v-if="settings.groupActions.length > 0 && attachment.subtype != 'zip'" @click="toggleFile(attachment)" title="Ajouter à la sélection" alt="Ajouter à la sélection" class="btn btn--blue-dark color--white" >
                     <i v-if="!isSelected(attachment.id)" class="material-icons"> add_circle </i>
                     <i v-else class="material-icons"> remove_circle </i>
                   </div>
@@ -106,9 +106,9 @@
       </td>
       <td class="text-right">
         <div class="btn-group attachment__actions">
-          <div title="Aperçu" alt="Aperçu" class="btn btn--green color--white" @click="preview(attachment)"><i class="material-icons"> remove_red_eye </i></div>
+          <div v-if="attachment.type != 'application' || (attachment.type == 'application' && attachment.subtype == 'pdf')" title="Aperçu" alt="Aperçu" class="btn btn--green color--white" @click="preview(attachment)"><i class="material-icons"> remove_red_eye </i></div>
           <div title="Télécharger" alt="Télécharger" class="btn btn--blue color--white" @click="downloadFile(attachment)"><i class="material-icons"> cloud_download </i></div>
-          <div title="Ajouter à la sélection" alt="Ajouter à la sélection" class="btn btn--blue-dark color--white" @click="toggleFile(attachment)">
+          <div  v-if="attachment.subtype != 'zip'" title="Ajouter à la sélection" alt="Ajouter à la sélection" class="btn btn--blue-dark color--white" @click="toggleFile(attachment)">
             <i v-if="!isSelected(attachment.id)" class="material-icons"> add_circle </i>
             <i v-else class="material-icons"> remove_circle </i>
           </div>
@@ -127,9 +127,9 @@
         </div>
         <div v-if="hover" class="attachment-thumb__actions d-flex flex-column justify-content-end align-items-end">
           <div class="btn-group">
-            <div title="Aperçu" alt="Aperçu" class="btn btn--green color--white" @click="preview(attachment)"><i class="material-icons"> remove_red_eye </i></div>
+            <div v-if="attachment.type != 'application' || (attachment.type == 'application' && attachment.subtype == 'pdf')" title="Aperçu" alt="Aperçu" class="btn btn--green color--white" @click="preview(attachment)"><i class="material-icons"> remove_red_eye </i></div>
             <div title="Télécharger" alt="Télécharger" class="btn btn--blue color--white" @click="downloadFile(attachment)"><i class="material-icons"> cloud_download </i></div>
-            <div title="Ajouter à la séléction" alt="Ajouter à la séléction" class="btn btn--blue-dark color--white" @click="toggleFile(attachment)">
+            <div v-if="attachment.subtype != 'zip'" title="Ajouter à la séléction" alt="Ajouter à la séléction" class="btn btn--blue-dark color--white" @click="toggleFile(attachment)">
               <i v-if="!isSelected(attachment.id)" class="material-icons"> add_circle </i>
               <i v-else class="material-icons"> remove_circle </i>
             </div>
@@ -143,10 +143,10 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import { client } from '../js/client.js'
 
 import iconCheck from './icons/check.vue'
-
 
 export default
 {
@@ -158,7 +158,8 @@ export default
   data()
   {
     return {
-      hover: false
+      hover: false,
+      requestArchive: 0
     }
   },
   computed:
@@ -172,7 +173,18 @@ export default
       return this.$store.get(this.aid + '/selection.files')
     }
   },
-  methods: {
+  mounted: function()
+  {
+    this.checkForArchiveProcessing()
+  },
+  methods:
+  {
+    ...mapActions({
+      fetchAttachment(dispatch, payload)
+      {
+        return dispatch(this.aid + '/attachments/fetchSingle', payload)
+      },
+    }),
     thumbBaseUrl(modifs, attachment)
     {
       let
@@ -216,6 +228,32 @@ export default
     preview(attachment){
       this.$store.set(this.aid + '/preview', attachment)
       this.$forceUpdate()
+    },
+    checkForArchiveProcessing(){
+      if(this.attachment.aarchive && this.attachment.aarchive.state == 'PROCESSING'){
+        setTimeout(function () {
+          this.checkStatus()
+        }.bind(this), 5000)
+      }
+    },
+    checkStatus(){
+      this.requestArchive++
+      if(this.requestArchive <= 30){
+        this.fetchAttachment({
+          customUrl:  this.settings.url+'attachment/attachments/view/'+this.attachment.id
+        }).then(response => {
+          let attachment = response.data.data
+          if(attachment.aarchive.state == 'PROCESSING'){
+            setTimeout(function () {
+              this.checkStatus()
+            }.bind(this), 5000)
+          }else{
+            this.attachment = attachment
+            this.$forceUpdate()
+          }
+        })
+        .catch(() => console.log('error occured'))
+      }
     }
   }
 }

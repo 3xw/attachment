@@ -32,6 +32,9 @@ class AarchivesController extends AppController
         'add' =>[
           'className' => 'Crud.Add'
         ],
+        'view' =>[
+          'className' => 'Crud.View'
+        ],
         'delete' => [
           'className' => 'Attachment\Crud\Action\DeleteAction',
         ]

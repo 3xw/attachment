@@ -165,7 +165,10 @@ export default
         slug: 'type',
         isActive: false,
         current: 'image/*',
-      }
+      },
+      hasProcessingArchive: false,
+      aarchiveIds: []
+
     }
   },
   components:
@@ -304,8 +307,11 @@ export default
       })
 
       // flush and redirect
-      this.$store.commit(this.aid+'/flushSelection')
-      this.$parent.mode = 'browse'
+      this.types.current = this.settings.browse.types.other.mime.join(',')
+      setTimeout(function () {
+        this.filterType()
+        this.$store.commit(this.aid+'/flushSelection');
+      }.bind(this), 500)
     },
     confirmSelection()
     {

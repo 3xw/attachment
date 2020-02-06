@@ -42,7 +42,7 @@ export default
       state.selection.files.push(payload)
     },
     'removeFileFromSelection': (state, payload) => {
-      let idx = state.selection.files.findIndex(file => file === payload);
+      let idx = state.selection.files.findIndex(file => file.id === payload.id);
       state.selection.files.splice(idx, 1)
     },
     'flushSelection': (state, payload) => {

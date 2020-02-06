@@ -49,7 +49,7 @@ Vue.filter('icon', function (attachment)
   switch(true)
   {
     case input == 'aarchive/progress':
-    return '<i class="material-icons">cached</i>'
+    return '<i class="material-icons rotating">cached</i>'
     break;
     case input == 'aarchive/completed':
     return '<i class="material-icons">cloud_done</i>'
