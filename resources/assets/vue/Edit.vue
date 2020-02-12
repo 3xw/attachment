@@ -124,6 +124,7 @@ export default {
             input.value = attachment[field]
           }else{
             input.isSame = false
+            input.value = null
           }
         }
         //ATAGS CHECK FOR SAME ATAG
