@@ -123,6 +123,7 @@
       <img src="https://static.wgr.ch/attachment/loading.gif" alt="">
     </div>
     <attachment-preview :aid="aid" :open="false"></attachment-preview>
+    <attachment-infos :aid="aid" :open="false"></attachment-infos>
     <!--<attachment-archive :aid="aid" :settings="settings"></attachment-archive >-->
 
   </section>
@@ -137,6 +138,7 @@ import { packeryEvents } from 'vue-packery-plugin'
 import Attachment from './Attachment.vue'
 import Pagination from './Pagination.vue'
 import Preview from './Preview.vue'
+import Infos from './Infos.vue'
 
 //import Archive from './Archives.vue'
 
@@ -177,6 +179,7 @@ export default
     'attachment-pagination': Pagination,
     'attachment-search-bar': SearchBar,
     'attachment-preview': Preview,
+    'attachment-infos': Infos,
     //'attachment-archive': Archive,
 
     'icon-grid': iconGrid,

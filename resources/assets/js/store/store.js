@@ -31,6 +31,7 @@ export default
       pagination: {},
       settings: {},
       preview: {},
+      infos: {},
       aarchives: []
     }
   },
@@ -79,7 +80,11 @@ export default
     'preview': (state, payload) => {
       state.preview = payload
     },
-    //Preview
+    //INFOS
+    'infos': (state, payload) => {
+      state.infos = payload
+    },
+    //Archive
     'aarchives': (state, payload) => {
       state.aarchives = payload
     },

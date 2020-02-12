@@ -58,6 +58,8 @@
               <div v-if="hover" class="attachment-thumb__actions d-flex flex-column justify-content-end align-items-end">
                 <div class="btn-group">
 
+                  <div title="Infos" alt="Infos" class="btn btn--grey color--white" @click="infos(attachment)"><i class="material-icons">info</i></div>
+
                   <!-- VIEW -->
                   <div v-if="settings.actions.indexOf('view') != -1 && attachment.type != 'application' || (attachment.type == 'application' && attachment.subtype == 'pdf')" @click="preview(attachment)" title="Aperçu" alt="Aperçu" class="btn btn--green color--white">
                     <i class="material-icons"> remove_red_eye</i>
@@ -106,6 +108,7 @@
       </td>
       <td class="text-right">
         <div class="btn-group attachment__actions">
+          <div title="Infos" alt="Infos" class="btn btn--grey color--white" @click="infos(attachment)"><i class="material-icons">info</i></div>
           <div v-if="attachment.type != 'application' || (attachment.type == 'application' && attachment.subtype == 'pdf')" title="Aperçu" alt="Aperçu" class="btn btn--green color--white" @click="preview(attachment)"><i class="material-icons"> remove_red_eye </i></div>
           <div title="Télécharger" alt="Télécharger" class="btn btn--blue color--white" @click="downloadFile(attachment)"><i class="material-icons"> cloud_download </i></div>
           <div  v-if="attachment.subtype != 'zip'" title="Ajouter à la sélection" alt="Ajouter à la sélection" class="btn btn--blue-dark color--white" @click="toggleFile(attachment)">
@@ -127,6 +130,7 @@
         </div>
         <div v-if="hover" class="attachment-thumb__actions d-flex flex-column justify-content-end align-items-end">
           <div class="btn-group">
+            <div title="Infos" alt="Infos" class="btn btn--grey color--white" @click="infos(attachment)"><i class="material-icons">info</i></div>
             <div v-if="attachment.type != 'application' || (attachment.type == 'application' && attachment.subtype == 'pdf')" title="Aperçu" alt="Aperçu" class="btn btn--green color--white" @click="preview(attachment)"><i class="material-icons"> remove_red_eye </i></div>
             <div title="Télécharger" alt="Télécharger" class="btn btn--blue color--white" @click="downloadFile(attachment)"><i class="material-icons"> cloud_download </i></div>
             <div v-if="attachment.subtype != 'zip'" title="Ajouter à la séléction" alt="Ajouter à la séléction" class="btn btn--blue-dark color--white" @click="toggleFile(attachment)">
@@ -211,22 +215,30 @@ export default
       return (this.selectedFiles.findIndex(f => f.id === id) !== -1)
     },
     forceFileDownload(response, attachment){
-      const url = window.URL.createObjectURL(new Blob([response.data], { type: response.headers['content-type'] }))
-      const link = document.createElement('a')
-      link.href = url
-      link.setAttribute('download', attachment.name) //or any other extension
-      document.body.appendChild(link)
-      link.click()
+      if (navigator.appVersion.toString().indexOf('.NET') > 0){
+        window.navigator.msSaveBlob(new Blob([response.data], { type: response.headers['content-type']}), attachment.name);
+      }else {
+        const url = window.URL.createObjectURL(new Blob([response.data], { type: response.headers['content-type'] }))
+        const link = document.createElement('a')
+        link.href = url
+        link.setAttribute('download', attachment.name) //or any other extension
+        document.body.appendChild(link)
+        link.click()
+      }
     },
     downloadFile(attachment){
       client.get(attachment.url, {responseType: 'arraybuffer'})
       .then(response => {
         this.forceFileDownload(response, attachment)
       })
-      .catch(() => console.log('error occured'))
+      .catch((response) => console.log(response))
     },
     preview(attachment){
       this.$store.set(this.aid + '/preview', attachment)
+      this.$forceUpdate()
+    },
+    infos(attachment){
+      this.$store.set(this.aid + '/infos', attachment)
       this.$forceUpdate()
     },
     checkForArchiveProcessing(){

@@ -1,17 +1,22 @@
 <template lang="html">
   <section>
-    <div class="section__files-list">
-
-      <div class="row">
-        <div v-for="(attachment, i) in selectedFiles" :key="i" class="col-sm-2">
-          <attachment :index="i" :aid="aid" mode="thumb" :attachment="attachment" :settings="settings"></attachment>
-        </div>
-      </div>
-      <div class="utils--spacer-semi"></div>
+    <div v-if="loading == true" class=" text-center">
+      <img src="https://static.wgr.ch/attachment/loading.gif" alt="">
     </div>
-    <!-- inputs -->
-    <attachment-inputs :aid="aid" mode="edit"></attachment-inputs>
-    <button type="button" name="button" class="btn btn-success" @click="edit">Editer</button>
+    <div v-else>
+      <div class="section__files-list">
+
+        <div class="row">
+          <div v-for="(attachment, i) in selectedFiles" :key="i" class="col-sm-2">
+            <attachment :index="i" :aid="aid" mode="thumb" :attachment="attachment" :settings="settings"></attachment>
+          </div>
+        </div>
+        <div class="utils--spacer-semi"></div>
+      </div>
+      <!-- inputs -->
+      <attachment-inputs :aid="aid" mode="edit"></attachment-inputs>
+      <button type="button" name="button" class="btn btn-success" @click="edit">Editer</button>
+    </div>
   </section>
 </template>
 <script>
@@ -28,6 +33,7 @@ export default {
   props: { aid: String, settings: Object },
   data() {
     return {
+      loading: false,
       attachmentInputs: {
         fields: [
           {
@@ -149,6 +155,7 @@ export default {
     },
     edit()
     {
+      this.loading = true
       for(let i = 0;i < this.selectedFiles.length; i++){
         let attachment = this.selectedFiles[i]
         for(let y = 0;y < this.attachmentInputs.fields.length;y++){
@@ -185,6 +192,7 @@ export default {
     editSuccess(){
       this.$store.commit(this.aid+'/flushSelection')
       this.$store.set(this.aid + '/aParams', Object.assign(this.$store.get(this.aid + '/aParams'),{atags: '', refresh: new Date().getTime() }))
+      this.loading = false
       this.$parent.mode = 'browse'
     },
     editError(){

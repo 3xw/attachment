@@ -40,6 +40,7 @@ export default {
     close()
     {
       this.open = false
+      this.$store.set(this.aid + '/infos', {})
     }
   }
 }
