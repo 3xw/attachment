@@ -24,7 +24,7 @@
   "autoload-dev": {
     "psr-4": {
       "Attachment\\Test\\": "tests",
-      "Cake\\Test\\": "./vendor/cakephp/cakephp/tests"cd ..
+      "Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
 
     }
   },
