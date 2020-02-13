@@ -13,7 +13,9 @@ import VuePackeryPlugin from 'vue-packery-plugin'
 // third party
 import 'element-ui/lib/theme-chalk/index.css';
 import ElementUI from 'element-ui';
+import locale from './js/vendor/elements/locale/fr.js'
+
 
 Vue.component('AttachmentLoader', AttachmentLoader)
 Vue.use(VuePackeryPlugin)
-Vue.use(ElementUI)
+Vue.use(ElementUI, { locale })
