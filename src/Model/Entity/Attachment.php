@@ -24,6 +24,6 @@ class Attachment extends Entity
   }
   protected function _getMime()
   {
-    return $this->_properties['type'].'/'.$this->_properties['subtype'];
+    return $this->_fields['type'].'/'. $this->_fields['subtype'];
   }
 }
