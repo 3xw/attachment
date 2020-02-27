@@ -177,7 +177,7 @@ class AttachmentsTable extends Table
   {
     if(!property_exists($entity, 'aarchive')) $entity->set('aarchive', $this->Aarchives
       ->find()
-      ->where(['attachment_id' => $entity->id])
+      ->where(['id' => $entity->id])
       ->first()
     );
 
