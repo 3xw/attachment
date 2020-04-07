@@ -46,7 +46,7 @@
       <div class="card attachment-thumb">
         <div class="attachment-thumb__icon-container" >
           <div>
-            <img v-if="$options.filters.isThumbable(attachment)" v-bind:src="thumbBaseUrl('w678c4-3q90', attachment)" class="card-img-top" />
+            <img v-if="$options.filters.isThumbable(attachment)" alt="" v-bind:src="thumbBaseUrl('w678c4-3q90', attachment)" class="card-img-top" />
             <span v-html="$options.filters.icon(attachment)"></span>
             <!-- overlay -->
             <div class="attachment-thumb__hover">
@@ -95,7 +95,7 @@
       <td>
         <div class="attachment-thumb__icon-container table" >
           <div>
-            <img v-if="$options.filters.isThumbable(attachment)" v-bind:src="thumbBaseUrl('w60c1-1q75',attachment)" width="60" class="card-img-top" />
+            <img v-if="$options.filters.isThumbable(attachment)"  alt="" v-bind:src="thumbBaseUrl('w60c1-1q75',attachment)" width="60" class="card-img-top" />
             <span v-html="$options.filters.icon(attachment)"></span>
           </div>
         </div>
@@ -121,7 +121,7 @@
 
     <!-- mosaic -->
     <div v-else-if="mode == 'mosaic'" class="attachment-thumb">
-      <img v-if="$options.filters.isThumbable(attachment)" v-bind:src="thumbBaseUrl('w678q90',attachment)" class="img-fluid"  />
+      <img v-if="$options.filters.isThumbable(attachment)"  alt="" v-bind:src="thumbBaseUrl('w678q90',attachment)" class="img-fluid"  />
       <div class="attachment-thumb__hover">
         <div v-if="isSelected(attachment.id)" class="d-flex flex-column justify-content-center align-items-center">
           <icon-check></icon-check>
