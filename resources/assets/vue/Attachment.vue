@@ -196,9 +196,10 @@ export default
       __WEBROOT__ + 'thumbnails/' :
       this.$store.get(this.aid+'/settings.baseUrls.'+attachment.profile+'.thumbnails'),
 
+      mbP = (attachment.thumb_params)? attachment.thumb_params : '',
       url = typeof attachment == 'string'?
       'default/'+modifs+'/'+ attachment:
-      attachment.profile+'/'+modifs+'/'+attachment.path+attachment.thumb_params
+      attachment.profile+'/'+modifs+'/'+attachment.path+mbP
 
       return baseUrl + url
     },

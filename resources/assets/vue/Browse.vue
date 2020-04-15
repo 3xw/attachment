@@ -265,6 +265,10 @@ export default
     this.$store.registerModule(this.aid, Object.assign({}, attachment))
     this.$store.set(this.aid + '/settings', this.settings)
 
+
+    if(this.mode == 'input' && this.settings.attachments.length > 0)
+      this.$store.set(this.aid + '/selection.files', this.settings.attachments)
+
     // CRUD
     client.baseURL = this.settings.url
 
