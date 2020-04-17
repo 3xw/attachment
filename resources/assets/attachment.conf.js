@@ -5,6 +5,7 @@ require('./css/sass/attachment.scss')
 require('./js/utils.js')
 require('./js/filters.js')
 require('./js/directives.js')
+require('./js/tinymce/plugin.js')
 
 // init
 import AttachmentLoader from './vue/AttachmentLoader.vue'

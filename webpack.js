@@ -82,7 +82,7 @@ const attachmentVendorConfig = env => {
     ],
     resolve: {
       alias: {
-          'vue$': 'vue/dist/vue.esm.js'
+        'vue$': 'vue/dist/vue.esm.js'
       },
       extensions: ['*', '.js', '.vue', '.json']
     },
@@ -107,64 +107,65 @@ const attachmentConfig = env => {
     module: {
       rules: [
         {
-        test: /\.js$/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env'],
-            plugins: [
-              "@babel/plugin-syntax-dynamic-import"
-            ]
-          }
-        }
-      },
-      {
-        test: /\.vue$/,
-        loader: 'vue-loader',
-        options: {
-          cacheBusting: true,
-        }
-      },
-      {
-        test: /\.(scss)$/,
-        use: [
-          { loader: MiniCssExtractPlugin.loader, },
-          'css-loader',
-          {
-            loader: 'postcss-loader',
+          test: /\.js$/,
+          use: {
+            loader: 'babel-loader',
             options: {
-              ident: 'postcss',
-              plugins: loader => [
-                require('postcss-preset-env')(),
-                require('pixrem')(),
-                require('autoprefixer')({overrideBrowserslist: 'last 10 versions'}),
-                require('cssnano')()
+              presets: ['@babel/preset-env'],
+              plugins: [
+                "@babel/plugin-syntax-dynamic-import"
               ]
             }
-          },
-          { loader: 'resolve-url-loader' },
-          { loader: 'sass-loader' },
-        ]
-      },
-      {
-        test: /\.css$/,
-        use: [
-          'vue-style-loader',
-          'css-loader',
-          'sass-loader'
-        ]
-      },
-      {
+          }
+        },
+        {
+          test: /\.vue$/,
+          loader: 'vue-loader',
+          options: {
+            cacheBusting: true,
+          }
+        },
+        {
+          test: /\.(scss)$/,
+          use: [
+            { loader: MiniCssExtractPlugin.loader, },
+            'css-loader',
+            {
+              loader: 'postcss-loader',
+              options: {
+                ident: 'postcss',
+                plugins: loader => [
+                  require('postcss-preset-env')(),
+                  require('pixrem')(),
+                  require('autoprefixer')({overrideBrowserslist: 'last 10 versions'}),
+                  require('cssnano')()
+                ]
+              }
+            },
+            { loader: 'resolve-url-loader' },
+            { loader: 'sass-loader' },
+          ]
+        },
+        {
+          test: /\.css$/,
+          use: [
+            'vue-style-loader',
+            'css-loader',
+            'sass-loader'
+          ]
+        },
+        {
           test: /\.(woff(2)?|ttf|otf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
           use: [{
-              loader: 'file-loader',
-              options: {
-                  name: '[name].[ext]',
-                  publicPath: webroot+'fonts/',
-                  outputPath: 'fonts/'
-              }
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+              publicPath: webroot+'fonts/',
+              outputPath: 'fonts/'
+            }
           }]
-      }]
+        }
+      ]
     },
     plugins: [
       new MiniCssExtractPlugin({
@@ -178,7 +179,7 @@ const attachmentConfig = env => {
     ],
     resolve: {
       alias: {
-          'vue$': 'vue/dist/vue.esm.js'
+        'vue$': 'vue/dist/vue.esm.js'
       },
       extensions: ['*', '.js', '.vue', '.json']
     },

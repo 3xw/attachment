@@ -262,6 +262,8 @@ export default
     this.mode = this.settings.mode
 
     // create new module and store settings
+    console.log('HERE');
+    console.log(attachment);
     this.$store.registerModule(this.aid, Object.assign({}, attachment))
     this.$store.set(this.aid + '/settings', this.settings)
 
