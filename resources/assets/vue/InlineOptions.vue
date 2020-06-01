@@ -119,12 +119,12 @@ export default
 {
   name: 'attachment-inline-options',
   props: {
-    file: {},
+    file: [],
     settings: Object,
     aid: String
   },
   data: function(){ return {
-    show: false,
+    show: (this.$parent.mode == 'editor-options'),
     options: {
       crop: [true,false],
       align: ['normal','left','center','right'],
@@ -135,7 +135,7 @@ export default
   }},
   created: function()
   {
-    window.aEventHub[this.aid].$on('show-options', this.showOptions)
+    //YO
   },
   watch:
   {
@@ -150,15 +150,18 @@ export default
         width: null,
         crop: 0
       }
+    },
+    show: function()
+    {
+      if(this.show){
+        this.addEventListeners()
+      }else{
+        this.removeEventListeners()
+      }
     }
   },
   methods:
   {
-    showOptions: function()
-    {
-      this.addEventListeners()
-      this.show = true
-    },
     addEventListeners : function()
     {
       $(document).bind('keypress', this.preventEnter)
@@ -181,12 +184,12 @@ export default
     close: function()
     {
       this.removeEventListeners()
-      this.show = false
+      this.$parent.mode = 'hidden'
     },
     success: function()
     {
       this.close()
-      window.aEventHub[this.aid].$emit('options-success', this.selection, this.file)
+      this.$parent.$emit('options-success', this.selection, this.file)
     }
   }
 }

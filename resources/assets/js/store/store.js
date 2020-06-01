@@ -94,5 +94,5 @@ export default
     'flushAarchives': (state, payload) => {
       state.aarchives = []
     }
-  },
+  }
 }

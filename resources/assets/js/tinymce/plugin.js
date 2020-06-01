@@ -12,9 +12,15 @@ Plugin =
     let conf = editor.settings.attachment_settings,
     aid = conf.field,
     BrowseCompoClass = Vue.component('browse', Browse)
-    console.log(conf);
 
-    editor.attachment = new BrowseCompoClass({store ,propsData: {settings: conf,aid: aid}})
+    //FORCE OVERLAY
+    conf.overlay = 1
+    conf.groupActions = ['tinymce']
+    conf.actions = ['add']
+
+    editor.attachment = new BrowseCompoClass({store, propsData: {settings: conf, aid: aid}})
+    editor.attachment.mode = 'hidden'
+    editor.attachment.tinymce = true
     editor.attachment.$mount()
     window.vueTinymce[aid].$el.appendChild(editor.attachment.$el)
   },
@@ -28,9 +34,9 @@ Plugin =
     aid = conf.field
 
     if(options.displayAs == 'Link') editor.insertContent('<a href="'+file.fullpath+'" target="'+options.target+'">'+options.title+'</a>')
-    else editor.insertContent(Plugin.createImageNode(conf, file, options))
+    else editor.insertContent(Plugin.createImageNode(editor, conf, file, options))
   },
-  createImageNode: function(conf, file, options)
+  createImageNode: function(editor, conf, file, options)
   {
     let html = '<img'
     let classes = 'img-responsive img-fluid '
@@ -38,13 +44,13 @@ Plugin =
     classes += (options.align)? options.align+' ': ''
     html += ' class=\'' + classes + '\''
     if(options.alt) html += ' alt=\'' + options.alt.replace(/['"]+/g, '') + '\''
-    html += ' src=\'' + Plugin.getImagePath(conf, file, options) + '\''
+    html += ' src=\'' + Plugin.getImagePath(editor, conf, file, options) + '\''
     html += ' />'
     return html
   },
-  getImagePath: function(conf, file, options)
+  getImagePath: function(editor, conf, file, options)
   {
-    let path = conf.thumbBaseUrl+'thumbnails/'+file.profile+'/'
+    let path = editor.attachment.settings.baseUrls.thumbnails.profile+file.profile+'/'
     path += (options.width)? 'w'+options.width: 'w1200'
     path += (options.crop)? 'c'+options.cropWidth+'-'+options.cropHeight: '';
     path += '/'+file.path;
@@ -52,8 +58,10 @@ Plugin =
   },
   addButton: function(editor)
   {
+
     let conf = editor.settings.attachment_settings,
-    aid = conf.field
+    aid = conf.field,
+    storeAid = conf.field.replace(/\./g, '')
 
     editor.ui.registry.addMenuButton('attachment', {
       text: 'Média',
@@ -64,14 +72,16 @@ Plugin =
             type: 'menuitem',
             text: 'Télécharger',
             onAction: function (_) {
-              editor.attachment.$emit('show-upload')
+              editor.attachment.overlay = true
+              editor.attachment.mode = 'upload'
             }
           },
           {
             type: 'menuitem',
             text: 'Parcourir',
             onAction: function (_) {
-              editor.attachment.$emit('show-browse')
+              editor.attachment.overlay = true
+              editor.attachment.mode = 'browse'
             }
           },
 

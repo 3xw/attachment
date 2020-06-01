@@ -18,18 +18,22 @@
           <div v-for="(attachment, i ) in selectedFiles" :key="i" class="col-sm-6 col-md-4">
             <attachment :index="i" :aid="aid" mode="input" :attachment="attachment" :settings="settings"></attachment>
           </div>
+          <div v-if="selectedFiles.length == 0">
+            <input type="hidden" :name="'attachments[]'" value="">
+          </div>
         </div>
+
 
       </div>
     </div><!-- // END INPUT VIEW -->
 
     <!-- BROWSE UPLOAD EMBED VIEW -->
-    <div v-if="mode != 'input'" class="section-attachment--container" :class="{ 'attachment-overlay-full': settings.overlay }">
+    <div v-if="mode != 'input'" class="section-attachment--container" :class="{ 'attachment-overlay-full': settings.overlay, 'd-none': (mode == 'hidden') }">
 
       <!-- dissmiss -->
       <section v-if="settings.overlay" class="">
-        <div class="text-left">
-          <button @click="mode = 'input'" type="button" name="button" class="btn btn-danger">FERMER</button>
+        <div class="text-right">
+          <button @click="mode = (tinymce)? 'hidden' : 'input'" type="button" name="button" class="btn btn-danger">FERMER</button>
         </div>
       </section>
 
@@ -69,7 +73,7 @@
 
                   <!-- EMBED -->
                   <button
-                  v-if="reIndexOf(settings.types, /embed/gm) != -1"
+                  v-if="reIndexOf(settings.types, /embed/gm) != -1 && settings.groupActions.indexOf('tinymce') == -1"
                   @click="mode = 'embed'"
                   type="button"  name="button" class="btn btn--blue color--white">
                   AJOUTER UN CODE EMBED
@@ -154,6 +158,11 @@
     </div>
   </section>
 
+  <!-- TinyMCE Options inline-options -->
+  <section v-if="mode == 'editor-options'" class="section-attachment--editor-options">
+    <inline-options :file="(selectedFiles)? selectedFiles[0] : false" :aid="aid" :settings="settings"></inline-options>
+  </section>
+
 </div><!-- // END BROWSE UPLOAD EMBED VIEW -->
 
 </main>
@@ -171,6 +180,7 @@ import attachment from '../js/store/store.js'
 import Atags from './Atags.vue'
 import Attachment from './Attachment.vue'
 import Attachments from './Attachments.vue'
+import InlineOptions from './InlineOptions.vue'
 import Upload from './Upload.vue'
 import Embed from './Embed.vue'
 import Edit from './Edit.vue'
@@ -189,8 +199,9 @@ export default
     'attachment-edit': Edit,
     'attachments': Attachments,
     'attachment': Attachment,
+    'inline-options': InlineOptions,
     'icon-add': iconAdd,
-    'icon-filter': iconFilter
+    'icon-filter': iconFilter,
   },
   props: { aid: String, settings: Object },
   data()
@@ -198,7 +209,8 @@ export default
     return {
       mode: 'browse',
       overlay: false,
-      loading: false
+      loading: false,
+      tinymce: false,
     }
   },
   computed:
@@ -257,13 +269,15 @@ export default
   },
   created()
   {
+
+    //Remove Char who breaks store
+    this.aid = this.aid.replace(/\./g, '')
+
     // init
     this.overlay = this.settings.overlay
     this.mode = this.settings.mode
 
     // create new module and store settings
-    console.log('HERE');
-    console.log(attachment);
     this.$store.registerModule(this.aid, Object.assign({}, attachment))
     this.$store.set(this.aid + '/settings', this.settings)
 

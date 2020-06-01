@@ -49,6 +49,10 @@ class AttachmentHelper extends Helper
     $uuid = Text::uuid();
     $this->_View->getRequest()->getSession()->write('Attachment.'.$uuid, $settings);
 
+    $uuidField = str_replace('.', '', $field);
+    $this->_View->getRequest()->getSession()->write('Attachment.'.$uuidField, $settings);
+
+
     // front side settings
     $settings['options'] = Configure::read('Attachment.options');
     $settings['uuid'] = $uuid;

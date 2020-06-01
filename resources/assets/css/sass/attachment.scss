@@ -114,7 +114,9 @@ $colors: (
 .attachment-overlay-full {
   position: fixed;z-index: 3000;top: 0;right: 0;bottom: 0;left: 0; background: rgba(0,0,0,0.5) !important;
   section:first-child>div>.btn{margin: $margin--mini;}
-  .section-attachment--browse{margin: 0 $margin--mini;background-color: map-get($colors, 'white')}
+  .section-attachment--browse,
+  .section-attachment--upload,
+  .section-attachment--embed{margin: 0 $margin--mini;background-color: map-get($colors, 'white')}
   @media (min-width: 992px){
     .no-gutters>[class*=col-] {padding: 0 !important;}
   }

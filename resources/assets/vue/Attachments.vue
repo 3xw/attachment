@@ -46,6 +46,14 @@
               EDITER
             </button>
 
+            <!-- EDIT -->
+            <button
+              v-if="selectedFiles.length > 0 && settings.groupActions.indexOf('tinymce') != -1"
+              @click="editorOptions"
+              type="button"  name="button" class="btn btn--orange mb-0 color--white">
+              AJOUTER A L'ÉDITEUR
+            </button>
+
             <!-- DELETE -->
             <button
               v-if="selectedFiles.length > 0 && settings.groupActions.indexOf('delete') != -1"
@@ -319,6 +327,10 @@ export default
     confirmSelection()
     {
       this.$parent.mode = 'input'
+    },
+    editorOptions()
+    {
+      this.$parent.mode = 'editor-options'
     }
   },
   mounted()
