@@ -70,7 +70,7 @@
       },
       getImagePath: function(conf, file, options)
       {
-        var path = conf.thumbBaseUrl+'thumbnails/'+file.profile+'/'
+        var path = conf.thumbBaseUrl+file.profile+'/'
         path += (options.width)? 'w'+options.width: 'w1200'
         path += (options.crop)? 'c'+options.cropWidth+'-'+options.cropHeight: '';
         path += '/'+file.path;
