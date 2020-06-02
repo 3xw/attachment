@@ -14,7 +14,7 @@
             <div class="col-md-6">
               <div class="thumbnail" >
                 <!-- thumb -->
-                <attachment-thumb :url="settings.url" :file="file"></attachment-thumb>
+                <attachment-thumb :url="settings.thumbBaseUrl" :file="file"></attachment-thumb>
 
                 <div class="caption">
                   {{file.name | truncate(100) }}<br/>
