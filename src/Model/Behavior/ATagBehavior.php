@@ -6,7 +6,7 @@ use Cake\Event\Event;
 use Exception;
 use Cake\Utility\Inflector;
 use Cake\Datasource\EntityInterface;
-use Cake\Network\Session;
+use Cake\Http\Session;
 
 use Cake\ORM\Behavior;
 use Cake\ORM\Table;

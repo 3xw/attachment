@@ -41,7 +41,7 @@ class EmbedBehavior extends Behavior
 
   public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options)
   {
-    $settings = $this->config();
+    $settings = $this->getConfig();
     $embed_field = $settings['embed_field'];
     $file_field = $settings['file_field'];
     if (!empty($data[$embed_field]))

@@ -29,9 +29,9 @@ class AtagsTable extends Table
   {
     parent::initialize($config);
 
-    $this->table('atags');
-    $this->displayField('name');
-    $this->primaryKey('id');
+    $this->setTable('atags');
+    $this->setDisplayField('name');
+    $this->setPrimaryKey('id');
 
     $this->belongsToMany('Attachment.Attachments', [
       'foreignKey' => 'atag_id',

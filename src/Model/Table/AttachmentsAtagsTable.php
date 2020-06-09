@@ -33,9 +33,9 @@ class AttachmentsAtagsTable extends Table
     {
         parent::initialize($config);
 
-        $this->table('attachments_atags');
-        $this->displayField('attachment_id');
-        $this->primaryKey(['attachment_id', 'atag_id']);
+        $this->setTable('attachments_atags');
+        $this->setDisplayField('attachment_id');
+        $this->setPrimaryKey(['attachment_id', 'atag_id']);
 
         $this->belongsTo('Attachments', [
             'foreignKey' => 'attachment_id',

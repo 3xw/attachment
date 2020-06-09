@@ -7,7 +7,7 @@ use Exception;
 use Cake\Utility\Inflector;
 use Cake\Core\Configure;
 use Cake\Datasource\EntityInterface;
-use Cake\Network\Session;
+use Cake\Http\Session;
 use Cake\ORM\Behavior;
 use Cake\ORM\Table;
 use Attachment\Fly\Profile;
@@ -30,7 +30,7 @@ class FlyBehavior extends Behavior
 
   public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options)
   {
-    $settings = $this->config();
+    $settings = $this->getConfig();
     $field = $settings['file_field'];
 
     if (!empty($data[$field]) && is_array($data[$field]))
@@ -71,7 +71,7 @@ class FlyBehavior extends Behavior
 
   public function beforeSave(Event $event, EntityInterface $entity, ArrayObject $options)
   {
-    $settings = $this->config();
+    $settings = $this->getConfig();
     $field = $settings['file_field'];
     $orginalValues = $entity->extractOriginalChanged([$field,'profile','md5']);
 
@@ -173,7 +173,7 @@ class FlyBehavior extends Behavior
 
   public function afterDelete(Event $event, EntityInterface $entity, ArrayObject $options)
   {
-    $settings = $this->config();
+    $settings = $this->getConfig();
     $field = $settings['file_field'];
     if(!empty($entity->get($field))) (new Profile($entity->get('profile')))->delete($entity->get($field));
   }
