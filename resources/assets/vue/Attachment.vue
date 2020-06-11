@@ -111,7 +111,7 @@
           <div title="Infos" alt="Infos" class="btn btn--grey color--white" @click="infos(attachment)"><i class="material-icons">info</i></div>
           <div v-if="attachment.type != 'application' || (attachment.type == 'application' && attachment.subtype == 'pdf')" title="Aperçu" alt="Aperçu" class="btn btn--green color--white" @click="preview(attachment)"><i class="material-icons"> remove_red_eye </i></div>
           <div title="Télécharger" alt="Télécharger" class="btn btn--blue color--white" @click="downloadFile(attachment)"><i class="material-icons"> cloud_download </i></div>
-          <div  v-if="attachment.subtype != 'zip'" title="Ajouter à la sélection" alt="Ajouter à la sélection" class="btn btn--blue-dark color--white" @click="toggleFile(attachment)">
+          <div  v-if="attachment.subtype != 'zip' && $parent.mode != 'input'" title="Ajouter à la sélection" alt="Ajouter à la sélection" class="btn btn--blue-dark color--white" @click="toggleFile(attachment)">
             <i v-if="!isSelected(attachment.id)" class="material-icons"> add_circle </i>
             <i v-else class="material-icons"> remove_circle </i>
           </div>
@@ -133,7 +133,7 @@
             <div title="Infos" alt="Infos" class="btn btn--grey color--white" @click="infos(attachment)"><i class="material-icons">info</i></div>
             <div v-if="attachment.type != 'application' || (attachment.type == 'application' && attachment.subtype == 'pdf')" title="Aperçu" alt="Aperçu" class="btn btn--green color--white" @click="preview(attachment)"><i class="material-icons"> remove_red_eye </i></div>
             <div title="Télécharger" alt="Télécharger" class="btn btn--blue color--white" @click="downloadFile(attachment)"><i class="material-icons"> cloud_download </i></div>
-            <div v-if="attachment.subtype != 'zip'" title="Ajouter à la séléction" alt="Ajouter à la séléction" class="btn btn--blue-dark color--white" @click="toggleFile(attachment)">
+            <div v-if="attachment.subtype != 'zip' && $parent.mode != 'input'" title="Ajouter à la séléction" alt="Ajouter à la séléction" class="btn btn--blue-dark color--white" @click="toggleFile(attachment)">
               <i v-if="!isSelected(attachment.id)" class="material-icons"> add_circle </i>
               <i v-else class="material-icons"> remove_circle </i>
             </div>
