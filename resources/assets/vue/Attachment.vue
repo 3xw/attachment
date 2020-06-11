@@ -71,7 +71,7 @@
                   </div>
 
                   <!-- SELECT -->
-                  <div v-if="settings.groupActions.length > 0 && attachment.subtype != 'zip'" @click="toggleFile(attachment)" title="Ajouter à la sélection" alt="Ajouter à la sélection" class="btn btn--blue-dark color--white" >
+                  <div v-if="settings.groupActions.length > 0" @click="toggleFile(attachment)" title="Ajouter à la sélection" alt="Ajouter à la sélection" class="btn btn--blue-dark color--white" >
                     <i v-if="!isSelected(attachment.id)" class="material-icons"> add_circle </i>
                     <i v-else class="material-icons"> remove_circle </i>
                   </div>
