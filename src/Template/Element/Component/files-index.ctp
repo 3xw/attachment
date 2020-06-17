@@ -60,7 +60,7 @@
         <div class="card mb-4" >
 
           <!-- thumb -->
-          <attachment-thumb :url="settings.thumbBaseUrl" :file="file"></attachment-thumb>
+          <attachment-thumb :url="settings.thumbBaseUrls[file.profile]" :file="file"></attachment-thumb>
 
           <div class="card-body">
 
