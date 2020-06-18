@@ -25,7 +25,8 @@ class Attachment extends Entity
 
   protected function _getMime()
   {
-    return $this->_properties['type'].'/'.$this->_properties['subtype'];
+    if(!empty($this->_properties['type'])) return  $this->_properties['type'].'/'.$this->_properties['subtype'];
+    else return '';
   }
 
 
