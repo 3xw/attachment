@@ -15,7 +15,7 @@
 
         <!-- files -->
         <div class="row">
-          <div v-for="(attachment, i ) in selectedFiles" :key="i" class="col-sm-6 col-md-4">
+          <div v-for="(attachment, i ) in selectedFiles" :key="i" class="col-12" :class="settings.cols">
             <attachment :index="i" :aid="aid" mode="input" :attachment="attachment" :settings="settings"></attachment>
           </div>
           <div v-if="selectedFiles.length == 0">

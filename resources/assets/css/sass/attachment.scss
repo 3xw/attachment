@@ -129,6 +129,9 @@ $colors: (
   position: relative;
   .attachment-thumb__hover>div:first-child{display: none;}
 }
+.attachment-input__icon-container>div{
+  min-height: 120px;  background-color: map-get($colors, 'red');
+}
 
 
 /* PAGINATION
