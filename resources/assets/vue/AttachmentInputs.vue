@@ -20,11 +20,12 @@
               <input @change="update" v-model="file.title" type="text" name="title" class="form-control" id="title">
             </div>
             <div class="input text">
-              <label for="title">Date</label>
+              <label for="date" class="mb-0">Date de prise / création de l’image (si connue)</label>
+              <label for="date" class="small mt-0">(format: 2020-12-12, 12:12)</label>
               <input @change="update" v-model="file.date" type="datetime-local" name="date" class="form-control" id="date">
             </div>
             <div class="input text">
-              <label for="title">Description</label>
+              <label for="description">Description</label>
               <textarea @change="update" v-model="file.description" name="description" class="form-control" id="description" rows="5"></textarea>
             </div>
           </div>
@@ -32,11 +33,11 @@
           <!-- other locales -->
           <div v-for="(language, index) in settings.i18n.languages"  v-if="language != settings.i18n.defaultLocale" role="tabpanel" class="tab-pane active" :id="'a-'+language">
             <div class="input text">
-              <label for="title">Title {{language}}</label>
+              <label :for="'_translations['+language+'][title]'">Title {{language}}</label>
               <input @change="update" v-model="file['_translations'][language].title" type="text" :name="'_translations['+language+'][title]'" class="form-control" :id="'a-'+language+'-title'">
             </div>
             <div class="input text">
-              <label for="title">Description{{language}}</label>
+              <label :for="'_translations['+language+'][description]'">Description{{language}}</label>
               <textarea @change="update" v-model="file['_translations'][language].description" :name="'_translations['+language+'][description]'" class="form-control" :id="'a-'+language+'-description'" rows="5"></textarea>
             </div>
           </div>
@@ -51,11 +52,12 @@
           <input @change="update" v-model="file.title" type="text" name="title" class="form-control" id="title">
         </div>
         <div class="input text">
-          <label for="title">Date</label>
+          <label for="date" class="mb-0">Date de prise / création de l’image (si connue)</label>
+          <label for="date" class="small mt-0">(format: 2020-12-12, 12:12)</label>
           <input @change="update" v-model="file.date" type="datetime-local" name="date" class="form-control" id="date">
         </div>
         <div class="input text">
-          <label for="title">Description</label>
+          <label for="description">Description</label>
           <textarea @change="update" v-model="file.description" name="description" class="form-control" id="description" rows="5"></textarea>
         </div>
       </div>

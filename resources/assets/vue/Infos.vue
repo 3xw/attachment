@@ -14,6 +14,7 @@
           <li><strong>ID</strong>: {{attachment.id}}</li>
           <li v-if="attachment.title"><strong>Title</strong>: {{attachment.title}}</li>
           <li v-if="attachment.date"><strong>Date</strong>: {{attachment.date}}</li>
+          <li v-if="attachment.date"><strong>Date d'upload</strong>: {{attachment.created}}</li>
           <li v-if="attachment.description"><strong>Description</strong>: {{attachment.description}}</li>
           <li v-if="attachment.author"><strong>Auteur</strong>: {{attachment.author}}</li>
           <li v-if="attachment.copyright"><strong>Copyright</strong>: {{attachment.copyright}}</li>

@@ -101,7 +101,7 @@ export default
     toggle(index1,index2)
     {
       // test exclusive
-      if(this.atagTypes[index1].exclusive) for(let i in this.atagTypes[index1].atags) if(i != index2) this.atagTypes[index1].atags[i].isActive = false
+      if(this.atagTypes[index1].exclusive && this.upload) for(let i in this.atagTypes[index1].atags) if(i != index2) this.atagTypes[index1].atags[i].isActive = false
 
       // toogle
       if(!this.atagTypes[index1].atags[index2].isActive) this.atagTypes[index1].atags[index2].isActive = true
