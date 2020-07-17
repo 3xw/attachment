@@ -19,7 +19,8 @@
             <attachment :index="i" :aid="aid" mode="input" :attachment="attachment" :settings="settings"></attachment>
           </div>
           <div v-if="selectedFiles.length == 0">
-            <input type="hidden" :name="'attachments[]'" value="">
+            <input v-if="settings.relation == 'belongsTo'" type="hidden" :name="settings.field" value="">
+            <input v-if="settings.relation != 'belongsTo'" type="hidden" name="attachments[]" value="">
           </div>
         </div>
 
