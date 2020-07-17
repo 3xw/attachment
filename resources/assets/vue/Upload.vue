@@ -177,7 +177,7 @@ export default
 
       let params = {
         headers: {'Accept': 'application/json', 'Content-Type': 'multipart/form-data'},
-        progress: this.progressHandler
+        onUploadProgress: this.progressHandler
       }
 
       client.post(this.settings.url+'attachment/attachments/add.json', formData, params)

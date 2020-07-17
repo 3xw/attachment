@@ -52,6 +52,7 @@ class AttachmentsTable extends Table
     $this->addBehavior('Attachment\ORM\Behavior\UserIDBehavior');
     $this->addBehavior('Attachment\ORM\Behavior\ExternalBehavior');
     $this->addBehavior('Attachment\ORM\Behavior\EmbedBehavior');
+    $this->addBehavior('Attachment\ORM\Behavior\AarchiveBehavior'); // must be before Fly for deletion if it crash the file remain...
     $this->addBehavior('Attachment\ORM\Behavior\FlyBehavior');
     $this->addBehavior('Attachment\ORM\Behavior\ATagBehavior');
     if(Configure::read('Attachment.translate')) $this->addBehavior('Trois\Utils\ORM\Behavior\TranslateBehavior', ['fields' => ['title','description']]);
@@ -171,17 +172,6 @@ class AttachmentsTable extends Table
     ->allowEmptyString('meta');
 
     return $validator;
-  }
-
-  public function afterDelete(Event $event, EntityInterface $entity, ArrayObject $options)
-  {
-    if(!property_exists($entity, 'aarchive')) $entity->set('aarchive', $this->Aarchives
-      ->find()
-      ->where(['id' => $entity->id])
-      ->first()
-    );
-
-    if(!empty($entity->aarchive)) $this->Aarchives->delete($entity->aarchive);
   }
 
   public function externalUrlIsValid($value, array $context)
