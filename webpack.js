@@ -36,7 +36,8 @@ const attachmentVendorConfig = env => {
             options: {
               presets: ['@babel/preset-env'],
               plugins: [
-                "@babel/plugin-syntax-dynamic-import"
+                "@babel/plugin-syntax-dynamic-import",
+                "@babel/plugin-proposal-class-properties",
               ]
             }
           }
@@ -113,7 +114,8 @@ const attachmentConfig = env => {
             options: {
               presets: ['@babel/preset-env'],
               plugins: [
-                "@babel/plugin-syntax-dynamic-import"
+                "@babel/plugin-syntax-dynamic-import",
+                "@babel/plugin-proposal-class-properties",
               ]
             }
           }
