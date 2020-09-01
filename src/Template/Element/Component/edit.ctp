@@ -89,13 +89,15 @@
 
                     <!-- other locales -->
                     <div v-for="(language, index) in settings.i18n.languages"  v-if="language != settings.i18n.defaultLocale" role="tabpanel" class="tab-pane active" :id="'a-'+language">
-                      <div class="input text">
-                        <label for="title"><?= __d('Attachment','Title') ?> {{language}}</label>
-                        <input v-model="file['_translations'][language].title" type="text" :name="'_translations['+language+'][title]'" class="form-control" :id="'a-'+language+'-title'">
-                      </div>
-                      <div class="input text">
-                        <label for="title"><?= __d('Attachment','Description') ?> {{language}}</label>
-                        <textarea v-model="file['_translations'][language].description" :name="'_translations['+language+'][description]'" class="form-control" :id="'a-'+language+'-description'" rows="5"></textarea>
+                      <div v-if="file['_translations'][language]">
+                        <div class="input text">
+                          <label for="title"><?= __d('Attachment','Title') ?> {{language}}</label>
+                          <input v-model="file['_translations'][language].title" type="text" :name="'_translations['+language+'][title]'" class="form-control" :id="'a-'+language+'-title'">
+                        </div>
+                        <div class="input text">
+                          <label for="title"><?= __d('Attachment','Description') ?> {{language}}</label>
+                          <textarea v-model="file['_translations'][language].description" :name="'_translations['+language+'][description]'" class="form-control" :id="'a-'+language+'-description'" rows="5"></textarea>
+                        </div>
                       </div>
                     </div>
 
