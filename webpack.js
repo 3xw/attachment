@@ -52,16 +52,15 @@ const attachmentVendorConfig = env => {
             {
               loader: 'postcss-loader',
               options: {
-                ident: 'postcss',
-                plugins: loader => [
-                  require('cssnano')({
-                    preset: ['default', {
-                      discardComments: {
-                        removeAll: true,
-                      }
+                postcssOptions: {
+                  ident: 'postcss',
+                  plugins: [
+                    ['cssnano',
+                    {
+                        preset: 'default'
                     }]
-                  })
-                ]
+                  ]
+                }
               }
             }
           ]
@@ -135,13 +134,16 @@ const attachmentConfig = env => {
             {
               loader: 'postcss-loader',
               options: {
-                ident: 'postcss',
-                plugins: loader => [
-                  require('postcss-preset-env')(),
-                  require('pixrem')(),
-                  require('autoprefixer')({overrideBrowserslist: 'last 10 versions'}),
-                  require('cssnano')()
-                ]
+                postcssOptions: {
+                  ident: 'postcss',
+                  plugins: [
+                    'postcss-preset-env',
+                    'pixrem',
+                    ['autoprefixer',
+                    {overrideBrowserslist: 'last 10 versions'}],
+                    'cssnano'
+                  ]
+                }
               }
             },
             { loader: 'resolve-url-loader' },
