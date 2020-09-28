@@ -4,7 +4,7 @@
       <div class="input-group mb-2">
         <input v-model="needle" @keyup.enter="search" type="text" class="form-control" id="inlineFormInputGroup" placeholder="RECHERCHE">
         <div type="submit" class="input-group-append bg--blue-light">
-          <div class="input-group-text bg--blue-light">
+          <div @click="search" class="input-group-text bg--blue-light">
             <icon-search></icon-search>
           </div>
         </div>
