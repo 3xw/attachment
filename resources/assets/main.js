@@ -14,6 +14,6 @@ import '@/utils/utils'
 import '@/plugins/tinymce.js'
 
 // init
-Vue.component('AttachmentLoader', AttachmentLoader)
+Vue.component('attachment-loader', AttachmentLoader)
 Vue.use(VuePackeryPlugin)
 Vue.use(ElementUI, { locale })

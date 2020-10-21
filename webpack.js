@@ -15,10 +15,10 @@ VueLoaderPlugin = require('vue-loader/lib/plugin'),
 // settings
 const
 rules = require('./webpack.rules.js'),
-optimization =
+optimization = 
 {
-  minimize: true,
-  minimizer: [new TerserPlugin()]
+  minimize: false,
+  //minimizer: [new TerserPlugin()]
 },
 plugins = (prefix) => {
   return [
@@ -47,6 +47,7 @@ configs = prefixes.map(prefix => {
       path.resolve(__dirname, 'resources/assets/main.js'),
       path.resolve(__dirname, 'resources/assets/assets/scss/theme.scss')
     ],
+    devtool: 'inline-source-map',
     output: {
       path: path.resolve(__dirname, '../../../webroot'),
       publicPath: webroot,
@@ -60,7 +61,7 @@ configs = prefixes.map(prefix => {
     plugins: plugins(prefix),
     resolve: {
       alias: {
-        '@host-assets': path.resolve(__dirname, '../../../resources/assets'), 
+        '@host-assets': path.resolve(__dirname, '../../../resources/assets'),
         '@': path.resolve(__dirname, 'resources/assets'),
         'vue$': 'vue/dist/vue.esm.js'
       },

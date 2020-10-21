@@ -3,6 +3,7 @@
 </template>
 <script>
 export default {
+  name: 'attachment-loader',
   props: {
     name: { type: String, default: 'null' },
     props: { type: String }
@@ -30,7 +31,7 @@ export default {
         }
         else obj[i] = baseObj[i]
       }
-
+      console.log(obj);
       return obj
     }
   },
