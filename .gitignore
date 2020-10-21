@@ -11,6 +11,8 @@
 # GRUNT NPM #
 #############
 /node_modules/*
+/package-lock.json
+/.sass-cache/*
 
 # OS generated files #
 ######################

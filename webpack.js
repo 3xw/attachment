@@ -1,193 +1,73 @@
-const webpack = require('webpack');
-const path = require('path');
-const conf = require('dotenv').config({path: 'webpack.env'});
-const webroot = conf.parsed.PUBLIC_PATH;
-const prefix = process.env;
+const
+webpack = require('webpack'),
+path = require('path'),
+conf = require('dotenv').config({path: './webpack.env'}),
+webroot = conf.parsed.PUBLIC_PATH,
+prefix = process.env
 
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const VueLoaderPlugin = require('vue-loader/lib/plugin');
+// WebpackPlugins
+const
+MiniCssExtractPlugin = require("mini-css-extract-plugin"),
+TerserPlugin = require('terser-webpack-plugin'),
+VueLoaderPlugin = require('vue-loader/lib/plugin'),
+{ CleanWebpackPlugin } = require('clean-webpack-plugin')
 
-const attachmentVendorConfig = env => {
+// settings
+const
+rules = require('./webpack.rules.js'),
+optimization =
+{
+  minimize: true,
+  minimizer: [new TerserPlugin()]
+},
+plugins = (prefix) => {
+  return [
+    new CleanWebpackPlugin({
+      cleanOnceBeforeBuildPatterns: [
+        path.join(__dirname,'../../../webroot','js/'+prefix+'/components/*'),
+        path.join(__dirname,'../../../webroot','css/'+prefix+'/components/*')
+      ],
+    }),
+    new MiniCssExtractPlugin({
+      filename: 'css/'+prefix+'/theme.min.css',
+      chunkFilename: 'css/'+prefix+'/components/[name].min.css',
+    }),
+    new VueLoaderPlugin()
+  ]
+}
+
+// configs
+const
+prefixes = ['attachment'],
+configs = prefixes.map(prefix => {
   return {
-    mode: 'development',
-    name: 'attachmentVendorConfig',
-    entry: path.join(__dirname, 'resources/assets/attachment.vendor.conf.js'),
-    output: {
-      path: path.resolve(__dirname, '../../../webroot'),
-      filename: 'js/plugins/attachment/attachment.vendor.min.js',
-    },
-    optimization: {
-      minimizer: [new UglifyJsPlugin({
-        extractComments: false,
-        parallel: true,
-        uglifyOptions: {
-          keep_fnames: true,
-          mangle: true,
-        }
-      })],
-    },
-    module: {
-      rules: [
-        {
-          test: /\.js$/,
-          use: {
-            loader: 'babel-loader',
-            options: {
-              presets: ['@babel/preset-env'],
-              plugins: [
-                "@babel/plugin-syntax-dynamic-import",
-                "@babel/plugin-proposal-class-properties",
-              ]
-            }
-          }
-        },
-        {
-          test: /\.(css)$/,
-          use: [
-            {
-              loader: MiniCssExtractPlugin.loader,
-            },
-            'css-loader',
-            {
-              loader: 'postcss-loader',
-              options: {
-                postcssOptions: {
-                  ident: 'postcss',
-                  plugins: [
-                    ['cssnano',
-                    {
-                        preset: 'default'
-                    }]
-                  ]
-                }
-              }
-            }
-          ]
-        }
-      ]
-    },
-    plugins: [
-      new MiniCssExtractPlugin({
-        filename: 'css/plugins/attachment/attachment.vendor.min.css',
-      }),
-      new webpack.IgnorePlugin({
-        resourceRegExp: /^\.\/locale$/,
-        contextRegExp: /moment$/
-      }),
-      new webpack.IgnorePlugin({
-        resourceRegExp: /got$/,
-        contextRegExp: /vuejs$/
-      }),
+    mode: 'production',
+    name: 'app-'+prefix,
+    entry: [
+      path.resolve(__dirname, 'resources/assets/main.js'),
+      path.resolve(__dirname, 'resources/assets/assets/scss/theme.scss')
     ],
-    resolve: {
-      alias: {
-        'vue$': 'vue/dist/vue.esm.js'
-      },
-      extensions: ['*', '.js', '.vue', '.json']
-    },
-  }
-};
-
-const attachmentConfig = env => {
-  return {
-    mode: 'development',
-    name: 'attachmentConfig',
-    entry: path.join(__dirname, 'resources/assets/attachment.conf.js'),
     output: {
       path: path.resolve(__dirname, '../../../webroot'),
       publicPath: webroot,
-      filename: 'js/plugins/attachment/attachment.min.js',
-      chunkFilename: 'js/plugins/attachment/components/attachment.[name].[hash].min.js',
+      filename: 'js/'+prefix+'/app.min.js',
+      chunkFilename: 'js/'+prefix+'/components/[fullhash].[name].min.js',
     },
-    watch: true,
-    optimization: {
-      minimizer: [new UglifyJsPlugin()],
-    },
+    optimization,
     module: {
-      rules: [
-        {
-          test: /\.js$/,
-          use: {
-            loader: 'babel-loader',
-            options: {
-              presets: ['@babel/preset-env'],
-              plugins: [
-                "@babel/plugin-syntax-dynamic-import",
-                "@babel/plugin-proposal-class-properties",
-              ]
-            }
-          }
-        },
-        {
-          test: /\.vue$/,
-          loader: 'vue-loader',
-          options: {
-            cacheBusting: true,
-          }
-        },
-        {
-          test: /\.(scss)$/,
-          use: [
-            { loader: MiniCssExtractPlugin.loader, },
-            'css-loader',
-            {
-              loader: 'postcss-loader',
-              options: {
-                postcssOptions: {
-                  ident: 'postcss',
-                  plugins: [
-                    'postcss-preset-env',
-                    'pixrem',
-                    ['autoprefixer',
-                    {overrideBrowserslist: 'last 10 versions'}],
-                    'cssnano'
-                  ]
-                }
-              }
-            },
-            { loader: 'resolve-url-loader' },
-            { loader: 'sass-loader' },
-          ]
-        },
-        {
-          test: /\.css$/,
-          use: [
-            'vue-style-loader',
-            'css-loader',
-            'sass-loader'
-          ]
-        },
-        {
-          test: /\.(woff(2)?|ttf|otf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
-          use: [{
-            loader: 'file-loader',
-            options: {
-              name: '[name].[ext]',
-              publicPath: webroot+'fonts/',
-              outputPath: 'fonts/'
-            }
-          }]
-        }
-      ]
+      rules: [rules.babel, rules.vue, rules.scss, rules.css, rules.fonts]
     },
-    plugins: [
-      new MiniCssExtractPlugin({
-        filename: 'css/plugins/attachment/attachment.min.css',
-        chunkFilename: 'css/plugins/attachment/components/attachment.[name].[hash].min.css',
-      }),
-      new VueLoaderPlugin(),
-      new webpack.DefinePlugin({
-        '__WEBROOT__': JSON.stringify(conf.parsed.PUBLIC_PATH),
-      })
-    ],
+    plugins: plugins(prefix),
     resolve: {
       alias: {
+        '@host-assets': path.resolve(__dirname, '../../../resources/assets'), 
+        '@': path.resolve(__dirname, 'resources/assets'),
         'vue$': 'vue/dist/vue.esm.js'
       },
       extensions: ['*', '.js', '.vue', '.json']
     },
   }
-}
+})
 
-module.exports = [attachmentVendorConfig, attachmentConfig];
+//console.log(configs)
+module.exports = configs

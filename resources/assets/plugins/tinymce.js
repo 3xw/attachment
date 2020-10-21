@@ -1,6 +1,6 @@
 // vue components & store
-import Browse from '../../vue/Browse.vue'
-import store from '../../../../../../../resources/assets/admin/js/store/store.js'
+import Browse from '@/components/Browse.vue'
+import store from '@host-assets/admin/store/store.js'
 
 // Plugin TinyMCE
 if(typeof tinymce !== 'undefined'){

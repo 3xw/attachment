@@ -148,9 +148,9 @@
 
 <script>
 import { mapActions } from 'vuex'
-import { client } from '../js/client.js'
+import { client } from '@/http/client.js'
 
-import iconCheck from './icons/check.vue'
+import iconCheck from '@/components/icons/check.vue'
 
 export default
 {

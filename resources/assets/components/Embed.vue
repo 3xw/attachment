@@ -47,10 +47,10 @@
 
 <script>
 // js scripts
-import { client } from '../js/client.js'
+import { client } from '@/http/client.js'
 
 // vue components
-import AttachmentInputs from './AttachmentInputs.vue'
+import AttachmentInputs from '@/components/AttachmentInputs.vue'
 
 export default
 {
