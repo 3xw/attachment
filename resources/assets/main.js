@@ -1,4 +1,3 @@
-import Vue from 'vue'
 import ElementUI from 'element-ui'
 import AttachmentLoader from '@/components/AttachmentLoader.vue'
 import VuePackeryPlugin from 'vue-packery-plugin'

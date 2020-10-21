@@ -1,7 +1,5 @@
 /* FILTERS
 *******************************/
-import Vue from 'vue'
-
 Vue.filter('inputName', function (input) {
   return input.split('.').reduce(function(o,i){ return o+'['+i+']' ;});
 });

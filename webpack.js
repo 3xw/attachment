@@ -15,7 +15,7 @@ VueLoaderPlugin = require('vue-loader/lib/plugin'),
 // settings
 const
 rules = require('./webpack.rules.js'),
-optimization = 
+optimization =
 {
   minimize: false,
   //minimizer: [new TerserPlugin()]
@@ -29,7 +29,7 @@ plugins = (prefix) => {
       ],
     }),
     new MiniCssExtractPlugin({
-      filename: 'css/'+prefix+'/theme.min.css',
+      filename: 'css/'+prefix+'/[name].min.css',
       chunkFilename: 'css/'+prefix+'/components/[name].min.css',
     }),
     new VueLoaderPlugin()
@@ -51,7 +51,7 @@ configs = prefixes.map(prefix => {
     output: {
       path: path.resolve(__dirname, '../../../webroot'),
       publicPath: webroot,
-      filename: 'js/'+prefix+'/app.min.js',
+      filename: 'js/'+prefix+'/[name].min.js',
       chunkFilename: 'js/'+prefix+'/components/[fullhash].[name].min.js',
     },
     optimization,

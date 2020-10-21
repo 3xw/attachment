@@ -30,8 +30,8 @@ class AttachmentHelper extends Helper
 
     // init
     $this->_View->getRequest()->getSession()->write('Attachment', 'oui');
-    $this->Html->css(['attachment/theme.min.css'],['block' => true]);
-    $this->Html->script(['attachment/app.min.js'],['block' => true]);
+    $this->Html->css(['attachment/main.min.css'],['block' => true]);
+    $this->Html->script(['attachment/main.min.js'],['block' => true]);
   }
 
   public function setup($field,$settings)
