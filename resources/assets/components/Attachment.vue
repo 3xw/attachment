@@ -158,7 +158,7 @@ export default
   components: {
     'icon-check': iconCheck,
   },
-  props:{attachment: Object, settings: Object, index: Number, aid: String, mode: String},
+  props:{attachment: Object, index: Number, aid: String, mode: String},
   data()
   {
     return {
