@@ -49,7 +49,7 @@ export default {
   },
   created(){
   },
-  methods(){
+  methods: {
     close()
     {
       this.open = false

@@ -34,7 +34,7 @@ import { mapState, mapGetters, mapActions } from 'vuex'
 export default
 {
   name:'attachment-atags',
-  props: { aid: String, upload:Boolean, filters: Object, options: Object },
+  props: { aid: String, upload:Boolean, filters: Array, options: Object },
   data(){
     return {
       visibility: {

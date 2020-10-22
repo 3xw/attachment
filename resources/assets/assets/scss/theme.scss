@@ -1,3 +1,6 @@
+//UI STYLE
+@import "~element-ui/lib/theme-chalk/index.css";
+
 /* VARS
 ***************************************/
 $margin--mini: 10px;
@@ -213,7 +216,7 @@ $colors: (
       }
       .input-group{width: auto;}
       .input-group path{fill: map-get($colors, 'white');}
-      input.form-control{width: auto !important;flex: 0;}
+      input.form-control{width: auto !important;min-width: 150px;flex: 0;}
     }
     .section__index{padding: $margin--semi;border-top: 1px solid map-get($colors, 'grey-light'); border-bottom: 1px solid map-get($colors, 'grey-light');background: map-get($colors, 'grey-very-light');}
     .section__filter{

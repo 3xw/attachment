@@ -37,14 +37,16 @@ rules =
         loader: 'postcss-loader',
         options:
         {
-          postcssOptions:
-          {
+          postcssOptions: {
             ident: 'postcss',
-            plugins: loader => [
-              require('postcss-preset-env')(),
-              require('pixrem')(),
-              require('autoprefixer')({overrideBrowserslist: 'last 10 versions'}),
-              require('cssnano')()
+            plugins: [
+              'postcss-preset-env',
+              'pixrem',
+              [
+                'autoprefixer',
+                {overrideBrowserslist: 'last 10 versions'}
+              ],
+              'cssnano'
             ]
           }
         }
