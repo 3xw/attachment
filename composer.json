@@ -1,4 +1,5 @@
 {
+  "abandoned": "3xw/cakephp-attachment",
   "name": "3xw/attachment",
   "description": "Attachment plugin for CakePHP",
   "type": "cakephp-plugin",
