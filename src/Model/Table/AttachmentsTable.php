@@ -136,8 +136,8 @@ class AttachmentsTable extends Table
     ->integer('height')
     ->allowEmpty('height');
 
-    // MD% Uique
-    if(Configure::check('Attachment.md5Unique') )
+    // MD5 Uique
+    if(Configure::read('Attachment.md5Unique') )
     {
       $validator
       ->requirePresence('md5', 'create')
