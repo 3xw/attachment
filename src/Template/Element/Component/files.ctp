@@ -22,8 +22,8 @@
                 {{file.size | bytesToMegaBytes | decimal(2) }} MB<br/>
               </p>
             <!-- data -->
-            <input v-if="settings.relation == 'belongsToMany'" type="hidden" :name="'attachments['+index+'][id]'" :value="file.id">
-            <input v-if="settings.relation == 'belongsToMany'" type="hidden" :name="'attachments['+index+'][_joinData][order]'" :value="index">
+            <input v-if="settings.relation == 'belongsToMany'" type="hidden" :name="settings.field+'['+index+'][id]'" :value="file.id">
+            <input v-if="settings.relation == 'belongsToMany'" type="hidden" :name="settings.field+'['+index+'][_joinData][order]'" :value="index">
 
             <input v-if="settings.relation != 'belongsToMany'" type="hidden" :name="settings.field" :value="file.id">
 
