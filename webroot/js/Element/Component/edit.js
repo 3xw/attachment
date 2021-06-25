@@ -105,7 +105,33 @@ Vue.component('attachment-edit', {
 
       var options = {headers:{"Accept":"application/json"}};
       var formData = new FormData();
-      for( i in this.file ) if(this.file[i] != '' && this.file[i] != null) formData.append(i, this.file[i]);
+      for( i in this.file )
+      {
+          switch(true)
+          {
+            case this.file[i] == null:
+            break;
+
+            case typeof this.file[i] === 'string':
+            formData.append(i, this.file[i]);
+            break;
+
+            case i == '_translations' && typeof this.file[i] === 'object':
+            for(lng in this.file[i]) {
+              for (field in this.file[i][lng]) {
+                if (field != null) {
+                  formData.append(i+'['+lng+']'+'['+field+']', this.file[i][lng][field]);
+                  console.log(this.file[i][lng][field]);
+                }
+              }
+            }
+            break;
+
+            default:
+            console.log('Unhandled case:', i, this.file[i]);
+            break;
+          }
+      }
       for( var t in this.file.atags )
       {
         formData.append('atags['+t+'][name]', this.file.atags[t].name);

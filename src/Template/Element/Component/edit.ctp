@@ -88,7 +88,7 @@
                     </div>
 
                     <!-- other locales -->
-                    <div v-for="(language, index) in settings.i18n.languages"  v-if="language != settings.i18n.defaultLocale" role="tabpanel" class="tab-pane active" :id="'a-'+language">
+                    <div v-for="(language, index) in settings.i18n.languages"  v-if="language != settings.i18n.defaultLocale" role="tabpanel" class="tab-pane" :id="'a-'+language">
                       <div v-if="file['_translations'][language]">
                         <div class="input text">
                           <label for="title"><?= __d('Attachment','Title') ?> {{language}}</label>
