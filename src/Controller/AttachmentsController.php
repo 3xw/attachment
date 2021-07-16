@@ -55,7 +55,7 @@ class AttachmentsController extends AppController
         //'CrudCache',
         'Crud.Api',
         'Crud.ApiPagination',
-        'Crud.ApiQueryLog',
+        //'Crud.ApiQueryLog',
         'Crud.Search'
       ]
     ]);
