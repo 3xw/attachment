@@ -71,7 +71,7 @@ class ResizeController extends AppController
     if($profile == 'external')
     {
       $url = str_replace(':/','://',$image);
-      $mimetype = get_headers($url, 1)["Content-Type"];
+      $mimetype = get_headers($url, 1)["content-type"];
     }else{
       $mimetype = $this->_filesystem($profile)->getMimetype($image);
     }
