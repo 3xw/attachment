@@ -128,6 +128,7 @@ Vue.component('attachment-edit', {
             break;
 
             default:
+            formData.append(i, this.file[i]);
             console.log('Unhandled case:', i, this.file[i]);
             break;
           }
