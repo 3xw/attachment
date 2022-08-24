@@ -169,7 +169,7 @@ export default
     return {
       sort: 'date',
       direction: 'desc',
-      mode: 'thumb',
+      mode: 'mosaic',
       types: {
         name: 'Types',
         slug: 'type',
