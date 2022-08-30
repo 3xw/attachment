@@ -49,7 +49,7 @@ class Profile
       'visibility' => $visibility,
       'mimetype' => $mimetype
     ]);
-    fclose($stream);
+    while(is_resource($stream)) fclose($stream);
   }
 
   public function delete($file, $force = false)
