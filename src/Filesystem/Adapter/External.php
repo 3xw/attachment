@@ -18,6 +18,12 @@ class External extends AbstractAdapter
     return str_replace(['http:/','https:/'], ['http://','https://'], $path);
   }
 
+  public function getHeaders($path)
+  {
+    if(str_contains($path, ':8765')) throw new \Exception("External Adapter detects default port cakePHP :8765 and auto stops process", 1);
+    return get_headers($path);
+  }
+
   /**
   * Check whether a file is present.
   *
@@ -28,7 +34,7 @@ class External extends AbstractAdapter
   public function has($path)
   {
     $path = $this->_makeNicePathUrl($path);
-    $array = get_headers($path);
+    $array = $this->getHeaders($path);
     $string = $array[0];
     return (strpos($string,"200"))? true : false;
   }
@@ -115,7 +121,7 @@ class External extends AbstractAdapter
   public function getMimetype($path)
   {
     $path = $this->_makeNicePathUrl($path);
-    $array = get_headers($path);
+    $array = $this->getHeaders($path);
     if(!empty($array[1])){
       return ['mimetype' => str_replace('Content-Type: ','',$array[1])];
     }
