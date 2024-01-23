@@ -6,6 +6,7 @@ use Cake\Utility\Security;
 use Cake\Network\Session;
 use Cake\Routing\Router;
 use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 
 class Token {
 
@@ -15,13 +16,13 @@ class Token {
 
   public function encode($string)
   {
-    return JWT::encode($string, $this->key());
+    return JWT::encode($string, $this->key(), 'HS256');
   }
 
   public function decode($cypher)
   {
     try {
-      $string = JWT::decode($cypher, $this->key(),['HS256']);
+      $string = JWT::decode($cypher, new Key($this->key(),['HS256']));
       return $string;
     } catch (Exception $e) {
       throw $e;
