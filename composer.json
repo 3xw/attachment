@@ -11,7 +11,7 @@
         "league/flysystem-aws-s3-v3": "^1.0",
         "intervention/image": "^2.3",
         "cakephp/migrations": "@stable",
-        "firebase/php-jwt": "^6.0",
+        "firebase/php-jwt": "^5.0",
         "3xw/cakephp-utils":"^3.6"
     },
     "require-dev": {
