@@ -98,6 +98,10 @@ class FlyBehavior extends Behavior
         }
         else $conf = array_merge(Configure::read('Attachment.upload'), $settings);
 
+        // DEBUG: Log MIME type for troubleshooting
+        \Cake\Log\Log::debug('Uploaded file type: ' . $this->_file['type']);
+        \Cake\Log\Log::debug('Allowed types: ' . json_encode($conf['types']));
+
         // CHECK type
         if (!in_array($this->_file['type'], $conf['types']))
         {
