@@ -30,6 +30,10 @@ class AttachmentsTable extends Table
       'embed_field' => 'embed',
       'file_field' => 'path'
     ]);
+    $this->addBehavior('Attachment.Link', [
+      'link_field' => 'link',
+      'file_field' => 'path'
+    ]);
     $this->addBehavior('Attachment.Fly', [
       'file_field' => 'path'
     ]);
