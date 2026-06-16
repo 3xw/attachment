@@ -4,7 +4,6 @@ Vue.component('attachment-link', {
     return {
       atags: [],
       errors: [],
-      success: [],
       show: false,
     };
   },

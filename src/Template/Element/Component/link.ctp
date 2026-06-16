@@ -53,14 +53,14 @@
             <!-- URL HERE -->
             <div class="input text required">
               <label for="link"><?= __d('Attachment','URL') ?></label>
-              <input type="text" name="link" class="form-control attachment-link__url" id="link" placeholder="https://..." />
+              <input type="url" name="link" class="form-control attachment-link__url" id="link" placeholder="https://..." />
             </div>
           </div>
           <p></p>
           <div class="custom-modal-footer">
             <div class="btn-group">
               <button type="button" class="modal-default-button btn btn-success" @click="upload">
-                <?= __d('Attachment','Upload') ?>
+                <?= __d('Attachment','Add') ?>
               </button>
               <button type="button" class="modal-default-button btn btn-warning" @click="close()">
                 <?= __d('Attachment','Close') ?>
