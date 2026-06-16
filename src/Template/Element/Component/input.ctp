@@ -16,6 +16,9 @@
       <!-- files -->
       <attachment-files :aid="aid" :settings="settings" ></attachment-files>
 
+      <!-- link -->
+      <attachment-link :aid="aid" :settings="settings" ></attachment-link>
+
       <p>
         <div class="btn-group" data-intro="Ajouter des médias à l'aide de ces boutons" data-position="right">
           <button type="button" class="btn btn-fill btn-xs btn-info" @click="$children[0].open()">
@@ -28,7 +31,11 @@
           </button>
           <button v-if="dispalyEmbed()" type="button" class="btn btn-fill btn-xs btn-info" @click="$children[2].open()">
             <i class="fa fa-code" aria-hidden="true"></i>
-            <?= __d('Attachment','Add an embed code') ?>
+            <?= __d('Attachment','Embed / iframe') ?>
+          </button>
+          <button v-if="displayLink()" type="button" class="btn btn-fill btn-xs btn-info" @click="$children[4].open()">
+            <i class="fa fa-link" aria-hidden="true"></i>
+            <?= __d('Attachment','Add a link') ?>
           </button>
         </div>
       </p>
