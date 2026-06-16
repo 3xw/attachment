@@ -126,6 +126,7 @@ class AttachmentHelper extends Helper
       $this->_View->append('template', $this->_View->element('Attachment.Component/upload'));
       $this->_View->append('template', $this->_View->element('Attachment.Component/atags'));
       $this->_View->append('template', $this->_View->element('Attachment.Component/embed'));
+      $this->_View->append('template', $this->_View->element('Attachment.Component/link'));
       $this->_View->append('template', $this->_View->element('Attachment.Component/browse'));
       $this->_View->append('template', $this->_View->element('Attachment.Component/input'));
       $this->_View->append('template', $this->_View->element('Attachment.Component/inline-options'));
@@ -149,6 +150,7 @@ class AttachmentHelper extends Helper
         'Attachment.Element/Component/atags.js'.$this->getVersion(),
         'Attachment.Element/Component/upload.js'.$this->getVersion(),
         'Attachment.Element/Component/embed.js'.$this->getVersion(),
+        'Attachment.Element/Component/link.js'.$this->getVersion(),
         'Attachment.Element/Component/browse.js'.$this->getVersion(),
         'Attachment.Element/Component/input.js'.$this->getVersion(),
         'Attachment.Element/Component/inline-options.js'.$this->getVersion()
