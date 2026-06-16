@@ -46,6 +46,9 @@ Vue.filter('icon', function (input) {
     case input.lastIndexOf('embed') != -1:
     return '<i class="material-icons">code</i>';
     break;
+    case input.lastIndexOf('link') != -1:
+    return '<i class="material-icons">link</i>';
+    break;
     case input == 'application/pdf':
     return '<i class="material-icons">picture_as_pdf</i>';
     break;
