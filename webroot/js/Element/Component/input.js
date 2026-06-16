@@ -24,6 +24,15 @@ Vue.component('attachment-input',{
         }
       }
       return false;
+    },
+    displayLink : function(){
+      for( var type in this.settings.types ){
+        if(this.settings.types[type].indexOf('link') != -1)
+        {
+          return true;
+        }
+      }
+      return false;
     }
   }
 });
