@@ -25,14 +25,26 @@ class ExternalBehavior extends Behavior
       $data['path'] .= (strpos($fileName,'%') === false )? urlencode($fileName): $fileName;
 
       $headers = get_headers($data['path'],1);
+      if (!$headers) return;
+      // Normalize header keys to handle HTTP/2 lowercase names
+      $headers = array_change_key_case($headers, CASE_UPPER);
       if(substr($headers[0], 9, 3) != 200) return;
       $pathPieces = explode('/',$data['path']);
       $data['name'] = empty($data['name'])? urldecode($fileName): $data['name'];
-      $data['type'] = explode('/',$headers['Content-Type'])[0];
-      $data['subtype'] = explode('/',$headers['Content-Type'])[1];
+      // Content-Type may be an array (redirect + final response) or missing
+      $contentType = $headers['CONTENT-TYPE'] ?? null;
+      if (is_array($contentType)) $contentType = end($contentType);
+      if (empty($contentType)) {
+        $ext = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+        $mimeMap = ['jpg' => 'image/jpeg', 'jpeg' => 'image/jpeg', 'png' => 'image/png', 'gif' => 'image/gif', 'webp' => 'image/webp', 'pdf' => 'application/pdf', 'svg' => 'image/svg+xml'];
+        $contentType = $mimeMap[$ext] ?? 'application/octet-stream';
+      }
+      $typeParts = explode('/', $contentType);
+      $data['type'] = $typeParts[0];
+      $data['subtype'] = $typeParts[1] ?? '';
       $data['md5'] = md5($data['path']);
-      $data['size'] = $headers['Content-Length'];
-      $data['date']= new DateTime($headers['Date']);
+      $data['size'] = $headers['CONTENT-LENGTH'] ?? null;
+      $data['date'] = isset($headers['DATE']) ? new DateTime($headers['DATE']) : new DateTime();
       $data['profile'] = 'external';
     }
   }
